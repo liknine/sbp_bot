@@ -15,5 +15,23 @@
     ],
     "created_at": "2026-05-24T14:07:38.027434",
     "updated_at": "2026-05-24T14:07:38.027455"
+  },
+  {
+    "id": "tovar-2-nazaanie-cherny",
+    "brand": "товар 2",
+    "name": "назаание",
+    "color": "черны",
+    "price": 444,
+    "sizes": [
+      "42",
+      "43"
+    ],
+    "badge": "скидка",
+    "description": "ооо",
+    "images": [
+      "images/products/tovar-2-nazaanie-cherny-1.jpg"
+    ],
+    "created_at": "2026-05-24T14:28:24.389841",
+    "updated_at": "2026-05-24T14:28:24.389898"
   }
 ]
