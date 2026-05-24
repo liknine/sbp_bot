@@ -5588,15 +5588,34 @@ body > .bottom-nav label span{
     return "Самовывоз";
   }
 
+  function isVisibleField(el){
+    if(!el) return false;
+    if(el.disabled) return false;
+    if(el.type && ["hidden","radio","checkbox","button","submit"].includes(el.type)) return false;
+
+    const style = window.getComputedStyle(el);
+    if(style.display === "none" || style.visibility === "hidden" || Number(style.opacity) === 0) return false;
+
+    const rect = el.getBoundingClientRect();
+    if(rect.width <= 0 || rect.height <= 0) return false;
+
+    const placeholder = (el.getAttribute("placeholder") || "").toLowerCase();
+    const label = (el.getAttribute("aria-label") || "").toLowerCase();
+    const name = (el.getAttribute("name") || "").toLowerCase();
+    const text = placeholder + " " + label + " " + name;
+
+    if(text.includes("пожел")) return false;
+    if(text.includes("коммент")) return false;
+    if(text.includes("comment")) return false;
+
+    return true;
+  }
+
   function requiredFields(){
     const screen = qs("#checkoutScreen");
     if(!screen) return [];
-    return qsa("input, textarea", screen).filter(el => {
-      const placeholder = (el.getAttribute("placeholder") || "").toLowerCase();
-      const label = (el.getAttribute("aria-label") || "").toLowerCase();
-      const text = placeholder + " " + label;
-      return !text.includes("пожел");
-    });
+
+    return qsa("input, textarea", screen).filter(isVisibleField);
   }
 
   function validateCheckout(showAlert){
@@ -5638,7 +5657,7 @@ body > .bottom-nav label span{
     if(screen && !qs(".sbp-required-hint", screen)){
       const button = qs('label[for="tab-success"], .primary-link[for="tab-success"]', screen);
       if(button){
-        button.insertAdjacentHTML("beforebegin", '<p class="sbp-required-hint">Заполните все поля, кроме пожеланий, чтобы отправить заявку.</p>');
+        button.insertAdjacentHTML("beforebegin", '<p class="sbp-required-hint">Заполните видимые обязательные поля, кроме пожеланий, чтобы отправить заявку.</p>');
       }
     }
   }
