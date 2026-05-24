@@ -4716,6 +4716,141 @@ body > .bottom-nav label span{
 .product-grid .card:not(.dynamic-card){display:none!important}
 .dynamic-products-empty,.dynamic-products-error{min-height:260px;border-radius:28px;background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.065),transparent 34%),linear-gradient(145deg,var(--card1),var(--card2));border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px 22px;grid-column:1/-1}.dynamic-products-empty h2{margin:0;font-size:24px;line-height:1.08;letter-spacing:-.7px}.dynamic-products-empty p,.dynamic-products-error{color:var(--muted);font-size:14px;line-height:1.38}.dynamic-products-empty p{margin:10px auto 0;max-width:280px}.dynamic-card{animation:softRise .28s cubic-bezier(.22,1,.36,1) both}.dynamic-card .fav-heart{pointer-events:none}.dynamic-hidden{display:none!important}
 
+
+/* === SBP v4: dynamic images, favorites, search === */
+.dynamic-card .photo{
+  overflow:hidden;
+}
+.dynamic-card .photo img,
+.product-main-image img,
+.product-thumb img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  display:block;
+}
+.dynamic-card .fav-heart{
+  pointer-events:auto !important;
+}
+.dynamic-card .fav-heart .heart-filled,
+.dynamic-card .fav-heart .heart-pop{
+  opacity:0;
+}
+.dynamic-card .fav-heart.active .heart-outline{
+  opacity:0;
+}
+.dynamic-card .fav-heart.active .heart-filled{
+  opacity:1;
+}
+.dynamic-card .fav-heart.active .heart-pop{
+  animation:heartPop .36s cubic-bezier(.22,1,.36,1);
+}
+@keyframes heartPop{
+  0%{opacity:.2;transform:scale(.45)}
+  55%{opacity:1;transform:scale(1.45)}
+  100%{opacity:0;transform:scale(1.05)}
+}
+.dynamic-favorites-grid{
+  margin-top:18px;
+}
+.dynamic-search-empty{
+  grid-column:1/-1;
+  min-height:140px;
+  border-radius:24px;
+  border:1px solid var(--line);
+  background:linear-gradient(145deg,var(--card1),var(--card2));
+  color:var(--muted);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
+}
+
+
+/* === SBP v5 final fixes: full-card photos + robust favorites === */
+.dynamic-card{
+  overflow:hidden !important;
+}
+.dynamic-card .photo{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  padding:0 !important;
+  margin:0 !important;
+  display:block !important;
+  z-index:1 !important;
+  overflow:hidden !important;
+}
+.dynamic-card .photo img{
+  width:100% !important;
+  height:100% !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:cover !important;
+  display:block !important;
+  filter:none !important;
+  transform:none !important;
+}
+.dynamic-card::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:58%;
+  z-index:2;
+  pointer-events:none;
+  background:linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,.38), transparent);
+}
+.dynamic-card .meta{
+  z-index:3 !important;
+  left:12px !important;
+  right:12px !important;
+  bottom:12px !important;
+}
+.dynamic-card .badge,
+.dynamic-card .heart{
+  z-index:6 !important;
+}
+.dynamic-card .brand,
+.dynamic-card .color,
+.dynamic-card h3,
+.dynamic-card .card-bottom,
+.dynamic-card .card-bottom b,
+.dynamic-card .card-bottom span{
+  color:#fff !important;
+  text-shadow:0 2px 10px rgba(0,0,0,.55);
+}
+.dynamic-card .brand,
+.dynamic-card .color,
+.dynamic-card .card-bottom span{
+  opacity:.82;
+}
+.dynamic-card .fav-heart{
+  pointer-events:auto !important;
+  touch-action:manipulation;
+}
+.dynamic-card .fav-heart .heart-filled,
+.dynamic-card .fav-heart .heart-pop{
+  opacity:0;
+}
+.dynamic-card .fav-heart.is-favorite .heart-outline,
+.dynamic-card .fav-heart.active .heart-outline{
+  opacity:0;
+}
+.dynamic-card .fav-heart.is-favorite .heart-filled,
+.dynamic-card .fav-heart.active .heart-filled{
+  opacity:1;
+}
+.dynamic-favorites-grid{
+  margin-top:18px;
+}
+.dynamic-favorites-grid:empty{
+  display:none;
+}
+
 </style>
 </head>
 <body>
@@ -5301,6 +5436,410 @@ body > .bottom-nav label span{
   document.addEventListener('click',e=>{const c=e.target.closest('.dynamic-card[data-product-id]'); if(c){state.active=c.dataset.productId;localStorage.setItem('sbp_active_product',state.active);renderProduct(find(state.active));} const s=e.target.closest('.dynamic-size-option[data-size]'); if(s){state.size=s.dataset.size;localStorage.setItem('sbp_selected_size',state.size)}},true);
   async function load(){try{const r=await fetch(PRODUCTS_URL+'?v='+Date.now(),{cache:'no-store'}); if(!r.ok)throw new Error(r.status); const data=await r.json(); state.products=Array.isArray(data)?data:[]; state.error=null;}catch(e){console.error('[SBP] products load failed',e);state.products=[];state.error=e;} renderGrids(); renderProduct(find(localStorage.getItem('sbp_active_product'))); patchOrder();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load);else load();
+})();
+</script>
+
+
+<script>
+/* === SBP v4 enhancements: real favorites + catalog search === */
+(function(){
+  const PRODUCTS_URL = "data/products.json";
+  const FAV_KEY = "sbp_favorites";
+
+  const $ = (s, r=document) => r.querySelector(s);
+  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+  const esc = v => String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+  const pid = p => p.id || String(p.name || "product").toLowerCase().replace(/[^a-z0-9а-яё]+/gi,"-").replace(/^-|-$/g,"");
+  const img = p => (Array.isArray(p.images) && p.images[0]) ? p.images[0] : "";
+  const price = p => Number(p.price || p.price_byn || 0) ? `${Number(p.price || p.price_byn)} BYN` : "Цена уточняется";
+  const sizes = p => Array.isArray(p.sizes) && p.sizes.length ? p.sizes.join(" ") : "Размеры уточняются";
+
+  let productsCache = [];
+
+  function favs(){
+    try { return new Set(JSON.parse(localStorage.getItem(FAV_KEY) || "[]")); }
+    catch(e){ return new Set(); }
+  }
+
+  function saveFavs(set){
+    localStorage.setItem(FAV_KEY, JSON.stringify(Array.from(set)));
+  }
+
+  function toggleFav(id){
+    const set = favs();
+    if(set.has(id)) set.delete(id);
+    else set.add(id);
+    saveFavs(set);
+    updateHearts();
+    renderFavorites();
+  }
+
+  function card(p){
+    const id = pid(p);
+    const im = img(p);
+    const active = favs().has(id) ? "active" : "";
+    return `<label class="card dynamic-card dynamic-fav-card" data-product-id="${esc(id)}" for="tab-product">
+      ${p.badge && p.badge !== "-" ? `<span class="badge">${esc(p.badge)}</span>` : ""}
+      <span class="heart fav-heart ${active}" data-fav-id="${esc(id)}">
+        <span class="heart-outline">♡</span>
+        <span class="heart-filled">♥</span>
+        <span class="heart-pop">♥</span>
+      </span>
+      <span class="photo">${im ? `<img src="${esc(im)}" alt="${esc(p.name)}">` : ""}</span>
+      <span class="meta">
+        <p class="brand">${esc(p.brand || "")}</p>
+        <h3>${esc(p.name || "Без названия")}</h3>
+        <p class="color">${esc(p.color || "")}</p>
+        <span class="card-bottom"><b>${esc(price(p))}</b><span>${esc(sizes(p))}</span></span>
+      </span>
+    </label>`;
+  }
+
+  async function loadProducts(){
+    try{
+      const r = await fetch(PRODUCTS_URL + "?v=" + Date.now(), {cache:"no-store"});
+      const data = await r.json();
+      productsCache = Array.isArray(data) ? data : [];
+    }catch(e){
+      productsCache = [];
+    }
+    updateHearts();
+    renderFavorites();
+  }
+
+  function updateHearts(){
+    const set = favs();
+    $$(".dynamic-card[data-product-id]").forEach(card => {
+      const heart = $(".fav-heart", card);
+      if(!heart) return;
+      heart.classList.toggle("active", set.has(card.dataset.productId));
+    });
+  }
+
+  function ensureFavoritesGrid(){
+    const screen = $("#favoritesScreen");
+    if(!screen) return null;
+
+    let grid = $(".dynamic-favorites-grid", screen);
+    if(!grid){
+      grid = document.createElement("section");
+      grid.className = "product-grid dynamic-favorites-grid";
+      const empty = $(".empty-state", screen);
+      if(empty) empty.insertAdjacentElement("beforebegin", grid);
+      else screen.appendChild(grid);
+    }
+    return grid;
+  }
+
+  function renderFavorites(){
+    const screen = $("#favoritesScreen");
+    if(!screen) return;
+
+    const grid = ensureFavoritesGrid();
+    if(!grid) return;
+
+    const set = favs();
+    const list = productsCache.filter(p => set.has(pid(p)));
+    const empty = $(".empty-state", screen);
+
+    if(!list.length){
+      grid.innerHTML = "";
+      if(empty) empty.style.display = "";
+      return;
+    }
+
+    if(empty) empty.style.display = "none";
+    grid.innerHTML = list.map(card).join("");
+  }
+
+  function applySearch(query){
+    const q = String(query || "").trim().toLowerCase();
+    const grid = $("#catalogScreen .product-grid");
+    if(!grid) return;
+
+    let visible = 0;
+    $$(".dynamic-card[data-product-id]", grid).forEach(card => {
+      const product = productsCache.find(p => pid(p) === card.dataset.productId);
+      const haystack = [
+        product?.brand,
+        product?.name,
+        product?.color,
+        product?.badge,
+        Array.isArray(product?.sizes) ? product.sizes.join(" ") : ""
+      ].join(" ").toLowerCase();
+
+      const ok = !q || haystack.includes(q);
+      card.style.display = ok ? "" : "none";
+      if(ok) visible++;
+    });
+
+    let empty = $(".dynamic-search-empty", grid);
+    if(q && visible === 0){
+      if(!empty){
+        empty = document.createElement("div");
+        empty.className = "dynamic-search-empty";
+        grid.appendChild(empty);
+      }
+      empty.textContent = "По этому запросу ничего не найдено";
+      empty.style.display = "";
+    }else if(empty){
+      empty.style.display = "none";
+    }
+  }
+
+  // Capture before old label/card click handler, so heart does not open product.
+  window.addEventListener("click", function(e){
+    const heart = e.target.closest(".dynamic-card .fav-heart");
+    if(heart){
+      e.preventDefault();
+      e.stopPropagation();
+      const card = heart.closest(".dynamic-card[data-product-id]");
+      if(card) toggleFav(card.dataset.productId);
+      return;
+    }
+
+    const favNav = e.target.closest('label[for="tab-favorites"], .nav-favorites');
+    if(favNav){
+      setTimeout(renderFavorites, 80);
+    }
+
+    const searchIcon = e.target.closest('.top-actions label[for="tab-catalog"]');
+    if(searchIcon){
+      setTimeout(() => {
+        const input = $("#catalogScreen .searchbox input");
+        if(input) input.focus();
+      }, 160);
+    }
+  }, true);
+
+  document.addEventListener("input", function(e){
+    if(e.target.matches("#catalogScreen .searchbox input")){
+      applySearch(e.target.value);
+    }
+  });
+
+  document.addEventListener("change", function(e){
+    if(e.target && e.target.id === "tab-favorites"){
+      setTimeout(renderFavorites, 80);
+    }
+  });
+
+  const observer = new MutationObserver(() => {
+    updateHearts();
+    const input = $("#catalogScreen .searchbox input");
+    if(input && input.value) applySearch(input.value);
+  });
+  observer.observe(document.documentElement, {childList:true, subtree:true});
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", loadProducts);
+  else loadProducts();
+})();
+</script>
+
+
+<script>
+/* === SBP v5 final fixes: favorites + full-card dynamic data === */
+(function(){
+  const PRODUCTS_URL = "data/products.json";
+  const FAV_KEY = "sbp_favorites";
+
+  const qs = (s, r=document) => r.querySelector(s);
+  const qsa = (s, r=document) => Array.from(r.querySelectorAll(s));
+  const esc = (v) => String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+  const idOf = (p) => p.id || String(p.name || "product").toLowerCase().replace(/[^a-z0-9а-яё]+/gi, "-").replace(/^-|-$/g, "");
+  const imageOf = (p) => Array.isArray(p.images) && p.images[0] ? p.images[0] : "";
+  const priceOf = (p) => Number(p.price || p.price_byn || 0) ? `${Number(p.price || p.price_byn)} BYN` : "Цена уточняется";
+  const sizesOf = (p) => Array.isArray(p.sizes) && p.sizes.length ? p.sizes.join(" ") : "Размеры уточняются";
+
+  let products = [];
+
+  function getFavs(){
+    try { return new Set(JSON.parse(localStorage.getItem(FAV_KEY) || "[]")); }
+    catch(e){ return new Set(); }
+  }
+
+  function setFavs(favs){
+    localStorage.setItem(FAV_KEY, JSON.stringify(Array.from(favs)));
+  }
+
+  function isFav(id){
+    return getFavs().has(id);
+  }
+
+  function toggleFav(id){
+    const favs = getFavs();
+    if(favs.has(id)) favs.delete(id);
+    else favs.add(id);
+    setFavs(favs);
+    syncHearts();
+    renderFavorites();
+  }
+
+  function productCard(p){
+    const id = idOf(p);
+    const img = imageOf(p);
+    const fav = isFav(id) ? "is-favorite active" : "";
+    return `
+      <label class="card dynamic-card" data-product-id="${esc(id)}" for="tab-product">
+        ${p.badge && p.badge !== "-" ? `<span class="badge">${esc(p.badge)}</span>` : ""}
+        <span class="heart fav-heart ${fav}" data-fav-id="${esc(id)}">
+          <span class="heart-outline">♡</span>
+          <span class="heart-filled">♥</span>
+          <span class="heart-pop">♥</span>
+        </span>
+        <span class="photo">${img ? `<img src="${esc(img)}" alt="${esc(p.name)}">` : ""}</span>
+        <span class="meta">
+          <p class="brand">${esc(p.brand || "")}</p>
+          <h3>${esc(p.name || "Без названия")}</h3>
+          <p class="color">${esc(p.color || "")}</p>
+          <span class="card-bottom"><b>${esc(priceOf(p))}</b><span>${esc(sizesOf(p))}</span></span>
+        </span>
+      </label>
+    `;
+  }
+
+  function syncHearts(){
+    const favs = getFavs();
+    qsa(".dynamic-card[data-product-id]").forEach(card => {
+      const heart = qs(".fav-heart", card);
+      if(!heart) return;
+      const active = favs.has(card.dataset.productId);
+      heart.classList.toggle("is-favorite", active);
+      heart.classList.toggle("active", active);
+    });
+  }
+
+  function ensureFavoritesGrid(){
+    const screen = qs("#favoritesScreen");
+    if(!screen) return null;
+
+    let grid = qs(".dynamic-favorites-grid", screen);
+    if(!grid){
+      grid = document.createElement("section");
+      grid.className = "product-grid dynamic-favorites-grid";
+      const header = qs(".page-head", screen);
+      if(header) header.insertAdjacentElement("afterend", grid);
+      else screen.prepend(grid);
+    }
+    return grid;
+  }
+
+  function renderFavorites(){
+    const screen = qs("#favoritesScreen");
+    if(!screen) return;
+
+    const grid = ensureFavoritesGrid();
+    const empty = qs(".empty-state", screen);
+    const favs = getFavs();
+    const list = products.filter(p => favs.has(idOf(p)));
+
+    if(!list.length){
+      if(grid) grid.innerHTML = "";
+      if(empty) empty.style.display = "";
+      return;
+    }
+
+    if(empty) empty.style.display = "none";
+    if(grid) grid.innerHTML = list.map(productCard).join("");
+    syncHearts();
+  }
+
+  function applySearch(){
+    const input = qs("#catalogScreen .searchbox input");
+    const grid = qs("#catalogScreen .product-grid");
+    if(!input || !grid) return;
+
+    const query = input.value.trim().toLowerCase();
+    let visible = 0;
+
+    qsa(".dynamic-card[data-product-id]", grid).forEach(card => {
+      const p = products.find(x => idOf(x) === card.dataset.productId);
+      const text = [
+        p?.brand,
+        p?.name,
+        p?.color,
+        p?.badge,
+        Array.isArray(p?.sizes) ? p.sizes.join(" ") : ""
+      ].join(" ").toLowerCase();
+
+      const ok = !query || text.includes(query);
+      card.style.display = ok ? "" : "none";
+      if(ok) visible++;
+    });
+
+    let empty = qs(".dynamic-search-empty", grid);
+    if(query && visible === 0){
+      if(!empty){
+        empty = document.createElement("div");
+        empty.className = "dynamic-search-empty";
+        empty.style.cssText = "grid-column:1/-1;min-height:140px;border-radius:24px;border:1px solid var(--line);background:linear-gradient(145deg,var(--card1),var(--card2));color:var(--muted);display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;";
+        grid.appendChild(empty);
+      }
+      empty.textContent = "По этому запросу ничего не найдено";
+      empty.style.display = "";
+    }else if(empty){
+      empty.style.display = "none";
+    }
+  }
+
+  async function loadProducts(){
+    try{
+      const r = await fetch(PRODUCTS_URL + "?v=" + Date.now(), {cache:"no-store"});
+      const data = await r.json();
+      products = Array.isArray(data) ? data : [];
+    }catch(e){
+      products = [];
+    }
+
+    setTimeout(() => {
+      syncHearts();
+      renderFavorites();
+      applySearch();
+    }, 120);
+  }
+
+  window.addEventListener("click", function(e){
+    const heart = e.target.closest(".dynamic-card .fav-heart");
+    if(heart){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      const id = heart.dataset.favId || heart.closest(".dynamic-card")?.dataset.productId;
+      if(id) toggleFav(id);
+      return false;
+    }
+
+    if(e.target.closest('label[for="tab-favorites"], .nav-favorites')){
+      setTimeout(renderFavorites, 120);
+    }
+  }, true);
+
+  document.addEventListener("change", function(e){
+    if(e.target && e.target.id === "tab-favorites"){
+      setTimeout(renderFavorites, 120);
+    }
+  }, true);
+
+  document.addEventListener("input", function(e){
+    if(e.target.matches("#catalogScreen .searchbox input")){
+      applySearch();
+    }
+  });
+
+  const observer = new MutationObserver(() => {
+    syncHearts();
+    const favoritesChecked = qs("#tab-favorites")?.checked;
+    if(favoritesChecked) renderFavorites();
+    applySearch();
+  });
+
+  observer.observe(document.documentElement, {childList:true, subtree:true});
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", loadProducts);
+  }else{
+    loadProducts();
+  }
 })();
 </script>
 
