@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "id": "oo-prol-prold",
+    "brand": "оо",
+    "name": "прол",
+    "color": "пролд",
+    "price": 77,
+    "sizes": [
+      "43"
+    ],
+    "badge": "",
+    "description": "мс",
+    "images": [
+      "images/products/oo-prol-prold-1.jpg"
+    ],
+    "created_at": "2026-05-24T14:48:03.728470",
+    "updated_at": "2026-05-24T14:48:03.728525"
+  }
+]
