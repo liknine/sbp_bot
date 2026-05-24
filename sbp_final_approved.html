@@ -4711,11 +4711,6 @@ body > .bottom-nav label span{
   }
 }
 
-
-/* === SBP dynamic products from JSON v1 === */
-.product-grid .card:not(.dynamic-card){display:none!important}
-.dynamic-products-empty,.dynamic-products-error{min-height:260px;border-radius:28px;background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.065),transparent 34%),linear-gradient(145deg,var(--card1),var(--card2));border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px 22px;grid-column:1/-1}.dynamic-products-empty h2{margin:0;font-size:24px;line-height:1.08;letter-spacing:-.7px}.dynamic-products-empty p,.dynamic-products-error{color:var(--muted);font-size:14px;line-height:1.38}.dynamic-products-empty p{margin:10px auto 0;max-width:280px}.dynamic-card{animation:softRise .28s cubic-bezier(.22,1,.36,1) both}.dynamic-card .fav-heart{pointer-events:none}.dynamic-hidden{display:none!important}
-
 </style>
 </head>
 <body>
@@ -5277,32 +5272,6 @@ body > .bottom-nav label span{
 
 
 
-
-
-<script>
-/* === SBP dynamic products from JSON v1 === */
-(function(){
-  const PRODUCTS_URL='data/products.json';
-  const state={products:[],active:null,size:null,error:null};
-  const $=(s,r=document)=>r.querySelector(s); const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
-  const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-  const pid=p=>p.id||String(p.name||'product').toLowerCase().replace(/[^a-z0-9а-яё]+/gi,'-').replace(/^-|-$/g,'');
-  const img=p=>(Array.isArray(p.images)&&p.images[0])?p.images[0]:'';
-  const price=p=>Number(p.price||p.price_byn||0)?`${Number(p.price||p.price_byn)} BYN`:'Цена уточняется';
-  const sizes=p=>Array.isArray(p.sizes)&&p.sizes.length?p.sizes.join(' '):'Размеры уточняются';
-  function find(id){return state.products.find(p=>pid(p)===id)||state.products[0]||null}
-  function card(p){const id=pid(p),im=img(p);return `<label class="card dynamic-card" data-product-id="${esc(id)}" for="tab-product">${p.badge&&p.badge!=='-'?`<span class="badge">${esc(p.badge)}</span>`:''}<span class="heart fav-heart"><span class="heart-outline">♡</span><span class="heart-filled">♥</span><span class="heart-pop">♥</span></span><span class="photo">${im?`<img src="${esc(im)}" alt="${esc(p.name)}">`:''}</span><span class="meta"><p class="brand">${esc(p.brand||'')}</p><h3>${esc(p.name||'Без названия')}</h3><p class="color">${esc(p.color||'')}</p><span class="card-bottom"><b>${esc(price(p))}</b><span>${esc(sizes(p))}</span></span></span></label>`}
-  function empty(){return `<div class="dynamic-products-empty"><div class="empty-icon">□</div><h2>Каталог пока пуст</h2><p>Товары появятся здесь после добавления администратором.</p></div>`}
-  function renderGrids(){['#homeScreen .product-grid','#catalogScreen .product-grid'].map(s=>$(s)).filter(Boolean).forEach(g=>{g.querySelectorAll('.dynamic-card,.dynamic-products-empty,.dynamic-products-error').forEach(x=>x.remove());g.insertAdjacentHTML('beforeend',state.error?`<div class="dynamic-products-error">Не получилось загрузить товары. Проверь файл <b>data/products.json</b>.</div>`:(state.products.length?state.products.map(card).join(''):empty()));});}
-  function renderProduct(p){if(!p)return; const root=$('#productScreen'); if(!root)return; const im=img(p); const main=$('.product-main-image img',root); if(main&&im){main.src=im;main.alt=p.name||''} $$('.product-thumb img',root).forEach((x,i)=>{if(p.images&&p.images[i]){x.src=p.images[i];x.alt=p.name||'';x.closest('.product-thumb')?.classList.remove('dynamic-hidden')}else{x.closest('.product-thumb')?.classList.add('dynamic-hidden')}}); const k=$('.product-kicker',root); if(k)k.textContent=p.brand||''; const t=$('.product-title',root); if(t)t.textContent=p.name||'Без названия'; const d=$('.product-desc',root); if(d)d.textContent=p.description||'Описание появится позже.'; const pr=$('.product-price',root); if(pr)pr.textContent=price(p); const sg=$('.sizes-grid',root); if(sg){const ss=Array.isArray(p.sizes)?p.sizes:[]; sg.innerHTML=ss.length?ss.map((s,i)=>`<input class="state size-radio" type="radio" name="size" id="dynamic-size-${i}"><label class="size-option dynamic-size-option" data-size="${esc(s)}" for="dynamic-size-${i}"><b>${esc(s)}</b><small>В наличии</small></label>`).join(''):`<div class="dynamic-products-empty" style="min-height:120px"><h2>Размеры уточняются</h2></div>`}}
-  function payload(){const p=find(state.active||localStorage.getItem('sbp_active_product')); if(!p)return null; return {type:'order_create',product_id:pid(p),product_name:p.name||'SBP order',brand:p.brand||'',color:p.color||'',size:state.size||localStorage.getItem('sbp_selected_size')||'-',price_byn:Number(p.price||p.price_byn||0),image:img(p),delivery_method:selectedDelivery()}}
-  function selectedDelivery(){const x=$('input[name="delivery"]:checked'); if(!x)return '-'; if(x.id==='delivery-evro')return 'Европочта'; if(x.id==='delivery-bel')return 'Белпочта'; return 'Самовывоз'}
-  function patchOrder(){document.querySelectorAll('label[for="tab-success"],.primary-link[for="tab-success"]').forEach(b=>{if(b.dataset.sbpPatched)return;b.dataset.sbpPatched='1';b.addEventListener('click',()=>{const p=payload(); if(p&&window.Telegram?.WebApp?.sendData) window.Telegram.WebApp.sendData(JSON.stringify(p));},true)})}
-  document.addEventListener('click',e=>{const c=e.target.closest('.dynamic-card[data-product-id]'); if(c){state.active=c.dataset.productId;localStorage.setItem('sbp_active_product',state.active);renderProduct(find(state.active));} const s=e.target.closest('.dynamic-size-option[data-size]'); if(s){state.size=s.dataset.size;localStorage.setItem('sbp_selected_size',state.size)}},true);
-  async function load(){try{const r=await fetch(PRODUCTS_URL+'?v='+Date.now(),{cache:'no-store'}); if(!r.ok)throw new Error(r.status); const data=await r.json(); state.products=Array.isArray(data)?data:[]; state.error=null;}catch(e){console.error('[SBP] products load failed',e);state.products=[];state.error=e;} renderGrids(); renderProduct(find(localStorage.getItem('sbp_active_product'))); patchOrder();}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load);else load();
-})();
-</script>
 
 </body>
 </html>
