@@ -4712,143 +4712,92 @@ body > .bottom-nav label span{
 }
 
 
-/* === SBP dynamic products from JSON v1 === */
-.product-grid .card:not(.dynamic-card){display:none!important}
-.dynamic-products-empty,.dynamic-products-error{min-height:260px;border-radius:28px;background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.065),transparent 34%),linear-gradient(145deg,var(--card1),var(--card2));border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:28px 22px;grid-column:1/-1}.dynamic-products-empty h2{margin:0;font-size:24px;line-height:1.08;letter-spacing:-.7px}.dynamic-products-empty p,.dynamic-products-error{color:var(--muted);font-size:14px;line-height:1.38}.dynamic-products-empty p{margin:10px auto 0;max-width:280px}.dynamic-card{animation:softRise .28s cubic-bezier(.22,1,.36,1) both}.dynamic-card .fav-heart{pointer-events:none}.dynamic-hidden{display:none!important}
-
-
-/* === SBP v4: dynamic images, favorites, search === */
-.dynamic-card .photo{
-  overflow:hidden;
+/* === SBP v7 dynamic catalog/favorites/order fixes === */
+.demo-product-card{
+  display:none !important;
 }
-.dynamic-card .photo img,
-.product-main-image img,
-.product-thumb img{
+.sbp-dynamic-card .photo{
+  height:132px !important;
   width:100% !important;
-  height:100% !important;
-  object-fit:cover !important;
-  display:block;
-}
-.dynamic-card .fav-heart{
-  pointer-events:auto !important;
-}
-.dynamic-card .fav-heart .heart-filled,
-.dynamic-card .fav-heart .heart-pop{
-  opacity:0;
-}
-.dynamic-card .fav-heart.active .heart-outline{
-  opacity:0;
-}
-.dynamic-card .fav-heart.active .heart-filled{
-  opacity:1;
-}
-.dynamic-card .fav-heart.active .heart-pop{
-  animation:heartPop .36s cubic-bezier(.22,1,.36,1);
-}
-@keyframes heartPop{
-  0%{opacity:.2;transform:scale(.45)}
-  55%{opacity:1;transform:scale(1.45)}
-  100%{opacity:0;transform:scale(1.05)}
-}
-.dynamic-favorites-grid{
-  margin-top:18px;
-}
-.dynamic-search-empty{
-  grid-column:1/-1;
-  min-height:140px;
-  border-radius:24px;
-  border:1px solid var(--line);
-  background:linear-gradient(145deg,var(--card1),var(--card2));
-  color:var(--muted);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:20px;
-}
-
-
-/* === SBP v5 final fixes: full-card photos + robust favorites === */
-.dynamic-card{
-  overflow:hidden !important;
-}
-.dynamic-card .photo{
-  position:absolute !important;
-  inset:0 !important;
-  width:100% !important;
-  height:100% !important;
   padding:0 !important;
   margin:0 !important;
   display:block !important;
-  z-index:1 !important;
   overflow:hidden !important;
 }
-.dynamic-card .photo img{
+.sbp-dynamic-card .photo img{
   width:100% !important;
   height:100% !important;
   max-width:none !important;
   max-height:none !important;
   object-fit:cover !important;
   display:block !important;
-  filter:none !important;
   transform:none !important;
+  filter:drop-shadow(0 18px 18px rgba(0,0,0,.35)) !important;
 }
-.dynamic-card::after{
-  content:"";
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:0;
-  height:58%;
-  z-index:2;
-  pointer-events:none;
-  background:linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,.38), transparent);
+.product-main-image img,
+.product-thumb img,
+.cart-img img{
+  width:100% !important;
+  height:100% !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:cover !important;
+  display:block !important;
 }
-.dynamic-card .meta{
-  z-index:3 !important;
-  left:12px !important;
-  right:12px !important;
-  bottom:12px !important;
-}
-.dynamic-card .badge,
-.dynamic-card .heart{
-  z-index:6 !important;
-}
-.dynamic-card .brand,
-.dynamic-card .color,
-.dynamic-card h3,
-.dynamic-card .card-bottom,
-.dynamic-card .card-bottom b,
-.dynamic-card .card-bottom span{
-  color:#fff !important;
-  text-shadow:0 2px 10px rgba(0,0,0,.55);
-}
-.dynamic-card .brand,
-.dynamic-card .color,
-.dynamic-card .card-bottom span{
-  opacity:.82;
-}
-.dynamic-card .fav-heart{
+.sbp-dynamic-card .fav-heart{
   pointer-events:auto !important;
-  touch-action:manipulation;
+  touch-action:manipulation !important;
+  cursor:pointer !important;
 }
-.dynamic-card .fav-heart .heart-filled,
-.dynamic-card .fav-heart .heart-pop{
+.sbp-dynamic-card .fav-heart .heart-filled,
+.sbp-dynamic-card .fav-heart .heart-pop{
   opacity:0;
 }
-.dynamic-card .fav-heart.is-favorite .heart-outline,
-.dynamic-card .fav-heart.active .heart-outline{
-  opacity:0;
+.sbp-dynamic-card .fav-heart.is-favorite .heart-outline{
+  opacity:0 !important;
 }
-.dynamic-card .fav-heart.is-favorite .heart-filled,
-.dynamic-card .fav-heart.active .heart-filled{
-  opacity:1;
+.sbp-dynamic-card .fav-heart.is-favorite .heart-filled{
+  opacity:1 !important;
 }
-.dynamic-favorites-grid{
+.sbp-dynamic-card .fav-heart.is-favorite .heart-pop{
+  animation:sbpV7HeartPop .34s cubic-bezier(.22,1,.36,1);
+}
+@keyframes sbpV7HeartPop{
+  0%{opacity:.25;transform:scale(.45)}
+  55%{opacity:1;transform:scale(1.42)}
+  100%{opacity:0;transform:scale(1.05)}
+}
+.sbp-dynamic-favorites-grid{
   margin-top:18px;
 }
-.dynamic-favorites-grid:empty{
-  display:none;
+.sbp-empty-dynamic,
+.sbp-search-empty,
+.sbp-load-error{
+  grid-column:1/-1;
+  min-height:170px;
+  border-radius:24px;
+  border:1px solid var(--line);
+  background:linear-gradient(145deg,var(--card1),var(--card2));
+  color:var(--muted);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
+}
+.sbp-empty-dynamic h2{
+  margin:0;
+  color:var(--text);
+  font-size:22px;
+  line-height:1.08;
+}
+.sbp-empty-dynamic p{
+  margin:8px 0 0;
+  max-width:280px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.35;
 }
 
 </style>
@@ -5415,297 +5364,119 @@ body > .bottom-nav label span{
 
 
 <script>
-/* === SBP dynamic products from JSON v1 === */
-(function(){
-  const PRODUCTS_URL='data/products.json';
-  const state={products:[],active:null,size:null,error:null};
-  const $=(s,r=document)=>r.querySelector(s); const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
-  const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-  const pid=p=>p.id||String(p.name||'product').toLowerCase().replace(/[^a-z0-9а-яё]+/gi,'-').replace(/^-|-$/g,'');
-  const img=p=>(Array.isArray(p.images)&&p.images[0])?p.images[0]:'';
-  const price=p=>Number(p.price||p.price_byn||0)?`${Number(p.price||p.price_byn)} BYN`:'Цена уточняется';
-  const sizes=p=>Array.isArray(p.sizes)&&p.sizes.length?p.sizes.join(' '):'Размеры уточняются';
-  function find(id){return state.products.find(p=>pid(p)===id)||state.products[0]||null}
-  function card(p){const id=pid(p),im=img(p);return `<label class="card dynamic-card" data-product-id="${esc(id)}" for="tab-product">${p.badge&&p.badge!=='-'?`<span class="badge">${esc(p.badge)}</span>`:''}<span class="heart fav-heart"><span class="heart-outline">♡</span><span class="heart-filled">♥</span><span class="heart-pop">♥</span></span><span class="photo">${im?`<img src="${esc(im)}" alt="${esc(p.name)}">`:''}</span><span class="meta"><p class="brand">${esc(p.brand||'')}</p><h3>${esc(p.name||'Без названия')}</h3><p class="color">${esc(p.color||'')}</p><span class="card-bottom"><b>${esc(price(p))}</b><span>${esc(sizes(p))}</span></span></span></label>`}
-  function empty(){return `<div class="dynamic-products-empty"><div class="empty-icon">□</div><h2>Каталог пока пуст</h2><p>Товары появятся здесь после добавления администратором.</p></div>`}
-  function renderGrids(){['#homeScreen .product-grid','#catalogScreen .product-grid'].map(s=>$(s)).filter(Boolean).forEach(g=>{g.querySelectorAll('.dynamic-card,.dynamic-products-empty,.dynamic-products-error').forEach(x=>x.remove());g.insertAdjacentHTML('beforeend',state.error?`<div class="dynamic-products-error">Не получилось загрузить товары. Проверь файл <b>data/products.json</b>.</div>`:(state.products.length?state.products.map(card).join(''):empty()));});}
-  function renderProduct(p){if(!p)return; const root=$('#productScreen'); if(!root)return; const im=img(p); const main=$('.product-main-image img',root); if(main&&im){main.src=im;main.alt=p.name||''} $$('.product-thumb img',root).forEach((x,i)=>{if(p.images&&p.images[i]){x.src=p.images[i];x.alt=p.name||'';x.closest('.product-thumb')?.classList.remove('dynamic-hidden')}else{x.closest('.product-thumb')?.classList.add('dynamic-hidden')}}); const k=$('.product-kicker',root); if(k)k.textContent=p.brand||''; const t=$('.product-title',root); if(t)t.textContent=p.name||'Без названия'; const d=$('.product-desc',root); if(d)d.textContent=p.description||'Описание появится позже.'; const pr=$('.product-price',root); if(pr)pr.textContent=price(p); const sg=$('.sizes-grid',root); if(sg){const ss=Array.isArray(p.sizes)?p.sizes:[]; sg.innerHTML=ss.length?ss.map((s,i)=>`<input class="state size-radio" type="radio" name="size" id="dynamic-size-${i}"><label class="size-option dynamic-size-option" data-size="${esc(s)}" for="dynamic-size-${i}"><b>${esc(s)}</b><small>В наличии</small></label>`).join(''):`<div class="dynamic-products-empty" style="min-height:120px"><h2>Размеры уточняются</h2></div>`}}
-  function payload(){const p=find(state.active||localStorage.getItem('sbp_active_product')); if(!p)return null; return {type:'order_create',product_id:pid(p),product_name:p.name||'SBP order',brand:p.brand||'',color:p.color||'',size:state.size||localStorage.getItem('sbp_selected_size')||'-',price_byn:Number(p.price||p.price_byn||0),image:img(p),delivery_method:selectedDelivery()}}
-  function selectedDelivery(){const x=$('input[name="delivery"]:checked'); if(!x)return '-'; if(x.id==='delivery-evro')return 'Европочта'; if(x.id==='delivery-bel')return 'Белпочта'; return 'Самовывоз'}
-  function patchOrder(){document.querySelectorAll('label[for="tab-success"],.primary-link[for="tab-success"]').forEach(b=>{if(b.dataset.sbpPatched)return;b.dataset.sbpPatched='1';b.addEventListener('click',()=>{const p=payload(); if(p&&window.Telegram?.WebApp?.sendData) window.Telegram.WebApp.sendData(JSON.stringify(p));},true)})}
-  document.addEventListener('click',e=>{const c=e.target.closest('.dynamic-card[data-product-id]'); if(c){state.active=c.dataset.productId;localStorage.setItem('sbp_active_product',state.active);renderProduct(find(state.active));} const s=e.target.closest('.dynamic-size-option[data-size]'); if(s){state.size=s.dataset.size;localStorage.setItem('sbp_selected_size',state.size)}},true);
-  async function load(){try{const r=await fetch(PRODUCTS_URL+'?v='+Date.now(),{cache:'no-store'}); if(!r.ok)throw new Error(r.status); const data=await r.json(); state.products=Array.isArray(data)?data:[]; state.error=null;}catch(e){console.error('[SBP] products load failed',e);state.products=[];state.error=e;} renderGrids(); renderProduct(find(localStorage.getItem('sbp_active_product'))); patchOrder();}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load);else load();
-})();
-</script>
-
-
-<script>
-/* === SBP v4 enhancements: real favorites + catalog search === */
+/* === SBP v7: single clean dynamic logic === */
 (function(){
   const PRODUCTS_URL = "data/products.json";
   const FAV_KEY = "sbp_favorites";
+  const ACTIVE_KEY = "sbp_active_product";
+  const SIZE_KEY = "sbp_selected_size";
 
-  const $ = (s, r=document) => r.querySelector(s);
-  const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
-  const esc = v => String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-  const pid = p => p.id || String(p.name || "product").toLowerCase().replace(/[^a-z0-9а-яё]+/gi,"-").replace(/^-|-$/g,"");
-  const img = p => (Array.isArray(p.images) && p.images[0]) ? p.images[0] : "";
-  const price = p => Number(p.price || p.price_byn || 0) ? `${Number(p.price || p.price_byn)} BYN` : "Цена уточняется";
-  const sizes = p => Array.isArray(p.sizes) && p.sizes.length ? p.sizes.join(" ") : "Размеры уточняются";
+  const qs = (s, r=document) => r.querySelector(s);
+  const qsa = (s, r=document) => Array.from(r.querySelectorAll(s));
+  const esc = (v) => String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+  const idOf = (p) => p.id || String(p.name || "product").toLowerCase().replace(/[^a-z0-9а-яё]+/gi, "-").replace(/^-|-$/g, "");
+  const imageOf = (p) => Array.isArray(p.images) && p.images.length ? p.images[0] : "";
+  const priceNumber = (p) => Number(p.price || p.price_byn || 0);
+  const priceOf = (p) => priceNumber(p) ? `${priceNumber(p)} BYN` : "Цена уточняется";
+  const sizesOf = (p) => Array.isArray(p.sizes) && p.sizes.length ? p.sizes.join(" ") : "Размеры уточняются";
 
-  let productsCache = [];
+  let products = [];
+  let loaded = false;
 
   function favs(){
     try { return new Set(JSON.parse(localStorage.getItem(FAV_KEY) || "[]")); }
     catch(e){ return new Set(); }
   }
 
-  function saveFavs(set){
-    localStorage.setItem(FAV_KEY, JSON.stringify(Array.from(set)));
-  }
-
-  function toggleFav(id){
-    const set = favs();
-    if(set.has(id)) set.delete(id);
-    else set.add(id);
-    saveFavs(set);
-    updateHearts();
-    renderFavorites();
-  }
-
-  function card(p){
-    const id = pid(p);
-    const im = img(p);
-    const active = favs().has(id) ? "active" : "";
-    return `<label class="card dynamic-card dynamic-fav-card" data-product-id="${esc(id)}" for="tab-product">
-      ${p.badge && p.badge !== "-" ? `<span class="badge">${esc(p.badge)}</span>` : ""}
-      <span class="heart fav-heart ${active}" data-fav-id="${esc(id)}">
-        <span class="heart-outline">♡</span>
-        <span class="heart-filled">♥</span>
-        <span class="heart-pop">♥</span>
-      </span>
-      <span class="photo">${im ? `<img src="${esc(im)}" alt="${esc(p.name)}">` : ""}</span>
-      <span class="meta">
-        <p class="brand">${esc(p.brand || "")}</p>
-        <h3>${esc(p.name || "Без названия")}</h3>
-        <p class="color">${esc(p.color || "")}</p>
-        <span class="card-bottom"><b>${esc(price(p))}</b><span>${esc(sizes(p))}</span></span>
-      </span>
-    </label>`;
-  }
-
-  async function loadProducts(){
-    try{
-      const r = await fetch(PRODUCTS_URL + "?v=" + Date.now(), {cache:"no-store"});
-      const data = await r.json();
-      productsCache = Array.isArray(data) ? data : [];
-    }catch(e){
-      productsCache = [];
-    }
-    updateHearts();
-    renderFavorites();
-  }
-
-  function updateHearts(){
-    const set = favs();
-    $$(".dynamic-card[data-product-id]").forEach(card => {
-      const heart = $(".fav-heart", card);
-      if(!heart) return;
-      heart.classList.toggle("active", set.has(card.dataset.productId));
-    });
-  }
-
-  function ensureFavoritesGrid(){
-    const screen = $("#favoritesScreen");
-    if(!screen) return null;
-
-    let grid = $(".dynamic-favorites-grid", screen);
-    if(!grid){
-      grid = document.createElement("section");
-      grid.className = "product-grid dynamic-favorites-grid";
-      const empty = $(".empty-state", screen);
-      if(empty) empty.insertAdjacentElement("beforebegin", grid);
-      else screen.appendChild(grid);
-    }
-    return grid;
-  }
-
-  function renderFavorites(){
-    const screen = $("#favoritesScreen");
-    if(!screen) return;
-
-    const grid = ensureFavoritesGrid();
-    if(!grid) return;
-
-    const set = favs();
-    const list = productsCache.filter(p => set.has(pid(p)));
-    const empty = $(".empty-state", screen);
-
-    if(!list.length){
-      grid.innerHTML = "";
-      if(empty) empty.style.display = "";
-      return;
-    }
-
-    if(empty) empty.style.display = "none";
-    grid.innerHTML = list.map(card).join("");
-  }
-
-  function applySearch(query){
-    const q = String(query || "").trim().toLowerCase();
-    const grid = $("#catalogScreen .product-grid");
-    if(!grid) return;
-
-    let visible = 0;
-    $$(".dynamic-card[data-product-id]", grid).forEach(card => {
-      const product = productsCache.find(p => pid(p) === card.dataset.productId);
-      const haystack = [
-        product?.brand,
-        product?.name,
-        product?.color,
-        product?.badge,
-        Array.isArray(product?.sizes) ? product.sizes.join(" ") : ""
-      ].join(" ").toLowerCase();
-
-      const ok = !q || haystack.includes(q);
-      card.style.display = ok ? "" : "none";
-      if(ok) visible++;
-    });
-
-    let empty = $(".dynamic-search-empty", grid);
-    if(q && visible === 0){
-      if(!empty){
-        empty = document.createElement("div");
-        empty.className = "dynamic-search-empty";
-        grid.appendChild(empty);
-      }
-      empty.textContent = "По этому запросу ничего не найдено";
-      empty.style.display = "";
-    }else if(empty){
-      empty.style.display = "none";
-    }
-  }
-
-  // Capture before old label/card click handler, so heart does not open product.
-  window.addEventListener("click", function(e){
-    const heart = e.target.closest(".dynamic-card .fav-heart");
-    if(heart){
-      e.preventDefault();
-      e.stopPropagation();
-      const card = heart.closest(".dynamic-card[data-product-id]");
-      if(card) toggleFav(card.dataset.productId);
-      return;
-    }
-
-    const favNav = e.target.closest('label[for="tab-favorites"], .nav-favorites');
-    if(favNav){
-      setTimeout(renderFavorites, 80);
-    }
-
-    const searchIcon = e.target.closest('.top-actions label[for="tab-catalog"]');
-    if(searchIcon){
-      setTimeout(() => {
-        const input = $("#catalogScreen .searchbox input");
-        if(input) input.focus();
-      }, 160);
-    }
-  }, true);
-
-  document.addEventListener("input", function(e){
-    if(e.target.matches("#catalogScreen .searchbox input")){
-      applySearch(e.target.value);
-    }
-  });
-
-  document.addEventListener("change", function(e){
-    if(e.target && e.target.id === "tab-favorites"){
-      setTimeout(renderFavorites, 80);
-    }
-  });
-
-  const observer = new MutationObserver(() => {
-    updateHearts();
-    const input = $("#catalogScreen .searchbox input");
-    if(input && input.value) applySearch(input.value);
-  });
-  observer.observe(document.documentElement, {childList:true, subtree:true});
-
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", loadProducts);
-  else loadProducts();
-})();
-</script>
-
-
-<script>
-/* === SBP v5 final fixes: favorites + full-card dynamic data === */
-(function(){
-  const PRODUCTS_URL = "data/products.json";
-  const FAV_KEY = "sbp_favorites";
-
-  const qs = (s, r=document) => r.querySelector(s);
-  const qsa = (s, r=document) => Array.from(r.querySelectorAll(s));
-  const esc = (v) => String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-  const idOf = (p) => p.id || String(p.name || "product").toLowerCase().replace(/[^a-z0-9а-яё]+/gi, "-").replace(/^-|-$/g, "");
-  const imageOf = (p) => Array.isArray(p.images) && p.images[0] ? p.images[0] : "";
-  const priceOf = (p) => Number(p.price || p.price_byn || 0) ? `${Number(p.price || p.price_byn)} BYN` : "Цена уточняется";
-  const sizesOf = (p) => Array.isArray(p.sizes) && p.sizes.length ? p.sizes.join(" ") : "Размеры уточняются";
-
-  let products = [];
-
-  function getFavs(){
-    try { return new Set(JSON.parse(localStorage.getItem(FAV_KEY) || "[]")); }
-    catch(e){ return new Set(); }
-  }
-
-  function setFavs(favs){
-    localStorage.setItem(FAV_KEY, JSON.stringify(Array.from(favs)));
+  function saveFavs(next){
+    localStorage.setItem(FAV_KEY, JSON.stringify(Array.from(next)));
   }
 
   function isFav(id){
-    return getFavs().has(id);
+    return favs().has(id);
   }
 
   function toggleFav(id){
-    const favs = getFavs();
-    if(favs.has(id)) favs.delete(id);
-    else favs.add(id);
-    setFavs(favs);
+    const next = favs();
+    next.has(id) ? next.delete(id) : next.add(id);
+    saveFavs(next);
     syncHearts();
     renderFavorites();
   }
 
-  function productCard(p){
-    const id = idOf(p);
-    const img = imageOf(p);
-    const fav = isFav(id) ? "is-favorite active" : "";
+  function productById(id){
+    return products.find(p => idOf(p) === id) || null;
+  }
+
+  function dynamicCard(product){
+    const id = idOf(product);
+    const image = imageOf(product);
+    const favClass = isFav(id) ? "is-favorite" : "";
+
     return `
-      <label class="card dynamic-card" data-product-id="${esc(id)}" for="tab-product">
-        ${p.badge && p.badge !== "-" ? `<span class="badge">${esc(p.badge)}</span>` : ""}
-        <span class="heart fav-heart ${fav}" data-fav-id="${esc(id)}">
+      <label class="card sbp-dynamic-card" data-product-id="${esc(id)}" for="tab-product">
+        ${product.badge && product.badge !== "-" ? `<span class="badge">${esc(product.badge)}</span>` : ""}
+        <span class="heart fav-heart ${favClass}" data-fav-id="${esc(id)}" role="button" aria-label="Добавить в избранное">
           <span class="heart-outline">♡</span>
           <span class="heart-filled">♥</span>
           <span class="heart-pop">♥</span>
         </span>
-        <span class="photo">${img ? `<img src="${esc(img)}" alt="${esc(p.name)}">` : ""}</span>
+        <span class="photo">${image ? `<img src="${esc(image)}" alt="${esc(product.name || "")}">` : ""}</span>
         <span class="meta">
-          <p class="brand">${esc(p.brand || "")}</p>
-          <h3>${esc(p.name || "Без названия")}</h3>
-          <p class="color">${esc(p.color || "")}</p>
-          <span class="card-bottom"><b>${esc(priceOf(p))}</b><span>${esc(sizesOf(p))}</span></span>
+          <p class="brand">${esc(product.brand || "")}</p>
+          <h3>${esc(product.name || "Без названия")}</h3>
+          <p class="color">${esc(product.color || "")}</p>
+          <span class="card-bottom">
+            <b>${esc(priceOf(product))}</b>
+            <span>${esc(sizesOf(product))}</span>
+          </span>
         </span>
       </label>
     `;
   }
 
+  function emptyCatalog(){
+    return `
+      <div class="sbp-empty-dynamic">
+        <h2>Каталог пока пуст</h2>
+        <p>Товары появятся здесь после добавления администратором.</p>
+      </div>
+    `;
+  }
+
+  function markAndHideDemoCards(grid){
+    if(!grid) return;
+    qsa(".card:not(.sbp-dynamic-card)", grid).forEach(card => {
+      card.classList.add("demo-product-card");
+    });
+  }
+
+  function renderGrid(grid, list){
+    if(!grid) return;
+
+    markAndHideDemoCards(grid);
+    qsa(".sbp-dynamic-card,.sbp-empty-dynamic,.sbp-search-empty,.sbp-load-error", grid).forEach(el => el.remove());
+
+    if(!list.length){
+      grid.insertAdjacentHTML("beforeend", emptyCatalog());
+      return;
+    }
+
+    grid.insertAdjacentHTML("beforeend", list.map(dynamicCard).join(""));
+  }
+
+  function renderCatalogs(){
+    renderGrid(qs("#homeScreen .product-grid"), products);
+    renderGrid(qs("#catalogScreen .product-grid"), products);
+    syncHearts();
+    applySearch();
+  }
+
   function syncHearts(){
-    const favs = getFavs();
-    qsa(".dynamic-card[data-product-id]").forEach(card => {
+    const current = favs();
+    qsa(".sbp-dynamic-card[data-product-id]").forEach(card => {
       const heart = qs(".fav-heart", card);
-      if(!heart) return;
-      const active = favs.has(card.dataset.productId);
-      heart.classList.toggle("is-favorite", active);
-      heart.classList.toggle("active", active);
+      if(heart) heart.classList.toggle("is-favorite", current.has(card.dataset.productId));
     });
   }
 
@@ -5713,12 +5484,12 @@ body > .bottom-nav label span{
     const screen = qs("#favoritesScreen");
     if(!screen) return null;
 
-    let grid = qs(".dynamic-favorites-grid", screen);
+    let grid = qs(".sbp-dynamic-favorites-grid", screen);
     if(!grid){
       grid = document.createElement("section");
-      grid.className = "product-grid dynamic-favorites-grid";
-      const header = qs(".page-head", screen);
-      if(header) header.insertAdjacentElement("afterend", grid);
+      grid.className = "product-grid sbp-dynamic-favorites-grid";
+      const head = qs(".page-head", screen);
+      if(head) head.insertAdjacentElement("afterend", grid);
       else screen.prepend(grid);
     }
     return grid;
@@ -5726,12 +5497,12 @@ body > .bottom-nav label span{
 
   function renderFavorites(){
     const screen = qs("#favoritesScreen");
-    if(!screen) return;
+    if(!screen || !loaded) return;
 
     const grid = ensureFavoritesGrid();
     const empty = qs(".empty-state", screen);
-    const favs = getFavs();
-    const list = products.filter(p => favs.has(idOf(p)));
+    const current = favs();
+    const list = products.filter(p => current.has(idOf(p)));
 
     if(!list.length){
       if(grid) grid.innerHTML = "";
@@ -5740,8 +5511,140 @@ body > .bottom-nav label span{
     }
 
     if(empty) empty.style.display = "none";
-    if(grid) grid.innerHTML = list.map(productCard).join("");
+    if(grid) grid.innerHTML = list.map(dynamicCard).join("");
     syncHearts();
+  }
+
+  function renderProduct(product){
+    if(!product) return;
+
+    const screen = qs("#productScreen");
+    if(!screen) return;
+
+    const images = Array.isArray(product.images) ? product.images : [];
+
+    const mainImg = qs(".product-main-image img", screen);
+    if(mainImg && images[0]){
+      mainImg.src = images[0];
+      mainImg.alt = product.name || "";
+    }
+
+    qsa(".product-thumb img", screen).forEach((img, index) => {
+      const wrap = img.closest(".product-thumb");
+      if(images[index]){
+        img.src = images[index];
+        img.alt = product.name || "";
+        if(wrap) wrap.style.display = "";
+      }else if(wrap){
+        wrap.style.display = "none";
+      }
+    });
+
+    const kicker = qs(".product-kicker", screen);
+    if(kicker) kicker.textContent = product.brand || "";
+
+    const title = qs(".product-title", screen);
+    if(title) title.textContent = product.name || "Без названия";
+
+    const desc = qs(".product-desc", screen);
+    if(desc) desc.textContent = product.description || "Описание появится позже.";
+
+    const price = qs(".product-price", screen);
+    if(price) price.textContent = priceOf(product);
+
+    const sizesGrid = qs(".sizes-grid", screen);
+    if(sizesGrid){
+      const sizes = Array.isArray(product.sizes) ? product.sizes : [];
+      sizesGrid.innerHTML = sizes.map((size, index) => {
+        const inputId = `size-dynamic-${index}`;
+        return `
+          <input class="state size-radio" type="radio" name="size" id="${inputId}">
+          <label class="size-option sbp-size-option" data-size="${esc(size)}" for="${inputId}">
+            <b>${esc(size)}</b>
+            <small>В наличии</small>
+          </label>
+        `;
+      }).join("");
+    }
+  }
+
+  function renderCart(product){
+    if(!product) return;
+    const screen = qs("#cartScreen");
+    if(!screen) return;
+
+    const image = imageOf(product);
+    const img = qs(".cart-img img", screen);
+    if(img && image){
+      img.src = image;
+      img.alt = product.name || "";
+    }
+
+    const title = qs(".cart-info h3", screen);
+    if(title) title.textContent = product.name || "Без названия";
+
+    const info = qs(".cart-info p", screen);
+    if(info) info.textContent = `Размер ${localStorage.getItem(SIZE_KEY) || "-"}`;
+
+    const bottomPrice = qs(".cart-bottom b", screen);
+    if(bottomPrice) bottomPrice.textContent = priceOf(product);
+
+    const rows = qsa(".summary-row", screen);
+    rows.forEach(row => {
+      const label = qs("span", row)?.textContent || "";
+      const value = qs("b", row);
+      if(!value) return;
+      if(label.includes("Товар")) value.textContent = priceOf(product);
+      if(label.includes("SBP Coins")) value.textContent = priceNumber(product) ? `+${priceNumber(product)}` : "+0";
+      if(row.classList.contains("total")) value.textContent = priceOf(product);
+    });
+  }
+
+  function setActiveProduct(productId){
+    const product = productById(productId);
+    if(!product) return;
+    localStorage.setItem(ACTIVE_KEY, productId);
+    renderProduct(product);
+    renderCart(product);
+  }
+
+  function selectedDelivery(){
+    const checked = qs('input[name="delivery"]:checked');
+    if(!checked) return "-";
+    if(checked.id === "delivery-evro") return "Европочта";
+    if(checked.id === "delivery-bel") return "Белпочта";
+    return "Самовывоз";
+  }
+
+  function orderPayload(){
+    const product = productById(localStorage.getItem(ACTIVE_KEY)) || products[0];
+    if(!product) return null;
+
+    return {
+      type: "order_create",
+      product_id: idOf(product),
+      product_name: product.name || "SBP order",
+      brand: product.brand || "",
+      color: product.color || "",
+      size: localStorage.getItem(SIZE_KEY) || "-",
+      price_byn: priceNumber(product),
+      image: imageOf(product),
+      delivery_method: selectedDelivery(),
+      created_at: new Date().toISOString()
+    };
+  }
+
+  function sendOrder(){
+    const payload = orderPayload();
+    if(!payload) return;
+
+    if(window.Telegram && window.Telegram.WebApp && typeof window.Telegram.WebApp.sendData === "function"){
+      window.Telegram.WebApp.sendData(JSON.stringify(payload));
+      console.log("[SBP] order sent", payload);
+    }else{
+      console.warn("[SBP] Telegram.WebApp.sendData is not available. Open app from bot button.", payload);
+      alert("Заявка отправляется только если открыть приложение через кнопку бота в Telegram.");
+    }
   }
 
   function applySearch(){
@@ -5752,27 +5655,26 @@ body > .bottom-nav label span{
     const query = input.value.trim().toLowerCase();
     let visible = 0;
 
-    qsa(".dynamic-card[data-product-id]", grid).forEach(card => {
-      const p = products.find(x => idOf(x) === card.dataset.productId);
-      const text = [
-        p?.brand,
-        p?.name,
-        p?.color,
-        p?.badge,
-        Array.isArray(p?.sizes) ? p.sizes.join(" ") : ""
+    qsa(".sbp-dynamic-card[data-product-id]", grid).forEach(card => {
+      const product = productById(card.dataset.productId);
+      const haystack = [
+        product && product.brand,
+        product && product.name,
+        product && product.color,
+        product && product.badge,
+        product && Array.isArray(product.sizes) ? product.sizes.join(" ") : ""
       ].join(" ").toLowerCase();
 
-      const ok = !query || text.includes(query);
+      const ok = !query || haystack.includes(query);
       card.style.display = ok ? "" : "none";
       if(ok) visible++;
     });
 
-    let empty = qs(".dynamic-search-empty", grid);
+    let empty = qs(".sbp-search-empty", grid);
     if(query && visible === 0){
       if(!empty){
         empty = document.createElement("div");
-        empty.className = "dynamic-search-empty";
-        empty.style.cssText = "grid-column:1/-1;min-height:140px;border-radius:24px;border:1px solid var(--line);background:linear-gradient(145deg,var(--card1),var(--card2));color:var(--muted);display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;";
+        empty.className = "sbp-search-empty";
         grid.appendChild(empty);
       }
       empty.textContent = "По этому запросу ничего не найдено";
@@ -5784,55 +5686,81 @@ body > .bottom-nav label span{
 
   async function loadProducts(){
     try{
-      const r = await fetch(PRODUCTS_URL + "?v=" + Date.now(), {cache:"no-store"});
-      const data = await r.json();
+      const response = await fetch(PRODUCTS_URL + "?v=" + Date.now(), {cache:"no-store"});
+      const data = await response.json();
       products = Array.isArray(data) ? data : [];
-    }catch(e){
+    }catch(error){
+      console.error("[SBP] products load failed", error);
       products = [];
     }
 
-    setTimeout(() => {
-      syncHearts();
-      renderFavorites();
-      applySearch();
-    }, 120);
+    loaded = true;
+    renderCatalogs();
+    renderFavorites();
+
+    const active = localStorage.getItem(ACTIVE_KEY);
+    if(active && productById(active)){
+      setActiveProduct(active);
+    }else if(products[0]){
+      setActiveProduct(idOf(products[0]));
+    }
   }
 
-  window.addEventListener("click", function(e){
-    const heart = e.target.closest(".dynamic-card .fav-heart");
+  window.addEventListener("click", function(event){
+    const heart = event.target.closest(".sbp-dynamic-card .fav-heart");
     if(heart){
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      e.stopPropagation();
-      const id = heart.dataset.favId || heart.closest(".dynamic-card")?.dataset.productId;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      event.stopPropagation();
+      const id = heart.dataset.favId || heart.closest(".sbp-dynamic-card")?.dataset.productId;
       if(id) toggleFav(id);
       return false;
     }
 
-    if(e.target.closest('label[for="tab-favorites"], .nav-favorites')){
-      setTimeout(renderFavorites, 120);
+    const card = event.target.closest(".sbp-dynamic-card[data-product-id]");
+    if(card){
+      setActiveProduct(card.dataset.productId);
+    }
+
+    const size = event.target.closest(".sbp-size-option[data-size]");
+    if(size){
+      localStorage.setItem(SIZE_KEY, size.dataset.size);
+      const active = localStorage.getItem(ACTIVE_KEY);
+      const product = productById(active);
+      if(product) renderCart(product);
+    }
+
+    if(event.target.closest('label[for="tab-cart"], .main-action[for="tab-cart"]')){
+      const active = localStorage.getItem(ACTIVE_KEY);
+      const product = productById(active);
+      if(product) renderCart(product);
+    }
+
+    if(event.target.closest('label[for="tab-success"], .primary-link[for="tab-success"]')){
+      sendOrder();
+    }
+
+    if(event.target.closest('label[for="tab-favorites"], .nav-favorites')){
+      setTimeout(renderFavorites, 80);
     }
   }, true);
 
-  document.addEventListener("change", function(e){
-    if(e.target && e.target.id === "tab-favorites"){
-      setTimeout(renderFavorites, 120);
+  document.addEventListener("change", function(event){
+    if(event.target && event.target.id === "tab-favorites"){
+      setTimeout(renderFavorites, 80);
     }
   }, true);
 
-  document.addEventListener("input", function(e){
-    if(e.target.matches("#catalogScreen .searchbox input")){
+  document.addEventListener("input", function(event){
+    if(event.target.matches("#catalogScreen .searchbox input")){
       applySearch();
     }
   });
 
-  const observer = new MutationObserver(() => {
+  const observer = new MutationObserver(function(){
+    if(!loaded) return;
     syncHearts();
-    const favoritesChecked = qs("#tab-favorites")?.checked;
-    if(favoritesChecked) renderFavorites();
-    applySearch();
   });
-
   observer.observe(document.documentElement, {childList:true, subtree:true});
 
   if(document.readyState === "loading"){
