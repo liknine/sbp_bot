@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "id": "nike-force111-kk",
+    "brand": "Nike",
+    "name": "Force111",
+    "color": "kk",
+    "price": 66,
+    "sizes": [
+      "43"
+    ],
+    "badge": "Хит",
+    "description": "рор",
+    "images": [
+      "images/products/nike-force111-kk-1.jpg"
+    ],
+    "created_at": "2026-05-24T14:07:38.027434",
+    "updated_at": "2026-05-24T14:07:38.027455"
+  }
+]
