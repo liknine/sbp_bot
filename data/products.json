@@ -15,5 +15,18 @@
     ],
     "created_at": "2026-05-24T14:07:38.027434",
     "updated_at": "2026-05-24T14:07:38.027455"
+  },
+  {
+    "id": "none-none-none",
+    "brand": "",
+    "name": "",
+    "color": "",
+    "price": 0,
+    "sizes": [],
+    "badge": "",
+    "description": "",
+    "images": [],
+    "created_at": "2026-05-24T14:07:41.877863",
+    "updated_at": "2026-05-24T14:07:41.877886"
   }
 ]
