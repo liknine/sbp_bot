@@ -4869,6 +4869,17 @@ body > .bottom-nav label span{
   clip-path:inset(0 round 20px)!important;
 }
 
+
+/* === SBP v12 scroll-safe cards === */
+.sbp-dynamic-card{
+  -webkit-user-select:none!important;
+  user-select:none!important;
+  touch-action:pan-y!important;
+}
+.sbp-dynamic-card .fav-heart{
+  touch-action:manipulation!important;
+}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -5434,32 +5445,60 @@ body > .bottom-nav label span{
 
 
 
+
 <script>
-/* === SBP v11 touch-scroll guard === */
+/* === SBP v12 strong scroll guard === */
 (function(){
   window.SBP_TOUCH_MOVED = false;
+  window.SBP_CARD_PRESS_OK = false;
+
   let sx = 0;
   let sy = 0;
+  let pressStartedOnCard = false;
 
-  window.addEventListener("touchstart", function(e){
-    const t = e.touches && e.touches[0];
-    if(!t) return;
-    sx = t.clientX;
-    sy = t.clientY;
+  function getPoint(e){
+    if(e.touches && e.touches[0]) return e.touches[0];
+    if(e.changedTouches && e.changedTouches[0]) return e.changedTouches[0];
+    return e;
+  }
+
+  function start(e){
+    const p = getPoint(e);
+    sx = p.clientX || 0;
+    sy = p.clientY || 0;
     window.SBP_TOUCH_MOVED = false;
-  }, {capture:true, passive:true});
+    window.SBP_CARD_PRESS_OK = false;
+    pressStartedOnCard = !!(e.target && e.target.closest && e.target.closest(".sbp-dynamic-card"));
+  }
 
-  window.addEventListener("touchmove", function(e){
-    const t = e.touches && e.touches[0];
-    if(!t) return;
-    if(Math.abs(t.clientX - sx) > 8 || Math.abs(t.clientY - sy) > 8){
+  function move(e){
+    const p = getPoint(e);
+    const dx = Math.abs((p.clientX || 0) - sx);
+    const dy = Math.abs((p.clientY || 0) - sy);
+    if(dx > 6 || dy > 6){
       window.SBP_TOUCH_MOVED = true;
+      window.SBP_CARD_PRESS_OK = false;
     }
-  }, {capture:true, passive:true});
+  }
 
-  window.addEventListener("touchend", function(){
-    setTimeout(function(){ window.SBP_TOUCH_MOVED = false; }, 180);
-  }, {capture:true, passive:true});
+  function end(e){
+    const p = getPoint(e);
+    const dx = Math.abs((p.clientX || 0) - sx);
+    const dy = Math.abs((p.clientY || 0) - sy);
+    window.SBP_CARD_PRESS_OK = pressStartedOnCard && dx <= 6 && dy <= 6 && !window.SBP_TOUCH_MOVED;
+    setTimeout(function(){
+      window.SBP_TOUCH_MOVED = false;
+      window.SBP_CARD_PRESS_OK = false;
+      pressStartedOnCard = false;
+    }, 220);
+  }
+
+  window.addEventListener("touchstart", start, {capture:true, passive:true});
+  window.addEventListener("touchmove", move, {capture:true, passive:true});
+  window.addEventListener("touchend", end, {capture:true, passive:true});
+  window.addEventListener("pointerdown", start, {capture:true, passive:true});
+  window.addEventListener("pointermove", move, {capture:true, passive:true});
+  window.addEventListener("pointerup", end, {capture:true, passive:true});
 })();
 </script>
 
@@ -5525,7 +5564,7 @@ body > .bottom-nav label span{
     const isFav = favSet().has(id);
     const img = imageOf(p);
     return `
-      <label class="card sbp-dynamic-card" data-product-id="${esc(id)}" for="tab-product">
+      <div class="card sbp-dynamic-card" data-product-id="${esc(id)}" role="button" tabindex="0">
         ${p.badge && p.badge !== "-" ? `<span class="badge">${esc(p.badge)}</span>` : ""}
         <span class="heart fav-heart ${isFav ? "is-favorite" : ""}" data-fav-id="${esc(id)}" role="button" aria-label="Добавить в избранное">
           <span class="heart-outline">♡</span>
@@ -5539,7 +5578,7 @@ body > .bottom-nav label span{
           <p class="color">${esc(p.color || "")}</p>
           <span class="card-bottom"><b>${esc(priceOf(p))}</b><span>${esc(sizesOf(p))}</span></span>
         </span>
-      </label>`;
+      </div>`;
   }
 
   function emptyHtml(){
@@ -5628,7 +5667,7 @@ body > .bottom-nav label span{
         return `<input class="state size-radio" type="radio" name="size" id="${inputId}">
           <label class="size-option sbp-size-option" data-size="${esc(s)}" for="${inputId}">
             <b>${esc(s)}</b><small>В наличии</small>
-          </label>`;
+          </div>`;
       }).join("");
     }
   }
@@ -5857,13 +5896,6 @@ body > .bottom-nav label span{
   }
 
   window.addEventListener("click", function(e){
-    if(window.SBP_TOUCH_MOVED && e.target.closest(".sbp-dynamic-card")){
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      e.stopPropagation();
-      return false;
-    }
-
     const heart = e.target.closest(".sbp-dynamic-card .fav-heart");
     if(heart){
       e.preventDefault();
@@ -5875,7 +5907,18 @@ body > .bottom-nav label span{
     }
 
     const card = e.target.closest(".sbp-dynamic-card[data-product-id]");
-    if(card) setActive(card.dataset.productId);
+    if(card){
+      const isTouchLike = e.pointerType === "touch" || e.sourceCapabilities?.firesTouchEvents || "ontouchstart" in window;
+      if(window.SBP_TOUCH_MOVED || (isTouchLike && !window.SBP_CARD_PRESS_OK)){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        e.stopPropagation();
+        return false;
+      }
+      setActive(card.dataset.productId);
+      const productTab = document.getElementById("tab-product");
+      if(productTab) productTab.checked = true;
+    }
 
     const size = e.target.closest(".sbp-size-option[data-size]");
     if(size){
