@@ -6675,6 +6675,52 @@ a,
   line-height:1.35;
 }
 
+
+/* === SBP v9 client status preparation === */
+.status-card .levels span{
+  position:relative;
+  transition:color .18s ease, opacity .18s ease, font-weight .18s ease;
+}
+.status-card .levels span.is-active{
+  color:var(--text)!important;
+  font-weight:800!important;
+  opacity:1!important;
+}
+.status-card .levels span.is-active:after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:-8px;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--inverse);
+  transform:translateX(-50%);
+}
+#theme-light:checked ~ .app .status-card .levels span.is-active:after{
+  background:var(--text);
+}
+.status-card .progress span[data-sbp-status-progress]{
+  width:0%;
+  transition:width .32s cubic-bezier(.22,1,.36,1);
+}
+.status-card[data-sbp-status-card="Entry"] .progress span[data-sbp-status-progress]{width:0%}
+.status-card[data-sbp-status-card="Selected"] .progress span[data-sbp-status-progress]{width:33%}
+.status-card[data-sbp-status-card="Priority"] .progress span[data-sbp-status-progress]{width:66%}
+.status-card[data-sbp-status-card="Black Access"] .progress span[data-sbp-status-progress]{width:100%}
+.coins-status [data-sbp-client-status],
+.status-row [data-sbp-profile-status]{
+  white-space:nowrap;
+}
+.coins-status-list div.is-active{
+  border-color:var(--inverse)!important;
+  background:linear-gradient(145deg,var(--card1),var(--card2))!important;
+}
+.coins-status-list div.is-active span,
+.coins-status-list div.is-active b{
+  color:var(--text)!important;
+}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
 
@@ -7405,7 +7451,7 @@ a,
         </div><div class="avatar profile-avatar profile-avatar-v61" data-light-avatar-ready="1">
           <img class="profile-avatar-dark" src="assets/embedded/embedded-2-3eefccdda3.png" alt="SBP" loading="lazy" decoding="async">
           <img class="profile-avatar-light" src="assets/embedded/embedded-1-990f04a27a.png" alt="SBP" loading="lazy" decoding="async">
-        </div><h1>@username</h1></section><section class="status-card"><div class="status-row"><div><small>Ваш статус</small><b>Selected</b></div><label for="tab-coins">как работает статус</label></div><p class="orders-left">3 из 8 заказов до Priority</p><div class="progress"><span></span></div><div class="levels"><span>Entry</span><span>Selected</span><span>Priority</span><span>Black Access</span></div></section><section class="profile-list"><label class="profile-item" for="tab-orders"><span class="profile-ico">□</span><span>История заказов</span><b>→</b></label><label class="profile-item" for="tab-favorites"><span class="profile-ico">♡</span><span>Избранное</span><b>→</b></label><label class="profile-item" for="tab-coins"><span class="profile-ico">S</span><span>SBP Coins</span><b data-sbp-profile-coins>0</b></label><label class="profile-item" for="tab-bonuses"><span class="profile-ico">◇</span><span>Мои бонусы</span><b data-sbp-active-bonuses>0</b></label></section></main>
+        </div><h1>@username</h1></section><section class="status-card" data-sbp-status-card><div class="status-row"><div><small>Ваш статус</small><b data-sbp-profile-status>Entry</b></div><label for="tab-coins">как работает статус</label></div><p class="orders-left" data-sbp-status-note>Entry · стандартное начисление Coins</p><div class="progress"><span data-sbp-status-progress></span></div><div class="levels"><span data-sbp-status-level="Entry">Entry</span><span data-sbp-status-level="Selected">Selected</span><span data-sbp-status-level="Priority">Priority</span><span data-sbp-status-level="Black Access">Black Access</span></div></section><section class="profile-list"><label class="profile-item" for="tab-orders"><span class="profile-ico">□</span><span>История заказов</span><b>→</b></label><label class="profile-item" for="tab-favorites"><span class="profile-ico">♡</span><span>Избранное</span><b>→</b></label><label class="profile-item" for="tab-coins"><span class="profile-ico">S</span><span>SBP Coins</span><b data-sbp-profile-coins>0</b></label><label class="profile-item" for="tab-bonuses"><span class="profile-ico">◇</span><span>Мои бонусы</span><b data-sbp-active-bonuses>0</b></label></section></main>
 
   <main class="screen" id="productScreen">
     <label class="screen-back" for="tab-catalog"><span>‹</span><b>Назад</b></label><header class="page-head"><h1>Товар</h1><p>Выберите размер перед добавлением в корзину.</p></header><section class="product-page"><section class="product-gallery"><div class="product-main-image"><img src="assets/embedded/embedded-2-3eefccdda3.png" alt="" loading="lazy" decoding="async">
@@ -9314,29 +9360,154 @@ a,
 
 
 <script id="sbp-loyalty-zero-state-script">
-/* SBP loyalty placeholder: real API later, now profile starts from 0. */
+/* SBP loyalty/profile placeholder: real API later, now exact local state with Entry default. */
 (function(){
-  const state = {
-    coins: Number(localStorage.getItem("sbp_coins_balance") || 0),
-    activeBonuses: Number(localStorage.getItem("sbp_active_bonuses_count") || 0),
-    status: localStorage.getItem("sbp_client_status") || "Entry"
+  const PROFILE_KEY = "sbp_profile_state_v1";
+  const LEGACY_COINS_KEY = "sbp_coins_balance";
+  const LEGACY_BONUSES_KEY = "sbp_active_bonuses_count";
+  const LEGACY_STATUS_KEY = "sbp_client_status";
+
+  const STATUS_META = {
+    "Entry": {
+      multiplier: "стандарт",
+      note: "Entry · стандартное начисление Coins",
+      progress: 0
+    },
+    "Selected": {
+      multiplier: "+10% Coins",
+      note: "Selected · +10% Coins к завершённым заказам",
+      progress: 33
+    },
+    "Priority": {
+      multiplier: "+20% Coins",
+      note: "Priority · +20% Coins к завершённым заказам",
+      progress: 66
+    },
+    "Black Access": {
+      multiplier: "+30% Coins",
+      note: "Black Access · +30% Coins к завершённым заказам",
+      progress: 100
+    }
   };
 
-  function qsAll(sel){ return Array.from(document.querySelectorAll(sel)); }
-  function setText(sel, value){ qsAll(sel).forEach(el => { el.textContent = value; }); }
+  const ALIASES = {
+    "entry": "Entry",
+    "selected": "Selected",
+    "priority": "Priority",
+    "black access": "Black Access",
+    "black_access": "Black Access",
+    "blackaccess": "Black Access",
+    "black": "Black Access"
+  };
 
-  function apply(){
-    setText("[data-sbp-coins-value], [data-sbp-profile-coins], [data-sbp-coins-balance]", String(state.coins));
-    setText("[data-sbp-active-bonuses]", String(state.activeBonuses));
-    setText("[data-sbp-client-status]", state.status);
-    setText("[data-sbp-client-multiplier]", state.status === "Entry" ? "стандарт" : "");
-    const bonusActive = document.getElementById("bonus-active");
-    if(bonusActive) bonusActive.checked = false;
+  function normalizeStatus(value){
+    const raw = String(value || "").trim();
+    if(STATUS_META[raw]) return raw;
+    const key = raw.toLowerCase().replace(/[\s-]+/g, " ").trim();
+    return ALIASES[key] || "Entry";
   }
 
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply);
+  function num(value){
+    const n = Number(value || 0);
+    return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
+  }
+
+  function readState(){
+    let saved = null;
+    try{ saved = JSON.parse(localStorage.getItem(PROFILE_KEY) || "null"); }catch(e){}
+    const state = {
+      coins: num(saved && saved.coins),
+      activeBonuses: num(saved && saved.activeBonuses),
+      status: normalizeStatus(saved && saved.status)
+    };
+
+    const legacyStatus = localStorage.getItem(LEGACY_STATUS_KEY);
+    const legacyCoins = localStorage.getItem(LEGACY_COINS_KEY);
+    const legacyBonuses = localStorage.getItem(LEGACY_BONUSES_KEY);
+
+    if(legacyStatus) state.status = normalizeStatus(legacyStatus);
+    if(legacyCoins !== null) state.coins = num(legacyCoins);
+    if(legacyBonuses !== null) state.activeBonuses = num(legacyBonuses);
+
+    try{
+      localStorage.setItem(PROFILE_KEY, JSON.stringify(state));
+      localStorage.setItem(LEGACY_STATUS_KEY, state.status);
+      localStorage.setItem(LEGACY_COINS_KEY, String(state.coins));
+      localStorage.setItem(LEGACY_BONUSES_KEY, String(state.activeBonuses));
+    }catch(e){}
+
+    return state;
+  }
+
+  function all(sel){ return Array.from(document.querySelectorAll(sel)); }
+  function setText(sel, value){ all(sel).forEach(el => { el.textContent = value; }); }
+
+  function apply(){
+    const state = readState();
+    const meta = STATUS_META[state.status] || STATUS_META.Entry;
+
+    setText("[data-sbp-coins-value], [data-sbp-profile-coins], [data-sbp-coins-balance]", String(state.coins));
+    setText("[data-sbp-active-bonuses]", String(state.activeBonuses));
+    setText("[data-sbp-client-status], [data-sbp-profile-status]", state.status);
+    setText("[data-sbp-client-multiplier]", meta.multiplier);
+    setText("[data-sbp-status-note]", meta.note);
+
+    const statusCard = document.querySelector("[data-sbp-status-card]");
+    if(statusCard) statusCard.setAttribute("data-sbp-status-card", state.status);
+
+    const progress = document.querySelector("[data-sbp-status-progress]");
+    if(progress) progress.style.width = meta.progress + "%";
+
+    all("[data-sbp-status-level]").forEach(el => {
+      el.classList.toggle("is-active", el.getAttribute("data-sbp-status-level") === state.status);
+    });
+
+    all(".coins-status-list div").forEach(row => {
+      const label = row.querySelector("span")?.textContent?.trim();
+      row.classList.toggle("is-active", label === state.status);
+    });
+
+    const bonusActive = document.getElementById("bonus-active");
+    if(bonusActive && state.activeBonuses <= 0) bonusActive.checked = false;
+  }
+
+  window.SBP_PROFILE_STATE = {
+    read: readState,
+    apply: apply,
+    setStatus: function(status){
+      const state = readState();
+      state.status = normalizeStatus(status);
+      try{
+        localStorage.setItem(PROFILE_KEY, JSON.stringify(state));
+        localStorage.setItem(LEGACY_STATUS_KEY, state.status);
+      }catch(e){}
+      apply();
+    },
+    setCoins: function(coins){
+      const state = readState();
+      state.coins = num(coins);
+      try{
+        localStorage.setItem(PROFILE_KEY, JSON.stringify(state));
+        localStorage.setItem(LEGACY_COINS_KEY, String(state.coins));
+      }catch(e){}
+      apply();
+    },
+    setActiveBonuses: function(count){
+      const state = readState();
+      state.activeBonuses = num(count);
+      try{
+        localStorage.setItem(PROFILE_KEY, JSON.stringify(state));
+        localStorage.setItem(LEGACY_BONUSES_KEY, String(state.activeBonuses));
+      }catch(e){}
+      apply();
+    }
+  };
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply, {once:true});
   else apply();
   window.addEventListener("storage", apply);
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden) apply(); });
+  setTimeout(apply, 250);
 })();
 </script>
 
