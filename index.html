@@ -6636,6 +6636,45 @@ a,
   font-size:15px;
 }
 
+
+/* === SBP v8 sensitivity + zero loyalty state === */
+.quick-card,
+.profile-item,
+.delivery-option{
+  touch-action:pan-y !important;
+  -webkit-user-select:none !important;
+  user-select:none !important;
+}
+
+.quick-card:active,
+.profile-item:active,
+.delivery-option:active{
+  animation:none !important;
+  transform:none !important;
+}
+
+.discount-card.is-empty,
+.bonus-item.is-locked{
+  opacity:.72;
+}
+
+.discount-card.is-empty button,
+.bonus-item.is-locked{
+  pointer-events:none;
+}
+
+.discount-card.is-empty button{
+  background:var(--soft) !important;
+  color:var(--muted) !important;
+}
+
+.bonuses-zero-note{
+  margin:12px 0 0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.35;
+}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
 
@@ -7287,7 +7326,7 @@ a,
         <div class="card-bottom"><b>229 BYN</b><span>39 40 41 42 43</span></div>
       </div>
     </label></section>
-    <label class="coins-row" for="tab-coins"><span class="coin">S</span><span class="coin-info"><b>SBP Coins <em>320</em></b><small>Покупай и получай привилегии</small></span><span class="more">Узнать больше</span></label>
+    <label class="coins-row" for="tab-coins"><span class="coin">S</span><span class="coin-info"><b>SBP Coins <em data-sbp-coins-value>0</em></b><small>Покупай и получай привилегии</small></span><span class="more">Узнать больше</span></label>
   </main>
 
   <main class="screen" id="catalogScreen">
@@ -7366,7 +7405,7 @@ a,
         </div><div class="avatar profile-avatar profile-avatar-v61" data-light-avatar-ready="1">
           <img class="profile-avatar-dark" src="assets/embedded/embedded-2-3eefccdda3.png" alt="SBP" loading="lazy" decoding="async">
           <img class="profile-avatar-light" src="assets/embedded/embedded-1-990f04a27a.png" alt="SBP" loading="lazy" decoding="async">
-        </div><h1>@username</h1></section><section class="status-card"><div class="status-row"><div><small>Ваш статус</small><b>Selected</b></div><label for="tab-coins">как работает статус</label></div><p class="orders-left">3 из 8 заказов до Priority</p><div class="progress"><span></span></div><div class="levels"><span>Entry</span><span>Selected</span><span>Priority</span><span>Black Access</span></div></section><section class="profile-list"><label class="profile-item" for="tab-orders"><span class="profile-ico">□</span><span>История заказов</span><b>→</b></label><button class="profile-item"><span class="profile-ico">♡</span><span>Избранное</span><b>→</b></button><label class="profile-item" for="tab-coins"><span class="profile-ico">S</span><span>SBP Coins</span><b>320</b></label><label class="profile-item" for="tab-bonuses"><span class="profile-ico">◇</span><span>Мои бонусы</span><b>1 активен</b></label></section></main>
+        </div><h1>@username</h1></section><section class="status-card"><div class="status-row"><div><small>Ваш статус</small><b>Selected</b></div><label for="tab-coins">как работает статус</label></div><p class="orders-left">3 из 8 заказов до Priority</p><div class="progress"><span></span></div><div class="levels"><span>Entry</span><span>Selected</span><span>Priority</span><span>Black Access</span></div></section><section class="profile-list"><label class="profile-item" for="tab-orders"><span class="profile-ico">□</span><span>История заказов</span><b>→</b></label><label class="profile-item" for="tab-favorites"><span class="profile-ico">♡</span><span>Избранное</span><b>→</b></label><label class="profile-item" for="tab-coins"><span class="profile-ico">S</span><span>SBP Coins</span><b data-sbp-profile-coins>0</b></label><label class="profile-item" for="tab-bonuses"><span class="profile-ico">◇</span><span>Мои бонусы</span><b data-sbp-active-bonuses>0</b></label></section></main>
 
   <main class="screen" id="productScreen">
     <label class="screen-back" for="tab-catalog"><span>‹</span><b>Назад</b></label><header class="page-head"><h1>Товар</h1><p>Выберите размер перед добавлением в корзину.</p></header><section class="product-page"><section class="product-gallery"><div class="product-main-image"><img src="assets/embedded/embedded-2-3eefccdda3.png" alt="" loading="lazy" decoding="async">
@@ -7384,10 +7423,10 @@ a,
 <section class="product-action-stack"><label class="main-action" for="tab-cart">В корзину</label><a class="dark-action" href="https://t.me/SBP_Admin" target="_blank">Связаться с менеджером</a><label class="dark-action" for="tab-catalog">Назад в каталог</label></section></section></main>
 
   <main class="screen" id="cartScreen">
-    <label class="screen-back" for="tab-home"><span>‹</span><b>Назад</b></label><header class="page-head"><h1>Корзина</h1><p>Проверь товары перед оформлением заявки.</p></header><section class="cart-list"><article class="cart-item"><div class="cart-img"><img src="assets/embedded/embedded-2-3eefccdda3.png" alt="" loading="lazy" decoding="async"></div><div class="cart-info"><h3>Nike Air Force 1 ’07</h3><p>Размер выбранный · Black</p><div class="cart-bottom"><b>179 BYN</b></div></div></article></section><section class="empty-state compact-empty cart-empty-template"><div class="empty-icon">□</div><h2>Пустая корзина</h2><p>Если товаров нет, пользователь увидит это состояние и кнопку возврата в каталог.</p><label class="secondary-link" for="tab-catalog">В каталог</label></section><section class="cart-summary"><div class="summary-row"><span>Товары</span><b>179 BYN</b></div><div class="summary-row"><span>Доступна скидка SBP Coins</span><b>−15 BYN</b></div><div class="summary-row"><span>Доставка</span><b>уточнит менеджер</b></div><div class="summary-row"><span>SBP Coins после завершения</span><b>+197</b></div><div class="summary-row total"><span>Итого</span><b>164 BYN</b></div></section><label class="primary-link" for="tab-checkout">Оформить заказ</label><label class="secondary-link" for="tab-home">Продолжить покупки</label></main>
+    <label class="screen-back" for="tab-home"><span>‹</span><b>Назад</b></label><header class="page-head"><h1>Корзина</h1><p>Проверь товары перед оформлением заявки.</p></header><section class="cart-list"><article class="cart-item"><div class="cart-img"><img src="assets/embedded/embedded-2-3eefccdda3.png" alt="" loading="lazy" decoding="async"></div><div class="cart-info"><h3>Nike Air Force 1 ’07</h3><p>Размер выбранный · Black</p><div class="cart-bottom"><b>179 BYN</b></div></div></article></section><section class="empty-state compact-empty cart-empty-template"><div class="empty-icon">□</div><h2>Пустая корзина</h2><p>Если товаров нет, пользователь увидит это состояние и кнопку возврата в каталог.</p><label class="secondary-link" for="tab-catalog">В каталог</label></section><section class="cart-summary"><div class="summary-row"><span>Товары</span><b>179 BYN</b></div><div class="summary-row"><span>Скидка SBP Coins</span><b>0 BYN</b></div><div class="summary-row"><span>Доставка</span><b>уточнит менеджер</b></div><div class="summary-row"><span>SBP Coins после завершения</span><b>+179</b></div><div class="summary-row total"><span>Итого</span><b>179 BYN</b></div></section><label class="primary-link" for="tab-checkout">Оформить заказ</label><label class="secondary-link" for="tab-home">Продолжить покупки</label></main>
 
   <main class="screen" id="checkoutScreen">
-    <label class="screen-back" for="tab-cart"><span>‹</span><b>Назад</b></label><header class="page-head"><h1>Оформление</h1><p>Выберите способ получения и оставьте данные.</p></header><section class="checkout-block"><h2>Способ получения</h2><div class="delivery-grid"><label class="delivery-option" for="delivery-pickup"><span>Самовывоз<small>Только город Витебск</small></span><b></b></label><label class="delivery-option" for="delivery-evro"><span>Европочта<small>ФИО, телефон, номер отделения</small></span><b></b></label><label class="delivery-option" for="delivery-bel"><span>Белпочта<small>ФИО, телефон, адрес, индекс</small></span><b></b></label></div></section><section class="checkout-block delivery-fields" data-fields="pickup"><h2>Самовывоз</h2><div class="pickup-note"><b>Самовывоз доступен только в городе Витебск.</b><span>Менеджер свяжется для уточнения деталей встречи.</span></div><div class="form-grid"><input class="field" placeholder="Имя"><input class="field" placeholder="Номер телефона"><textarea class="field" placeholder="Пожелания"></textarea></div></section><section class="checkout-block delivery-fields" data-fields="evropochta"><h2>Европочта</h2><div class="form-grid"><input class="field" placeholder="ФИО"><input class="field" placeholder="Номер телефона"><input class="field" placeholder="Номер отделения Европочты"><textarea class="field" placeholder="Пожелания"></textarea></div></section><section class="checkout-block delivery-fields" data-fields="belpochta"><h2>Белпочта</h2><div class="form-grid"><input class="field" placeholder="ФИО"><input class="field" placeholder="Номер телефона"><input class="field" placeholder="Адрес"><input class="field" placeholder="Индекс"></div></section><section class="checkout-block"><h2>SBP Coins</h2><div class="discount-card"><div><b>Доступна скидка SBP Coins</b><span>−15 BYN за активированный бонус</span></div><button type="button">Использовать</button></div><p class="form-note">Скидка через Coins не может превышать 20% стоимости заказа.</p></section><label class="primary-link" for="tab-success">Отправить заявку</label><label class="secondary-link" for="tab-cart">Назад в корзину</label></main>
+    <label class="screen-back" for="tab-cart"><span>‹</span><b>Назад</b></label><header class="page-head"><h1>Оформление</h1><p>Выберите способ получения и оставьте данные.</p></header><section class="checkout-block"><h2>Способ получения</h2><div class="delivery-grid"><label class="delivery-option" for="delivery-pickup"><span>Самовывоз<small>Только город Витебск</small></span><b></b></label><label class="delivery-option" for="delivery-evro"><span>Европочта<small>ФИО, телефон, номер отделения</small></span><b></b></label><label class="delivery-option" for="delivery-bel"><span>Белпочта<small>ФИО, телефон, адрес, индекс</small></span><b></b></label></div></section><section class="checkout-block delivery-fields" data-fields="pickup"><h2>Самовывоз</h2><div class="pickup-note"><b>Самовывоз доступен только в городе Витебск.</b><span>Менеджер свяжется для уточнения деталей встречи.</span></div><div class="form-grid"><input class="field" placeholder="Имя"><input class="field" placeholder="Номер телефона"><textarea class="field" placeholder="Пожелания"></textarea></div></section><section class="checkout-block delivery-fields" data-fields="evropochta"><h2>Европочта</h2><div class="form-grid"><input class="field" placeholder="ФИО"><input class="field" placeholder="Номер телефона"><input class="field" placeholder="Номер отделения Европочты"><textarea class="field" placeholder="Пожелания"></textarea></div></section><section class="checkout-block delivery-fields" data-fields="belpochta"><h2>Белпочта</h2><div class="form-grid"><input class="field" placeholder="ФИО"><input class="field" placeholder="Номер телефона"><input class="field" placeholder="Адрес"><input class="field" placeholder="Индекс"></div></section><section class="checkout-block"><h2>SBP Coins</h2><div class="discount-card is-empty"><div><b>Активных бонусов нет</b><span>0 BYN доступно к заказу</span></div><button type="button" disabled>Нет бонуса</button></div><p class="form-note">Скидка через Coins не может превышать 20% стоимости заказа.</p></section><label class="primary-link" for="tab-success">Отправить заявку</label><label class="secondary-link" for="tab-cart">Назад в корзину</label></main>
 
   <main class="screen" id="successScreen">
     <label class="screen-back" for="tab-home"><span>‹</span><b>Назад</b></label><section class="success-card"><div class="success-mark">✓</div><h1>Заявка отправлена</h1><p>Менеджер свяжется с вами для уточнения деталей заказа.</p><div class="success-steps"><div><span>1</span><b>Заявка принята</b></div><div><span>2</span><b>Уточнение деталей</b></div><div><span>3</span><b>Трек-номер</b></div></div><label class="primary-link" for="tab-home">Вернуться на главную</label><label class="secondary-link" for="tab-profile">Открыть профиль</label></section></main>
@@ -7455,7 +7494,7 @@ a,
 </section>
 
 
-    <section class="coins-card"><h2>Активация бонуса</h2><div class="bonus-list"><label class="bonus-item" for="bonus-modal"><div><h3>Скидка 5 BYN</h3><p>К следующему заказу</p></div><span class="bonus-cost">100 Coins</span></label><label class="bonus-item recommended-bonus" for="bonus-modal"><div><h3>Скидка 15 BYN</h3><p>Оптимальный бонус для следующего заказа</p></div><span class="bonus-cost">250 Coins</span></label><label class="bonus-item" for="bonus-modal"><div><h3>Скидка 35 BYN</h3><p>Не больше 20% заказа</p></div><span class="bonus-cost">500 Coins</span></label></div></section>
+    <section class="coins-card"><h2>Активация бонуса</h2><p class="bonuses-zero-note">Сейчас доступно 0 Coins. Бонусы станут доступны после завершённых заказов.</p><div class="bonus-list"><label class="bonus-item is-locked" aria-disabled="true"><div><h3>Скидка 5 BYN</h3><p>К следующему заказу</p></div><span class="bonus-cost">100 Coins</span></label><label class="bonus-item recommended-bonus is-locked" aria-disabled="true"><div><h3>Скидка 15 BYN</h3><p>Оптимальный бонус для следующего заказа</p></div><span class="bonus-cost">250 Coins</span></label><label class="bonus-item is-locked" aria-disabled="true"><div><h3>Скидка 35 BYN</h3><p>Не больше 20% заказа</p></div><span class="bonus-cost">500 Coins</span></label></div></section>
 
     <section class="empty-state bonuses-empty-template">
       <div class="empty-icon">◇</div>
@@ -7466,7 +7505,7 @@ a,
   </main>
 
   <main class="screen" id="coinsScreen">
-    <label class="screen-back" for="tab-profile"><span>‹</span><b>Назад</b></label><header class="page-head"><h1>SBP Coins</h1><p>Спокойная система лояльности внутри SBP.</p></header><section class="coins-hero"><p class="coins-kicker">CURRENT BALANCE</p><div class="coins-balance"><b>320</b><span>SBP Coins на аккаунте</span></div><div class="coins-mark">S</div></section><section class="coins-status"><div><small>Статус клиента</small><b>Selected</b></div><span class="stock-pill">+10% Coins</span></section>
+    <label class="screen-back" for="tab-profile"><span>‹</span><b>Назад</b></label><header class="page-head"><h1>SBP Coins</h1><p>Спокойная система лояльности внутри SBP.</p></header><section class="coins-hero"><p class="coins-kicker">CURRENT BALANCE</p><div class="coins-balance"><b data-sbp-coins-balance>0</b><span>SBP Coins на аккаунте</span></div><div class="coins-mark">S</div></section><section class="coins-status"><div><small>Статус клиента</small><b data-sbp-client-status>Entry</b></div><span class="stock-pill" data-sbp-client-multiplier>стандарт</span></section>
 
 <section class="coins-card coins-explanation-final coins-info-card">
   <h2>Информация о Coins</h2>
@@ -7573,74 +7612,132 @@ a,
 <aside class="bonus-modal-overlay">
     <section class="bonus-modal">
       <div class="bonus-modal-icon">S</div>
-      <h2>Активировать бонус?</h2>
-      <p>Списать <b>250 SBP Coins</b> и активировать скидку <b>15 BYN</b> для следующего заказа.</p>
+      <h2>Бонус пока недоступен</h2>
+      <p>Сейчас на аккаунте <b>0 SBP Coins</b>. Бонусы можно будет активировать после завершённых заказов.</p>
       <div class="bonus-modal-rules">
-        <div><span>Списание</span><b>−250 Coins</b></div>
-        <div><span>Бонус</span><b>−15 BYN</b></div>
+        <div><span>Баланс</span><b>0 Coins</b></div>
+        <div><span>Бонус</span><b>недоступен</b></div>
         <div><span>Ограничение</span><b>до 20% заказа</b></div>
       </div>
       <div class="bonus-modal-actions">
         <label class="modal-secondary" for="bonus-modal">Отмена</label>
-        <label class="modal-primary" for="bonus-active">Активировать</label>
+        <label class="modal-primary" for="bonus-modal">Понятно</label>
       </div>
     </section>
   </aside>
 </div>
 <script>
+/* === SBP v8 safe labels: no accidental activation while scrolling === */
 (function(){
   function byId(id){ return document.getElementById(id); }
 
   function findLabel(el){
     while(el && el !== document){
-      if(el.tagName && el.tagName.toLowerCase() === 'label' && el.getAttribute('for')) return el;
+      if(el.tagName && el.tagName.toLowerCase() === "label" && el.getAttribute("for")) return el;
       el = el.parentNode;
     }
     return null;
   }
 
   function activateLabel(label){
-    var id = label.getAttribute('for');
+    var id = label.getAttribute("for");
     if(!id) return false;
     var input = byId(id);
     if(!input) return false;
 
-    if(input.type === 'radio'){
+    if(input.type === "radio"){
       input.checked = true;
-    } else if(input.type === 'checkbox'){
+    }else if(input.type === "checkbox"){
       input.checked = !input.checked;
     }
 
-    try {
-      var evt = document.createEvent('HTMLEvents');
-      evt.initEvent('change', true, false);
-      input.dispatchEvent(evt);
-    } catch(e) {}
+    try{
+      input.dispatchEvent(new Event("change", {bubbles:true}));
+    }catch(e){
+      try{
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent("change", true, false);
+        input.dispatchEvent(evt);
+      }catch(_){}
+    }
 
     return true;
   }
 
+  var startX = 0;
+  var startY = 0;
+  var startTime = 0;
+  var moved = false;
   var lastTouchTime = 0;
+  var blockClickUntil = 0;
+  var MOVE_LIMIT = 6;
+  var TIME_LIMIT = 700;
 
-  document.addEventListener('touchend', function(e){
+  function point(e){
+    if(e.touches && e.touches[0]) return e.touches[0];
+    if(e.changedTouches && e.changedTouches[0]) return e.changedTouches[0];
+    return e;
+  }
+
+  function rememberStart(e){
+    var p = point(e);
+    startX = p.clientX || 0;
+    startY = p.clientY || 0;
+    startTime = Date.now();
+    moved = false;
+  }
+
+  function rememberMove(e){
+    var p = point(e);
+    var dx = Math.abs((p.clientX || 0) - startX);
+    var dy = Math.abs((p.clientY || 0) - startY);
+    if(dx > MOVE_LIMIT || dy > MOVE_LIMIT) moved = true;
+  }
+
+  function isSafeEnd(e){
+    var p = point(e);
+    var dx = Math.abs((p.clientX || 0) - startX);
+    var dy = Math.abs((p.clientY || 0) - startY);
+    return !moved && dx <= MOVE_LIMIT && dy <= MOVE_LIMIT && (Date.now() - startTime) <= TIME_LIMIT;
+  }
+
+  document.addEventListener("touchstart", rememberStart, {capture:true, passive:true});
+  document.addEventListener("touchmove", rememberMove, {capture:true, passive:true});
+
+  document.addEventListener("touchend", function(e){
     var label = findLabel(e.target);
     if(!label) return;
 
-    var href = label.getAttribute('href');
-    if(href) return;
+    if(!isSafeEnd(e)){
+      blockClickUntil = Date.now() + 600;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      return false;
+    }
 
     if(activateLabel(label)){
       lastTouchTime = Date.now();
       e.preventDefault();
+      e.stopImmediatePropagation();
       e.stopPropagation();
+      return false;
     }
   }, true);
 
-  document.addEventListener('click', function(e){
+  document.addEventListener("click", function(e){
+    if(Date.now() < blockClickUntil){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      return false;
+    }
+
     if(Date.now() - lastTouchTime < 450){
       e.preventDefault();
+      e.stopImmediatePropagation();
       e.stopPropagation();
-      return;
+      return false;
     }
 
     var label = findLabel(e.target);
@@ -7648,7 +7745,9 @@ a,
 
     if(activateLabel(label)){
       e.preventDefault();
+      e.stopImmediatePropagation();
       e.stopPropagation();
+      return false;
     }
   }, true);
 })();
@@ -7656,34 +7755,74 @@ a,
 <nav class="bottom-nav-fixed"><span class="nav-indicator"></span><label class="nav-home" for="tab-home"><svg viewBox="0 0 24 24"><path d="M4.5 10.6 12 4.5l7.5 6.1"/><path d="M6.8 9.7v9.8h10.4V9.7"/><path d="M10.2 19.5v-5.6h3.6v5.6"/></svg><span>Главная</span></label><label class="nav-catalog" for="tab-catalog"><svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg><span>Каталог</span></label><label class="nav-favorites" for="tab-favorites"><svg viewBox="0 0 24 24"><path d="M20.8 8.6c0 5.4-8.8 10.4-8.8 10.4S3.2 14 3.2 8.6A4.6 4.6 0 0 1 12 6.4a4.6 4.6 0 0 1 8.8 2.2Z"/></svg><span>Избранное</span></label><label class="nav-profile" for="tab-profile"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профиль</span></label></nav>
 
 <script>
+/* === SBP v8 safe bottom navigation === */
 (function(){
   function activate(id){
     var input = document.getElementById(id);
     if(!input) return;
     input.checked = true;
-    try{
-      input.dispatchEvent(new Event('change', { bubbles:true }));
-    }catch(e){}
+    try{ input.dispatchEvent(new Event("change", {bubbles:true})); }catch(e){}
   }
 
-  document.addEventListener('click', function(e){
-    var label = e.target.closest && e.target.closest('.bottom-nav-fixed label[for]');
+  var startX = 0, startY = 0, moved = false, lastTouch = 0;
+  var LIMIT = 8;
+
+  function point(e){
+    if(e.touches && e.touches[0]) return e.touches[0];
+    if(e.changedTouches && e.changedTouches[0]) return e.changedTouches[0];
+    return e;
+  }
+
+  document.addEventListener("touchstart", function(e){
+    var label = e.target.closest && e.target.closest(".bottom-nav-fixed label[for]");
     if(!label) return;
+    var p = point(e);
+    startX = p.clientX || 0;
+    startY = p.clientY || 0;
+    moved = false;
+  }, {capture:true, passive:true});
+
+  document.addEventListener("touchmove", function(e){
+    var label = e.target.closest && e.target.closest(".bottom-nav-fixed label[for]");
+    if(!label) return;
+    var p = point(e);
+    if(Math.abs((p.clientX || 0) - startX) > LIMIT || Math.abs((p.clientY || 0) - startY) > LIMIT) moved = true;
+  }, {capture:true, passive:true});
+
+  document.addEventListener("touchend", function(e){
+    var label = e.target.closest && e.target.closest(".bottom-nav-fixed label[for]");
+    if(!label) return;
+    if(moved){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      return false;
+    }
+    lastTouch = Date.now();
     e.preventDefault();
+    e.stopImmediatePropagation();
     e.stopPropagation();
-    activate(label.getAttribute('for'));
+    activate(label.getAttribute("for"));
+    return false;
   }, true);
 
-  document.addEventListener('touchend', function(e){
-    var label = e.target.closest && e.target.closest('.bottom-nav-fixed label[for]');
+  document.addEventListener("click", function(e){
+    var label = e.target.closest && e.target.closest(".bottom-nav-fixed label[for]");
     if(!label) return;
+    if(Date.now() - lastTouch < 450){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
+      return false;
+    }
     e.preventDefault();
+    e.stopImmediatePropagation();
     e.stopPropagation();
-    activate(label.getAttribute('for'));
+    activate(label.getAttribute("for"));
+    return false;
   }, true);
 })();
 </script>
-
 
 <aside class="story-fullscreen"><div class="story-full-bg"><span>SBP</span><span>DROP</span><span>COINS</span><span>SELECT</span><span>RARE</span><span>SBP</span></div><label class="story-close" for="story-overlay">×</label><section class="story-full-card"><p>SBP STORIES</p><h2>Curated drop inside Telegram</h2><span>Новые позиции, бонусы, статусы и быстрый доступ к SBP — всё внутри одного mini-app.</span><div class="story-full-shine"></div><label class="story-full-action" for="tab-catalog" id="storyCatalogBtn" onclick="document.getElementById('story-overlay').checked=false;document.getElementById('tab-catalog').checked=true;window.scrollTo(0,0);return false;">Перейти в каталог</label></section></aside>
 
@@ -8027,7 +8166,8 @@ a,
       const value = qs("b", row);
       if(!value) return;
       if(label.includes("Товар")) value.textContent = priceOf(p);
-      if(label.includes("SBP Coins")) value.textContent = priceNum(p) ? `+${priceNum(p)}` : "+0";
+      if(label.includes("Скидка SBP Coins")) value.textContent = "0 BYN";
+      if(label.includes("SBP Coins после завершения")) value.textContent = priceNum(p) ? `+${priceNum(p)}` : "+0";
       if(row.classList.contains("total")) value.textContent = priceOf(p);
     });
   }
@@ -8140,6 +8280,10 @@ a,
       color:p.color || "",
       size:localStorage.getItem(SIZE_KEY) || "-",
       price_byn:priceNum(p),
+      discount_byn:0,
+      final_price_byn:priceNum(p),
+      bonus_used:null,
+      active_bonus:null,
       image:imageOf(p),
       delivery_method:selectedDelivery(),
       customer_fields:fields,
@@ -9165,6 +9309,34 @@ a,
   window.addEventListener('load', boot);
   window.addEventListener('focus', applyTelegramProfile);
   document.addEventListener('visibilitychange', function(){ if(!document.hidden) applyTelegramProfile(); });
+})();
+</script>
+
+
+<script id="sbp-loyalty-zero-state-script">
+/* SBP loyalty placeholder: real API later, now profile starts from 0. */
+(function(){
+  const state = {
+    coins: Number(localStorage.getItem("sbp_coins_balance") || 0),
+    activeBonuses: Number(localStorage.getItem("sbp_active_bonuses_count") || 0),
+    status: localStorage.getItem("sbp_client_status") || "Entry"
+  };
+
+  function qsAll(sel){ return Array.from(document.querySelectorAll(sel)); }
+  function setText(sel, value){ qsAll(sel).forEach(el => { el.textContent = value; }); }
+
+  function apply(){
+    setText("[data-sbp-coins-value], [data-sbp-profile-coins], [data-sbp-coins-balance]", String(state.coins));
+    setText("[data-sbp-active-bonuses]", String(state.activeBonuses));
+    setText("[data-sbp-client-status]", state.status);
+    setText("[data-sbp-client-multiplier]", state.status === "Entry" ? "стандарт" : "");
+    const bonusActive = document.getElementById("bonus-active");
+    if(bonusActive) bonusActive.checked = false;
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply);
+  else apply();
+  window.addEventListener("storage", apply);
 })();
 </script>
 
