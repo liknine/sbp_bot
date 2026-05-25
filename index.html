@@ -6994,6 +6994,176 @@ a,
 .sbp-theme-locking *{
   transition-duration:.01ms !important;
 }
+
+/* === SBP v7 repair: logo single-layer, orders restore, heart stable === */
+.app .sbp-logo-mark{
+  position:relative!important;
+  display:block!important;
+  width:104px!important;
+  height:58px!important;
+  line-height:0!important;
+}
+.app .sbp-logo-mark img{
+  position:absolute!important;
+  left:0!important;
+  top:50%!important;
+  width:104px!important;
+  max-width:104px!important;
+  height:auto!important;
+  max-height:none!important;
+  object-fit:contain!important;
+  transform:translateY(-50%)!important;
+}
+.app .sbp-logo-mark img.sbp-logo-dark{display:block!important}
+.app .sbp-logo-mark img.sbp-logo-light{display:none!important}
+#theme-light:checked ~ .app .sbp-logo-mark img.sbp-logo-dark{display:none!important}
+#theme-light:checked ~ .app .sbp-logo-mark img.sbp-logo-light{display:block!important}
+.app .menu-logo .sbp-logo-mark{width:112px!important;height:62px!important}
+.app .menu-logo .sbp-logo-mark img{width:112px!important;max-width:112px!important}
+
+.app .fav-heart,
+.app .product-main-heart{
+  box-sizing:border-box!important;
+  border-radius:50%!important;
+  overflow:hidden!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0!important;
+  line-height:0!important;
+  background:rgba(0,0,0,.38)!important;
+  border:1.4px solid rgba(255,255,255,.34)!important;
+  color:#fff!important;
+}
+#theme-light:checked ~ .app .fav-heart,
+#theme-light:checked ~ .app .product-main-heart{
+  background:rgba(255,255,255,.82)!important;
+  border-color:rgba(0,0,0,.14)!important;
+  color:#111!important;
+}
+.app .fav-heart.is-favorite,
+.app .product-main-heart.is-favorite{
+  background:#050505!important;
+  border-color:rgba(255,255,255,.42)!important;
+  color:#fff!important;
+}
+#theme-light:checked ~ .app .fav-heart.is-favorite,
+#theme-light:checked ~ .app .product-main-heart.is-favorite{
+  background:#050505!important;
+  border-color:rgba(0,0,0,.16)!important;
+  color:#fff!important;
+}
+.app .fav-heart .heart-outline,
+.app .fav-heart .heart-filled,
+.app .fav-heart .heart-pop,
+.app .product-main-heart .heart-outline,
+.app .product-main-heart .heart-filled,
+.app .product-main-heart .heart-pop{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  width:27px!important;
+  height:27px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0!important;
+  padding:0!important;
+  font-size:0!important;
+  line-height:0!important;
+  transform:translate(-50%,-50%)!important;
+}
+.app .fav-heart .sbp-heart-icon,
+.app .product-main-heart .sbp-heart-icon{
+  width:27px!important;
+  height:27px!important;
+  display:block!important;
+  overflow:visible!important;
+}
+.app .fav-heart .heart-outline .sbp-heart-icon path,
+.app .product-main-heart .heart-outline .sbp-heart-icon path{
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:2.35!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+}
+.app .fav-heart .heart-filled .sbp-heart-icon path,
+.app .fav-heart .heart-pop .sbp-heart-icon path,
+.app .product-main-heart .heart-filled .sbp-heart-icon path,
+.app .product-main-heart .heart-pop .sbp-heart-icon path{
+  fill:currentColor!important;
+  stroke:currentColor!important;
+  stroke-width:.8!important;
+}
+.app .fav-heart .heart-filled,
+.app .product-main-heart .heart-filled{
+  opacity:0!important;
+  transform:translate(-50%,-50%) scale(.55)!important;
+}
+.app .fav-heart .heart-pop,
+.app .product-main-heart .heart-pop{
+  opacity:0!important;
+  transform:translate(-50%,-50%) scale(.35)!important;
+}
+.app .fav-heart.is-favorite .heart-outline,
+.app .product-main-heart.is-favorite .heart-outline{opacity:0!important}
+.app .fav-heart.is-favorite .heart-filled,
+.app .product-main-heart.is-favorite .heart-filled{
+  opacity:1!important;
+  transform:translate(-50%,-50%) scale(1)!important;
+}
+.app .card .fav-heart{
+  right:12px!important;
+  top:12px!important;
+  width:46px!important;
+  height:46px!important;
+}
+.app .product-main-heart{
+  width:50px!important;
+  height:50px!important;
+}
+
+#ordersScreen .orders-timeline{
+  display:block;
+  margin-top:18px;
+}
+#ordersScreen .orders-timeline:empty{display:none}
+#ordersScreen .orders-empty-template{margin-top:18px}
+#ordersScreen .orders-empty-template[hidden]{display:none!important}
+#ordersScreen .orders-timeline.has-orders + .orders-empty-template{display:none!important}
+#ordersScreen .order-date{
+  margin:20px 0 10px;
+  color:var(--muted);
+  font-size:14px;
+  font-weight:800;
+}
+#ordersScreen .order-card{
+  margin-bottom:12px;
+}
+
+
+/* SBP v7.1: heart color must not be transparent */
+.app .fav-heart .heart-outline,
+.app .fav-heart .heart-filled,
+.app .fav-heart .heart-pop,
+.app .product-main-heart .heart-outline,
+.app .product-main-heart .heart-filled,
+.app .product-main-heart .heart-pop{
+  color:inherit!important;
+  background:none!important;
+  background-image:none!important;
+}
+.app .fav-heart .heart-outline::before,
+.app .fav-heart .heart-filled::before,
+.app .fav-heart .heart-pop::before,
+.app .product-main-heart .heart-outline::before,
+.app .product-main-heart .heart-filled::before,
+.app .product-main-heart .heart-pop::before{
+  content:none!important;
+  display:none!important;
+}
+
 </style>
 
 
@@ -7241,66 +7411,13 @@ a,
       <p>Здесь отображаются ваши заказы и их текущий статус.</p>
     </header>
 
-    <section class="empty-state orders-empty-template">
+    <section class="orders-timeline" data-orders-list></section>
+
+    <section class="empty-state orders-empty-template" data-orders-empty>
       <div class="empty-icon">□</div>
       <h2>История заказов пока пуста</h2>
       <p>Здесь будут отображаться ваши будущие заказы.</p>
       <label class="secondary-link" for="tab-catalog">Перейти в каталог</label>
-    </section>
-
-    <section class="orders-timeline">
-      <h3 class="order-date">12 мая 2026</h3>
-      <article class="order-card product-order-card">
-        <div class="order-product-photo"><img src="assets/embedded/embedded-2-3eefccdda3.png" alt="" loading="lazy" decoding="async"></div>
-        <div class="order-product-info">
-          <div class="order-headline">
-            <small>ORDER #SBP-1042</small>
-            <span class="order-status-pill processing">Заказ обрабатывается</span>
-          </div>
-          <h2>Nike Air Force 1 ’07</h2>
-          <div class="order-product-meta">
-            <span>Размер 42</span>
-            <b>179 BYN</b>
-          </div>
-        </div>
-      </article>
-
-      <h3 class="order-date">8 мая 2026</h3>
-      <article class="order-card product-order-card">
-        <div class="order-product-photo"><img src="assets/embedded/embedded-2-3eefccdda3.png" alt="" loading="lazy" decoding="async"></div>
-        <div class="order-product-info">
-          <div class="order-headline">
-            <small>ORDER #SBP-1037</small>
-            <span class="order-status-pill shipped">Отправлен</span>
-          </div>
-          <h2>New Balance 2002R</h2>
-          <div class="order-product-meta">
-            <span>Размер 43</span>
-            <b>259 BYN</b>
-          </div>
-        </div>
-      </article>
-
-      <h3 class="order-date">5 мая 2026</h3>
-      <article class="order-card product-order-card">
-        <div class="order-product-photo"><img src="assets/embedded/embedded-2-3eefccdda3.png" alt="" loading="lazy" decoding="async"></div>
-        <div class="order-product-info">
-          <div class="order-headline">
-            <small>ORDER #SBP-1021</small>
-            <span class="order-status-pill done">Завершён</span>
-          </div>
-          <h2>Adidas Samba OG</h2>
-          <div class="order-product-meta">
-            <span>Размер 41</span>
-            <b>199 BYN</b>
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <section class="coins-card logic-note-card">
-      <h2>Логика статусов</h2>
-      <p>Статус меняется внутри карточки заказа: заказ обрабатывается → отправлен → ожидает получения → завершён. Отдельные страницы под этапы не нужны.</p>
     </section>
   </main>
 
@@ -8041,11 +8158,20 @@ a,
     if(!data) return false;
     const raw = JSON.stringify(data);
 
+    function saveLocalSubmittedOrder(){
+      try{
+        if(window.SBP_SAVE_LOCAL_ORDER) window.SBP_SAVE_LOCAL_ORDER(data);
+      }catch(e){
+        console.warn("[SBP] local order save failed", e);
+      }
+    }
+
     const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 
     try{
       if(tg && typeof tg.ready === "function") tg.ready();
       if(tg && typeof tg.sendData === "function"){
+        saveLocalSubmittedOrder();
         tg.sendData(raw);
         return true;
       }
@@ -8055,6 +8181,7 @@ a,
 
     try{
       if(window.TelegramWebviewProxy && typeof window.TelegramWebviewProxy.postEvent === "function"){
+        saveLocalSubmittedOrder();
         window.TelegramWebviewProxy.postEvent("web_app_data_send", JSON.stringify({data: raw}));
         return true;
       }
@@ -8620,6 +8747,182 @@ a,
 </script>
 
 
+
+
+<script id="sbp-local-orders-repair-script">
+/* SBP local orders: real submitted orders only, no fake demo cards. */
+(function(){
+  const ORDER_KEYS = ["sbp_orders", "sbp_local_orders_v1", "sbp_orders_v1"];
+  const PRIMARY_KEY = "sbp_orders";
+
+  const STATUS_LABELS = {
+    processing: "В обработке",
+    awaiting_payment: "Ожидает оплаты",
+    sent: "Отправлен",
+    shipped: "Отправлен",
+    in_transit: "В пути",
+    waiting: "Прибыл",
+    arrived: "Прибыл",
+    completed: "Завершен",
+    done: "Завершен",
+    cancelled: "Отменен",
+    canceled: "Отменен"
+  };
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function esc(value){
+    return String(value ?? "").replace(/[&<>"']/g, function(ch){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch];
+    });
+  }
+  function parseList(key){
+    try{
+      const raw = localStorage.getItem(key);
+      const data = raw ? JSON.parse(raw) : [];
+      return Array.isArray(data) ? data : [];
+    }catch(e){ return []; }
+  }
+  function normalizeOrder(order){
+    const created = order.created_at || order.createdAt || new Date().toISOString();
+    const localId = order.local_order_id || order.local_id || order.id || ("LOCAL-" + Date.parse(created || Date.now()) + "-" + Math.random().toString(16).slice(2,6));
+    const number = order.order_number || order.orderNumber || ("SBP-" + String(localId).replace(/\D/g,"").slice(-6).padStart(6,"0"));
+    return {
+      ...order,
+      local_order_id: String(localId),
+      order_number: String(number),
+      product_name: order.product_name || order.name || order.product || "SBP order",
+      image: order.image || order.product_image || "",
+      size: order.size || order.selected_size || "-",
+      price_byn: Number(order.price_byn || order.price || order.total || 0),
+      final_price_byn: Number(order.final_price_byn || order.final_price || order.price_byn || order.price || 0),
+      status: String(order.status || "processing"),
+      created_at: created
+    };
+  }
+  function readOrders(){
+    const map = new Map();
+    ORDER_KEYS.forEach(function(key){
+      parseList(key).forEach(function(item){
+        const order = normalizeOrder(item);
+        const id = order.local_order_id || order.order_number;
+        if(!map.has(id)) map.set(id, order);
+      });
+    });
+    return Array.from(map.values()).sort(function(a,b){
+      return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
+    });
+  }
+  function writeOrders(orders){
+    const cleaned = orders.map(normalizeOrder);
+    try{ localStorage.setItem(PRIMARY_KEY, JSON.stringify(cleaned)); }catch(e){}
+    try{ localStorage.setItem("sbp_local_orders_v1", JSON.stringify(cleaned)); }catch(e){}
+  }
+  function dateLabel(value){
+    const d = value ? new Date(value) : new Date();
+    if(Number.isNaN(d.getTime())) return "Сегодня";
+    return d.toLocaleDateString("ru-RU", {day:"numeric", month:"long", year:"numeric"});
+  }
+  function priceLabel(order){
+    const value = Number(order.final_price_byn || order.price_byn || order.price || 0);
+    return value ? value + " BYN" : "Цена уточняется";
+  }
+  function statusLabel(status){
+    return STATUS_LABELS[status] || STATUS_LABELS.processing;
+  }
+  function orderHtml(order){
+    const title = order.product_name || "SBP order";
+    const image = order.image || "";
+    const status = order.status || "processing";
+    return `
+      <article class="order-card product-order-card" data-local-order-id="${esc(order.local_order_id)}">
+        <div class="order-product-photo">${image ? `<img src="${esc(image)}" alt="${esc(title)}" loading="lazy" decoding="async">` : ""}</div>
+        <div class="order-product-info">
+          <div class="order-headline">
+            <small>ORDER #${esc(order.order_number)}</small>
+            <span class="order-status-pill ${esc(status)}">${esc(statusLabel(status))}</span>
+          </div>
+          <h2>${esc(title)}</h2>
+          <div class="order-product-meta">
+            <span>Размер ${esc(order.size || "-")}</span>
+            <b>${esc(priceLabel(order))}</b>
+          </div>
+        </div>
+      </article>`;
+  }
+  function renderOrders(){
+    const screen = qs("#ordersScreen");
+    if(!screen) return;
+    const list = qs("[data-orders-list]", screen) || qs(".orders-timeline", screen);
+    const empty = qs("[data-orders-empty]", screen) || qs(".orders-empty-template", screen);
+    if(!list) return;
+
+    const orders = readOrders();
+    list.innerHTML = "";
+
+    if(!orders.length){
+      list.classList.remove("has-orders");
+      if(empty){
+        empty.hidden = false;
+        empty.style.display = "";
+      }
+      return;
+    }
+
+    if(empty){
+      empty.hidden = true;
+      empty.style.display = "none";
+    }
+    list.classList.add("has-orders");
+
+    let last = "";
+    list.innerHTML = orders.map(function(order){
+      const d = dateLabel(order.created_at);
+      const head = d !== last ? `<h3 class="order-date">${esc(d)}</h3>` : "";
+      last = d;
+      return head + orderHtml(order);
+    }).join("");
+  }
+
+  window.SBP_SAVE_LOCAL_ORDER = function(payload){
+    const orders = readOrders();
+    const created = payload.created_at || new Date().toISOString();
+    const stamp = Date.now();
+    const order = normalizeOrder({
+      ...payload,
+      status: payload.status || "processing",
+      created_at: created,
+      local_order_id: payload.local_order_id || ("LOCAL-" + stamp),
+      order_number: payload.order_number || ("SBP-" + String(stamp).slice(-6))
+    });
+
+    const exists = orders.some(function(item){
+      return item.local_order_id === order.local_order_id || (
+        item.product_id === order.product_id &&
+        item.size === order.size &&
+        Math.abs(new Date(item.created_at).getTime() - new Date(order.created_at).getTime()) < 2000
+      );
+    });
+
+    if(!exists) orders.unshift(order);
+    writeOrders(orders);
+    renderOrders();
+  };
+
+  window.SBP_RENDER_ORDERS = renderOrders;
+
+  document.addEventListener("DOMContentLoaded", renderOrders);
+  window.addEventListener("storage", renderOrders);
+  document.addEventListener("change", function(e){
+    if(e.target && e.target.id === "tab-orders") setTimeout(renderOrders, 40);
+  }, true);
+  document.addEventListener("click", function(e){
+    if(e.target.closest('label[for="tab-orders"], .orders-top-btn, .profile-item[for="tab-orders"]')){
+      setTimeout(renderOrders, 70);
+    }
+  }, true);
+  setTimeout(renderOrders, 250);
+})();
+</script>
 
 <script id="sbp-final-frontend-patch-script">
 /* Final frontend patch: stable hearts, Telegram profile, selected sizes and theme preservation. */
