@@ -6914,6 +6914,798 @@ a,
 }
 </style>
 
+
+<style id="sbp-polish-v31">
+/* SBP v31 final polish: orders shortcut, profile data stability, centered hearts, cleaner light theme. */
+
+/* Top-right shortcut now opens My Orders. Keep original button geometry. */
+.sbp-orders-top-btn svg{
+  width:23px !important;
+  height:23px !important;
+  transform:translateY(.2px) !important;
+}
+.sbp-orders-top-btn:active{
+  transform:scale(.97) !important;
+}
+#theme-light:checked ~ .app .sbp-orders-top-btn,
+#theme-light:checked ~ .app .icon-btn{
+  color:#111111 !important;
+  background:rgba(255,255,255,.92) !important;
+  border-color:rgba(0,0,0,.12) !important;
+  box-shadow:0 10px 24px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.96) !important;
+}
+#theme-light:checked ~ .app .cart-badge{
+  background:#111111 !important;
+  color:#ffffff !important;
+  border:1px solid rgba(255,255,255,.75) !important;
+}
+
+/* Favorite buttons: exact optical centering for home/catalog/dynamic/product-detail hearts. */
+.card .fav-heart,
+.sbp-dynamic-card .fav-heart,
+.card .heart,
+.product-main-heart{
+  display:grid !important;
+  place-items:center !important;
+  text-align:center !important;
+  padding:0 !important;
+  line-height:0 !important;
+  font-size:0 !important;
+}
+.card .fav-heart,
+.sbp-dynamic-card .fav-heart,
+.card .heart{
+  width:42px !important;
+  height:42px !important;
+  right:10px !important;
+  top:10px !important;
+}
+.fav-heart > span,
+.product-main-heart > span,
+.card .heart > span,
+.fav-heart .heart-outline,
+.fav-heart .heart-filled,
+.fav-heart .heart-pop,
+.product-main-heart .heart-outline,
+.product-main-heart .heart-filled,
+.product-main-heart .heart-pop{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  display:grid !important;
+  place-items:center !important;
+  margin:0 !important;
+  padding:0 !important;
+  line-height:0 !important;
+  text-align:center !important;
+  transform-origin:center center !important;
+}
+.sbp-heart-icon{
+  width:25.5px !important;
+  height:25.5px !important;
+  display:block !important;
+  margin:0 !important;
+  transform:translate3d(0,-.35px,0) !important;
+  transform-origin:center center !important;
+}
+.product-main-heart .sbp-heart-icon{
+  width:26px !important;
+  height:26px !important;
+}
+.fav-heart .heart-filled,
+.fav-heart .heart-pop,
+.product-main-heart .heart-filled,
+.product-main-heart .heart-pop{
+  opacity:0 !important;
+  transform:scale(.72) !important;
+}
+.fav-heart.is-favorite .heart-filled,
+.product-main-heart.is-favorite .heart-filled,
+#fav-1:checked ~ .app label[for="fav-1"] .heart-filled,
+#fav-2:checked ~ .app label[for="fav-2"] .heart-filled,
+#fav-3:checked ~ .app label[for="fav-3"] .heart-filled,
+#fav-4:checked ~ .app label[for="fav-4"] .heart-filled{
+  opacity:1 !important;
+  transform:scale(1) !important;
+}
+
+/* Profile SBP sticker background: one clean layer, not duplicated/noisy. */
+.profile-premium{
+  isolation:isolate !important;
+}
+.profile-premium.profile-top::before,
+.profile-premium.profile-top::after,
+.profile-premium-bg::before{
+  content:none !important;
+  display:none !important;
+}
+.profile-premium-bg{
+  display:block !important;
+  position:absolute !important;
+  inset:0 !important;
+  z-index:0 !important;
+  overflow:hidden !important;
+  border:0 !important;
+  box-shadow:none !important;
+  background:
+    radial-gradient(circle at 50% 42%,rgba(255,255,255,.115),transparent 84px),
+    radial-gradient(circle at 50% 42%,rgba(255,255,255,.045),transparent 190px),
+    linear-gradient(145deg,rgba(255,255,255,.034),rgba(255,255,255,.010)) !important;
+}
+.profile-premium-bg::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  z-index:2 !important;
+  pointer-events:none !important;
+  background:radial-gradient(circle at 50% 42%,transparent 0 88px,rgba(0,0,0,.06) 166px,rgba(0,0,0,.18) 100%) !important;
+}
+.profile-premium-bg span{
+  position:absolute !important;
+  z-index:1 !important;
+  display:block !important;
+  color:rgba(255,255,255,.068) !important;
+  opacity:1 !important;
+  text-shadow:none !important;
+  pointer-events:none !important;
+  transform:rotate(-3deg) !important;
+}
+.profile-premium-bg span:nth-child(n+12){
+  display:none !important;
+}
+.profile-premium-bg span:nth-child(1){left:7%!important;top:18%!important;font-size:19px!important;opacity:.56!important}
+.profile-premium-bg span:nth-child(2){left:29%!important;top:8%!important;font-size:19px!important;opacity:.60!important}
+.profile-premium-bg span:nth-child(3){left:63%!important;top:11%!important;font-size:19px!important;opacity:.56!important}
+.profile-premium-bg span:nth-child(4){right:8%!important;top:25%!important;font-size:18px!important;opacity:.50!important}
+.profile-premium-bg span:nth-child(5){left:16%!important;top:48%!important;font-size:19px!important;opacity:.58!important}
+.profile-premium-bg span:nth-child(6){right:28%!important;top:39%!important;font-size:21px!important;opacity:.50!important}
+.profile-premium-bg span:nth-child(7){right:10%!important;top:56%!important;font-size:20px!important;opacity:.48!important}
+.profile-premium-bg span:nth-child(8){left:9%!important;bottom:18%!important;font-size:18px!important;opacity:.42!important}
+.profile-premium-bg span:nth-child(9){left:35%!important;bottom:12%!important;font-size:22px!important;opacity:.54!important}
+.profile-premium-bg span:nth-child(10){right:22%!important;bottom:15%!important;font-size:20px!important;opacity:.43!important}
+.profile-premium-bg span:nth-child(11){right:6%!important;bottom:25%!important;font-size:18px!important;opacity:.36!important}
+#theme-light:checked ~ .app .profile-premium-bg{
+  background:
+    radial-gradient(circle at 50% 42%,rgba(0,0,0,.046),transparent 84px),
+    radial-gradient(circle at 50% 42%,rgba(0,0,0,.018),transparent 190px),
+    linear-gradient(145deg,rgba(255,255,255,.94),rgba(246,246,246,.98)) !important;
+}
+#theme-light:checked ~ .app .profile-premium-bg::after{
+  background:radial-gradient(circle at 50% 42%,rgba(255,255,255,.05) 0 88px,rgba(255,255,255,.22) 166px,rgba(255,255,255,.52) 100%) !important;
+}
+#theme-light:checked ~ .app .profile-premium-bg span{
+  color:rgba(0,0,0,.064) !important;
+}
+
+/* Real Telegram avatar / initials fallback. */
+.profile-avatar.has-tg-avatar,
+.avatar.has-tg-avatar,
+.profile-avatar.has-tg-avatar-initials,
+.avatar.has-tg-avatar-initials{
+  padding:0 !important;
+  overflow:hidden !important;
+  border-radius:50% !important;
+  background:linear-gradient(145deg,#1d1d1d,#090909) !important;
+}
+.profile-avatar.has-tg-avatar img.sbp-tg-avatar-img,
+.avatar.has-tg-avatar img.sbp-tg-avatar-img{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:cover !important;
+  border-radius:50% !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  filter:none !important;
+}
+.profile-avatar.has-tg-avatar-initials > img:not(.sbp-tg-avatar-img),
+.avatar.has-tg-avatar-initials > img:not(.sbp-tg-avatar-img){
+  display:none !important;
+}
+.sbp-tg-avatar-initials{
+  width:100% !important;
+  height:100% !important;
+  display:grid !important;
+  place-items:center !important;
+  border-radius:50% !important;
+  color:#ffffff !important;
+  font-weight:900 !important;
+  font-size:34px !important;
+  letter-spacing:-.06em !important;
+  background:radial-gradient(circle at 35% 25%,rgba(255,255,255,.22),transparent 34%),linear-gradient(145deg,#2a2a2a,#070707) !important;
+}
+#theme-light:checked ~ .app .sbp-tg-avatar-initials{
+  color:#111111 !important;
+  background:radial-gradient(circle at 35% 25%,rgba(255,255,255,.94),transparent 34%),linear-gradient(145deg,#f8f8f8,#dcdcdc) !important;
+}
+.profile-premium h1,
+.profile-premium .profile-username,
+.profile-premium .profile-name{
+  position:relative !important;
+  z-index:3 !important;
+}
+
+/* Size selection: high contrast in both themes, including subtext. */
+#productScreen .sizes-grid input:checked + label,
+#productScreen .sizes-grid input:checked + .size-option,
+#productScreen .sizes-grid input:checked + .sbp-size-option,
+#productScreen .sizes-grid .is-selected,
+.product-block .sizes-grid .is-selected{
+  background:#ffffff !important;
+  border-color:#ffffff !important;
+  color:#050505 !important;
+  box-shadow:0 16px 34px rgba(0,0,0,.34), inset 0 0 0 1px rgba(0,0,0,.08) !important;
+}
+#productScreen .sizes-grid input:checked + label b,
+#productScreen .sizes-grid input:checked + label small,
+#productScreen .sizes-grid .is-selected b,
+#productScreen .sizes-grid .is-selected small,
+.product-block .sizes-grid .is-selected b,
+.product-block .sizes-grid .is-selected small{
+  color:#050505 !important;
+  opacity:1 !important;
+}
+#productScreen .sizes-grid input:checked + label small,
+#productScreen .sizes-grid .is-selected small,
+.product-block .sizes-grid .is-selected small{
+  color:rgba(0,0,0,.66) !important;
+}
+#theme-light:checked ~ .app #productScreen .sizes-grid input:checked + label,
+#theme-light:checked ~ .app #productScreen .sizes-grid input:checked + .size-option,
+#theme-light:checked ~ .app #productScreen .sizes-grid input:checked + .sbp-size-option,
+#theme-light:checked ~ .app #productScreen .sizes-grid .is-selected,
+#theme-light:checked ~ .app .product-block .sizes-grid .is-selected{
+  background:#050505 !important;
+  border-color:#050505 !important;
+  color:#ffffff !important;
+}
+#theme-light:checked ~ .app #productScreen .sizes-grid input:checked + label b,
+#theme-light:checked ~ .app #productScreen .sizes-grid input:checked + label small,
+#theme-light:checked ~ .app #productScreen .sizes-grid .is-selected b,
+#theme-light:checked ~ .app #productScreen .sizes-grid .is-selected small,
+#theme-light:checked ~ .app .product-block .sizes-grid .is-selected b,
+#theme-light:checked ~ .app .product-block .sizes-grid .is-selected small{
+  color:#ffffff !important;
+  opacity:1 !important;
+}
+#theme-light:checked ~ .app #productScreen .sizes-grid input:checked + label small,
+#theme-light:checked ~ .app #productScreen .sizes-grid .is-selected small,
+#theme-light:checked ~ .app .product-block .sizes-grid .is-selected small{
+  color:rgba(255,255,255,.76) !important;
+}
+
+/* Additional light-theme contrast sweep for places that previously looked washed out. */
+#theme-light:checked ~ .app .quick-card,
+#theme-light:checked ~ .app .status-card,
+#theme-light:checked ~ .app .profile-list,
+#theme-light:checked ~ .app .product-info-card,
+#theme-light:checked ~ .app .product-block,
+#theme-light:checked ~ .app .checkout-block,
+#theme-light:checked ~ .app .coins-card,
+#theme-light:checked ~ .app .bonus-card,
+#theme-light:checked ~ .app .product-order-card{
+  background:rgba(255,255,255,.82) !important;
+  border-color:rgba(0,0,0,.10) !important;
+  color:#111111 !important;
+}
+#theme-light:checked ~ .app .profile-item,
+#theme-light:checked ~ .app .info-item,
+#theme-light:checked ~ .app .searchbox,
+#theme-light:checked ~ .app .field{
+  border-color:rgba(0,0,0,.10) !important;
+  color:#111111 !important;
+}
+#theme-light:checked ~ .app .screen-back,
+#theme-light:checked ~ .app .secondary-link,
+#theme-light:checked ~ .app .dark-action{
+  color:#111111 !important;
+  border-color:rgba(0,0,0,.12) !important;
+}
+#theme-light:checked ~ .app .order-status-pill.processing{
+  background:#111111 !important;
+  color:#ffffff !important;
+}
+
+
+/* === SBP v26 final frontend polish before new logic === */
+/* Top-right home button now opens Orders. Keep the existing button style, only tune the icon. */
+.sbp-orders-top-btn svg{
+  width:23px !important;
+  height:23px !important;
+  transform:translateY(.5px) !important;
+}
+
+/* Hearts: optical centering inside the round glass button on home/catalog/product. */
+.card .fav-heart,
+.sbp-dynamic-card .fav-heart,
+.card .heart,
+.product-main-heart{
+  display:grid !important;
+  place-items:center !important;
+  line-height:0 !important;
+}
+.fav-heart .heart-outline,
+.fav-heart .heart-filled,
+.fav-heart .heart-pop,
+.product-main-heart .heart-outline,
+.product-main-heart .heart-filled,
+.product-main-heart .heart-pop{
+  display:grid !important;
+  place-items:center !important;
+  inset:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+}
+.sbp-heart-icon{
+  width:24px !important;
+  height:24px !important;
+  transform:translateY(1px) scale(.99) !important;
+  transform-origin:center !important;
+}
+.sbp-dynamic-card .fav-heart .sbp-heart-icon,
+.card .fav-heart .sbp-heart-icon,
+.card .heart .sbp-heart-icon{
+  margin:0 !important;
+}
+
+/* Sizes: active state must be obvious in both themes. */
+#productScreen .sizes-grid .sbp-size-button.is-selected,
+#productScreen .sizes-grid .size-option.is-selected,
+#productScreen .sizes-grid input:checked + label,
+#productScreen .sizes-grid input:checked + .size-option,
+#productScreen .sizes-grid input:checked + .sbp-size-option,
+.product-block .sizes-grid .sbp-size-button.is-selected,
+.product-block .sizes-grid .size-option.is-selected,
+.product-block .sizes-grid input:checked + label,
+.product-block .sizes-grid input:checked + .size-option,
+.product-block .sizes-grid input:checked + .sbp-size-option{
+  background:#f5f5f5 !important;
+  border-color:rgba(255,255,255,.92) !important;
+  color:#050505 !important;
+  box-shadow:0 14px 34px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.90) !important;
+}
+#productScreen .sizes-grid .sbp-size-button.is-selected b,
+#productScreen .sizes-grid .size-option.is-selected b,
+#productScreen .sizes-grid input:checked + label b,
+#productScreen .sizes-grid input:checked + .size-option b,
+#productScreen .sizes-grid input:checked + .sbp-size-option b,
+.product-block .sizes-grid .sbp-size-button.is-selected b,
+.product-block .sizes-grid .size-option.is-selected b,
+.product-block .sizes-grid input:checked + label b,
+.product-block .sizes-grid input:checked + .size-option b,
+.product-block .sizes-grid input:checked + .sbp-size-option b{
+  color:#050505 !important;
+}
+#productScreen .sizes-grid .sbp-size-button.is-selected small,
+#productScreen .sizes-grid .size-option.is-selected small,
+#productScreen .sizes-grid input:checked + label small,
+#productScreen .sizes-grid input:checked + .size-option small,
+#productScreen .sizes-grid input:checked + .sbp-size-option small,
+.product-block .sizes-grid .sbp-size-button.is-selected small,
+.product-block .sizes-grid .size-option.is-selected small,
+.product-block .sizes-grid input:checked + label small,
+.product-block .sizes-grid input:checked + .size-option small,
+.product-block .sizes-grid input:checked + .sbp-size-option small{
+  color:rgba(0,0,0,.56) !important;
+}
+#theme-light:checked ~ .app #productScreen .sizes-grid .sbp-size-button.is-selected,
+#theme-light:checked ~ .app #productScreen .sizes-grid .size-option.is-selected,
+#theme-light:checked ~ .app #productScreen .sizes-grid input:checked + label,
+#theme-light:checked ~ .app #productScreen .sizes-grid input:checked + .size-option,
+#theme-light:checked ~ .app #productScreen .sizes-grid input:checked + .sbp-size-option,
+#theme-light:checked ~ .app .product-block .sizes-grid .sbp-size-button.is-selected,
+#theme-light:checked ~ .app .product-block .sizes-grid .size-option.is-selected,
+#theme-light:checked ~ .app .product-block .sizes-grid input:checked + label,
+#theme-light:checked ~ .app .product-block .sizes-grid input:checked + .size-option,
+#theme-light:checked ~ .app .product-block .sizes-grid input:checked + .sbp-size-option{
+  background:#050505 !important;
+  border-color:#050505 !important;
+  color:#ffffff !important;
+  box-shadow:0 14px 30px rgba(0,0,0,.18) !important;
+}
+#theme-light:checked ~ .app #productScreen .sizes-grid .sbp-size-button.is-selected b,
+#theme-light:checked ~ .app #productScreen .sizes-grid .size-option.is-selected b,
+#theme-light:checked ~ .app #productScreen .sizes-grid input:checked + label b,
+#theme-light:checked ~ .app #productScreen .sizes-grid input:checked + .size-option b,
+#theme-light:checked ~ .app #productScreen .sizes-grid input:checked + .sbp-size-option b{
+  color:#ffffff !important;
+}
+#theme-light:checked ~ .app #productScreen .sizes-grid .sbp-size-button.is-selected small,
+#theme-light:checked ~ .app #productScreen .sizes-grid .size-option.is-selected small,
+#theme-light:checked ~ .app #productScreen .sizes-grid input:checked + label small,
+#theme-light:checked ~ .app #productScreen .sizes-grid input:checked + .size-option small,
+#theme-light:checked ~ .app #productScreen .sizes-grid input:checked + .sbp-size-option small{
+  color:rgba(255,255,255,.72) !important;
+}
+
+/* Profile pattern: only one layer, clearer sticker effect, no doubled SBP texture. */
+.profile-premium-bg::before{
+  content:none !important;
+  display:none !important;
+}
+.profile-premium-bg span{
+  opacity:1 !important;
+  filter:none !important;
+}
+.profile-premium .profile-avatar.has-tg-avatar,
+.profile-premium .avatar.has-tg-avatar{
+  background:#111 !important;
+  border-color:rgba(255,255,255,.16) !important;
+}
+#theme-light:checked ~ .app .profile-premium .profile-avatar.has-tg-avatar,
+#theme-light:checked ~ .app .profile-premium .avatar.has-tg-avatar{
+  background:#f4f4f4 !important;
+  border-color:rgba(0,0,0,.12) !important;
+}
+.profile-avatar.has-tg-avatar .profile-avatar-dark,
+.profile-avatar.has-tg-avatar .profile-avatar-light,
+.avatar.has-tg-avatar .profile-avatar-dark,
+.avatar.has-tg-avatar .profile-avatar-light{
+  display:none !important;
+}
+
+/* Light theme contrast pass: keep the design, make text/buttons readable. */
+#theme-light:checked ~ .app .icon-btn{
+  color:#111111 !important;
+  background:linear-gradient(145deg,#ffffff,#eeeeee) !important;
+  border-color:rgba(0,0,0,.12) !important;
+}
+#theme-light:checked ~ .app .quick-card,
+#theme-light:checked ~ .app .status-card,
+#theme-light:checked ~ .app .profile-list,
+#theme-light:checked ~ .app .checkout-block,
+#theme-light:checked ~ .app .product-info-card,
+#theme-light:checked ~ .app .product-block,
+#theme-light:checked ~ .app .cart-summary,
+#theme-light:checked ~ .app .product-order-card{
+  color:#050505 !important;
+  border-color:rgba(0,0,0,.105) !important;
+}
+#theme-light:checked ~ .app .card h3,
+#theme-light:checked ~ .app .quick-card b,
+#theme-light:checked ~ .app .profile-top h1,
+#theme-light:checked ~ .app .status-row b,
+#theme-light:checked ~ .app .product-title,
+#theme-light:checked ~ .app .cart-info h3,
+#theme-light:checked ~ .app .order-product-info h2,
+#theme-light:checked ~ .app .order-product-meta b{
+  color:#050505 !important;
+}
+#theme-light:checked ~ .app .brand,
+#theme-light:checked ~ .app .color,
+#theme-light:checked ~ .app .page-head p,
+#theme-light:checked ~ .app .product-desc,
+#theme-light:checked ~ .app .profile-item b,
+#theme-light:checked ~ .app .order-product-meta span,
+#theme-light:checked ~ .app .order-headline small{
+  color:rgba(0,0,0,.56) !important;
+}
+#theme-light:checked ~ .app .bottom-nav-fixed label,
+#theme-light:checked ~ .app .bottom-nav label{
+  color:rgba(0,0,0,.58) !important;
+}
+#theme-light:checked ~ #tab-home:checked ~ .bottom-nav-fixed .nav-home,
+#theme-light:checked ~ #tab-catalog:checked ~ .bottom-nav-fixed .nav-catalog,
+#theme-light:checked ~ #tab-favorites:checked ~ .bottom-nav-fixed .nav-favorites,
+#theme-light:checked ~ #tab-profile:checked ~ .bottom-nav-fixed .nav-profile{
+  color:#050505 !important;
+}
+
+/* Orders screen: real list/empty state, no internal tech notes. */
+.logic-note-card{display:none !important;}
+.orders-timeline:empty{display:none !important;}
+.orders-timeline:not(:empty) + .logic-note-card{display:none !important;}
+.orders-timeline:not(:empty) ~ .orders-empty-template{display:none !important;}
+.sbp-order-date{margin:12px 0 2px;color:var(--muted);font-size:13px;letter-spacing:.05em;}
+</style>
+
+
+
+<!-- === SBP final frontend stabilization v64 === -->
+<style id="sbp-final-stabilization-v64">
+/* Profile: keep only ONE SBP sticker layer. The real layer is .profile-premium-bg. */
+#profileScreen .profile-top::before,
+#profileScreen .profile-top::after,
+#profileScreen .profile-premium::before,
+#profileScreen .profile-premium::after,
+#profileScreen .profile-card::before,
+#profileScreen .profile-card::after,
+#profileScreen .profile-header::before,
+#profileScreen .profile-header::after,
+#profileScreen .profile-hero::before,
+#profileScreen .profile-hero::after,
+#profileScreen .user-hero::before,
+#profileScreen .user-hero::after,
+#profileScreen .account-hero::before,
+#profileScreen .account-hero::after{
+  content:none !important;
+  display:none !important;
+  opacity:0 !important;
+  background:none !important;
+}
+
+#profileScreen .profile-premium{
+  isolation:isolate !important;
+}
+
+#profileScreen .profile-premium-bg{
+  display:block !important;
+  opacity:1 !important;
+  z-index:0 !important;
+  background:
+    radial-gradient(circle at 50% 43%,rgba(255,255,255,.115),transparent 18%),
+    radial-gradient(circle at 50% 43%,rgba(255,255,255,.060),transparent 34%),
+    linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.010)) !important;
+}
+
+#profileScreen .profile-premium-bg:after{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  pointer-events:none !important;
+  background:radial-gradient(circle at 50% 43%,transparent 0 92px,rgba(0,0,0,.16) 190px,rgba(0,0,0,.34) 100%) !important;
+}
+
+#theme-light:checked ~ .app #profileScreen .profile-premium-bg{
+  background:
+    radial-gradient(circle at 50% 43%,rgba(0,0,0,.045),transparent 18%),
+    radial-gradient(circle at 50% 43%,rgba(0,0,0,.028),transparent 34%),
+    linear-gradient(145deg,rgba(255,255,255,.98),rgba(248,248,248,.94)) !important;
+}
+
+#theme-light:checked ~ .app #profileScreen .profile-premium-bg:after{
+  background:radial-gradient(circle at 50% 43%,transparent 0 92px,rgba(255,255,255,.10) 170px,rgba(255,255,255,.44) 100%) !important;
+}
+
+#profileScreen .profile-premium-bg span{
+  z-index:1 !important;
+  pointer-events:none !important;
+}
+
+#profileScreen .profile-premium .avatar,
+#profileScreen .profile-premium .profile-avatar,
+#profileScreen .profile-premium h1,
+#profileScreen .profile-premium .profile-name,
+#profileScreen .profile-premium .profile-username{
+  position:relative !important;
+  z-index:3 !important;
+}
+
+/* Telegram avatar: real photo fills the circle; fallback logo stays clean if Telegram gives no photo. */
+#profileScreen .avatar.has-tg-avatar,
+#profileScreen .profile-avatar.has-tg-avatar,
+#profileScreen .avatar.sbp-has-real-avatar,
+#profileScreen .profile-avatar.sbp-has-real-avatar{
+  padding:0 !important;
+  background:#111 !important;
+  background-image:none !important;
+  overflow:hidden !important;
+}
+
+#theme-light:checked ~ .app #profileScreen .avatar.has-tg-avatar,
+#theme-light:checked ~ .app #profileScreen .profile-avatar.has-tg-avatar,
+#theme-light:checked ~ .app #profileScreen .avatar.sbp-has-real-avatar,
+#theme-light:checked ~ .app #profileScreen .profile-avatar.sbp-has-real-avatar{
+  background:#f2f2f2 !important;
+}
+
+#profileScreen .sbp-tg-avatar-img,
+#profileScreen .avatar.has-tg-avatar img,
+#profileScreen .profile-avatar.has-tg-avatar img,
+#profileScreen .avatar.sbp-has-real-avatar img,
+#profileScreen .profile-avatar.sbp-has-real-avatar img{
+  position:static !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:none !important;
+  max-height:none !important;
+  object-fit:cover !important;
+  border-radius:50% !important;
+  display:block !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  filter:none !important;
+  transform:none !important;
+}
+
+/* Top right button on home: now opens My orders, not catalog search. */
+.orders-top-btn svg,
+.sbp-orders-top-btn svg{
+  width:23px !important;
+  height:23px !important;
+  transform:translateY(.5px) !important;
+}
+.orders-top-btn svg,
+.sbp-orders-top-btn svg,
+.orders-top-btn svg *,
+.sbp-orders-top-btn svg *{
+  fill:none !important;
+  stroke:currentColor !important;
+  stroke-width:1.9 !important;
+  stroke-linecap:round !important;
+  stroke-linejoin:round !important;
+}
+
+/* Heart buttons: exact centering and identical SVG behavior on home/catalog/product. */
+.card .fav-heart,
+.sbp-dynamic-card .fav-heart,
+.card .heart,
+.product-main-heart{
+  width:42px !important;
+  height:42px !important;
+  min-width:42px !important;
+  min-height:42px !important;
+  border-radius:50% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  place-items:center !important;
+  padding:0 !important;
+  overflow:hidden !important;
+  line-height:0 !important;
+  font-size:0 !important;
+}
+
+.card .fav-heart,
+.sbp-dynamic-card .fav-heart,
+.card .heart{
+  right:10px !important;
+  top:10px !important;
+}
+
+.fav-heart .heart-outline,
+.fav-heart .heart-filled,
+.fav-heart .heart-pop,
+.product-main-heart .heart-outline,
+.product-main-heart .heart-filled,
+.product-main-heart .heart-pop,
+.card .heart .heart-outline,
+.card .heart .heart-filled,
+.card .heart .heart-pop{
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  line-height:0 !important;
+  font-size:0 !important;
+  text-align:center !important;
+}
+
+.sbp-heart-icon{
+  width:24px !important;
+  height:24px !important;
+  display:block !important;
+  flex:0 0 auto !important;
+  overflow:visible !important;
+  transform:translateY(.75px) !important;
+}
+
+.heart-outline .sbp-heart-icon path{
+  fill:none !important;
+  stroke:currentColor !important;
+  stroke-width:2.25 !important;
+  stroke-linecap:round !important;
+  stroke-linejoin:round !important;
+}
+
+.heart-filled .sbp-heart-icon path,
+.heart-pop .sbp-heart-icon path{
+  fill:currentColor !important;
+  stroke:currentColor !important;
+  stroke-width:0 !important;
+}
+
+.fav-heart.is-favorite .heart-outline,
+.product-main-heart.is-favorite .heart-outline{
+  opacity:0 !important;
+}
+
+.fav-heart.is-favorite .heart-filled,
+.product-main-heart.is-favorite .heart-filled{
+  opacity:1 !important;
+  transform:scale(1) !important;
+}
+
+/* Light theme final contrast pass. */
+#theme-light:checked ~ .app{
+  color:#050505 !important;
+}
+
+#theme-light:checked ~ .app .icon-btn,
+#theme-light:checked ~ .app .quick-card,
+#theme-light:checked ~ .app .card,
+#theme-light:checked ~ .app .product-info-card,
+#theme-light:checked ~ .app .product-block,
+#theme-light:checked ~ .app .profile-list,
+#theme-light:checked ~ .app .status-card,
+#theme-light:checked ~ .app .cart-summary,
+#theme-light:checked ~ .app .checkout-block,
+#theme-light:checked ~ .app .order-card,
+#theme-light:checked ~ .app .product-order-card{
+  border-color:rgba(0,0,0,.14) !important;
+}
+
+#theme-light:checked ~ .app .brand,
+#theme-light:checked ~ .app .color,
+#theme-light:checked ~ .app .card-bottom span,
+#theme-light:checked ~ .app .section-head span,
+#theme-light:checked ~ .app .profile-item b,
+#theme-light:checked ~ .app .page-head p,
+#theme-light:checked ~ .app .order-product-meta span,
+#theme-light:checked ~ .app .order-headline small{
+  color:#686868 !important;
+  opacity:1 !important;
+}
+
+#theme-light:checked ~ .bottom-nav-fixed label,
+#theme-light:checked ~ .bottom-nav-fixed label span,
+#theme-light:checked ~ .bottom-nav-fixed label svg,
+#theme-light:checked ~ .bottom-nav-fixed label svg *{
+  opacity:1 !important;
+}
+
+#theme-light:checked ~ #tab-home:checked ~ .bottom-nav-fixed .nav-home,
+#theme-light:checked ~ #tab-catalog:checked ~ .bottom-nav-fixed .nav-catalog,
+#theme-light:checked ~ #tab-favorites:checked ~ .bottom-nav-fixed .nav-favorites,
+#theme-light:checked ~ #tab-profile:checked ~ .bottom-nav-fixed .nav-profile{
+  color:#050505 !important;
+}
+
+/* Size selected state must be readable in both themes. */
+#productScreen .sizes-grid .is-selected,
+#productScreen .sizes-grid .is-selected b,
+#productScreen .sizes-grid .is-selected small{
+  color:#050505 !important;
+}
+
+#productScreen .sizes-grid .is-selected{
+  background:#ffffff !important;
+  border-color:#ffffff !important;
+}
+
+#productScreen .sizes-grid .is-selected small{
+  color:rgba(0,0,0,.58) !important;
+}
+
+#theme-light:checked ~ .app #productScreen .sizes-grid .is-selected{
+  background:#050505 !important;
+  border-color:#050505 !important;
+}
+
+#theme-light:checked ~ .app #productScreen .sizes-grid .is-selected,
+#theme-light:checked ~ .app #productScreen .sizes-grid .is-selected b{
+  color:#ffffff !important;
+}
+
+#theme-light:checked ~ .app #productScreen .sizes-grid .is-selected small{
+  color:rgba(255,255,255,.76) !important;
+}
+
+/* Orders empty/list states controlled by JS. */
+#ordersScreen.sbp-has-local-orders .orders-empty-template{
+  display:none !important;
+}
+#ordersScreen:not(.sbp-has-local-orders) .orders-timeline{
+  display:none !important;
+}
+#ordersScreen .orders-timeline{
+  padding-bottom:18px !important;
+}
+
+/* Theme must not visually jump after submit. */
+html.sbp-theme-locking *,
+body.sbp-theme-locking *{
+  transition-duration:.01ms !important;
+  animation-duration:.01ms !important;
+}
+</style>
+
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -6949,7 +7741,7 @@ a,
       <div class="top-actions">
         <label class="icon-btn menu-icon" for="menu-toggle"><i></i><i></i><i></i></label>
         <label class="icon-btn" for="tab-cart"><svg viewBox="0 0 24 24"><path d="M7 8h10l1 12H6L7 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg><span class="cart-badge">1</span></label>
-        <label class="icon-btn" for="tab-catalog"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></label>
+        <label class="icon-btn orders-top-btn sbp-orders-top-btn" for="tab-orders" aria-label="Мои заказы" title="Мои заказы"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10a2 2 0 0 1 2 2v16l-2.2-1.25L14.6 21l-2.2-1.25L10.2 21 8 19.75 5.8 21V5a2 2 0 0 1 2-2Z"/><path d="M9 8h6"/><path d="M9 12h6"/><path d="M9 16h4"/></svg></label>
       </div>
     </header>
     <section class="hero">
@@ -7139,14 +7931,14 @@ a,
       <p>Здесь отображаются ваши заказы и их текущий статус.</p>
     </header>
 
-    <section class="empty-state orders-empty-template" data-orders-empty>
+    <section class="empty-state orders-empty-template">
       <div class="empty-icon">□</div>
       <h2>История заказов пока пуста</h2>
       <p>Здесь будут отображаться ваши будущие заказы.</p>
       <label class="secondary-link" for="tab-catalog">Перейти в каталог</label>
     </section>
 
-    <section class="orders-timeline" data-orders-list></section>
+    <section class="orders-timeline" data-sbp-orders-list></section>
   </main>
 
 <main class="screen" id="bonusesScreen">
@@ -7566,46 +8358,6 @@ a,
   const priceNum = (p) => Number(p.price || p.price_byn || 0);
   const priceOf = (p) => priceNum(p) ? `${priceNum(p)} BYN` : "Цена уточняется";
   const sizesOf = (p) => Array.isArray(p.sizes) && p.sizes.length ? p.sizes.join(" ") : "Размеры уточняются";
-  const ORDERS_KEY = "sbp_orders_v1";
-
-  function readLocalOrders(){
-    try{
-      const arr = JSON.parse(localStorage.getItem(ORDERS_KEY) || "[]");
-      return Array.isArray(arr) ? arr : [];
-    }catch(e){
-      return [];
-    }
-  }
-
-  function saveLocalOrders(list){
-    try{
-      localStorage.setItem(ORDERS_KEY, JSON.stringify(Array.isArray(list) ? list : []));
-    }catch(e){
-      console.error("[SBP] local orders save failed", e);
-    }
-  }
-
-  function rememberLocalOrder(order){
-    if(!order) return;
-    const localId = order.local_order_id || ("local-" + Date.now());
-    const normalized = Object.assign({}, order, {
-      local_order_id: localId,
-      order_number: order.order_number || ("TEMP-" + String(Date.now()).slice(-8)),
-      status: order.status || "processing",
-      created_at: order.created_at || new Date().toISOString()
-    });
-
-    const orders = readLocalOrders();
-    const exists = orders.some(item => item.local_order_id === normalized.local_order_id);
-    if(!exists){
-      orders.unshift(normalized);
-      saveLocalOrders(orders.slice(0, 50));
-    }
-
-    if(typeof window.SBP_RENDER_ORDERS === "function"){
-      setTimeout(window.SBP_RENDER_ORDERS, 40);
-    }
-  }
 
   let products = [];
   let ready = false;
@@ -7900,27 +8652,18 @@ a,
       fields[key] = el.value || "";
     });
 
-    const createdAt = new Date().toISOString();
-    const localId = "local-" + Date.now();
-    const price = priceNum(p);
-
     return {
       type:"order_create",
-      local_order_id:localId,
-      order_number:"TEMP-" + String(Date.now()).slice(-8),
-      status:"processing",
       product_id:idOf(p),
       product_name:p.name || "SBP order",
       brand:p.brand || "",
       color:p.color || "",
       size:localStorage.getItem(SIZE_KEY) || "-",
-      price_byn:price,
-      discount_byn:0,
-      final_price_byn:price,
+      price_byn:priceNum(p),
       image:imageOf(p),
       delivery_method:selectedDelivery(),
       customer_fields:fields,
-      created_at:createdAt
+      created_at:new Date().toISOString()
     };
   }
 
@@ -7941,7 +8684,7 @@ a,
       if(tg && typeof tg.ready === "function") tg.ready();
       if(tg && typeof tg.sendData === "function"){
         tg.sendData(raw);
-        rememberLocalOrder(data);
+        try{ window.SBP_saveLocalOrder && window.SBP_saveLocalOrder(data); }catch(e){}
         return true;
       }
     }catch(e){
@@ -7951,7 +8694,7 @@ a,
     try{
       if(window.TelegramWebviewProxy && typeof window.TelegramWebviewProxy.postEvent === "function"){
         window.TelegramWebviewProxy.postEvent("web_app_data_send", JSON.stringify({data: raw}));
-        rememberLocalOrder(data);
+        try{ window.SBP_saveLocalOrder && window.SBP_saveLocalOrder(data); }catch(e){}
         return true;
       }
     }catch(e){
@@ -8638,125 +9381,599 @@ a,
 </script>
 
 
-<style>
-/* === SBP orders localStorage v1 === */
-.orders-timeline:empty{display:none}
-.orders-timeline.has-orders{display:grid;gap:10px}
-.order-card.product-order-card[data-local-order="1"]{animation:softRise .34s cubic-bezier(.22,1,.36,1) both}
-.order-status-pill.awaiting_payment{background:#f1f1f1;color:#111}
-#theme-light:checked ~ .app .order-status-pill.awaiting_payment{background:#111;color:#fff}
-.order-status-pill.sent,.order-status-pill.in_transit,.order-status-pill.arrived{background:var(--soft);color:var(--text)}
-.order-status-pill.completed{background:rgba(70,180,110,.16);color:var(--text)}
-.order-status-pill.cancelled{background:rgba(220,70,70,.16);color:var(--text)}
-</style>
-
-<script>
-/* === SBP orders localStorage v1: temporary frontend history until backend API === */
+<script id="sbp-polish-v31-script">
 (function(){
-  const ORDERS_KEY = "sbp_orders_v1";
-  const STATUS_LABELS = {
-    processing:"В обработке",
-    awaiting_payment:"Ожидает оплаты",
-    sent:"Отправлен",
-    in_transit:"В пути",
-    arrived:"Прибыл",
-    completed:"Завершен",
-    cancelled:"Отменен"
-  };
+  const qs = (sel, root=document) => root.querySelector(sel);
+  const qsa = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+  const clean = (v) => String(v || '').replace(/\s+/g, ' ').trim();
+  const HEART_OUTLINE = '<svg class="sbp-heart-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.4l-1.04-.94C5.8 14.78 3 12.24 3 8.95 3 6.4 5.02 4.4 7.56 4.4c1.44 0 2.82.67 3.72 1.72L12 6.96l.72-.84c.9-1.05 2.28-1.72 3.72-1.72C18.98 4.4 21 6.4 21 8.95c0 3.29-2.8 5.83-7.96 10.51L12 20.4z"></path></svg>';
+  const HEART_FILLED = '<svg class="sbp-heart-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.4l-1.04-.94C5.8 14.78 3 12.24 3 8.95 3 6.4 5.02 4.4 7.56 4.4c1.44 0 2.82.67 3.72 1.72L12 6.96l.72-.84c.9-1.05 2.28-1.72 3.72-1.72C18.98 4.4 21 6.4 21 8.95c0 3.29-2.8 5.83-7.96 10.51L12 20.4z"></path></svg>';
 
-  function qs(s, r=document){ return r.querySelector(s); }
-  function esc(v){
-    return String(v ?? "").replace(/[&<>"']/g, function(m){
-      if(m === "&") return "&amp;";
-      if(m === "<") return "&lt;";
-      if(m === ">") return "&gt;";
-      if(m === '"') return "&quot;";
-      return "&#039;";
+  function parseUserFromParams(raw){
+    if(!raw) return null;
+    try{
+      const params = new URLSearchParams(raw.replace(/^#|^\?/, ''));
+      const direct = params.get('user');
+      if(direct) return JSON.parse(direct);
+      const webAppData = params.get('tgWebAppData');
+      if(webAppData){
+        const decoded = decodeURIComponent(webAppData);
+        const nested = new URLSearchParams(decoded);
+        const nestedUser = nested.get('user');
+        if(nestedUser) return JSON.parse(nestedUser);
+      }
+    }catch(e){}
+    return null;
+  }
+
+  function readTelegramUser(){
+    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    try{
+      if(tg && typeof tg.ready === 'function') tg.ready();
+      if(tg && typeof tg.expand === 'function') tg.expand();
+    }catch(e){}
+
+    let user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
+
+    if(!user && tg && typeof tg.initData === 'string' && tg.initData){
+      user = parseUserFromParams(tg.initData);
+    }
+    if(!user){
+      user = parseUserFromParams(window.location.hash || '') || parseUserFromParams(window.location.search || '');
+    }
+    if(!user){
+      try{
+        const hash = decodeURIComponent(window.location.hash || '');
+        const m = hash.match(/user=([^&]+)/);
+        if(m) user = JSON.parse(decodeURIComponent(m[1]));
+      }catch(e){}
+    }
+    if(user && (user.id || user.username || user.first_name || user.photo_url)){
+      try{ localStorage.setItem('sbp_tg_user_cache', JSON.stringify(user)); }catch(e){}
+      return user;
+    }
+    try{
+      const cached = JSON.parse(localStorage.getItem('sbp_tg_user_cache') || 'null');
+      if(cached && (cached.id || cached.username || cached.first_name || cached.photo_url)) return cached;
+    }catch(e){}
+    return null;
+  }
+
+  function userDisplayName(user){
+    if(!user) return '';
+    if(user.username) return '@' + clean(user.username).replace(/^@/, '');
+    const full = clean([user.first_name, user.last_name].filter(Boolean).join(' '));
+    return full || (user.id ? 'ID ' + user.id : '');
+  }
+
+  function initialsFromUser(user){
+    const first = clean(user && user.first_name);
+    const last = clean(user && user.last_name);
+    const username = clean(user && user.username).replace(/^@/, '');
+    const source = (first ? first[0] : '') + (last ? last[0] : '');
+    return clean(source || (username ? username.slice(0,2) : 'SB')).slice(0,2).toUpperCase();
+  }
+
+  function setName(name){
+    name = clean(name);
+    if(!name) return;
+    const profile = qs('#profileScreen');
+    if(!profile) return;
+    qsa('.profile-name,.profile-username,.profile-title,.user-name,.account-name', profile).forEach(el => { el.textContent = name; });
+    const h = qs('.profile-premium h1, .profile-top h1, #profileScreen h1', profile);
+    if(h) h.textContent = name;
+    qsa('h1,h2,h3,span,b,p,div', profile).forEach(el => {
+      if(el.children.length) return;
+      const t = clean(el.textContent);
+      if(t === '@username' || t === 'username' || t === '@user') el.textContent = name;
     });
   }
+
+  function setInitialAvatar(avatar, user){
+    if(!avatar || !user) return;
+    if(!avatar.dataset.sbpFallbackHtml) avatar.dataset.sbpFallbackHtml = avatar.innerHTML;
+    avatar.classList.remove('has-tg-avatar');
+    avatar.classList.add('has-tg-avatar-initials');
+    avatar.classList.remove('profile-avatar-v61');
+    avatar.innerHTML = '<span class="sbp-tg-avatar-initials" aria-hidden="true">' + initialsFromUser(user) + '</span>';
+  }
+
+  function setPhotoAvatar(avatar, url, user){
+    url = clean(url);
+    if(!avatar || !url) return false;
+    if(avatar.dataset.sbpTgPhotoUrl === url && avatar.classList.contains('has-tg-avatar')) return true;
+    if(!avatar.dataset.sbpFallbackHtml) avatar.dataset.sbpFallbackHtml = avatar.innerHTML;
+    const img = new Image();
+    img.className = 'sbp-tg-avatar-img';
+    img.alt = 'Telegram avatar';
+    img.referrerPolicy = 'no-referrer';
+    img.decoding = 'async';
+    img.onload = function(){
+      avatar.classList.remove('profile-avatar-v61','has-tg-avatar-initials');
+      avatar.classList.add('has-tg-avatar');
+      avatar.dataset.sbpTgPhotoUrl = url;
+      avatar.innerHTML = '';
+      avatar.appendChild(img);
+    };
+    img.onerror = function(){
+      setInitialAvatar(avatar, user);
+    };
+    img.src = url;
+    return true;
+  }
+
+  function applyTelegramProfileStable(){
+    const user = readTelegramUser();
+    if(!user) return false;
+    const profile = qs('#profileScreen');
+    if(!profile) return false;
+    const name = userDisplayName(user);
+    setName(name);
+    const avatar = qs('.profile-avatar, .avatar', profile);
+    if(avatar){
+      if(user.photo_url) setPhotoAvatar(avatar, user.photo_url, user);
+      else setInitialAvatar(avatar, user);
+    }
+    return true;
+  }
+
+  function normalizeHeart(heart){
+    if(!heart) return;
+    let outline = qs('.heart-outline', heart);
+    let filled = qs('.heart-filled', heart);
+    let pop = qs('.heart-pop', heart);
+    if(!outline){ outline = document.createElement('span'); outline.className = 'heart-outline'; heart.appendChild(outline); }
+    if(!filled){ filled = document.createElement('span'); filled.className = 'heart-filled'; heart.appendChild(filled); }
+    if(!pop){ pop = document.createElement('span'); pop.className = 'heart-pop'; heart.appendChild(pop); }
+    if(outline.innerHTML.indexOf('sbp-heart-icon') === -1) outline.innerHTML = HEART_OUTLINE;
+    if(filled.innerHTML.indexOf('sbp-heart-icon') === -1) filled.innerHTML = HEART_FILLED;
+    if(pop.innerHTML.indexOf('sbp-heart-icon') === -1) pop.innerHTML = HEART_FILLED;
+  }
+
+  function normalizeHeartsStable(){
+    qsa('.fav-heart, .product-main-heart, .card .heart').forEach(normalizeHeart);
+  }
+
+  function boot(){
+    normalizeHeartsStable();
+    applyTelegramProfileStable();
+    setTimeout(normalizeHeartsStable, 80);
+    setTimeout(applyTelegramProfileStable, 120);
+    setTimeout(applyTelegramProfileStable, 550);
+    setTimeout(applyTelegramProfileStable, 1300);
+    setTimeout(applyTelegramProfileStable, 2600);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+  window.addEventListener('load', boot);
+  window.addEventListener('pageshow', boot);
+  window.addEventListener('focus', applyTelegramProfileStable);
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) applyTelegramProfileStable(); });
+  document.addEventListener('click', function(e){
+    if(e.target.closest('label[for="tab-profile"], label[for="tab-orders"], .fav-heart, .product-main-heart, .sbp-dynamic-card')){
+      setTimeout(normalizeHeartsStable, 0);
+      setTimeout(applyTelegramProfileStable, 80);
+      setTimeout(applyTelegramProfileStable, 400);
+    }
+  }, true);
+
+  let ticks = 0;
+  const timer = setInterval(function(){
+    ticks += 1;
+    normalizeHeartsStable();
+    applyTelegramProfileStable();
+    if(ticks >= 28) clearInterval(timer);
+  }, 300);
+})();
+</script>
+<script id="sbp-final-stabilization-v64-script">
+(function(){
+  'use strict';
+
+  const ORDER_KEY = 'sbp_orders_v1';
+  const THEME_KEY = 'sbp_theme_mode';
+  const qs = (sel, root=document) => root.querySelector(sel);
+  const qsa = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+  const clean = (v) => String(v == null ? '' : v).replace(/\s+/g, ' ').trim();
+  const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+
+  const HEART_OUTLINE = '<svg class="sbp-heart-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.4l-1.04-.94C5.8 14.78 3 12.24 3 8.95 3 6.4 5.02 4.4 7.56 4.4c1.44 0 2.82.67 3.72 1.72L12 6.96l.72-.84c.9-1.05 2.28-1.72 3.72-1.72C18.98 4.4 21 6.4 21 8.95c0 3.29-2.8 5.83-7.96 10.51L12 20.4z"></path></svg>';
+  const HEART_FILLED = '<svg class="sbp-heart-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.4l-1.04-.94C5.8 14.78 3 12.24 3 8.95 3 6.4 5.02 4.4 7.56 4.4c1.44 0 2.82.67 3.72 1.72L12 6.96l.72-.84c.9-1.05 2.28-1.72 3.72-1.72C18.98 4.4 21 6.4 21 8.95c0 3.29-2.8 5.83-7.96 10.51L12 20.4z"></path></svg>';
+
+  function dispatchChange(input){
+    if(!input) return;
+    try{ input.dispatchEvent(new Event('change', {bubbles:true})); }catch(e){}
+  }
+
+  function openOrders(){
+    const tab = qs('#tab-orders');
+    if(tab){ tab.checked = true; dispatchChange(tab); }
+    setTimeout(renderLocalOrders, 0);
+    setTimeout(renderLocalOrders, 120);
+  }
+
+  function normalizeHeart(heart){
+    if(!heart) return;
+    let outline = qs('.heart-outline', heart);
+    let filled = qs('.heart-filled', heart);
+    let pop = qs('.heart-pop', heart);
+    if(!outline){ outline = document.createElement('span'); outline.className = 'heart-outline'; heart.appendChild(outline); }
+    if(!filled){ filled = document.createElement('span'); filled.className = 'heart-filled'; heart.appendChild(filled); }
+    if(!pop){ pop = document.createElement('span'); pop.className = 'heart-pop'; heart.appendChild(pop); }
+    outline.innerHTML = HEART_OUTLINE;
+    filled.innerHTML = HEART_FILLED;
+    pop.innerHTML = HEART_FILLED;
+  }
+
+  function normalizeHearts(){
+    qsa('.fav-heart, .product-main-heart, .card .heart').forEach(normalizeHeart);
+  }
+
+  function parseInitData(str){
+    str = clean(str);
+    if(!str) return null;
+    try{
+      const params = new URLSearchParams(str);
+      const rawUser = params.get('user');
+      if(rawUser) return JSON.parse(rawUser);
+    }catch(e){}
+    try{
+      const decoded = decodeURIComponent(str);
+      if(decoded !== str){
+        const params = new URLSearchParams(decoded);
+        const rawUser = params.get('user');
+        if(rawUser) return JSON.parse(rawUser);
+      }
+    }catch(e){}
+    return null;
+  }
+
+  function parseTgWebAppDataFromLocation(){
+    const chunks = [];
+    if(location.hash) chunks.push(location.hash.replace(/^#/, ''));
+    if(location.search) chunks.push(location.search.replace(/^\?/, ''));
+    for(const chunk of chunks){
+      try{
+        const params = new URLSearchParams(chunk);
+        const nested = params.get('tgWebAppData');
+        if(nested){
+          const user = parseInitData(nested);
+          if(user) return user;
+        }
+        const directUser = params.get('user');
+        if(directUser) return JSON.parse(directUser);
+      }catch(e){}
+    }
+    return null;
+  }
+
+  function getTelegramUser(){
+    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    try{
+      if(tg && typeof tg.ready === 'function') tg.ready();
+      if(tg && typeof tg.expand === 'function') tg.expand();
+    }catch(e){}
+
+    let user = null;
+    try{ user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null; }catch(e){}
+    if(!user){ try{ user = tg && tg.initData ? parseInitData(tg.initData) : null; }catch(e){} }
+    if(!user) user = parseTgWebAppDataFromLocation();
+
+    if(user && (user.id || user.username || user.first_name || user.photo_url)){
+      try{ localStorage.setItem('sbp_tg_user_cache', JSON.stringify(user)); }catch(e){}
+      window.SBP_TG_USER = user;
+      return user;
+    }
+
+    try{
+      const cached = JSON.parse(localStorage.getItem('sbp_tg_user_cache') || 'null');
+      if(cached && (cached.id || cached.username || cached.first_name || cached.photo_url)){
+        window.SBP_TG_USER = cached;
+        return cached;
+      }
+    }catch(e){}
+
+    return null;
+  }
+
+  function setProfileName(name){
+    name = clean(name);
+    if(!name) return;
+    const profile = qs('#profileScreen');
+    if(!profile) return;
+
+    const direct = qsa('.profile-name,.profile-username,.profile-title,.user-name,.account-name', profile);
+    direct.forEach(el => { el.textContent = name; });
+
+    const title = qs('.profile-premium h1, .profile-top h1, #profileScreen h1', profile);
+    if(title) title.textContent = name;
+
+    qsa('h1,h2,h3,span,b,p,div', profile).forEach(el => {
+      if(el.children.length) return;
+      const text = clean(el.textContent);
+      if(text === '@username' || text === 'username' || text === '@user' || text === 'User') el.textContent = name;
+    });
+  }
+
+  function avatarCandidates(user){
+    const out = [];
+    if(user && user.photo_url) out.push(clean(user.photo_url));
+    if(user && user.username){
+      const username = clean(user.username).replace(/^@/, '');
+      if(username) out.push('https://t.me/i/userpic/320/' + encodeURIComponent(username) + '.jpg');
+    }
+    return Array.from(new Set(out.filter(Boolean)));
+  }
+
+  function setProfileAvatarFromCandidates(urls, index=0){
+    const profile = qs('#profileScreen');
+    const avatar = profile && (qs('.profile-avatar', profile) || qs('.avatar', profile));
+    if(!avatar || !urls || index >= urls.length) return;
+
+    const url = urls[index];
+    if(avatar.dataset.sbpTgPhotoUrl === url && avatar.classList.contains('has-tg-avatar')) return;
+    if(!avatar.dataset.sbpFallbackHtml) avatar.dataset.sbpFallbackHtml = avatar.innerHTML;
+
+    const img = new Image();
+    img.className = 'sbp-tg-avatar-img';
+    img.alt = 'Telegram avatar';
+    img.decoding = 'async';
+    img.loading = 'eager';
+    img.referrerPolicy = 'no-referrer';
+    img.onload = function(){
+      avatar.classList.add('has-tg-avatar','sbp-has-real-avatar');
+      avatar.dataset.sbpTgPhotoUrl = url;
+      avatar.innerHTML = '';
+      avatar.appendChild(img);
+    };
+    img.onerror = function(){
+      if(index + 1 < urls.length){
+        setProfileAvatarFromCandidates(urls, index + 1);
+      }else{
+        avatar.classList.remove('has-tg-avatar','sbp-has-real-avatar');
+        if(avatar.dataset.sbpFallbackHtml) avatar.innerHTML = avatar.dataset.sbpFallbackHtml;
+      }
+    };
+    img.src = url;
+  }
+
+  function applyTelegramProfile(){
+    const user = getTelegramUser();
+    if(!user) return false;
+
+    const name = user.username
+      ? '@' + clean(user.username).replace(/^@/, '')
+      : clean([user.first_name, user.last_name].filter(Boolean).join(' '));
+
+    if(name) setProfileName(name);
+    const urls = avatarCandidates(user);
+    if(urls.length) setProfileAvatarFromCandidates(urls);
+    return true;
+  }
+
   function readOrders(){
     try{
-      const arr = JSON.parse(localStorage.getItem(ORDERS_KEY) || "[]");
+      const arr = JSON.parse(localStorage.getItem(ORDER_KEY) || '[]');
       return Array.isArray(arr) ? arr : [];
     }catch(e){ return []; }
   }
-  function dateLabel(value){
-    const d = value ? new Date(value) : new Date();
-    if(Number.isNaN(d.getTime())) return "Сегодня";
-    return d.toLocaleDateString("ru-RU", {day:"numeric", month:"long", year:"numeric"});
+
+  function writeOrders(orders){
+    try{ localStorage.setItem(ORDER_KEY, JSON.stringify(orders)); }catch(e){}
   }
-  function priceLabel(order){
-    const value = Number(order.final_price_byn || order.price_byn || order.price || 0);
-    return value ? `${value} BYN` : "Цена уточняется";
+
+  function orderNumber(){
+    return 'SBP-' + String(Date.now()).slice(-6);
   }
-  function statusKey(order){
-    return String(order.status || "processing").trim() || "processing";
+
+  function toOrderRecord(data){
+    const created = clean(data.created_at) || new Date().toISOString();
+    const price = Number(data.price_byn || data.price || data.total || 0) || 0;
+    return {
+      local_id: 'local-' + Date.now() + '-' + Math.random().toString(36).slice(2,7),
+      order_number: data.order_number || orderNumber(),
+      product_id: clean(data.product_id),
+      product_name: clean(data.product_name || data.name || data.product || 'SBP order'),
+      image: clean(data.image || data.photo || ''),
+      size: clean(data.size || data.selected_size || '-'),
+      price_byn: price,
+      status: clean(data.status || 'processing'),
+      status_label: clean(data.status_label || 'В обработке'),
+      created_at: created,
+      source_created_at: created
+    };
   }
+
+  function saveLocalOrder(data){
+    if(!data) return null;
+    const record = toOrderRecord(data);
+    const orders = readOrders();
+
+    const duplicate = orders.some(o =>
+      clean(o.source_created_at) === clean(record.source_created_at) &&
+      clean(o.product_id) === clean(record.product_id) &&
+      clean(o.size) === clean(record.size)
+    );
+    if(!duplicate){
+      orders.unshift(record);
+      writeOrders(orders.slice(0, 60));
+    }
+    renderLocalOrders();
+    return record;
+  }
+
+  function formatDate(value){
+    const d = new Date(value || Date.now());
+    if(Number.isNaN(d.getTime())) return '';
+    return d.toLocaleDateString('ru-RU', {day:'numeric', month:'long', year:'numeric'});
+  }
+
+  function statusLabel(status, fallback){
+    const map = {
+      processing:'В обработке',
+      awaiting_payment:'Ожидает оплаты',
+      sent:'Отправлен',
+      shipped:'Отправлен',
+      in_transit:'В пути',
+      arrived:'Прибыл',
+      completed:'Завершен',
+      cancelled:'Отменен'
+    };
+    return map[clean(status)] || clean(fallback) || 'В обработке';
+  }
+
   function orderHtml(order){
-    const status = statusKey(order);
-    const title = order.product_name || order.name || order.product || "SBP order";
-    const image = order.image || order.product_image || "";
-    const number = order.order_number || order.local_order_id || "TEMP";
-    const size = order.size || order.selected_size || "-";
+    const img = clean(order.image);
+    const price = Number(order.price_byn || 0);
+    const status = clean(order.status || 'processing');
+    const label = statusLabel(status, order.status_label);
     return `
-      <article class="order-card product-order-card" data-local-order="1">
-        <div class="order-product-photo">${image ? `<img src="${esc(image)}" alt="${esc(title)}">` : ""}</div>
+      <article class="order-card product-order-card sbp-local-order-card">
+        <div class="order-product-photo">${img ? `<img src="${esc(img)}" alt="${esc(order.product_name)}">` : '<span class="sbp-order-photo-empty">SBP</span>'}</div>
         <div class="order-product-info">
           <div class="order-headline">
-            <small>ORDER #${esc(number)}</small>
-            <span class="order-status-pill ${esc(status)}">${esc(STATUS_LABELS[status] || status)}</span>
+            <small>ORDER #${esc(order.order_number || '')}</small>
+            <span class="order-status-pill ${esc(status)}">${esc(label)}</span>
           </div>
-          <h2>${esc(title)}</h2>
+          <h2>${esc(order.product_name)}</h2>
           <div class="order-product-meta">
-            <span>Размер ${esc(size)}</span>
-            <b>${esc(priceLabel(order))}</b>
+            <span>${esc(formatDate(order.created_at))} · размер ${esc(order.size || '-')}</span>
+            <b>${price ? esc(price + ' BYN') : 'Цена уточняется'}</b>
           </div>
         </div>
       </article>`;
   }
-  function renderOrders(){
-    const screen = qs("#ordersScreen");
-    if(!screen) return;
-    const empty = qs("[data-orders-empty]", screen) || qs(".orders-empty-template", screen);
-    const list = qs("[data-orders-list]", screen) || qs(".orders-timeline", screen);
-    if(!list) return;
 
-    const orders = readOrders().sort(function(a,b){
-      return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
-    });
+  function renderLocalOrders(){
+    const screen = qs('#ordersScreen');
+    if(!screen) return;
+    const timeline = qs('.orders-timeline', screen);
+    const empty = qs('.orders-empty-template', screen) || qs('.empty-state', screen);
+    if(!timeline) return;
+
+    const orders = readOrders();
+    screen.classList.toggle('sbp-has-local-orders', orders.length > 0);
 
     if(!orders.length){
-      if(empty) empty.style.display = "";
-      list.classList.remove("has-orders");
-      list.innerHTML = "";
+      timeline.innerHTML = '';
+      if(empty) empty.style.display = '';
       return;
     }
 
-    if(empty) empty.style.display = "none";
-    list.classList.add("has-orders");
-
-    let lastDate = "";
-    list.innerHTML = orders.map(function(order){
-      const d = dateLabel(order.created_at);
-      const head = d !== lastDate ? `<h3 class="order-date">${esc(d)}</h3>` : "";
-      lastDate = d;
-      return head + orderHtml(order);
-    }).join("");
+    if(empty) empty.style.display = 'none';
+    const grouped = [];
+    let lastDate = '';
+    orders
+      .slice()
+      .sort((a,b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
+      .forEach(order => {
+        const date = formatDate(order.created_at);
+        if(date !== lastDate){
+          grouped.push(`<h3 class="order-date sbp-local-order-date">${esc(date)}</h3>`);
+          lastDate = date;
+        }
+        grouped.push(orderHtml(order));
+      });
+    timeline.innerHTML = grouped.join('');
   }
 
-  window.SBP_RENDER_ORDERS = renderOrders;
-  document.addEventListener("DOMContentLoaded", renderOrders);
-  window.addEventListener("storage", renderOrders);
-  document.addEventListener("change", function(e){
-    if(e.target && e.target.id === "tab-orders") setTimeout(renderOrders, 40);
-  }, true);
-  document.addEventListener("click", function(e){
+  function readTheme(){
+    const t = qs('#theme-light');
+    return t && t.checked ? 'light' : 'dark';
+  }
+  function applyTheme(mode){
+    const t = qs('#theme-light');
+    if(!t) return;
+    t.checked = mode === 'light';
+    try{ localStorage.setItem(THEME_KEY, mode === 'light' ? 'light' : 'dark'); }catch(e){}
+  }
+  function preserveTheme(){
+    const mode = readTheme();
+    document.documentElement.classList.add('sbp-theme-locking');
+    document.body && document.body.classList.add('sbp-theme-locking');
+    [0,60,180,420,900].forEach(ms => setTimeout(() => applyTheme(mode), ms));
+    setTimeout(() => {
+      document.documentElement.classList.remove('sbp-theme-locking');
+      document.body && document.body.classList.remove('sbp-theme-locking');
+    }, 980);
+  }
+
+  function boot(){
+    try{
+      const savedTheme = localStorage.getItem(THEME_KEY);
+      if(savedTheme === 'light' || savedTheme === 'dark') applyTheme(savedTheme);
+    }catch(e){}
+    normalizeHearts();
+    renderLocalOrders();
+    applyTelegramProfile();
+    setTimeout(normalizeHearts, 80);
+    setTimeout(normalizeHearts, 300);
+    setTimeout(applyTelegramProfile, 120);
+    setTimeout(applyTelegramProfile, 500);
+    setTimeout(applyTelegramProfile, 1200);
+    setTimeout(applyTelegramProfile, 2500);
+  }
+
+  window.SBP_saveLocalOrder = saveLocalOrder;
+  window.SBP_renderLocalOrders = renderLocalOrders;
+  window.SBP_applyTelegramProfile = applyTelegramProfile;
+  window.SBP_openOrders = openOrders;
+
+  document.addEventListener('click', function(e){
+    const ordersBtn = e.target.closest('.orders-top-btn, .sbp-orders-top-btn');
+    if(ordersBtn){
+      e.preventDefault();
+      e.stopPropagation();
+      openOrders();
+      return;
+    }
+
     if(e.target.closest('label[for="tab-orders"], .profile-item[for="tab-orders"]')){
-      setTimeout(renderOrders, 80);
+      setTimeout(renderLocalOrders, 0);
+      setTimeout(renderLocalOrders, 120);
+    }
+
+    if(e.target.closest('label[for="tab-success"], .primary-link[for="tab-success"], button[type="submit"]')){
+      preserveTheme();
+    }
+
+    if(e.target.closest('.fav-heart, .product-main-heart, .sbp-dynamic-card')){
+      setTimeout(normalizeHearts, 0);
+      setTimeout(normalizeHearts, 120);
+    }
+
+    if(e.target.closest('label[for="tab-profile"], .nav-profile, label[for="tab-orders"]')){
+      setTimeout(applyTelegramProfile, 80);
+      setTimeout(applyTelegramProfile, 420);
     }
   }, true);
-  setTimeout(renderOrders, 300);
+
+  document.addEventListener('change', function(e){
+    if(e.target && e.target.id === 'theme-light') applyTheme(e.target.checked ? 'light' : 'dark');
+    if(e.target && e.target.id === 'tab-orders') setTimeout(renderLocalOrders, 50);
+    setTimeout(normalizeHearts, 40);
+  }, true);
+
+  const mo = new MutationObserver(function(){
+    normalizeHearts();
+  });
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){
+      boot();
+      try{ mo.observe(document.body || document.documentElement, {childList:true, subtree:true}); }catch(e){}
+    });
+  }else{
+    boot();
+    try{ mo.observe(document.body || document.documentElement, {childList:true, subtree:true}); }catch(e){}
+  }
+
+  window.addEventListener('load', boot);
+  window.addEventListener('focus', applyTelegramProfile);
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden){ applyTelegramProfile(); renderLocalOrders(); } });
 })();
 </script>
+
 </body>
 </html>
