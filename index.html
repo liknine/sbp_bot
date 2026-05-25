@@ -6554,6 +6554,88 @@ a,
   display:none !important;
 }
 
+
+/* === SBP v6 logo restore, heart centering, filters === */
+.logo-btn,.menu-logo{color:var(--text)!important}
+.sbp-logo-mark{display:inline-grid!important;place-items:center!important;width:104px!important;height:58px!important;line-height:0!important}
+.sbp-logo-mark img{grid-area:1/1!important;display:block!important;width:104px!important;max-width:104px!important;height:auto!important;object-fit:contain!important}
+.sbp-logo-light{display:none!important}
+.sbp-logo-dark{display:block!important}
+#theme-light:checked ~ .app .sbp-logo-dark{display:none!important}
+#theme-light:checked ~ .app .sbp-logo-light{display:block!important}
+.menu-logo .sbp-logo-mark{width:112px!important;height:62px!important}
+.menu-logo .sbp-logo-mark img{width:112px!important;max-width:112px!important}
+
+.fav-heart,.sbp-dynamic-card .fav-heart{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0!important;
+  line-height:0!important;
+}
+.fav-heart .heart-outline,.fav-heart .heart-filled,.fav-heart .heart-pop{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  width:29px!important;
+  height:29px!important;
+  transform:translate(-50%,-50%)!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+  background-size:29px 29px!important;
+  line-height:0!important;
+  font-size:0!important;
+}
+.fav-heart .heart-filled{transform:translate(-50%,-50%) scale(.4)!important}
+.fav-heart .heart-pop{transform:translate(-50%,-50%) scale(.2)!important}
+.fav-heart.is-favorite .heart-filled,
+.product-main-heart.is-favorite .heart-filled{
+  transform:translate(-50%,-50%) scale(1)!important;
+}
+.fav-heart.is-favorite .heart-outline,
+.product-main-heart.is-favorite .heart-outline{opacity:0!important}
+.fav-heart.is-favorite .heart-pop,
+.product-main-heart.is-favorite .heart-pop{animation:heartBurst .52s ease-out!important}
+
+.sbp-filter-options{
+  display:none;
+  gap:8px;
+  overflow-x:auto;
+  padding:0 0 14px;
+  margin:-8px 0 16px;
+  scrollbar-width:none;
+}
+.sbp-filter-options::-webkit-scrollbar{display:none}
+.sbp-filter-options.is-open{display:flex}
+.sbp-filter-options button{
+  flex:0 0 auto;
+  min-height:34px;
+  padding:0 13px;
+  border-radius:999px;
+  background:var(--input);
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:13px;
+}
+.sbp-filter-options button.active{
+  background:var(--inverse);
+  color:var(--inverseText);
+}
+.sbp-filter-empty{
+  grid-column:1/-1;
+  min-height:140px;
+  border-radius:24px;
+  border:1px solid var(--line);
+  background:linear-gradient(145deg,var(--card1),var(--card2));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
+  color:var(--muted);
+  font-size:15px;
+}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
 
@@ -6965,11 +7047,11 @@ a,
 <div class="app">
   <main class="screen" id="homeScreen">
     <header class="topbar">
-      <button class="logo-btn"><img src="assets/embedded/embedded-2-3eefccdda3.png" alt="SBP" loading="lazy" decoding="async"></button>
+      <button class="logo-btn"><span class="sbp-logo-mark" aria-label="SBP"><img class="sbp-logo-dark" src="assets/embedded/embedded-2-3eefccdda3.png" alt="SBP" loading="eager" decoding="async"><img class="sbp-logo-light" src="assets/embedded/embedded-1-990f04a27a.png" alt="SBP" loading="eager" decoding="async"></span></button>
       <div class="top-actions">
         <label class="icon-btn menu-icon" for="menu-toggle"><i></i><i></i><i></i></label>
         <label class="icon-btn" for="tab-cart"><svg viewBox="0 0 24 24"><path d="M7 8h10l1 12H6L7 8Z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg><span class="cart-badge">1</span></label>
-        <label class="icon-btn" for="tab-catalog"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></label>
+        <label class="icon-btn orders-top-btn" for="tab-orders" aria-label="История заказов"><svg viewBox="0 0 24 24"><path d="M7 3h10a2 2 0 0 1 2 2v16l-3-1.8-3 1.8-3-1.8-3 1.8V5a2 2 0 0 1 2-2Z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></label>
       </div>
     </header>
     <section class="hero">
@@ -7039,7 +7121,7 @@ a,
   </main>
 
   <main class="screen" id="catalogScreen">
-    <label class="screen-back" for="tab-home"><span>‹</span><b>Назад</b></label><header class="page-head"><h1>Каталог</h1><p>Все актуальные позиции SBP. Сначала новые и в наличии.</p></header><div class="searchbox"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg><input placeholder="Поиск по названию, модели, цвету..."></div><div class="chips"><button class="active">Все</button><button>В наличии</button><button>Новинки</button><button>Бренд</button><button>Размер</button><button>Цена</button></div><section class="section-head"><h2>Новинки</h2><span>Смотреть все →</span></section><section class="product-grid">
+    <label class="screen-back" for="tab-home"><span>‹</span><b>Назад</b></label><header class="page-head"><h1>Каталог</h1><p>Все актуальные позиции SBP. Сначала новые и в наличии.</p></header><div class="searchbox"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg><input placeholder="Поиск по названию, модели, цвету..."></div><div class="chips sbp-filter-chips"><button class="active" data-filter="all" type="button">Все</button><button data-filter="instock" type="button">В наличии</button><button data-filter="new" type="button">Новинки</button><button data-filter="brand" type="button">Бренд</button><button data-filter="size" type="button">Размер</button><button data-filter="price" type="button">Цена</button></div><div class="sbp-filter-options" aria-live="polite"></div><section class="section-head"><h2>Новинки</h2><span>Смотреть все →</span></section><section class="product-grid">
     <label class="card " for="tab-product">
       <span class="badge">ХИТ</span>
       <label class="heart fav-heart" for="fav-1"><span class="heart-outline">♡</span><span class="heart-filled">♥</span><span class="heart-pop">♥</span></label>
@@ -7299,7 +7381,7 @@ a,
   <aside class="menu-overlay">
     <section class="menu-panel">
       <div class="menu-top">
-        <div class="menu-logo"><img src="assets/embedded/embedded-2-3eefccdda3.png" alt="SBP" loading="lazy" decoding="async"></div>
+        <div class="menu-logo"><span class="sbp-logo-mark" aria-label="SBP"><img class="sbp-logo-dark" src="assets/embedded/embedded-2-3eefccdda3.png" alt="SBP" loading="eager" decoding="async"><img class="sbp-logo-light" src="assets/embedded/embedded-1-990f04a27a.png" alt="SBP" loading="eager" decoding="async"></span></div>
         <label class="menu-close" for="menu-toggle">×</label>
       </div>
 
@@ -7984,38 +8066,118 @@ a,
     return false;
   }
 
-  function applySearch(){
-    const input = qs("#catalogScreen .searchbox input");
-    const grid = qs("#catalogScreen .product-grid");
-    if(!input || !grid) return;
-    const q = input.value.trim().toLowerCase();
-    let visible = 0;
+  const filterState = {
+    mode: "all",
+    brand: "",
+    size: "",
+    priceSort: ""
+  };
 
+  function lower(v){ return String(v || "").toLowerCase().trim(); }
+  function productText(p){
+    return [p?.brand, p?.name, p?.color, p?.badge, p?.category, Array.isArray(p?.sizes) ? p.sizes.join(" ") : ""].join(" ").toLowerCase();
+  }
+  function isNewProduct(p){
+    const t = productText(p);
+    return t.includes("нов") || t.includes("new") || t.includes("fresh") || t.includes("drop");
+  }
+  function isInStock(p){
+    if(p?.in_stock === false || p?.available === false) return false;
+    if(Array.isArray(p?.sizes)) return p.sizes.length > 0;
+    return true;
+  }
+  function matchesFilters(p){
+    const q = lower(qs("#catalogScreen .searchbox input")?.value || "");
+    if(q && !productText(p).includes(q)) return false;
+    if(filterState.mode === "instock" && !isInStock(p)) return false;
+    if(filterState.mode === "new" && !isNewProduct(p)) return false;
+    if(filterState.mode === "brand" && filterState.brand && lower(p?.brand) !== lower(filterState.brand)) return false;
+    if(filterState.mode === "size" && filterState.size){
+      const sizes = Array.isArray(p?.sizes) ? p.sizes.map(String) : [];
+      if(!sizes.includes(String(filterState.size))) return false;
+    }
+    return true;
+  }
+  function sortedProductIds(){
+    let list = products.slice();
+    if(filterState.priceSort === "asc") list.sort((a,b) => priceNum(a) - priceNum(b));
+    if(filterState.priceSort === "desc") list.sort((a,b) => priceNum(b) - priceNum(a));
+    return list.map(p => idOf(p));
+  }
+  function ensureFilterEmpty(grid){
+    let empty = qs(".sbp-filter-empty", grid);
+    if(!empty){
+      empty = document.createElement("div");
+      empty.className = "sbp-filter-empty";
+      empty.textContent = "По выбранному фильтру ничего не найдено";
+      grid.appendChild(empty);
+    }
+    return empty;
+  }
+  function renderFilterOptions(){
+    const wrap = qs("#catalogScreen .sbp-filter-options");
+    if(!wrap) return;
+    wrap.innerHTML = "";
+    wrap.classList.remove("is-open");
+
+    if(filterState.mode === "brand"){
+      const brands = Array.from(new Set(products.map(p => (p.brand || "").trim()).filter(Boolean))).sort((a,b)=>a.localeCompare(b,"ru"));
+      if(brands.length){
+        wrap.classList.add("is-open");
+        wrap.innerHTML = brands.map(b => `<button type="button" data-brand="${esc(b)}" class="${filterState.brand === b ? "active" : ""}">${esc(b)}</button>`).join("");
+      }
+    }
+
+    if(filterState.mode === "size"){
+      const sizes = Array.from(new Set(products.flatMap(p => Array.isArray(p.sizes) ? p.sizes.map(String) : []))).sort((a,b)=>Number(a)-Number(b));
+      if(sizes.length){
+        wrap.classList.add("is-open");
+        wrap.innerHTML = sizes.map(s => `<button type="button" data-size-filter="${esc(s)}" class="${String(filterState.size) === String(s) ? "active" : ""}">${esc(s)}</button>`).join("");
+      }
+    }
+
+    if(filterState.mode === "price"){
+      wrap.classList.add("is-open");
+      wrap.innerHTML = `
+        <button type="button" data-price-sort="asc" class="${filterState.priceSort === "asc" ? "active" : ""}">Сначала дешевле</button>
+        <button type="button" data-price-sort="desc" class="${filterState.priceSort === "desc" ? "active" : ""}">Сначала дороже</button>
+      `;
+    }
+  }
+  function updateFilterChips(){
+    qsa("#catalogScreen .chips button[data-filter]").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.filter === filterState.mode);
+    });
+  }
+  function applySearch(){
+    const grid = qs("#catalogScreen .product-grid");
+    if(!grid) return;
+    renderFilterOptions();
+    updateFilterChips();
+
+    const order = sortedProductIds();
+    order.forEach(id => {
+      const card = qs(`.sbp-dynamic-card[data-product-id="${CSS.escape(id)}"]`, grid);
+      if(card) grid.appendChild(card);
+    });
+
+    let visible = 0;
     qsa(".sbp-dynamic-card[data-product-id]", grid).forEach(card => {
       const p = productById(card.dataset.productId);
-      const text = [p?.brand, p?.name, p?.color, p?.badge, Array.isArray(p?.sizes) ? p.sizes.join(" ") : ""].join(" ").toLowerCase();
-      const ok = !q || text.includes(q);
+      const ok = p ? matchesFilters(p) : true;
       card.style.display = ok ? "" : "none";
       if(ok) visible++;
     });
 
-    let empty = qs(".sbp-search-empty", grid);
-    if(q && visible === 0){
-      if(!empty){
-        empty = document.createElement("div");
-        empty.className = "sbp-search-empty";
-        grid.appendChild(empty);
-      }
-      empty.textContent = "По этому запросу ничего не найдено";
-      empty.style.display = "";
-    }else if(empty){ empty.style.display = "none"; }
+    const empty = ensureFilterEmpty(grid);
+    empty.style.display = visible === 0 && products.length ? "flex" : "none";
   }
 
   async function loadProducts(){
     migrateFavorites();
 
     try{
-      const res = await fetch(PRODUCTS_URL + "?v=" + Date.now(), {cache:"no-store"});
+      const res = await fetch(PRODUCTS_URL, {cache:"default"});
       const data = await res.json();
       products = Array.isArray(data) ? data : [];
     }catch(e){
@@ -8037,6 +8199,50 @@ a,
   }
 
   window.addEventListener("click", function(e){
+    const chip = e.target.closest("#catalogScreen .chips button[data-filter]");
+    if(chip){
+      e.preventDefault();
+      const mode = chip.dataset.filter || "all";
+      if(mode === "all"){
+        filterState.mode = "all";
+        filterState.brand = "";
+        filterState.size = "";
+        filterState.priceSort = "";
+      }else{
+        filterState.mode = mode;
+        if(mode !== "brand") filterState.brand = "";
+        if(mode !== "size") filterState.size = "";
+        if(mode === "price" && !filterState.priceSort) filterState.priceSort = "asc";
+        if(mode !== "price") filterState.priceSort = "";
+      }
+      applySearch();
+      return false;
+    }
+
+    const brandBtn = e.target.closest("#catalogScreen .sbp-filter-options button[data-brand]");
+    if(brandBtn){
+      e.preventDefault();
+      filterState.brand = brandBtn.dataset.brand || "";
+      applySearch();
+      return false;
+    }
+
+    const sizeFilterBtn = e.target.closest("#catalogScreen .sbp-filter-options button[data-size-filter]");
+    if(sizeFilterBtn){
+      e.preventDefault();
+      filterState.size = sizeFilterBtn.dataset.sizeFilter || "";
+      applySearch();
+      return false;
+    }
+
+    const priceSortBtn = e.target.closest("#catalogScreen .sbp-filter-options button[data-price-sort]");
+    if(priceSortBtn){
+      e.preventDefault();
+      filterState.priceSort = priceSortBtn.dataset.priceSort || "asc";
+      applySearch();
+      return false;
+    }
+
     const productHeart = e.target.closest(".product-main-heart");
     if(productHeart){
       e.preventDefault();
