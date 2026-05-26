@@ -9360,34 +9360,19 @@ a,
 
 
 <script id="sbp-loyalty-zero-state-script">
-/* SBP loyalty/profile placeholder: real API later, now exact local state with Entry default. */
+/* SBP loyalty/profile state. Reads local defaults and syncs public profile JSON from bot/GitHub until real API is ready. */
 (function(){
   const PROFILE_KEY = "sbp_profile_state_v1";
   const LEGACY_COINS_KEY = "sbp_coins_balance";
   const LEGACY_BONUSES_KEY = "sbp_active_bonuses_count";
   const LEGACY_STATUS_KEY = "sbp_client_status";
+  const REMOTE_CACHE_MS = 4500;
 
   const STATUS_META = {
-    "Entry": {
-      multiplier: "стандарт",
-      note: "Entry · стандартное начисление Coins",
-      progress: 0
-    },
-    "Selected": {
-      multiplier: "+10% Coins",
-      note: "Selected · +10% Coins к завершённым заказам",
-      progress: 33
-    },
-    "Priority": {
-      multiplier: "+20% Coins",
-      note: "Priority · +20% Coins к завершённым заказам",
-      progress: 66
-    },
-    "Black Access": {
-      multiplier: "+30% Coins",
-      note: "Black Access · +30% Coins к завершённым заказам",
-      progress: 100
-    }
+    "Entry": { multiplier: "стандарт", note: "Entry · стандартное начисление Coins", progress: 0 },
+    "Selected": { multiplier: "+10% Coins", note: "Selected · +10% Coins к завершённым заказам", progress: 33 },
+    "Priority": { multiplier: "+20% Coins", note: "Priority · +20% Coins к завершённым заказам", progress: 66 },
+    "Black Access": { multiplier: "+30% Coins", note: "Black Access · +30% Coins к завершённым заказам", progress: 100 }
   };
 
   const ALIASES = {
@@ -9399,6 +9384,9 @@ a,
     "blackaccess": "Black Access",
     "black": "Black Access"
   };
+
+  let lastRemoteFetch = 0;
+  let remoteInFlight = false;
 
   function normalizeStatus(value){
     const raw = String(value || "").trim();
@@ -9412,31 +9400,48 @@ a,
     return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
   }
 
-  function readState(){
-    let saved = null;
-    try{ saved = JSON.parse(localStorage.getItem(PROFILE_KEY) || "null"); }catch(e){}
-    const state = {
-      coins: num(saved && saved.coins),
-      activeBonuses: num(saved && saved.activeBonuses),
-      status: normalizeStatus(saved && saved.status)
+  function safeJson(raw, fallback){
+    try{ return JSON.parse(raw); }catch(e){ return fallback; }
+  }
+
+  function writeState(state){
+    state = {
+      coins: num(state && (state.coins_balance ?? state.coins)),
+      activeBonuses: num(state && (state.active_bonuses_count ?? state.activeBonuses)),
+      status: normalizeStatus(state && state.status),
+      updated_at: state && state.updated_at || new Date().toISOString(),
+      coin_history: Array.isArray(state && state.coin_history) ? state.coin_history : [],
+      orders: Array.isArray(state && state.orders) ? state.orders : []
     };
-
-    const legacyStatus = localStorage.getItem(LEGACY_STATUS_KEY);
-    const legacyCoins = localStorage.getItem(LEGACY_COINS_KEY);
-    const legacyBonuses = localStorage.getItem(LEGACY_BONUSES_KEY);
-
-    if(legacyStatus) state.status = normalizeStatus(legacyStatus);
-    if(legacyCoins !== null) state.coins = num(legacyCoins);
-    if(legacyBonuses !== null) state.activeBonuses = num(legacyBonuses);
-
     try{
       localStorage.setItem(PROFILE_KEY, JSON.stringify(state));
       localStorage.setItem(LEGACY_STATUS_KEY, state.status);
       localStorage.setItem(LEGACY_COINS_KEY, String(state.coins));
       localStorage.setItem(LEGACY_BONUSES_KEY, String(state.activeBonuses));
     }catch(e){}
-
     return state;
+  }
+
+  function readState(){
+    const saved = safeJson(localStorage.getItem(PROFILE_KEY) || "null", null) || {};
+    const state = {
+      coins: num(saved.coins_balance ?? saved.coins),
+      activeBonuses: num(saved.active_bonuses_count ?? saved.activeBonuses),
+      status: normalizeStatus(saved.status),
+      updated_at: saved.updated_at || "",
+      coin_history: Array.isArray(saved.coin_history) ? saved.coin_history : [],
+      orders: Array.isArray(saved.orders) ? saved.orders : []
+    };
+
+    const legacyStatus = localStorage.getItem(LEGACY_STATUS_KEY);
+    const legacyCoins = localStorage.getItem(LEGACY_COINS_KEY);
+    const legacyBonuses = localStorage.getItem(LEGACY_BONUSES_KEY);
+
+    if(legacyStatus && !saved.updated_at) state.status = normalizeStatus(legacyStatus);
+    if(legacyCoins !== null && !saved.updated_at) state.coins = num(legacyCoins);
+    if(legacyBonuses !== null && !saved.updated_at) state.activeBonuses = num(legacyBonuses);
+
+    return writeState(state);
   }
 
   function all(sel){ return Array.from(document.querySelectorAll(sel)); }
@@ -9471,43 +9476,115 @@ a,
     if(bonusActive && state.activeBonuses <= 0) bonusActive.checked = false;
   }
 
+  function getTelegramUser(){
+    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    let user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
+
+    if(!user && tg && typeof tg.initData === "string" && tg.initData){
+      try{
+        const params = new URLSearchParams(tg.initData);
+        const rawUser = params.get("user");
+        if(rawUser) user = JSON.parse(rawUser);
+      }catch(e){}
+    }
+
+    if(user){
+      try{ localStorage.setItem("sbp_tg_user_cache", JSON.stringify(user)); }catch(e){}
+      return user;
+    }
+
+    try{
+      const cached = JSON.parse(localStorage.getItem("sbp_tg_user_cache") || "null");
+      if(cached && cached.id) return cached;
+    }catch(e){}
+
+    return null;
+  }
+
+  async function sha256Hex(value){
+    value = String(value || "");
+    if(window.crypto && crypto.subtle && window.TextEncoder){
+      const data = new TextEncoder().encode(value);
+      const hash = await crypto.subtle.digest("SHA-256", data);
+      return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,"0")).join("");
+    }
+    return value;
+  }
+
+  async function syncRemoteProfile(force){
+    const user = getTelegramUser();
+    if(!user || !user.id) return false;
+    const now = Date.now();
+    if(!force && now - lastRemoteFetch < REMOTE_CACHE_MS) return false;
+    if(remoteInFlight) return false;
+    remoteInFlight = true;
+    lastRemoteFetch = now;
+
+    try{
+      const hash = await sha256Hex(user.id);
+      const res = await fetch("data/users/" + hash + ".json?v=" + Date.now(), {cache:"no-store"});
+      if(!res.ok) return false;
+      const remote = await res.json();
+      if(!remote || typeof remote !== "object") return false;
+      writeState({
+        status: remote.status,
+        coins: remote.coins_balance ?? remote.coins,
+        activeBonuses: remote.active_bonuses_count ?? remote.activeBonuses,
+        updated_at: remote.updated_at || new Date().toISOString(),
+        coin_history: remote.coin_history || [],
+        orders: remote.orders || []
+      });
+      apply();
+      return true;
+    }catch(e){
+      return false;
+    }finally{
+      remoteInFlight = false;
+    }
+  }
+
   window.SBP_PROFILE_STATE = {
     read: readState,
     apply: apply,
+    sync: function(){ return syncRemoteProfile(true); },
     setStatus: function(status){
       const state = readState();
       state.status = normalizeStatus(status);
-      try{
-        localStorage.setItem(PROFILE_KEY, JSON.stringify(state));
-        localStorage.setItem(LEGACY_STATUS_KEY, state.status);
-      }catch(e){}
+      writeState(state);
       apply();
     },
     setCoins: function(coins){
       const state = readState();
       state.coins = num(coins);
-      try{
-        localStorage.setItem(PROFILE_KEY, JSON.stringify(state));
-        localStorage.setItem(LEGACY_COINS_KEY, String(state.coins));
-      }catch(e){}
+      writeState(state);
       apply();
     },
     setActiveBonuses: function(count){
       const state = readState();
       state.activeBonuses = num(count);
-      try{
-        localStorage.setItem(PROFILE_KEY, JSON.stringify(state));
-        localStorage.setItem(LEGACY_BONUSES_KEY, String(state.activeBonuses));
-      }catch(e){}
+      writeState(state);
       apply();
     }
   };
 
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply, {once:true});
-  else apply();
+  function boot(){
+    apply();
+    syncRemoteProfile(true);
+    setTimeout(() => syncRemoteProfile(true), 900);
+    setTimeout(() => syncRemoteProfile(false), 2500);
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
+  else boot();
+
   window.addEventListener("storage", apply);
-  document.addEventListener("visibilitychange", function(){ if(!document.hidden) apply(); });
-  setTimeout(apply, 250);
+  window.addEventListener("focus", function(){ syncRemoteProfile(false); });
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden) syncRemoteProfile(false); });
+  document.addEventListener("click", function(e){
+    if(e.target.closest('label[for="tab-profile"], label[for="tab-coins"], .coins-row, .profile-item[for="tab-coins"]')){
+      setTimeout(() => syncRemoteProfile(true), 80);
+    }
+  }, true);
 })();
 </script>
 
