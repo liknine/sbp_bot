@@ -3,7 +3,7 @@
   "telegram_id": 1639462053,
   "username": "liknine",
   "first_name": "ликнайн",
-  "status": "Black Access",
+  "status": "Priority",
   "coins": 154,
   "coins_balance": 154,
   "activeBonuses": 0,
@@ -165,5 +165,5 @@
       "updated_at": "2026-05-24 16:09:35"
     }
   ],
-  "updated_at": "2026-05-26T13:52:29.253573"
+  "updated_at": "2026-05-26T13:52:33.264675"
 }
