@@ -1,12 +1,19 @@
 {
   "schema_version": 1,
   "status": "Black Access",
-  "coins": 0,
-  "coins_balance": 0,
+  "coins": 55,
+  "coins_balance": 55,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
   "active_bonus": null,
-  "coin_history": [],
+  "coin_history": [
+    {
+      "amount": 55,
+      "type": "manual_bonus",
+      "comment": "Admin manual operation",
+      "created_at": "2026-05-26 05:12:57"
+    }
+  ],
   "orders": [],
-  "updated_at": "2026-05-26T04:45:17.431565"
+  "updated_at": "2026-05-26T13:22:32.282866"
 }
