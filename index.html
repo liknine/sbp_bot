@@ -7428,26 +7428,6 @@ a,
 </style>
 
 
-<style id="sbp-gallery-v18-arrow-fix-css">
-.sbp-gallery-arrow{
-  z-index:2147483647!important;
-  pointer-events:auto!important;
-  touch-action:manipulation!important;
-  user-select:none!important;
-  -webkit-user-select:none!important;
-}
-.sbp-gallery-track,
-.sbp-gallery-slide,
-.sbp-gallery-slide img{
-  pointer-events:auto!important;
-}
-.sbp-gallery-prev{
-  left:max(10px, env(safe-area-inset-left, 0px) + 10px)!important;
-}
-.sbp-gallery-next{
-  right:max(10px, env(safe-area-inset-right, 0px) + 10px)!important;
-}
-</style>
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -10382,37 +10362,123 @@ a,
 })();
 </script>
 
-<script id="sbp-gallery-v18-arrow-fix">
+
+<style id="sbp-gallery-v19-stable-arrows-css">
+.sbp-gallery-arrow{
+  z-index:2147483647!important;
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+  user-select:none!important;
+  -webkit-user-select:none!important;
+  transition:background .14s ease, transform .14s ease!important;
+}
+.sbp-gallery-arrow:active{
+  transform:translateY(-50%) scale(.96)!important;
+}
+.sbp-gallery-track{
+  will-change:transform!important;
+  backface-visibility:hidden!important;
+}
+.sbp-gallery-prev{
+  left:max(10px, calc(env(safe-area-inset-left, 0px) + 10px))!important;
+}
+.sbp-gallery-next{
+  right:max(10px, calc(env(safe-area-inset-right, 0px) + 10px))!important;
+}
+</style>
+<script id="sbp-gallery-v19-stable-arrows">
 (function(){
-  function modalOpen(){
-    const m = document.getElementById("sbpGalleryModal");
-    return !!(m && m.classList.contains("is-open"));
+  let lockUntil = 0;
+
+  function isOpen(){
+    const modal = document.getElementById("sbpGalleryModal");
+    return !!(modal && modal.classList.contains("is-open"));
   }
-  function clickArrow(target){
-    if(!modalOpen()) return false;
-    const prev = target && target.closest && target.closest("[data-sbp-gallery-prev], .sbp-gallery-prev");
-    const next = target && target.closest && target.closest("[data-sbp-gallery-next], .sbp-gallery-next");
-    if(!prev && !next) return false;
 
-    if(typeof window.SBP_GALLERY_OPEN !== "function"){
-      return false;
+  function slides(){
+    return Array.from(document.querySelectorAll("#sbpGalleryModal .sbp-gallery-slide"));
+  }
+
+  function dots(){
+    return Array.from(document.querySelectorAll("#sbpGalleryModal .sbp-gallery-dot"));
+  }
+
+  function currentIndex(){
+    const dotList = dots();
+    const dotIndex = dotList.findIndex(d => d.classList.contains("is-active"));
+    if(dotIndex >= 0) return dotIndex;
+
+    const track = document.querySelector("#sbpGalleryModal [data-sbp-gallery-track]");
+    const transform = track && track.style ? String(track.style.transform || "") : "";
+    const match = transform.match(/translateX\((-?\d+(?:\.\d+)?)%\)/);
+    if(match){
+      const value = Math.abs(parseFloat(match[1]));
+      return Math.round(value / 100);
     }
+    return 0;
+  }
 
-    // Use the original buttons too, but drive the gallery by keyboard event fallback.
-    // The v16 gallery listens to ArrowLeft / ArrowRight reliably.
-    const key = prev ? "ArrowLeft" : "ArrowRight";
-    document.dispatchEvent(new KeyboardEvent("keydown", {key:key, bubbles:true}));
+  function setIndex(nextIndex){
+    const track = document.querySelector("#sbpGalleryModal [data-sbp-gallery-track]");
+    const slideList = slides();
+    const dotList = dots();
+    const count = slideList.length;
+
+    if(!track || !count) return;
+
+    let index = nextIndex;
+    if(index < 0) index = count - 1;
+    if(index >= count) index = 0;
+
+    track.style.transition = "transform .28s cubic-bezier(.22,1,.36,1)";
+    track.style.transform = "translateX(" + (-index * 100) + "%)";
+
+    dotList.forEach((dot, i) => dot.classList.toggle("is-active", i === index));
+  }
+
+  function step(direction){
+    if(!isOpen()) return false;
+
+    const now = Date.now();
+    if(now < lockUntil) return true;
+    lockUntil = now + 260;
+
+    setIndex(currentIndex() + direction);
     return true;
   }
 
-  ["pointerdown","pointerup","touchend","click"].forEach(function(type){
-    document.addEventListener(type, function(e){
-      if(!clickArrow(e.target)) return;
+  window.SBP_GALLERY_PREV = function(){ return step(-1); };
+  window.SBP_GALLERY_NEXT = function(){ return step(1); };
+
+  function handle(e){
+    if(!isOpen()) return;
+
+    const prev = e.target && e.target.closest && e.target.closest("[data-sbp-gallery-prev], .sbp-gallery-prev");
+    const next = e.target && e.target.closest && e.target.closest("[data-sbp-gallery-next], .sbp-gallery-next");
+
+    if(!prev && !next) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    step(prev ? -1 : 1);
+  }
+
+  document.addEventListener("click", handle, true);
+  document.addEventListener("pointerup", handle, true);
+
+  document.addEventListener("keydown", function(e){
+    if(!isOpen()) return;
+    if(e.key === "ArrowLeft"){
       e.preventDefault();
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-    }, {capture:true, passive:false});
-  });
+      step(-1);
+    }
+    if(e.key === "ArrowRight"){
+      e.preventDefault();
+      step(1);
+    }
+  }, true);
 })();
 </script>
 
