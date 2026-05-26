@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "status": "Black Access",
+  "coins": 0,
+  "coins_balance": 0,
+  "activeBonuses": 0,
+  "active_bonuses_count": 0,
+  "active_bonus": null,
+  "coin_history": [],
+  "orders": [],
+  "updated_at": "2026-05-26T04:45:17.431565"
+}
