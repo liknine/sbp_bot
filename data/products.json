@@ -35,5 +35,27 @@
     ],
     "created_at": "2026-05-24T15:28:06.040728",
     "updated_at": "2026-05-24T15:28:06.040781"
+  },
+  {
+    "id": "pppp-latal-chernye",
+    "brand": "Пппп",
+    "name": "Латал",
+    "color": "Черные",
+    "price": 150,
+    "sizes": [
+      "40",
+      "41",
+      "42"
+    ],
+    "badge": "Новинка",
+    "description": "Товар поползла",
+    "images": [
+      "images/products/pppp-latal-chernye-1.jpg",
+      "images/products/pppp-latal-chernye-2.jpg",
+      "images/products/pppp-latal-chernye-3.jpg",
+      "images/products/pppp-latal-chernye-4.jpg"
+    ],
+    "created_at": "2026-05-26T15:28:11.434753+00:00",
+    "updated_at": "2026-05-26T15:28:11.434788+00:00"
   }
 ]
