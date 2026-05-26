@@ -1,5 +1,8 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
+  "telegram_id": 7952353435,
+  "username": "SBP_Admin",
+  "first_name": "SBP_Admin",
   "status": "Black Access",
   "coins": 55,
   "coins_balance": 55,
@@ -15,5 +18,5 @@
     }
   ],
   "orders": [],
-  "updated_at": "2026-05-26T13:22:32.282866"
+  "updated_at": "2026-05-26T14:31:00.688270+00:00"
 }
