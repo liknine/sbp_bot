@@ -57,5 +57,25 @@
     ],
     "created_at": "2026-05-26T15:28:11.434753+00:00",
     "updated_at": "2026-05-26T15:28:11.434788+00:00"
+  },
+  {
+    "id": "maison-margiela-maison-margiela-evolution-low-black",
+    "brand": "Maison Margiela",
+    "name": "Maison Margiela Evolution Low",
+    "color": "Black",
+    "price": 1000,
+    "sizes": [
+      "43",
+      "44"
+    ],
+    "badge": "НОВИНКА",
+    "description": "описание 1111\n222222",
+    "images": [
+      "images/products/maison-margiela-maison-margiela-evolution-low-black-1.jpg",
+      "images/products/maison-margiela-maison-margiela-evolution-low-black-2.jpg",
+      "images/products/maison-margiela-maison-margiela-evolution-low-black-3.jpg"
+    ],
+    "created_at": "2026-05-26T18:28:01.773295+00:00",
+    "updated_at": "2026-05-26T18:28:01.773315+00:00"
   }
 ]
