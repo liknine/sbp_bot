@@ -1,5 +1,8 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
+  "telegram_id": 1639462053,
+  "username": "liknine",
+  "first_name": "ликнайн",
   "status": "Black Access",
   "coins": 154,
   "coins_balance": 154,
@@ -162,5 +165,5 @@
       "updated_at": "2026-05-24 16:09:35"
     }
   ],
-  "updated_at": "2026-05-26T13:27:37.408409"
+  "updated_at": "2026-05-26T13:48:26.101485"
 }
