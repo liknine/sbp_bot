@@ -9539,21 +9539,78 @@ a,
     return String(value || "").trim().replace(/^@/,"").toLowerCase().replace(/[^a-z0-9_]/g,"");
   }
 
+  function decodeB64Url(value){
+    try{
+      value = String(value || "").replace(/-/g, "+").replace(/_/g, "/");
+      while(value.length % 4) value += "=";
+      return decodeURIComponent(Array.prototype.map.call(atob(value), function(c){
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(""));
+    }catch(e){ return ""; }
+  }
+
+  function readInlineProfile(){
+    try{
+      const url = new URL(window.location.href);
+      const raw = url.searchParams.get("sbp_profile") || url.searchParams.get("profile");
+      if(!raw) return null;
+      const json = JSON.parse(decodeB64Url(raw));
+      if(json && typeof json === "object"){
+        if(json.telegram_id) localStorage.setItem("sbp_profile_user_id", String(json.telegram_id));
+        localStorage.setItem("sbp_inline_profile_seen", "1");
+        return json;
+      }
+    }catch(e){
+      try{ localStorage.setItem("sbp_profile_last_error", "inline profile -> " + (e && e.message ? e.message : e)); }catch(_e){}
+    }
+    return null;
+  }
+
+  function profilePathCandidates(base, idOrHash){
+    const path = String(idOrHash || "") + ".json";
+    const repo = (location.pathname.split("/").filter(Boolean)[0] || "").trim();
+    const repoBase = repo ? "/" + repo + "/" : "/";
+    return [
+      base + "/" + path,
+      "data/users/" + path,
+      "frontend/data/users/" + path,
+      "./data/users/" + path,
+      "./frontend/data/users/" + path,
+      repoBase + "data/users/" + path,
+      repoBase + "frontend/data/users/" + path
+    ];
+  }
+
+  function usernamePathCandidates(username){
+    const name = encodeURIComponent(username);
+    const repo = (location.pathname.split("/").filter(Boolean)[0] || "").trim();
+    const repoBase = repo ? "/" + repo + "/" : "/";
+    return [
+      "data/users/usernames/" + name + ".json",
+      "frontend/data/users/usernames/" + name + ".json",
+      "./data/users/usernames/" + name + ".json",
+      "./frontend/data/users/usernames/" + name + ".json",
+      repoBase + "data/users/usernames/" + name + ".json",
+      repoBase + "frontend/data/users/usernames/" + name + ".json"
+    ];
+  }
+
   async function profileUrlsFor(user){
     const urls = [];
     const id = user && user.id ? String(user.id) : readUrlUserId();
     if(id){
-      urls.push("data/users/" + encodeURIComponent(id) + ".json");
+      profilePathCandidates("data/users", encodeURIComponent(id)).forEach(u => urls.push(u));
       const hash = await sha256Hex(id);
-      if(hash) urls.push("data/users/" + hash + ".json");
+      if(hash) profilePathCandidates("data/users", hash).forEach(u => urls.push(u));
     }
     const username = cleanUsername(user && user.username);
-    if(username) urls.push("data/users/usernames/" + encodeURIComponent(username) + ".json");
+    if(username) usernamePathCandidates(username).forEach(u => urls.push(u));
     return Array.from(new Set(urls));
   }
 
   async function fetchFirstProfile(urls){
     let lastError = "";
+    try{ localStorage.setItem("sbp_profile_candidate_urls", JSON.stringify(urls)); }catch(e){}
     for(const url of urls){
       try{
         const sep = url.includes("?") ? "&" : "?";
@@ -9571,8 +9628,21 @@ a,
   }
 
   async function syncRemoteProfile(force){
+    const inline = readInlineProfile();
+    if(inline){
+      writeState({
+        status: inline.status,
+        coins: inline.coins_balance ?? inline.coins,
+        activeBonuses: inline.active_bonuses_count ?? inline.activeBonuses,
+        updated_at: inline.updated_at || new Date().toISOString(),
+        coin_history: inline.coin_history || [],
+        orders: inline.orders || []
+      });
+      apply();
+    }
+
     const user = getTelegramUser();
-    if(!user || !user.id) return false;
+    if(!user || !user.id) return !!inline;
     const now = Date.now();
     if(!force && now - lastRemoteFetch < REMOTE_CACHE_MS) return false;
     if(remoteInFlight) return false;
@@ -9605,12 +9675,15 @@ a,
     read: readState,
     apply: apply,
     sync: function(){ return syncRemoteProfile(true); },
-    debug: function(){
+    debug: async function(){
+      const user = getTelegramUser();
       return {
-        user:getTelegramUser(),
+        user:user,
         state:readState(),
         profileUrl:localStorage.getItem("sbp_last_profile_url") || "",
         lastError:localStorage.getItem("sbp_profile_last_error") || "",
+        inlineProfileSeen:localStorage.getItem("sbp_inline_profile_seen") || "",
+        candidateUrls: await profileUrlsFor(user || {}),
         url:location.href
       };
     },
@@ -9642,6 +9715,17 @@ a,
   };
 
   function boot(){
+    const inline = readInlineProfile();
+    if(inline){
+      writeState({
+        status: inline.status,
+        coins: inline.coins_balance ?? inline.coins,
+        activeBonuses: inline.active_bonuses_count ?? inline.activeBonuses,
+        updated_at: inline.updated_at || new Date().toISOString(),
+        coin_history: inline.coin_history || [],
+        orders: inline.orders || []
+      });
+    }
     apply();
     syncRemoteProfile(true);
     setTimeout(() => syncRemoteProfile(true), 900);
