@@ -1,5 +1,8 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
+  "telegram_id": 8204895546,
+  "username": "lxssart",
+  "first_name": "lxssart",
   "status": "Black Access",
   "coins": 999,
   "coins_balance": 999,
@@ -30,5 +33,5 @@
       "updated_at": "2026-05-24 18:05:30"
     }
   ],
-  "updated_at": "2026-05-26T13:22:28.392767"
+  "updated_at": "2026-05-26T14:30:46.721408+00:00"
 }
