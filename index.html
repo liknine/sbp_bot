@@ -7416,6 +7416,17 @@ a,
 }
 </style>
 
+
+<style id="sbp-gallery-v17-hotfix-css">
+#productScreen .product-main-image,
+#productScreen .product-thumb,
+#productScreen .product-main-image img,
+#productScreen .product-thumb img{
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+}
+</style>
+
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -10284,6 +10295,69 @@ a,
   }, {passive:true});
 
   window.SBP_GALLERY_OPEN = openGallery;
+})();
+</script>
+
+
+<script id="sbp-product-gallery-v17-hotfix">
+(function(){
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchStartedOnGalleryTarget = false;
+
+  function isProductPhotoTarget(target){
+    return !!(target && target.closest && target.closest("#productScreen .product-main-image, #productScreen .product-thumb"));
+  }
+  function openFromTarget(target){
+    if(!isProductPhotoTarget(target)) return false;
+    const thumb = target.closest("#productScreen .product-thumb");
+    let index = 0;
+    if(thumb){
+      const thumbs = Array.from(document.querySelectorAll("#productScreen .product-thumb")).filter(el => {
+        return el.style.display !== "none" && el.offsetParent !== null;
+      });
+      index = thumbs.indexOf(thumb);
+      if(index < 0) index = 0;
+    }
+    if(typeof window.SBP_GALLERY_OPEN === "function"){
+      window.SBP_GALLERY_OPEN(index);
+      return true;
+    }
+    return false;
+  }
+
+  document.addEventListener("pointerup", function(e){
+    if(e.pointerType && e.pointerType !== "touch" && e.pointerType !== "mouse" && e.pointerType !== "pen") return;
+    if(!isProductPhotoTarget(e.target)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    openFromTarget(e.target);
+  }, true);
+
+  document.addEventListener("touchstart", function(e){
+    if(!isProductPhotoTarget(e.target)) return;
+    const t = e.touches && e.touches[0];
+    if(!t) return;
+    touchStartedOnGalleryTarget = true;
+    touchStartX = t.clientX;
+    touchStartY = t.clientY;
+  }, {capture:true, passive:true});
+
+  document.addEventListener("touchend", function(e){
+    if(!touchStartedOnGalleryTarget) return;
+    touchStartedOnGalleryTarget = false;
+    const t = (e.changedTouches && e.changedTouches[0]) || null;
+    if(!t) return;
+    const dx = Math.abs(t.clientX - touchStartX);
+    const dy = Math.abs(t.clientY - touchStartY);
+    if(dx > 12 || dy > 12) return;
+    if(!isProductPhotoTarget(e.target)) return;
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    openFromTarget(e.target);
+  }, {capture:true, passive:false});
 })();
 </script>
 
