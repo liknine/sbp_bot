@@ -1,0 +1,22 @@
+{
+  "schema_version": 2,
+  "telegram_id": 7952353435,
+  "username": "SBP_Admin",
+  "first_name": "SBP_Admin",
+  "status": "Black Access",
+  "coins": 55,
+  "coins_balance": 55,
+  "activeBonuses": 0,
+  "active_bonuses_count": 0,
+  "active_bonus": null,
+  "coin_history": [
+    {
+      "amount": 55,
+      "type": "manual_bonus",
+      "comment": "Admin manual operation",
+      "created_at": "2026-05-26 05:12:57"
+    }
+  ],
+  "orders": [],
+  "updated_at": "2026-05-26T14:31:00.688270+00:00"
+}
