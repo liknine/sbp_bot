@@ -7280,6 +7280,142 @@ a,
 }
 </style>
 
+
+<style id="sbp-gallery-v16-css">
+.product-main-image,
+.product-thumb{
+  cursor:pointer!important;
+}
+.product-main-image:active,
+.product-thumb:active{
+  transform:scale(.995);
+}
+.sbp-gallery-modal{
+  position:fixed;
+  inset:0;
+  z-index:2147483647;
+  display:none;
+  background:rgba(0,0,0,.94);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  color:#fff;
+  touch-action:none;
+}
+.sbp-gallery-modal.is-open{
+  display:flex;
+  flex-direction:column;
+}
+.sbp-gallery-top{
+  height:calc(58px + env(safe-area-inset-top, 0px));
+  padding:calc(10px + env(safe-area-inset-top, 0px)) 16px 8px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex:0 0 auto;
+}
+.sbp-gallery-title{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:15px;
+  font-weight:700;
+  opacity:.9;
+}
+.sbp-gallery-close{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.18);
+  color:#fff;
+  font-size:30px;
+  line-height:1;
+}
+.sbp-gallery-stage{
+  position:relative;
+  flex:1 1 auto;
+  min-height:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.sbp-gallery-track{
+  height:100%;
+  width:100%;
+  display:flex;
+  transition:transform .28s cubic-bezier(.22,1,.36,1);
+  will-change:transform;
+}
+.sbp-gallery-slide{
+  flex:0 0 100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 18px 22px;
+}
+.sbp-gallery-slide img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  border-radius:18px;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+.sbp-gallery-arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:44px;
+  height:56px;
+  border-radius:999px;
+  display:grid;
+  place-items:center;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.16);
+  color:#fff;
+  font-size:34px;
+  line-height:1;
+}
+.sbp-gallery-prev{left:10px}
+.sbp-gallery-next{right:10px}
+.sbp-gallery-bottom{
+  min-height:calc(54px + env(safe-area-inset-bottom, 0px));
+  padding:8px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  flex:0 0 auto;
+}
+.sbp-gallery-dot{
+  width:7px;
+  height:7px;
+  border-radius:999px;
+  background:rgba(255,255,255,.34);
+}
+.sbp-gallery-dot.is-active{
+  width:22px;
+  background:#fff;
+}
+@media(max-width:380px){
+  .sbp-gallery-arrow{
+    width:38px;
+    height:50px;
+    font-size:30px;
+  }
+  .sbp-gallery-slide{
+    padding-left:12px;
+    padding-right:12px;
+  }
+}
+</style>
+
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -8073,6 +8209,14 @@ a,
     return products.find(p => idOf(p) === id) || null;
   }
 
+  window.SBP_PRODUCTS_API = {
+    all: function(){ return products.slice(); },
+    active: function(){
+      return productById(localStorage.getItem(ACTIVE_KEY)) || products[0] || null;
+    },
+    byId: productById
+  };
+
   function cardHtml(p){
     const id = idOf(p);
     const isFav = favSet().has(id);
@@ -8505,7 +8649,15 @@ a,
     try{
       const res = await fetch(PRODUCTS_URL, {cache:"default"});
       const data = await res.json();
-      products = Array.isArray(data) ? data : [];
+      products = Array.isArray(data) ? data.slice() : [];
+      products = products
+        .map((p, i) => Object.assign({_sbpOriginalIndex:i}, p))
+        .sort((a,b) => {
+          const ad = Date.parse(a.created_at || a.updated_at || a.date || "");
+          const bd = Date.parse(b.created_at || b.updated_at || b.date || "");
+          if(Number.isFinite(ad) && Number.isFinite(bd) && ad !== bd) return bd - ad;
+          return (b._sbpOriginalIndex || 0) - (a._sbpOriginalIndex || 0);
+        });
     }catch(e){
       console.error("[SBP] products load failed", e);
       products = [];
@@ -9978,6 +10130,160 @@ a,
       setTimeout(() => sync(true), 80);
     }
   }, true);
+})();
+</script>
+
+
+<div class="sbp-gallery-modal" id="sbpGalleryModal" aria-hidden="true">
+  <div class="sbp-gallery-top">
+    <div class="sbp-gallery-title" data-sbp-gallery-title>SBP</div>
+    <button class="sbp-gallery-close" type="button" data-sbp-gallery-close aria-label="Закрыть">×</button>
+  </div>
+  <div class="sbp-gallery-stage">
+    <button class="sbp-gallery-arrow sbp-gallery-prev" type="button" data-sbp-gallery-prev aria-label="Предыдущее фото">‹</button>
+    <div class="sbp-gallery-track" data-sbp-gallery-track></div>
+    <button class="sbp-gallery-arrow sbp-gallery-next" type="button" data-sbp-gallery-next aria-label="Следующее фото">›</button>
+  </div>
+  <div class="sbp-gallery-bottom" data-sbp-gallery-dots></div>
+</div>
+<script id="sbp-product-gallery-v16">
+(function(){
+  const ACTIVE_KEY = "sbp_active_product";
+  const modal = () => document.getElementById("sbpGalleryModal");
+  const track = () => document.querySelector("[data-sbp-gallery-track]");
+  const dots = () => document.querySelector("[data-sbp-gallery-dots]");
+  const title = () => document.querySelector("[data-sbp-gallery-title]");
+  let images = [];
+  let current = 0;
+  let startX = 0;
+  let lastX = 0;
+  let dragging = false;
+
+  function esc(v){
+    return String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+  }
+  function activeProduct(){
+    try{
+      if(window.SBP_PRODUCTS_API && typeof window.SBP_PRODUCTS_API.active === "function"){
+        return window.SBP_PRODUCTS_API.active();
+      }
+    }catch(e){}
+    const main = document.querySelector(".product-main-image img");
+    const thumbs = Array.from(document.querySelectorAll(".product-thumb img"))
+      .map(img => img.currentSrc || img.src)
+      .filter(Boolean);
+    const list = [main && (main.currentSrc || main.src)].concat(thumbs).filter(Boolean);
+    return {name:document.querySelector(".product-title")?.textContent || "SBP", images:Array.from(new Set(list))};
+  }
+  function render(){
+    const m = modal(), t = track(), d = dots();
+    if(!m || !t || !d) return;
+    if(!images.length) return;
+    t.innerHTML = images.map(src => `<div class="sbp-gallery-slide"><img src="${esc(src)}" alt=""></div>`).join("");
+    d.innerHTML = images.map((_, i) => `<span class="sbp-gallery-dot${i === current ? " is-active" : ""}"></span>`).join("");
+    update();
+  }
+  function update(){
+    const t = track(), d = dots();
+    if(!t) return;
+    if(current < 0) current = images.length - 1;
+    if(current >= images.length) current = 0;
+    t.style.transform = `translateX(${-current * 100}%)`;
+    if(d){
+      Array.from(d.children).forEach((el, i) => el.classList.toggle("is-active", i === current));
+    }
+    const prev = document.querySelector("[data-sbp-gallery-prev]");
+    const next = document.querySelector("[data-sbp-gallery-next]");
+    const multi = images.length > 1;
+    if(prev) prev.style.display = multi ? "" : "none";
+    if(next) next.style.display = multi ? "" : "none";
+  }
+  function openGallery(index){
+    const p = activeProduct();
+    images = Array.isArray(p.images) ? p.images.filter(Boolean) : [];
+    images = Array.from(new Set(images));
+    if(!images.length) return;
+    current = Math.max(0, Math.min(Number(index || 0), images.length - 1));
+    if(title()) title().textContent = p.name || "SBP";
+    render();
+    const m = modal();
+    if(m){
+      m.classList.add("is-open");
+      m.setAttribute("aria-hidden", "false");
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+    }
+  }
+  function closeGallery(){
+    const m = modal();
+    if(m){
+      m.classList.remove("is-open");
+      m.setAttribute("aria-hidden", "true");
+    }
+    document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
+  }
+  function next(){ current += 1; update(); }
+  function prev(){ current -= 1; update(); }
+
+  document.addEventListener("click", function(e){
+    const close = e.target.closest("[data-sbp-gallery-close]");
+    if(close){ e.preventDefault(); closeGallery(); return; }
+
+    if(e.target.closest("[data-sbp-gallery-next]")){ e.preventDefault(); next(); return; }
+    if(e.target.closest("[data-sbp-gallery-prev]")){ e.preventDefault(); prev(); return; }
+
+    const main = e.target.closest(".product-main-image");
+    const thumb = e.target.closest(".product-thumb");
+    if(main || thumb){
+      const productScreen = e.target.closest("#productScreen");
+      if(!productScreen) return;
+      e.preventDefault();
+      e.stopPropagation();
+      let idx = 0;
+      if(thumb){
+        const all = Array.from(document.querySelectorAll("#productScreen .product-thumb")).filter(el => el.style.display !== "none");
+        idx = all.indexOf(thumb);
+        if(idx < 0) idx = 0;
+      }
+      openGallery(idx);
+    }
+  }, true);
+
+  document.addEventListener("keydown", function(e){
+    const m = modal();
+    if(!m || !m.classList.contains("is-open")) return;
+    if(e.key === "Escape") closeGallery();
+    if(e.key === "ArrowRight") next();
+    if(e.key === "ArrowLeft") prev();
+  });
+
+  document.addEventListener("touchstart", function(e){
+    const m = modal();
+    if(!m || !m.classList.contains("is-open")) return;
+    const p = e.touches && e.touches[0];
+    if(!p) return;
+    dragging = true;
+    startX = lastX = p.clientX;
+  }, {passive:true});
+
+  document.addEventListener("touchmove", function(e){
+    if(!dragging) return;
+    const p = e.touches && e.touches[0];
+    if(!p) return;
+    lastX = p.clientX;
+  }, {passive:true});
+
+  document.addEventListener("touchend", function(){
+    if(!dragging) return;
+    const dx = lastX - startX;
+    dragging = false;
+    if(Math.abs(dx) > 45){
+      dx < 0 ? next() : prev();
+    }
+  }, {passive:true});
+
+  window.SBP_GALLERY_OPEN = openGallery;
 })();
 </script>
 
