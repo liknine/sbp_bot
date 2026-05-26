@@ -7427,6 +7427,27 @@ a,
 }
 </style>
 
+
+<style id="sbp-gallery-v18-arrow-fix-css">
+.sbp-gallery-arrow{
+  z-index:2147483647!important;
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+  user-select:none!important;
+  -webkit-user-select:none!important;
+}
+.sbp-gallery-track,
+.sbp-gallery-slide,
+.sbp-gallery-slide img{
+  pointer-events:auto!important;
+}
+.sbp-gallery-prev{
+  left:max(10px, env(safe-area-inset-left, 0px) + 10px)!important;
+}
+.sbp-gallery-next{
+  right:max(10px, env(safe-area-inset-right, 0px) + 10px)!important;
+}
+</style>
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -10358,6 +10379,40 @@ a,
     e.stopImmediatePropagation();
     openFromTarget(e.target);
   }, {capture:true, passive:false});
+})();
+</script>
+
+<script id="sbp-gallery-v18-arrow-fix">
+(function(){
+  function modalOpen(){
+    const m = document.getElementById("sbpGalleryModal");
+    return !!(m && m.classList.contains("is-open"));
+  }
+  function clickArrow(target){
+    if(!modalOpen()) return false;
+    const prev = target && target.closest && target.closest("[data-sbp-gallery-prev], .sbp-gallery-prev");
+    const next = target && target.closest && target.closest("[data-sbp-gallery-next], .sbp-gallery-next");
+    if(!prev && !next) return false;
+
+    if(typeof window.SBP_GALLERY_OPEN !== "function"){
+      return false;
+    }
+
+    // Use the original buttons too, but drive the gallery by keyboard event fallback.
+    // The v16 gallery listens to ArrowLeft / ArrowRight reliably.
+    const key = prev ? "ArrowLeft" : "ArrowRight";
+    document.dispatchEvent(new KeyboardEvent("keydown", {key:key, bubbles:true}));
+    return true;
+  }
+
+  ["pointerdown","pointerup","touchend","click"].forEach(function(type){
+    document.addEventListener(type, function(e){
+      if(!clickArrow(e.target)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    }, {capture:true, passive:false});
+  });
 })();
 </script>
 
