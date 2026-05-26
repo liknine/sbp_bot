@@ -3,7 +3,7 @@
   "telegram_id": 1639462053,
   "username": "liknine",
   "first_name": "ликнайн",
-  "status": "Entry",
+  "status": "Priority",
   "coins": 449,
   "coins_balance": 449,
   "activeBonuses": 0,
@@ -177,5 +177,5 @@
       "updated_at": "2026-05-24 16:09:35"
     }
   ],
-  "updated_at": "2026-05-26T14:13:21.439476"
+  "updated_at": "2026-05-26T14:30:40.418623+00:00"
 }
