@@ -7659,7 +7659,7 @@ a,
     <section class="bonus-modal">
       <div class="bonus-modal-icon">S</div>
       <h2>Бонус пока недоступен</h2>
-      <p>Сейчас на аккаунте <b>0 SBP Coins</b>. Бонусы можно будет активировать после завершённых заказов.</p>
+      <p>Сейчас на аккаунте <b data-sbp-coins-balance>0</b> SBP Coins. Бонусы можно будет активировать после завершённых заказов.</p>
       <div class="bonus-modal-rules">
         <div><span>Баланс</span><b>0 Coins</b></div>
         <div><span>Бонус</span><b>недоступен</b></div>
@@ -9476,6 +9476,22 @@ a,
     if(bonusActive && state.activeBonuses <= 0) bonusActive.checked = false;
   }
 
+  function readUrlUserId(){
+    try{
+      const url = new URL(window.location.href);
+      const value = url.searchParams.get("sbp_uid") || url.searchParams.get("tg_id") || url.searchParams.get("user_id");
+      if(value && /^\d+$/.test(value)){
+        localStorage.setItem("sbp_profile_user_id", value);
+        return value;
+      }
+    }catch(e){}
+    try{
+      const saved = localStorage.getItem("sbp_profile_user_id");
+      if(saved && /^\d+$/.test(saved)) return saved;
+    }catch(e){}
+    return "";
+  }
+
   function getTelegramUser(){
     const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
     let user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
@@ -9488,8 +9504,11 @@ a,
       }catch(e){}
     }
 
-    if(user){
-      try{ localStorage.setItem("sbp_tg_user_cache", JSON.stringify(user)); }catch(e){}
+    if(user && user.id){
+      try{
+        localStorage.setItem("sbp_tg_user_cache", JSON.stringify(user));
+        localStorage.setItem("sbp_profile_user_id", String(user.id));
+      }catch(e){}
       return user;
     }
 
@@ -9498,17 +9517,57 @@ a,
       if(cached && cached.id) return cached;
     }catch(e){}
 
+    const urlId = readUrlUserId();
+    if(urlId) return {id:urlId};
+
     return null;
   }
 
   async function sha256Hex(value){
     value = String(value || "");
-    if(window.crypto && crypto.subtle && window.TextEncoder){
-      const data = new TextEncoder().encode(value);
-      const hash = await crypto.subtle.digest("SHA-256", data);
-      return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,"0")).join("");
+    try{
+      if(window.crypto && crypto.subtle && window.TextEncoder){
+        const data = new TextEncoder().encode(value);
+        const hash = await crypto.subtle.digest("SHA-256", data);
+        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,"0")).join("");
+      }
+    }catch(e){}
+    return "";
+  }
+
+  function cleanUsername(value){
+    return String(value || "").trim().replace(/^@/,"").toLowerCase().replace(/[^a-z0-9_]/g,"");
+  }
+
+  async function profileUrlsFor(user){
+    const urls = [];
+    const id = user && user.id ? String(user.id) : readUrlUserId();
+    if(id){
+      urls.push("data/users/" + encodeURIComponent(id) + ".json");
+      const hash = await sha256Hex(id);
+      if(hash) urls.push("data/users/" + hash + ".json");
     }
-    return value;
+    const username = cleanUsername(user && user.username);
+    if(username) urls.push("data/users/usernames/" + encodeURIComponent(username) + ".json");
+    return Array.from(new Set(urls));
+  }
+
+  async function fetchFirstProfile(urls){
+    let lastError = "";
+    for(const url of urls){
+      try{
+        const sep = url.includes("?") ? "&" : "?";
+        const res = await fetch(url + sep + "v=" + Date.now(), {cache:"no-store"});
+        if(!res.ok){ lastError = url + " -> " + res.status; continue; }
+        const json = await res.json();
+        if(json && typeof json === "object"){
+          try{ localStorage.setItem("sbp_last_profile_url", url); }catch(e){}
+          return json;
+        }
+      }catch(e){ lastError = url + " -> " + (e && e.message ? e.message : e); }
+    }
+    try{ localStorage.setItem("sbp_profile_last_error", lastError); }catch(e){}
+    return null;
   }
 
   async function syncRemoteProfile(force){
@@ -9521,11 +9580,9 @@ a,
     lastRemoteFetch = now;
 
     try{
-      const hash = await sha256Hex(user.id);
-      const res = await fetch("data/users/" + hash + ".json?v=" + Date.now(), {cache:"no-store"});
-      if(!res.ok) return false;
-      const remote = await res.json();
-      if(!remote || typeof remote !== "object") return false;
+      const urls = await profileUrlsFor(user);
+      const remote = await fetchFirstProfile(urls);
+      if(!remote) return false;
       writeState({
         status: remote.status,
         coins: remote.coins_balance ?? remote.coins,
@@ -9537,6 +9594,7 @@ a,
       apply();
       return true;
     }catch(e){
+      try{ localStorage.setItem("sbp_profile_last_error", e && e.message ? e.message : String(e)); }catch(_e){}
       return false;
     }finally{
       remoteInFlight = false;
@@ -9547,6 +9605,22 @@ a,
     read: readState,
     apply: apply,
     sync: function(){ return syncRemoteProfile(true); },
+    debug: function(){
+      return {
+        user:getTelegramUser(),
+        state:readState(),
+        profileUrl:localStorage.getItem("sbp_last_profile_url") || "",
+        lastError:localStorage.getItem("sbp_profile_last_error") || "",
+        url:location.href
+      };
+    },
+    setUserId: function(id){
+      if(id && /^\d+$/.test(String(id))){
+        localStorage.setItem("sbp_profile_user_id", String(id));
+        return syncRemoteProfile(true);
+      }
+      return false;
+    },
     setStatus: function(status){
       const state = readState();
       state.status = normalizeStatus(status);
