@@ -7271,6 +7271,15 @@ a,
 })();
 </script>
 
+
+<style id="sbp-status-format-v14">
+.coins-status [data-sbp-client-status],
+.status-row [data-sbp-profile-status]{
+  display:inline-block!important;
+  margin-left:8px!important;
+}
+</style>
+
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -9741,6 +9750,232 @@ a,
   document.addEventListener("click", function(e){
     if(e.target.closest('label[for="tab-profile"], label[for="tab-coins"], .coins-row, .profile-item[for="tab-coins"]')){
       setTimeout(() => syncRemoteProfile(true), 80);
+    }
+  }, true);
+})();
+</script>
+
+
+<script id="sbp-force-profile-sync-v14">
+/* Force profile sync bridge for static GitHub Pages. Keeps Coins/status visible even while API is not deployed. */
+(function(){
+  const STATUS_META = {
+    "Entry": {multiplier:"стандарт", note:"Entry · стандартное начисление Coins", progress:0},
+    "Selected": {multiplier:"+10% Coins", note:"Selected · +10% Coins к завершённым заказам", progress:33},
+    "Priority": {multiplier:"+20% Coins", note:"Priority · +20% Coins к завершённым заказам", progress:66},
+    "Black Access": {multiplier:"+30% Coins", note:"Black Access · +30% Coins к завершённым заказам", progress:100}
+  };
+  const ALIASES = {
+    "entry":"Entry","selected":"Selected","priority":"Priority",
+    "black access":"Black Access","black_access":"Black Access","blackaccess":"Black Access","black":"Black Access"
+  };
+  function normStatus(v){
+    v = String(v || "").trim();
+    if(STATUS_META[v]) return v;
+    return ALIASES[v.toLowerCase().replace(/[\s-]+/g," ").trim()] || "Entry";
+  }
+  function num(v){
+    const n = Number(v || 0);
+    return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
+  }
+  function b64urlDecode(value){
+    try{
+      value = String(value || "").replace(/-/g,"+").replace(/_/g,"/");
+      while(value.length % 4) value += "=";
+      const binary = atob(value);
+      const bytes = Array.prototype.map.call(binary, c => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)).join("");
+      return decodeURIComponent(bytes);
+    }catch(e){ return ""; }
+  }
+  function readInline(){
+    try{
+      const url = new URL(location.href);
+      const raw = url.searchParams.get("sbp_profile") || url.searchParams.get("profile");
+      if(!raw) return null;
+      const data = JSON.parse(b64urlDecode(raw));
+      if(data && typeof data === "object"){
+        localStorage.setItem("sbp_force_inline_profile", JSON.stringify(data));
+        if(data.telegram_id) localStorage.setItem("sbp_profile_user_id", String(data.telegram_id));
+        return data;
+      }
+    }catch(e){}
+    try{
+      return JSON.parse(localStorage.getItem("sbp_force_inline_profile") || "null");
+    }catch(e){ return null; }
+  }
+  function readUid(){
+    try{
+      const url = new URL(location.href);
+      const uid = url.searchParams.get("sbp_uid") || url.searchParams.get("tg_id") || url.searchParams.get("user_id");
+      if(uid && /^\d+$/.test(uid)){
+        localStorage.setItem("sbp_profile_user_id", uid);
+        return uid;
+      }
+    }catch(e){}
+    try{
+      const tg = window.Telegram && Telegram.WebApp;
+      const user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
+      if(user && user.id){
+        localStorage.setItem("sbp_profile_user_id", String(user.id));
+        if(user.username) localStorage.setItem("sbp_profile_username", String(user.username).toLowerCase());
+        return String(user.id);
+      }
+      if(tg && tg.initData){
+        const raw = new URLSearchParams(tg.initData).get("user");
+        if(raw){
+          const parsed = JSON.parse(raw);
+          if(parsed && parsed.id){
+            localStorage.setItem("sbp_profile_user_id", String(parsed.id));
+            if(parsed.username) localStorage.setItem("sbp_profile_username", String(parsed.username).toLowerCase());
+            return String(parsed.id);
+          }
+        }
+      }
+    }catch(e){}
+    return localStorage.getItem("sbp_profile_user_id") || "";
+  }
+  function readUsername(){
+    try{
+      const tg = window.Telegram && Telegram.WebApp;
+      const user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
+      if(user && user.username) return String(user.username).replace(/^@/,"").toLowerCase();
+    }catch(e){}
+    return String(localStorage.getItem("sbp_profile_username") || "").replace(/^@/,"").toLowerCase();
+  }
+  function hashId(id){
+    if(!(window.crypto && crypto.subtle && window.TextEncoder)) return Promise.resolve("");
+    return crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(id))).then(buf => {
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,"0")).join("");
+    }).catch(() => "");
+  }
+  function repoBase(){
+    const first = location.pathname.split("/").filter(Boolean)[0] || "";
+    return first ? "/" + first + "/" : "/";
+  }
+  async function urls(){
+    const out = [];
+    const base = repoBase();
+    const id = readUid();
+    const username = readUsername();
+    function add(p){
+      if(!p) return;
+      out.push(p);
+      if(p[0] !== "/") out.push(base + p.replace(/^\.\//,""));
+    }
+    if(id){
+      add("data/users/" + encodeURIComponent(id) + ".json");
+      add("frontend/data/users/" + encodeURIComponent(id) + ".json");
+      const h = await hashId(id);
+      if(h){
+        add("data/users/" + h + ".json");
+        add("frontend/data/users/" + h + ".json");
+      }
+    }
+    if(username){
+      add("data/users/usernames/" + encodeURIComponent(username) + ".json");
+      add("frontend/data/users/usernames/" + encodeURIComponent(username) + ".json");
+    }
+    return Array.from(new Set(out));
+  }
+  function normalizeProfile(p){
+    p = p || {};
+    return {
+      status: normStatus(p.status),
+      coins: num(p.coins_balance != null ? p.coins_balance : p.coins),
+      activeBonuses: num(p.active_bonuses_count != null ? p.active_bonuses_count : p.activeBonuses),
+      updated_at: p.updated_at || new Date().toISOString()
+    };
+  }
+  function save(profile){
+    const state = normalizeProfile(profile);
+    try{
+      localStorage.setItem("sbp_profile_state_v1", JSON.stringify(state));
+      localStorage.setItem("sbp_client_status", state.status);
+      localStorage.setItem("sbp_coins_balance", String(state.coins));
+      localStorage.setItem("sbp_active_bonuses_count", String(state.activeBonuses));
+      localStorage.setItem("sbp_force_profile_last", JSON.stringify(state));
+    }catch(e){}
+    return state;
+  }
+  function readSaved(){
+    try{
+      return normalizeProfile(JSON.parse(localStorage.getItem("sbp_force_profile_last") || localStorage.getItem("sbp_profile_state_v1") || "null"));
+    }catch(e){ return normalizeProfile({}); }
+  }
+  function all(sel){ return Array.from(document.querySelectorAll(sel)); }
+  function setText(sel, value){ all(sel).forEach(el => { el.textContent = String(value); }); }
+  function apply(profile){
+    const st = save(profile || readSaved());
+    const meta = STATUS_META[st.status] || STATUS_META.Entry;
+    setText("[data-sbp-coins-value], [data-sbp-profile-coins], [data-sbp-coins-balance]", st.coins);
+    setText("[data-sbp-active-bonuses]", st.activeBonuses);
+    setText("[data-sbp-client-status], [data-sbp-profile-status]", st.status);
+    setText("[data-sbp-client-multiplier]", meta.multiplier);
+    setText("[data-sbp-status-note]", meta.note);
+    const card = document.querySelector("[data-sbp-status-card]");
+    if(card) card.setAttribute("data-sbp-status-card", st.status);
+    const progress = document.querySelector("[data-sbp-status-progress]");
+    if(progress) progress.style.width = meta.progress + "%";
+    all("[data-sbp-status-level]").forEach(el => el.classList.toggle("is-active", el.getAttribute("data-sbp-status-level") === st.status));
+    all(".coins-status-list div").forEach(row => {
+      const label = row.querySelector("span") && row.querySelector("span").textContent.trim();
+      row.classList.toggle("is-active", label === st.status);
+    });
+    document.dispatchEvent(new CustomEvent("sbp:profile-applied", {detail: st}));
+  }
+  async function fetchRemote(){
+    const list = await urls();
+    localStorage.setItem("sbp_force_profile_urls", JSON.stringify(list));
+    for(const url of list){
+      try{
+        const sep = url.indexOf("?") >= 0 ? "&" : "?";
+        const res = await fetch(url + sep + "v=" + Date.now(), {cache:"no-store"});
+        if(!res.ok) continue;
+        const json = await res.json();
+        if(json && typeof json === "object"){
+          localStorage.setItem("sbp_force_profile_url", url);
+          return json;
+        }
+      }catch(e){
+        localStorage.setItem("sbp_force_profile_error", String(e && e.message || e));
+      }
+    }
+    return null;
+  }
+  async function sync(force){
+    const inline = readInline();
+    if(inline) apply(inline);
+    const remote = await fetchRemote();
+    if(remote) apply(remote);
+    else if(!inline) apply(readSaved());
+  }
+  window.SBP_FORCE_PROFILE_SYNC = {
+    sync: () => sync(true),
+    debug: async () => ({
+      uid: readUid(),
+      username: readUsername(),
+      inline: readInline(),
+      saved: readSaved(),
+      urls: await urls(),
+      lastUrl: localStorage.getItem("sbp_force_profile_url") || "",
+      lastError: localStorage.getItem("sbp_force_profile_error") || "",
+      href: location.href
+    })
+  };
+  function boot(){
+    apply(readInline() || readSaved());
+    sync(true);
+    setTimeout(() => sync(true), 700);
+    setTimeout(() => sync(true), 1800);
+    setTimeout(() => sync(true), 4000);
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
+  else boot();
+  document.addEventListener("visibilitychange", () => { if(!document.hidden) sync(true); });
+  window.addEventListener("focus", () => sync(true));
+  document.addEventListener("click", e => {
+    if(e.target.closest('label[for="tab-profile"], label[for="tab-coins"], .coins-row, .profile-item[for="tab-coins"]')){
+      setTimeout(() => sync(true), 80);
     }
   }, true);
 })();
