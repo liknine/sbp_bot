@@ -7431,102 +7431,148 @@ a,
 
 
 
-<style id="sbp-banner-v24-hard-css">
-#homeScreen .hero.sbp-banner-v24{
+
+<style id="sbp-banner-v25-isolated-css">
+#homeScreen .hero.sbp-banner-v25{
   position:relative!important;
   overflow:hidden!important;
   isolation:isolate!important;
 }
-#homeScreen .hero.sbp-banner-v24 .hero-content{
-  transform:none!important;
-  transition:none!important;
-  display:block!important;
-  width:100%!important;
-  height:100%!important;
-}
-#homeScreen .hero.sbp-banner-v24 .story{
-  position:absolute!important;
-  inset:0!important;
-  width:100%!important;
-  min-width:0!important;
-  padding:26px!important;
-  display:flex!important;
-  flex-direction:column!important;
-  justify-content:flex-end!important;
-  align-items:flex-start!important;
+#homeScreen .hero.sbp-banner-v25 > .hero-content{
   opacity:0!important;
+  visibility:hidden!important;
   pointer-events:none!important;
   transform:none!important;
-  transition:opacity .22s ease!important;
-  z-index:2!important;
+  animation:none!important;
 }
-#homeScreen .hero.sbp-banner-v24 .story.is-active{
-  opacity:1!important;
-  pointer-events:auto!important;
+#homeScreen .hero.sbp-banner-v25 > .story-bars{
+  display:none!important;
 }
-#homeScreen .hero.sbp-banner-v24 .story h1,
-#homeScreen .hero.sbp-banner-v24 .story p,
-#homeScreen .hero.sbp-banner-v24 .story-open-btn{
-  text-shadow:0 8px 24px rgba(0,0,0,.42)!important;
+.sbp-banner-layer{
+  position:absolute!important;
+  inset:0!important;
+  z-index:10!important;
+  overflow:hidden!important;
+  border-radius:inherit!important;
 }
-#homeScreen .hero.sbp-banner-v24[data-sbp-banner-image="1"]{
+.sbp-banner-slide{
+  position:absolute!important;
+  inset:0!important;
+  opacity:0!important;
+  pointer-events:none!important;
+  transition:opacity .28s ease!important;
+  background:
+    radial-gradient(circle at 62% 46%, rgba(255,255,255,.10), transparent 30%),
+    linear-gradient(145deg,var(--card1),var(--card2));
   background-size:cover!important;
   background-position:center!important;
 }
-#homeScreen .hero.sbp-banner-v24[data-sbp-banner-image="1"]::before{
+.sbp-banner-slide.is-active{
+  opacity:1!important;
+  pointer-events:auto!important;
+}
+.sbp-banner-slide.has-image::before{
   content:"";
   position:absolute;
   inset:0;
   z-index:1;
   background:
-    linear-gradient(90deg, rgba(0,0,0,.78), rgba(0,0,0,.22) 56%, rgba(0,0,0,.44)),
+    linear-gradient(90deg, rgba(0,0,0,.78), rgba(0,0,0,.22) 56%, rgba(0,0,0,.48)),
     radial-gradient(circle at 74% 46%, rgba(255,255,255,.13), transparent 28%);
   pointer-events:none;
 }
-#homeScreen .hero.sbp-banner-v24 .story-bars{
+.sbp-banner-text{
+  position:absolute!important;
+  left:26px!important;
+  right:26px!important;
+  bottom:26px!important;
+  z-index:2!important;
+  max-width:78%!important;
+  color:var(--text)!important;
+}
+.sbp-banner-slide.has-image .sbp-banner-text{
+  color:#fff!important;
+}
+.sbp-banner-kicker{
+  margin:0 0 8px!important;
+  font-size:12px!important;
+  line-height:1.1!important;
+  font-weight:800!important;
+  letter-spacing:.12em!important;
+  opacity:.82!important;
+  text-transform:uppercase!important;
+  white-space:normal!important;
+}
+.sbp-banner-title{
+  margin:0!important;
+  font-size:30px!important;
+  line-height:.96!important;
+  letter-spacing:-1.2px!important;
+  font-weight:900!important;
+  white-space:normal!important;
+  text-wrap:balance!important;
+}
+.sbp-banner-button{
+  margin-top:18px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  max-width:100%!important;
+  min-height:34px!important;
+  border:0!important;
+  background:transparent!important;
+  color:inherit!important;
+  padding:0!important;
+  font:inherit!important;
+  font-size:15px!important;
+  font-weight:800!important;
+  cursor:pointer!important;
+  text-shadow:0 8px 24px rgba(0,0,0,.42)!important;
+  -webkit-tap-highlight-color:transparent!important;
+}
+.sbp-banner-kicker,
+.sbp-banner-title{
+  text-shadow:0 8px 24px rgba(0,0,0,.42)!important;
+}
+.sbp-banner-dots{
   position:absolute!important;
   right:28px!important;
   bottom:28px!important;
-  z-index:5!important;
+  z-index:12!important;
   display:flex!important;
+  gap:8px!important;
+  align-items:center!important;
 }
-#homeScreen .hero.sbp-banner-v24 .story-bars i{
-  opacity:.45!important;
-}
-#homeScreen .hero.sbp-banner-v24 .story-bars i.is-active{
-  opacity:1!important;
-  width:34px!important;
-}
-#homeScreen .hero.sbp-banner-v24 .story-open-btn{
+.sbp-banner-dots button{
+  width:28px!important;
+  height:6px!important;
+  border-radius:99px!important;
   border:0!important;
-  appearance:none!important;
-  -webkit-appearance:none!important;
-  background:transparent!important;
   padding:0!important;
-  cursor:pointer!important;
-  color:inherit!important;
-  font:inherit!important;
-  pointer-events:auto!important;
-  -webkit-tap-highlight-color:transparent!important;
+  background:rgba(255,255,255,.32)!important;
+  opacity:.8!important;
 }
-#theme-light:checked ~ .app #homeScreen .hero.sbp-banner-v24[data-sbp-banner-image="1"] .story h1,
-#theme-light:checked ~ .app #homeScreen .hero.sbp-banner-v24[data-sbp-banner-image="1"] .story p,
-#theme-light:checked ~ .app #homeScreen .hero.sbp-banner-v24[data-sbp-banner-image="1"] .story-open-btn{
-  color:#fff!important;
+.sbp-banner-dots button.is-active{
+  background:rgba(255,255,255,.92)!important;
+  width:38px!important;
 }
-.bonus-item{
-  cursor:pointer;
-  transition:border-color .18s ease, transform .18s ease, background .18s ease, opacity .18s ease;
+#theme-light:checked ~ .app .sbp-banner-slide:not(.has-image) .sbp-banner-text{
+  color:var(--text)!important;
 }
-.bonus-item:not(.is-locked):active{transform:scale(.99)}
-.bonus-item.is-locked{opacity:.48;cursor:not-allowed}
-.bonus-item.is-selected{
-  border-color:var(--inverse)!important;
-  background:linear-gradient(145deg,var(--card1),var(--card2))!important;
+@media(max-width:380px){
+  .sbp-banner-text{
+    left:20px!important;
+    right:20px!important;
+    bottom:22px!important;
+    max-width:82%!important;
+  }
+  .sbp-banner-title{
+    font-size:27px!important;
+  }
+  .sbp-banner-dots{
+    right:22px!important;
+    bottom:22px!important;
+  }
 }
-.bonus-item.is-selected .bonus-cost::after{content:" ✓"}
-.discount-card.is-requested{border-color:var(--inverse)!important}
-.discount-card.is-requested button{background:var(--inverse)!important;color:var(--inverseText)!important}
 </style>
 
 </head>
@@ -10589,16 +10635,16 @@ a,
 
 
 
-<script id="sbp-banner-v24-hard-loader">
+
+<script id="sbp-banner-v25-isolated-loader">
 (function(){
-  const VERSION = "v24";
+  const VERSION = "v25";
   const BONUS_KEY = "sbp_requested_bonus_v1";
   const BONUS_OPTIONS = [
     {coins_cost:100, discount_byn:5, title:"Скидка 5 BYN"},
     {coins_cost:250, discount_byn:15, title:"Скидка 15 BYN"},
     {coins_cost:500, discount_byn:35, title:"Скидка 35 BYN"}
   ];
-
   let active = 0;
   let timer = null;
   let banners = [];
@@ -10611,7 +10657,6 @@ a,
     const parts = location.pathname.split("/").filter(Boolean);
     return parts.length ? "/" + parts[0] + "/" : "/";
   }
-
   function candidates(){
     const base = repoBase();
     return Array.from(new Set([
@@ -10623,16 +10668,13 @@ a,
       "./frontend/data/banners.json"
     ]));
   }
-
-  function normalizeImage(url){
+  function imageUrl(url){
     url = String(url || "").trim();
     if(!url) return "";
     if(/^https?:\/\//i.test(url)) return url;
-    url = url.replace(/^frontend\//, "");
-    if(url[0] === "/") return url;
+    url = url.replace(/^frontend\//, "").replace(/^\//, "");
     return repoBase() + url;
   }
-
   async function fetchBanners(){
     let errors = [];
     for(const url of candidates()){
@@ -10656,7 +10698,6 @@ a,
     localStorage.setItem("sbp_banner_load_error", errors.join(" | "));
     return [];
   }
-
   function fallback(){
     return [
       {title:"Curated drop\ninside Telegram", subtitle:"SBP SELECTION", button_text:"Смотреть →", link:"catalog", active:true, sort:0},
@@ -10664,7 +10705,6 @@ a,
       {title:"Бонусы за\nзавершённые заказы", subtitle:"SBP COINS", button_text:"Узнать больше →", link:"coins", active:true, sort:2}
     ];
   }
-
   function action(link){
     link = String(link || "catalog").trim();
     const map = {catalog:"tab-catalog", coins:"tab-coins", bonuses:"tab-bonuses", archive:"tab-archive", home:"tab-home", profile:"tab-profile"};
@@ -10680,89 +10720,76 @@ a,
       }catch(e){ window.open(link, "_blank"); }
     }
   }
-
+  function renderLayer(){
+    const hero = qs("#homeScreen .hero");
+    if(!hero) return null;
+    hero.classList.add("sbp-banner-v25");
+    hero.classList.remove("sbp-banner-v24","sbp-banners-ready");
+    qsa(".sbp-banner-layer", hero).forEach(el => el.remove());
+    const layer = document.createElement("div");
+    layer.className = "sbp-banner-layer";
+    layer.innerHTML = `<div class="sbp-banner-slides"></div><div class="sbp-banner-dots"></div>`;
+    hero.appendChild(layer);
+    return layer;
+  }
   function apply(idx){
     if(!banners.length) return;
     active = ((idx % banners.length) + banners.length) % banners.length;
-    const hero = qs("#homeScreen .hero");
-    const content = qs("#homeScreen .hero-content");
-    const bars = qs("#homeScreen .story-bars");
-    if(!hero || !content) return;
-
-    qsa(".story", content).forEach((el, i) => el.classList.toggle("is-active", i === active));
-    if(bars) qsa("[data-banner-dot]", bars).forEach((el, i) => el.classList.toggle("is-active", i === active));
-
-    const img = normalizeImage(banners[active].image || "");
-    if(img){
-      hero.style.backgroundImage = `url("${img}")`;
-      hero.setAttribute("data-sbp-banner-image", "1");
-    }else{
-      hero.style.backgroundImage = "";
-      hero.removeAttribute("data-sbp-banner-image");
-    }
+    const layer = qs("#homeScreen .sbp-banner-layer");
+    if(!layer) return;
+    qsa(".sbp-banner-slide", layer).forEach((el,i) => el.classList.toggle("is-active", i === active));
+    qsa(".sbp-banner-dots button", layer).forEach((el,i) => el.classList.toggle("is-active", i === active));
   }
-
   function start(){
     stop();
     if(banners.length > 1) timer = setInterval(() => apply(active + 1), 5200);
   }
-
   function stop(){
     if(timer) clearInterval(timer);
     timer = null;
   }
-
-  function renderHero(list){
-    const hero = qs("#homeScreen .hero");
-    const content = qs("#homeScreen .hero-content");
-    let bars = qs("#homeScreen .story-bars");
-    if(!hero || !content) return;
-
+  function build(list){
     banners = (list || [])
       .filter(b => b && b.active !== false)
       .sort((a,b) => Number(a.sort || 0) - Number(b.sort || 0))
       .slice(0, 8);
-
     if(!banners.length) banners = fallback();
-
-    hero.classList.add("sbp-banner-v24");
-    hero.classList.remove("sbp-banners-ready");
-
-    content.innerHTML = banners.map((b, i) => {
+    const layer = renderLayer();
+    if(!layer) return;
+    const slides = qs(".sbp-banner-slides", layer);
+    const dots = qs(".sbp-banner-dots", layer);
+    slides.innerHTML = banners.map((b,i) => {
+      const img = imageUrl(b.image || "");
       const title = esc(b.title || "SBP").replace(/\n/g, "<br>");
       const subtitle = esc(b.subtitle || "SBP");
       const btn = esc(b.button_text || "Смотреть →");
-      return `<div class="story${i === 0 ? " is-active" : ""}" data-banner-index="${i}">
-        <p>${subtitle}</p>
-        <h1>${title}</h1>
-        <button type="button" class="story-open-btn" data-banner-action="${i}">${btn}</button>
-      </div>`;
+      const style = img ? ` style="background-image:url('${esc(img)}')"` : "";
+      return `<section class="sbp-banner-slide ${img ? "has-image" : ""} ${i === 0 ? "is-active" : ""}" data-banner-index="${i}"${style}>
+        <div class="sbp-banner-text">
+          <p class="sbp-banner-kicker">${subtitle}</p>
+          <h1 class="sbp-banner-title">${title}</h1>
+          <button class="sbp-banner-button" type="button" data-banner-action="${i}">${btn}</button>
+        </div>
+      </section>`;
     }).join("");
-
-    if(!bars){
-      bars = document.createElement("div");
-      bars.className = "story-bars";
-      hero.appendChild(bars);
-    }
-    bars.innerHTML = banners.map((_, i) => `<i data-banner-dot="${i}" class="${i === 0 ? "is-active" : ""}"></i>`).join("");
-
-    content.onclick = function(e){
+    dots.innerHTML = banners.map((_,i) => `<button type="button" data-banner-dot="${i}" class="${i === 0 ? "is-active" : ""}" aria-label="Баннер ${i+1}"></button>`).join("");
+    layer.addEventListener("click", function(e){
       const btn = e.target.closest("[data-banner-action]");
-      if(!btn) return;
-      e.preventDefault();
-      e.stopPropagation();
-      const idx = Number(btn.getAttribute("data-banner-action") || active);
-      action(banners[idx] && banners[idx].link || "catalog");
-    };
-
-    bars.onclick = function(e){
+      if(btn){
+        e.preventDefault();
+        e.stopPropagation();
+        const idx = Number(btn.getAttribute("data-banner-action") || active);
+        action(banners[idx] && banners[idx].link || "catalog");
+        return;
+      }
       const dot = e.target.closest("[data-banner-dot]");
-      if(!dot) return;
-      e.preventDefault();
-      apply(Number(dot.getAttribute("data-banner-dot") || 0));
-      start();
-    };
-
+      if(dot){
+        e.preventDefault();
+        e.stopPropagation();
+        apply(Number(dot.getAttribute("data-banner-dot") || 0));
+        start();
+      }
+    }, true);
     apply(0);
     start();
   }
@@ -10777,7 +10804,6 @@ a,
       return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
     }
   }
-
   function readRequestedBonus(){
     try{
       const data = JSON.parse(localStorage.getItem(BONUS_KEY) || "null");
@@ -10785,13 +10811,11 @@ a,
       return data;
     }catch(e){ return null; }
   }
-
   function writeRequestedBonus(bonus){
     if(!bonus) localStorage.removeItem(BONUS_KEY);
     else localStorage.setItem(BONUS_KEY, JSON.stringify(bonus));
     renderBonusState();
   }
-
   function renderBonusState(){
     const balance = coinsBalance();
     const requested = readRequestedBonus();
@@ -10801,7 +10825,6 @@ a,
         ? `Сейчас доступно ${balance} Coins. Выберите бонус, который хотите применить к следующему заказу.`
         : "Сейчас доступно 0 Coins. Бонусы станут доступны после завершённых заказов.";
     }
-
     qsa("#bonusesScreen .bonus-list .bonus-item").forEach((item, i) => {
       const opt = BONUS_OPTIONS[i];
       if(!opt) return;
@@ -10813,20 +10836,6 @@ a,
       item.classList.toggle("is-selected", !!requested && requested.coins_cost === opt.coins_cost);
       item.setAttribute("aria-disabled", available ? "false" : "true");
     });
-
-    const activePreview = qs("#bonusesScreen .active-bonus-preview");
-    if(activePreview){
-      activePreview.style.display = requested ? "block" : "";
-      const b = qs(".activated-bonus-card b", activePreview);
-      const small = qs(".activated-bonus-card small", activePreview);
-      const pill = qs(".activated-bonus-card span", activePreview);
-      if(requested){
-        if(b) b.textContent = `−${requested.discount_byn} BYN`;
-        if(small) small.textContent = `Запрос на бонус за ${requested.coins_cost} Coins будет отправлен вместе с заказом`;
-        if(pill) pill.textContent = "requested";
-      }
-    }
-
     const checkoutCard = qs("#checkoutScreen .discount-card");
     if(checkoutCard){
       const title = qs("b", checkoutCard);
@@ -10845,7 +10854,6 @@ a,
       }
     }
   }
-
   document.addEventListener("click", function(e){
     const item = e.target.closest("#bonusesScreen .bonus-list .bonus-item");
     if(!item) return;
@@ -10865,33 +10873,21 @@ a,
 
   window.SBP_BONUS_STATE = {read:readRequestedBonus, clear:function(){writeRequestedBonus(null);}, render:renderBonusState};
   window.SBP_BANNERS_RELOAD = async function(){
-    const loaded = await fetchBanners();
-    renderHero(loaded && loaded.length ? loaded : fallback());
+    const data = await fetchBanners();
+    build(data && data.length ? data : fallback());
     return window.SBP_BANNERS_DEBUG();
   };
   window.SBP_BANNERS_DEBUG = function(){
-    return {
-      version: VERSION,
-      count: banners.length,
-      active,
-      banners,
-      loadedUrl: localStorage.getItem("sbp_banner_loaded_url") || "",
-      error: localStorage.getItem("sbp_banner_load_error") || "",
-      candidates: candidates()
-    };
+    return {version:VERSION,count:banners.length,active,banners,loadedUrl:localStorage.getItem("sbp_banner_loaded_url") || "",error:localStorage.getItem("sbp_banner_load_error") || "",candidates:candidates()};
   };
-
   async function boot(){
-    const loaded = await fetchBanners();
-    renderHero(loaded && loaded.length ? loaded : fallback());
+    const data = await fetchBanners();
+    build(data && data.length ? data : fallback());
     renderBonusState();
   }
-
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
   else boot();
-
   document.addEventListener("sbp:profile-applied", renderBonusState);
-  window.addEventListener("storage", renderBonusState);
 })();
 </script>
 
