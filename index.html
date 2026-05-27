@@ -8750,7 +8750,26 @@ a,
 
     const data = orderPayload();
     if(!data) return false;
-    const raw = JSON.stringify(data);
+
+    const compact = {
+      type: "order_create",
+      product_id: data.product_id,
+      product_name: data.product_name,
+      brand: data.brand,
+      color: data.color,
+      size: data.size,
+      price_byn: data.price_byn,
+      discount_byn: data.discount_byn || 0,
+      final_price_byn: data.final_price_byn || data.price_byn,
+      bonus_request: data.bonus_request || null,
+      image: data.image,
+      delivery_method: data.delivery_method,
+      customer_fields: data.customer_fields || {},
+      created_at: data.created_at,
+      client_order_id: data.client_order_id || ("WEB-" + Date.now())
+    };
+
+    const raw = JSON.stringify(compact);
 
     function saveLocalSubmittedOrder(){
       try{
@@ -8763,32 +8782,44 @@ a,
     const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 
     try{
-      if(tg && typeof tg.ready === "function") tg.ready();
-      if(tg && typeof tg.sendData === "function"){
-        saveLocalSubmittedOrder();
-        tg.sendData(raw);
-        if(window.SBP_BONUS_STATE && data.bonus_request) window.SBP_BONUS_STATE.clear();
-        return true;
+      if(!tg || typeof tg.sendData !== "function"){
+        alert("Заявка не отправилась: приложение открыто не как Telegram Mini App. Открой через кнопку «🛍 Открыть приложение» в чате с ботом.");
+        return false;
       }
+
+      if(raw.length > 3900){
+        alert("Заявка слишком большая для Telegram. Уменьши комментарий или данные доставки.");
+        return false;
+      }
+
+      if(typeof tg.ready === "function") tg.ready();
+      tg.sendData(raw);
+
+      saveLocalSubmittedOrder();
+      try{
+        localStorage.setItem("sbp_last_order_send_attempt", JSON.stringify({
+          at:new Date().toISOString(),
+          method:"Telegram.WebApp.sendData",
+          length:raw.length,
+          preview:raw.slice(0,220)
+        }));
+      }catch(e){}
+
+      if(window.SBP_BONUS_STATE && data.bonus_request) window.SBP_BONUS_STATE.clear();
+
+      try{
+        setTimeout(function(){
+          if(tg && typeof tg.close === "function") tg.close();
+        }, 180);
+      }catch(e){}
+
+      return true;
     }catch(e){
       console.error("[SBP] tg.sendData failed", e);
+      alert("Telegram не принял заявку: " + (e && e.message ? e.message : e));
+      return false;
     }
-
-    try{
-      if(window.TelegramWebviewProxy && typeof window.TelegramWebviewProxy.postEvent === "function"){
-        saveLocalSubmittedOrder();
-        window.TelegramWebviewProxy.postEvent("web_app_data_send", JSON.stringify({data: raw}));
-        if(window.SBP_BONUS_STATE && data.bonus_request) window.SBP_BONUS_STATE.clear();
-        return true;
-      }
-    }catch(e){
-      console.error("[SBP] TelegramWebviewProxy failed", e);
-    }
-
-    alert("Заявка не отправилась. Открой приложение через нижнюю кнопку «🛍 Открыть приложение» в чате с ботом, а не через ссылку.");
-    return false;
   }
-
 
   const filterState = {
     mode: "all",
@@ -10747,7 +10778,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v35";
+  const VERSION = "v36";
   let active = 0;
   let timer = null;
   let banners = [];
