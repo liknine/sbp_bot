@@ -4,12 +4,19 @@
   "username": "liknine",
   "first_name": "ликнайн",
   "status": "Black Access",
-  "coins": 0,
-  "coins_balance": 0,
+  "coins": 200,
+  "coins_balance": 200,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
   "active_bonus": null,
-  "coin_history": [],
+  "coin_history": [
+    {
+      "amount": 200,
+      "type": "manual_bonus",
+      "comment": "Admin manual operation",
+      "created_at": "2026-05-27 12:38:58"
+    }
+  ],
   "orders": [],
-  "updated_at": "2026-05-27T12:38:14.446451+00:00"
+  "updated_at": "2026-05-27T12:38:58.933873+00:00"
 }
