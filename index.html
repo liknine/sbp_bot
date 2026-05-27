@@ -7612,7 +7612,7 @@ a,
 
 
 
-<style id="sbp-banner-v28-progress-css">
+<style id="sbp-banner-v30-progress-css">
 .sbp-banner-v26-dot{
   position:relative!important;
   overflow:hidden!important;
@@ -8383,6 +8383,7 @@ a,
 /* === SBP v9: stable products, favorites, validation, order send === */
 (function(){
   const PRODUCTS_URL = "data/products.json";
+  const PRODUCTS_FALLBACK_URLS = ["data/products.json","frontend/data/products.json","products.json","frontend/products.json"];
   const FAV_KEY = "sbp_favorites_v9";
   const ACTIVE_KEY = "sbp_active_product";
   const SIZE_KEY = "sbp_selected_size";
@@ -8442,6 +8443,9 @@ a,
       return productById(localStorage.getItem(ACTIVE_KEY)) || products[0] || null;
     },
     byId: productById
+  };
+  window.SBP_PRODUCTS_DEBUG = function(){
+    return {count:products.length, loadedUrl:localStorage.getItem("sbp_products_loaded_url") || "", products:products.slice(0,5)};
   };
 
   function cardHtml(p){
@@ -8689,6 +8693,23 @@ a,
     }
   }
 
+
+  function makeClientOrderId(){
+    try{
+      const existing = sessionStorage.getItem("sbp_current_client_order_id");
+      if(existing) return existing;
+      const id = "WEB-" + Date.now() + "-" + Math.random().toString(36).slice(2, 10);
+      sessionStorage.setItem("sbp_current_client_order_id", id);
+      return id;
+    }catch(e){
+      return "WEB-" + Date.now() + "-" + Math.random().toString(36).slice(2, 10);
+    }
+  }
+
+  function clearClientOrderId(){
+    try{ sessionStorage.removeItem("sbp_current_client_order_id"); }catch(e){}
+  }
+
   function orderPayload(){
     const p = productById(localStorage.getItem(ACTIVE_KEY)) || products[0];
     if(!p) return null;
@@ -8701,6 +8722,7 @@ a,
     const requestedBonus = (window.SBP_BONUS_STATE && typeof window.SBP_BONUS_STATE.read === "function") ? window.SBP_BONUS_STATE.read() : null;
     return {
       type:"order_create",
+      client_order_id:makeClientOrderId(),
       product_id:idOf(p),
       product_name:p.name || "SBP order",
       brand:p.brand || "",
@@ -8739,31 +8761,62 @@ a,
     }
 
     const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    let attempted = false;
+    let sentBy = [];
 
-    try{
-      if(tg && typeof tg.ready === "function") tg.ready();
-      if(tg && typeof tg.sendData === "function"){
-        saveLocalSubmittedOrder();
-        tg.sendData(raw);
-        if(window.SBP_BONUS_STATE && data.bonus_request) window.SBP_BONUS_STATE.clear();
-        return true;
-      }
-    }catch(e){
-      console.error("[SBP] tg.sendData failed", e);
+    function markSent(method){
+      attempted = true;
+      sentBy.push(method);
+    }
+
+    function cleanupAfterAttempt(){
+      saveLocalSubmittedOrder();
+      try{ localStorage.setItem("sbp_last_order_send_attempt", JSON.stringify({at:new Date().toISOString(), methods:sentBy, client_order_id:data.client_order_id})); }catch(e){}
+      if(window.SBP_BONUS_STATE && data.bonus_request) window.SBP_BONUS_STATE.clear();
+      clearClientOrderId();
     }
 
     try{
+      if(tg && typeof tg.ready === "function") tg.ready();
+    }catch(e){}
+
+    // 1) Low-level Telegram bridge from the official WebApp script.
+    // This is more reliable in some Telegram WebViews than calling sendData alone.
+    try{
+      if(window.Telegram && window.Telegram.WebView && typeof window.Telegram.WebView.postEvent === "function"){
+        window.Telegram.WebView.postEvent("web_app_data_send", false, {data: raw});
+        markSent("Telegram.WebView.postEvent");
+      }
+    }catch(e){
+      console.error("[SBP] Telegram.WebView.postEvent failed", e);
+    }
+
+    // 2) Native proxy fallback.
+    try{
       if(window.TelegramWebviewProxy && typeof window.TelegramWebviewProxy.postEvent === "function"){
-        saveLocalSubmittedOrder();
         window.TelegramWebviewProxy.postEvent("web_app_data_send", JSON.stringify({data: raw}));
-        if(window.SBP_BONUS_STATE && data.bonus_request) window.SBP_BONUS_STATE.clear();
-        return true;
+        markSent("TelegramWebviewProxy.postEvent");
       }
     }catch(e){
       console.error("[SBP] TelegramWebviewProxy failed", e);
     }
 
-    alert("Заявка не отправилась. Открой приложение через нижнюю кнопку «🛍 Открыть приложение» в чате с ботом, а не через ссылку.");
+    // 3) Public WebApp API.
+    try{
+      if(tg && typeof tg.sendData === "function"){
+        tg.sendData(raw);
+        markSent("Telegram.WebApp.sendData");
+      }
+    }catch(e){
+      console.error("[SBP] tg.sendData failed", e);
+    }
+
+    if(attempted){
+      cleanupAfterAttempt();
+      return true;
+    }
+
+    alert("Заявка сохранилась в истории, но Telegram не дал отправить её боту. Открой приложение именно через кнопку «🛍 Открыть приложение» в чате с ботом и попробуй ещё раз.");
     return false;
   }
 
@@ -8878,8 +8931,25 @@ a,
     migrateFavorites();
 
     try{
-      const res = await fetch(PRODUCTS_URL, {cache:"default"});
-      const data = await res.json();
+      const first = location.pathname.split("/").filter(Boolean)[0] || "";
+      const base = first ? "/" + first + "/" : "/";
+      const urls = Array.from(new Set(PRODUCTS_FALLBACK_URLS.flatMap(u => [u, "./" + u.replace(/^\.\//,""), base + u.replace(/^\.\//,"")])));
+      let data = null;
+      let loadedUrl = "";
+      for(const url of urls){
+        try{
+          const sep = url.includes("?") ? "&" : "?";
+          const res = await fetch(url + sep + "sbp_products=" + Date.now(), {cache:"no-store"});
+          if(!res.ok) continue;
+          const json = await res.json();
+          if(Array.isArray(json)){
+            data = json;
+            loadedUrl = url;
+            break;
+          }
+        }catch(_e){}
+      }
+      localStorage.setItem("sbp_products_loaded_url", loadedUrl || "");
       products = Array.isArray(data) ? data.slice() : [];
       products = products
         .map((p, i) => Object.assign({_sbpOriginalIndex:i}, p))
@@ -10707,7 +10777,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v28";
+  const VERSION = "v33";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -10842,7 +10912,6 @@ a,
 
   function start(){
     stop();
-    if(banners.length > 1) timer = setInterval(() => apply(active + 1), 5500);
   }
 
   function stop(){
@@ -10973,6 +11042,15 @@ a,
     };
   };
 
+
+  window.SBP_BANNER_DIRECT = {
+    next: function(){ apply(active + 1); return active; },
+    prev: function(){ apply(active - 1); return active; },
+    go: function(i){ apply(Number(i) || 0); return active; },
+    index: function(){ return active; },
+    count: function(){ return banners.length; }
+  };
+
   async function boot(){
     const data = await fetchBanners();
     banners = await prepare(data);
@@ -10985,89 +11063,114 @@ a,
 </script>
 
 
-<script id="sbp-banner-v28-progress-controller">
+
+
+<script id="sbp-banner-v30-direct-progress-controller">
 (function(){
   const DURATION = 5500;
   let raf = 0;
   let startedAt = 0;
-  let paused = false;
+  let lastIndex = -1;
 
-  function layer(){
-    return document.querySelector("#homeScreen .sbp-banner-v26-layer");
-  }
-  function activeDot(){
-    return document.querySelector("#homeScreen .sbp-banner-v26-dot.is-active");
+  function api(){
+    return window.SBP_BANNER_DIRECT || null;
   }
   function dots(){
     return Array.from(document.querySelectorAll("#homeScreen .sbp-banner-v26-dot"));
   }
-  function nextButton(){
-    return document.querySelector("#homeScreen .sbp-banner-v26-next");
+  function activeDot(){
+    return document.querySelector("#homeScreen .sbp-banner-v26-dot.is-active");
   }
-  function isVisible(){
-    const l = layer();
-    return !!(l && l.offsetParent !== null);
+  function currentIndex(){
+    const a = api();
+    if(a && typeof a.index === "function") return a.index();
+    return dots().findIndex(dot => dot.classList.contains("is-active"));
   }
-  function setProgress(value){
-    const dot = activeDot();
-    if(!dot) return;
-    dot.style.setProperty("--sbp-progress", Math.max(0, Math.min(1, value)));
+  function count(){
+    const a = api();
+    if(a && typeof a.count === "function") return a.count();
+    return dots().length;
   }
   function resetDots(){
     dots().forEach(dot => dot.style.setProperty("--sbp-progress", "0"));
   }
-  function tick(now){
-    if(paused || !isVisible()){
-      raf = requestAnimationFrame(tick);
-      return;
-    }
-    if(!startedAt) startedAt = now;
-    const progress = Math.min(1, (now - startedAt) / DURATION);
-    setProgress(progress);
-    if(progress >= 1){
-      resetDots();
-      startedAt = performance.now();
-      const next = nextButton();
-      if(next) next.click();
-      raf = requestAnimationFrame(tick);
-      return;
-    }
-    raf = requestAnimationFrame(tick);
+  function setProgress(value){
+    const dot = activeDot();
+    if(dot) dot.style.setProperty("--sbp-progress", Math.max(0, Math.min(1, value)));
   }
   function restart(){
     cancelAnimationFrame(raf);
     resetDots();
     startedAt = 0;
-    paused = false;
+    lastIndex = currentIndex();
+    raf = requestAnimationFrame(tick);
+  }
+  function nextDirect(){
+    const a = api();
+    if(a && typeof a.next === "function") a.next();
+  }
+  function tick(now){
+    if(!api() || count() <= 0){
+      raf = requestAnimationFrame(tick);
+      return;
+    }
+
+    const idx = currentIndex();
+    if(idx !== lastIndex){
+      resetDots();
+      startedAt = now;
+      lastIndex = idx;
+    }
+
+    if(!startedAt) startedAt = now;
+
+    const progress = Math.min(1, (now - startedAt) / DURATION);
+    setProgress(progress);
+
+    if(progress >= 1){
+      resetDots();
+      startedAt = now;
+      nextDirect();
+      lastIndex = currentIndex();
+    }
+
     raf = requestAnimationFrame(tick);
   }
 
-  // Restart after banner switches, dots click, swipe, reload, or boot.
   document.addEventListener("click", function(e){
-    if(e.target.closest("#homeScreen .sbp-banner-v26-dot, #homeScreen .sbp-banner-v26-arrow")){
+    const dot = e.target.closest && e.target.closest("#homeScreen .sbp-banner-v26-dot");
+    if(dot){
       setTimeout(restart, 80);
+      return;
+    }
+    const prev = e.target.closest && e.target.closest("#homeScreen .sbp-banner-v26-prev");
+    const next = e.target.closest && e.target.closest("#homeScreen .sbp-banner-v26-next");
+    if(prev || next){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      const a = api();
+      if(a){
+        prev ? a.prev() : a.next();
+        setTimeout(restart, 40);
+      }
     }
   }, true);
 
   document.addEventListener("touchend", function(e){
     if(e.target.closest && e.target.closest("#homeScreen .sbp-banner-v26-layer")){
-      setTimeout(restart, 120);
+      setTimeout(restart, 160);
     }
   }, true);
 
   document.addEventListener("visibilitychange", function(){
-    if(document.hidden){
-      paused = true;
-    }else{
-      restart();
-    }
+    if(!document.hidden) restart();
   });
 
   window.SBP_BANNER_PROGRESS_RESTART = restart;
 
   function boot(){
     restart();
-    // Banner layer is async, so retry a few times after the JSON/images load.
     setTimeout(restart, 500);
     setTimeout(restart, 1200);
     setTimeout(restart, 2500);
