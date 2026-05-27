@@ -6721,10 +6721,7 @@ a,
   color:var(--text)!important;
 }
 
-
-#favoritesScreen .favorites-empty-link{color:#fff!important;opacity:1!important;-webkit-text-fill-color:#fff!important;mix-blend-mode:normal!important;filter:none!important;text-shadow:none!important;}
-#favoritesScreen .favorites-empty-link *{color:#fff!important;-webkit-text-fill-color:#fff!important;opacity:1!important;}
-
+</style>
 <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
 
 
@@ -7647,18 +7644,19 @@ a,
 </style>
 
 
-<style id="sbp-v38-empty-button-contrast">
-#favoritesScreen .empty-state .primary-link,
-#favoritesScreen .empty-state .secondary-link,
-#favoritesScreen .empty-state label.primary-link,
-#favoritesScreen .empty-state label.secondary-link,
-#favoritesScreen .empty-state button.primary-link,
-#favoritesScreen .empty-state button.secondary-link{
+<style id="sbp-v41-favorites-button-white">
+#favoritesScreen .favorites-empty-link{
   color:#fff!important;
+  opacity:1!important;
+  -webkit-text-fill-color:#fff!important;
+  mix-blend-mode:normal!important;
+  filter:none!important;
+  text-shadow:none!important;
 }
-#favoritesScreen .empty-state .primary-link *,
-#favoritesScreen .empty-state .secondary-link *{
+#favoritesScreen .favorites-empty-link *{
   color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+  opacity:1!important;
 }
 </style>
 
@@ -7822,7 +7820,7 @@ a,
       <div class="empty-icon">♡</div>
       <h2>Избранного пока нет</h2>
       <p>Добавляйте товары в избранное, чтобы быстро вернуться к ним позже.</p>
-      <label class="primary-link favorites-empty-link" for="tab-catalog" style="color:#fff!important;opacity:1!important;-webkit-text-fill-color:#fff!important;text-shadow:none;filter:none;">Перейти в каталог</label>
+      <label class="primary-link favorites-empty-link" for="tab-catalog" style="color:#fff!important;opacity:1!important;-webkit-text-fill-color:#fff!important;text-shadow:none!important;filter:none!important;">Перейти в каталог</label>
     </section>
   </main>
   <main class="screen" id="archiveScreen">
@@ -8814,15 +8812,13 @@ a,
         tg.sendData(raw);
         sentMethod = "Telegram.WebApp.sendData";
       }else if(window.TelegramWebviewProxy && typeof window.TelegramWebviewProxy.postEvent === "function"){
-        // Fallback for Telegram WebViews where sendData is not exposed but native proxy exists.
         window.TelegramWebviewProxy.postEvent("web_app_data_send", JSON.stringify({data: raw}));
         sentMethod = "TelegramWebviewProxy.postEvent";
       }else if(window.Telegram && window.Telegram.WebView && typeof window.Telegram.WebView.postEvent === "function"){
-        // Fallback for some desktop/web builds.
         window.Telegram.WebView.postEvent("web_app_data_send", false, {data: raw});
         sentMethod = "Telegram.WebView.postEvent";
       }else{
-        alert("Заявка не отправилась: Telegram не дал приложению доступ к отправке данных. Закрой это окно, напиши боту /open и открой нижнюю кнопку «🛍 Открыть приложение» заново.");
+        alert("Заявка не отправилась: Telegram не дал странице доступ к отправке данных. Закрой Mini App полностью, напиши /open и открой нижнюю кнопку заново.");
         return false;
       }
 
@@ -8832,7 +8828,8 @@ a,
           at:new Date().toISOString(),
           method:sentMethod,
           length:raw.length,
-          preview:raw.slice(0,220)
+          preview:raw.slice(0,220),
+          version:"v41"
         }));
       }catch(e){}
 
@@ -10809,7 +10806,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v39";
+  const VERSION = "v41";
   let active = 0;
   let timer = null;
   let banners = [];
