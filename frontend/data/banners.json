@@ -34,13 +34,13 @@
   },
   {
     "id": "sbp-coins",
-    "title": "Бонусы за\\nзавершённые заказы",
+    "title": "Бонусы\nк заказу",
     "subtitle": "SBP COINS",
     "button_text": "Узнать больше →",
     "link": "coins",
     "image": "",
     "sort": 2,
     "active": true,
-    "updated_at": ""
+    "updated_at": "2026-05-27T03:24:44.388875+00:00"
   }
 ]
