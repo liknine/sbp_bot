@@ -95,5 +95,26 @@
     ],
     "created_at": "2026-05-27T12:37:25.228540+00:00",
     "updated_at": "2026-05-27T12:50:28.487933+00:00"
+  },
+  {
+    "id": "test-test-chernyy",
+    "brand": "тест",
+    "name": "тест",
+    "color": "черный",
+    "price": 350,
+    "sizes": [
+      "40",
+      "43",
+      "44",
+      "45.5"
+    ],
+    "badge": "СКИДКА",
+    "description": "sgrouhfdv\nhgrjgry \n210;0",
+    "images": [
+      "images/products/test-test-chernyy-1-98942a5a02.jpg",
+      "images/products/test-test-chernyy-2-e165e424c9.jpg"
+    ],
+    "created_at": "2026-05-27T14:44:17.643543+00:00",
+    "updated_at": "2026-05-27T14:44:17.643562+00:00"
   }
 ]
