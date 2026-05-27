@@ -7644,7 +7644,7 @@ a,
 </style>
 
 
-<style id="sbp-v41-favorites-button-white">
+<style id="sbp-v42-favorites-button-white-only">
 #favoritesScreen .favorites-empty-link{
   color:#fff!important;
   opacity:1!important;
@@ -8799,37 +8799,26 @@ a,
     const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 
     try{
+      if(!tg || typeof tg.sendData !== "function"){
+        alert("Заявка не отправилась: приложение открыто не как Telegram Mini App. Открой через кнопку «🛍 Открыть приложение» в чате с ботом.");
+        return false;
+      }
+
       if(raw.length > 3900){
         alert("Заявка слишком большая для Telegram. Уменьши комментарий или данные доставки.");
         return false;
       }
 
-      let sentMethod = "";
-
-      if(tg && typeof tg.ready === "function") tg.ready();
-
-      if(tg && typeof tg.sendData === "function"){
-        tg.sendData(raw);
-        sentMethod = "Telegram.WebApp.sendData";
-      }else if(window.TelegramWebviewProxy && typeof window.TelegramWebviewProxy.postEvent === "function"){
-        window.TelegramWebviewProxy.postEvent("web_app_data_send", JSON.stringify({data: raw}));
-        sentMethod = "TelegramWebviewProxy.postEvent";
-      }else if(window.Telegram && window.Telegram.WebView && typeof window.Telegram.WebView.postEvent === "function"){
-        window.Telegram.WebView.postEvent("web_app_data_send", false, {data: raw});
-        sentMethod = "Telegram.WebView.postEvent";
-      }else{
-        alert("Заявка не отправилась: Telegram не дал странице доступ к отправке данных. Закрой Mini App полностью, напиши /open и открой нижнюю кнопку заново.");
-        return false;
-      }
+      if(typeof tg.ready === "function") tg.ready();
+      tg.sendData(raw);
 
       saveLocalSubmittedOrder();
       try{
         localStorage.setItem("sbp_last_order_send_attempt", JSON.stringify({
           at:new Date().toISOString(),
-          method:sentMethod,
+          method:"Telegram.WebApp.sendData",
           length:raw.length,
-          preview:raw.slice(0,220),
-          version:"v41"
+          preview:raw.slice(0,220)
         }));
       }catch(e){}
 
@@ -8843,7 +8832,7 @@ a,
 
       return true;
     }catch(e){
-      console.error("[SBP] order send failed", e);
+      console.error("[SBP] tg.sendData failed", e);
       alert("Telegram не принял заявку: " + (e && e.message ? e.message : e));
       return false;
     }
@@ -10806,7 +10795,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v41";
+  const VERSION = "v42";
   let active = 0;
   let timer = null;
   let banners = [];
