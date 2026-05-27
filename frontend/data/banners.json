@@ -11,17 +11,6 @@
     "updated_at": "2026-05-27T03:06:49.779851+00:00"
   },
   {
-    "id": "sbp-selection",
-    "title": "Curated drop\\ninside Telegram",
-    "subtitle": "SBP SELECTION",
-    "button_text": "Смотреть →",
-    "link": "catalog",
-    "image": "",
-    "sort": 1,
-    "active": true,
-    "updated_at": ""
-  },
-  {
     "id": "sbp-coins",
     "title": "Бонусы\nк заказу",
     "subtitle": "SBP COINS",
