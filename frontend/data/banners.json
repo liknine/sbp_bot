@@ -22,17 +22,6 @@
     "updated_at": ""
   },
   {
-    "id": "new-arrivals",
-    "title": "Новые позиции\\nуже в каталоге",
-    "subtitle": "NEW ARRIVALS",
-    "button_text": "В каталог →",
-    "link": "catalog",
-    "image": "",
-    "sort": 1,
-    "active": true,
-    "updated_at": ""
-  },
-  {
     "id": "sbp-coins",
     "title": "Бонусы\nк заказу",
     "subtitle": "SBP COINS",
