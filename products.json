@@ -1,1 +1,120 @@
-[]
+[
+  {
+    "id": "oo-prol-prold",
+    "brand": "оо",
+    "name": "прол",
+    "color": "пролд",
+    "price": 77,
+    "sizes": [
+      "43"
+    ],
+    "badge": "",
+    "description": "мс",
+    "images": [
+      "images/products/oo-prol-prold-1.jpg"
+    ],
+    "created_at": "2026-05-24T14:48:03.728470",
+    "updated_at": "2026-05-24T14:48:03.728525"
+  },
+  {
+    "id": "nike-hggg-black",
+    "brand": "nike",
+    "name": "hggg",
+    "color": "black",
+    "price": 300,
+    "sizes": [
+      "43",
+      "45",
+      "46",
+      "43.5"
+    ],
+    "badge": "ХИТ",
+    "description": "ав",
+    "images": [
+      "images/products/nike-hggg-black-1.jpg"
+    ],
+    "created_at": "2026-05-24T15:28:06.040728",
+    "updated_at": "2026-05-24T15:28:06.040781"
+  },
+  {
+    "id": "pppp-latal-chernye",
+    "brand": "Пппп",
+    "name": "Латал",
+    "color": "Черные",
+    "price": 150,
+    "sizes": [
+      "40",
+      "41",
+      "42"
+    ],
+    "badge": "Новинка",
+    "description": "Товар поползла",
+    "images": [
+      "images/products/pppp-latal-chernye-1.jpg",
+      "images/products/pppp-latal-chernye-2.jpg",
+      "images/products/pppp-latal-chernye-3.jpg",
+      "images/products/pppp-latal-chernye-4.jpg"
+    ],
+    "created_at": "2026-05-26T15:28:11.434753+00:00",
+    "updated_at": "2026-05-26T15:28:11.434788+00:00"
+  },
+  {
+    "id": "maison-margiela-maison-margiela-evolution-low-black",
+    "brand": "Maison Margiela",
+    "name": "Maison Margiela Evolution Low",
+    "color": "Black",
+    "price": 1000,
+    "sizes": [
+      "43",
+      "44"
+    ],
+    "badge": "НОВИНКА",
+    "description": "описание 1111\n222222",
+    "images": [
+      "images/products/maison-margiela-maison-margiela-evolution-low-black-1.jpg",
+      "images/products/maison-margiela-maison-margiela-evolution-low-black-2.jpg",
+      "images/products/maison-margiela-maison-margiela-evolution-low-black-3.jpg"
+    ],
+    "created_at": "2026-05-26T18:28:01.773295+00:00",
+    "updated_at": "2026-05-26T18:28:01.773315+00:00"
+  },
+  {
+    "id": "1-2-3",
+    "brand": "1",
+    "name": "2",
+    "color": "3",
+    "price": 4,
+    "sizes": [
+      "44",
+      "45"
+    ],
+    "badge": "",
+    "description": "ыывы",
+    "images": [
+      "images/products/1-2-3-1-81d35fa294.jpg"
+    ],
+    "created_at": "2026-05-27T12:37:25.228540+00:00",
+    "updated_at": "2026-05-27T12:50:28.487933+00:00"
+  },
+  {
+    "id": "test-test-chernyy",
+    "brand": "тест",
+    "name": "тест",
+    "color": "черный",
+    "price": 350,
+    "sizes": [
+      "40",
+      "43",
+      "44",
+      "45.5"
+    ],
+    "badge": "СКИДКА",
+    "description": "sgrouhfdv\nhgrjgry \n210;0",
+    "images": [
+      "images/products/test-test-chernyy-1-98942a5a02.jpg",
+      "images/products/test-test-chernyy-2-e165e424c9.jpg"
+    ],
+    "created_at": "2026-05-27T14:44:17.643543+00:00",
+    "updated_at": "2026-05-27T14:44:17.643562+00:00"
+  }
+]
