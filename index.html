@@ -7643,6 +7643,22 @@ a,
 }
 </style>
 
+
+<style id="sbp-v38-empty-button-contrast">
+#favoritesScreen .empty-state .primary-link,
+#favoritesScreen .empty-state .secondary-link,
+#favoritesScreen .empty-state label.primary-link,
+#favoritesScreen .empty-state label.secondary-link,
+#favoritesScreen .empty-state button.primary-link,
+#favoritesScreen .empty-state button.secondary-link{
+  color:#fff!important;
+}
+#favoritesScreen .empty-state .primary-link *,
+#favoritesScreen .empty-state .secondary-link *{
+  color:#fff!important;
+}
+</style>
+
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -10778,7 +10794,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v36";
+  const VERSION = "v38";
   let active = 0;
   let timer = null;
   let banners = [];
