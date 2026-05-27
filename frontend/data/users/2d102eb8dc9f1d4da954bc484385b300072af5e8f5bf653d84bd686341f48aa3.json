@@ -12,6 +12,20 @@
   "coin_history": [],
   "orders": [
     {
+      "order_number": "SBP-00003",
+      "product_id": "1-2-3",
+      "product_name": "2",
+      "brand": "1",
+      "image": "images/products/1-2-3-1-81d35fa294.jpg",
+      "size": "45",
+      "price_byn": 4,
+      "discount_byn": 0,
+      "final_price_byn": 4,
+      "status": "processing",
+      "created_at": "2026-05-27 15:42:50",
+      "updated_at": "2026-05-27T15:42:50.251957"
+    },
+    {
       "order_number": "SBP-00002",
       "product_id": "maison-margiela-maison-margiela-evolution-low-black",
       "product_name": "Maison Margiela Evolution Low",
@@ -40,5 +54,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-05-27T15:38:35.539487+00:00"
+  "updated_at": "2026-05-27T15:42:50.255397+00:00"
 }
