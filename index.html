@@ -8762,49 +8762,33 @@ a,
 
     const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 
-    // Telegram Bot API has a small sendData limit. Send a compact payload only.
-    const compact = {
-      type:data.type,
-      client_order_id:data.client_order_id,
-      product_id:data.product_id,
-      product_name:data.product_name,
-      brand:data.brand,
-      color:data.color,
-      size:data.size,
-      price_byn:data.price_byn,
-      discount_byn:data.discount_byn,
-      final_price_byn:data.final_price_byn,
-      bonus_request:data.bonus_request || null,
-      image:data.image,
-      delivery_method:data.delivery_method,
-      customer_fields:data.customer_fields || {},
-      created_at:data.created_at
-    };
-    const compactRaw = JSON.stringify(compact);
-
     try{
       if(tg && typeof tg.ready === "function") tg.ready();
       if(tg && typeof tg.sendData === "function"){
-        if(compactRaw.length > 3900){
-          alert("Заявка слишком большая для Telegram. Уменьши комментарий или данные доставки.");
-          return false;
-        }
-        tg.sendData(compactRaw);
         saveLocalSubmittedOrder();
-        try{ localStorage.setItem("sbp_last_order_send_attempt", JSON.stringify({at:new Date().toISOString(), method:"Telegram.WebApp.sendData", length:compactRaw.length, client_order_id:data.client_order_id})); }catch(e){}
+        tg.sendData(raw);
         if(window.SBP_BONUS_STATE && data.bonus_request) window.SBP_BONUS_STATE.clear();
-        clearClientOrderId();
         return true;
       }
     }catch(e){
       console.error("[SBP] tg.sendData failed", e);
-      alert("Telegram не принял заявку: " + (e && e.message ? e.message : e));
-      return false;
     }
 
-    alert("Заявка не отправилась. Открой приложение именно через нижнюю кнопку «🛍 Открыть приложение» в чате с ботом.");
+    try{
+      if(window.TelegramWebviewProxy && typeof window.TelegramWebviewProxy.postEvent === "function"){
+        saveLocalSubmittedOrder();
+        window.TelegramWebviewProxy.postEvent("web_app_data_send", JSON.stringify({data: raw}));
+        if(window.SBP_BONUS_STATE && data.bonus_request) window.SBP_BONUS_STATE.clear();
+        return true;
+      }
+    }catch(e){
+      console.error("[SBP] TelegramWebviewProxy failed", e);
+    }
+
+    alert("Заявка не отправилась. Открой приложение через нижнюю кнопку «🛍 Открыть приложение» в чате с ботом, а не через ссылку.");
     return false;
   }
+
 
   const filterState = {
     mode: "all",
@@ -10763,7 +10747,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v34";
+  const VERSION = "v35";
   let active = 0;
   let timer = null;
   let banners = [];
