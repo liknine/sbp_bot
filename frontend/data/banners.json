@@ -1,0 +1,35 @@
+[
+  {
+    "id": "sbp-selection",
+    "title": "Curated drop\\ninside Telegram",
+    "subtitle": "SBP SELECTION",
+    "button_text": "Смотреть →",
+    "link": "catalog",
+    "image": "",
+    "sort": 0,
+    "active": true,
+    "updated_at": ""
+  },
+  {
+    "id": "new-arrivals",
+    "title": "Новые позиции\\nуже в каталоге",
+    "subtitle": "NEW ARRIVALS",
+    "button_text": "В каталог →",
+    "link": "catalog",
+    "image": "",
+    "sort": 1,
+    "active": true,
+    "updated_at": ""
+  },
+  {
+    "id": "sbp-coins",
+    "title": "Бонусы за\\nзавершённые заказы",
+    "subtitle": "SBP COINS",
+    "button_text": "Узнать больше →",
+    "link": "coins",
+    "image": "",
+    "sort": 2,
+    "active": true,
+    "updated_at": ""
+  }
+]
