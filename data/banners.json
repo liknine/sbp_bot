@@ -1,5 +1,16 @@
 [
   {
+    "id": "uauaua",
+    "title": "проверка\nнахуй",
+    "subtitle": "уауауа",
+    "button_text": "Смотреть →",
+    "link": "archive",
+    "image": "images/banners/uauaua-4402a82da3.jpg",
+    "sort": -1779898360,
+    "active": true,
+    "updated_at": "2026-05-27T16:09:12.614651+00:00"
+  },
+  {
     "id": "new-shoes",
     "title": "тестовый\nбаннер",
     "subtitle": "NEW SHOES",
