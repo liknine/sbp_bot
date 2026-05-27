@@ -7610,6 +7610,39 @@ a,
 }
 </style>
 
+
+
+<style id="sbp-banner-v28-progress-css">
+.sbp-banner-v26-dot{
+  position:relative!important;
+  overflow:hidden!important;
+  width:38px!important;
+  height:6px!important;
+  border-radius:99px!important;
+  background:rgba(255,255,255,.26)!important;
+  opacity:.88!important;
+}
+.sbp-banner-v26-dot.is-active{
+  background:rgba(255,255,255,.26)!important;
+  width:38px!important;
+}
+.sbp-banner-v26-dot::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:calc(var(--sbp-progress, 0) * 100%);
+  border-radius:inherit;
+  background:rgba(255,255,255,.98);
+  transition:width .08s linear;
+}
+.sbp-banner-v26-dot:not(.is-active)::before{
+  width:0%!important;
+  transition:none!important;
+}
+</style>
+
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -10674,7 +10707,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v26";
+  const VERSION = "v28";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -10789,8 +10822,17 @@ a,
     active = ((index % banners.length) + banners.length) % banners.length;
     const layer = qs("#homeScreen .sbp-banner-v26-layer");
     if(!layer) return;
+
     qsa(".sbp-banner-v26-slide", layer).forEach((el,i) => el.classList.toggle("is-active", i === active));
-    qsa(".sbp-banner-v26-dot", layer).forEach((el,i) => el.classList.toggle("is-active", i === active));
+
+    const dots = qsa(".sbp-banner-v26-dot", layer);
+    dots.forEach(el => {
+      el.classList.remove("is-active");
+      el.classList.remove("is-paused");
+      // Force CSS animation restart.
+      void el.offsetWidth;
+    });
+    dots.forEach((el,i) => el.classList.toggle("is-active", i === active));
   }
 
   function step(delta){
@@ -10893,6 +10935,7 @@ a,
       touchStartX = t.clientX;
       touchStartY = t.clientY;
       stop();
+      qsa(".sbp-banner-v26-dot.is-active", layer).forEach(el => el.classList.add("is-paused"));
     }, {passive:true});
 
     layer.addEventListener("touchend", function(e){
@@ -10934,6 +10977,100 @@ a,
     const data = await fetchBanners();
     banners = await prepare(data);
     render();
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
+  else boot();
+})();
+</script>
+
+
+<script id="sbp-banner-v28-progress-controller">
+(function(){
+  const DURATION = 5500;
+  let raf = 0;
+  let startedAt = 0;
+  let paused = false;
+
+  function layer(){
+    return document.querySelector("#homeScreen .sbp-banner-v26-layer");
+  }
+  function activeDot(){
+    return document.querySelector("#homeScreen .sbp-banner-v26-dot.is-active");
+  }
+  function dots(){
+    return Array.from(document.querySelectorAll("#homeScreen .sbp-banner-v26-dot"));
+  }
+  function nextButton(){
+    return document.querySelector("#homeScreen .sbp-banner-v26-next");
+  }
+  function isVisible(){
+    const l = layer();
+    return !!(l && l.offsetParent !== null);
+  }
+  function setProgress(value){
+    const dot = activeDot();
+    if(!dot) return;
+    dot.style.setProperty("--sbp-progress", Math.max(0, Math.min(1, value)));
+  }
+  function resetDots(){
+    dots().forEach(dot => dot.style.setProperty("--sbp-progress", "0"));
+  }
+  function tick(now){
+    if(paused || !isVisible()){
+      raf = requestAnimationFrame(tick);
+      return;
+    }
+    if(!startedAt) startedAt = now;
+    const progress = Math.min(1, (now - startedAt) / DURATION);
+    setProgress(progress);
+    if(progress >= 1){
+      resetDots();
+      startedAt = performance.now();
+      const next = nextButton();
+      if(next) next.click();
+      raf = requestAnimationFrame(tick);
+      return;
+    }
+    raf = requestAnimationFrame(tick);
+  }
+  function restart(){
+    cancelAnimationFrame(raf);
+    resetDots();
+    startedAt = 0;
+    paused = false;
+    raf = requestAnimationFrame(tick);
+  }
+
+  // Restart after banner switches, dots click, swipe, reload, or boot.
+  document.addEventListener("click", function(e){
+    if(e.target.closest("#homeScreen .sbp-banner-v26-dot, #homeScreen .sbp-banner-v26-arrow")){
+      setTimeout(restart, 80);
+    }
+  }, true);
+
+  document.addEventListener("touchend", function(e){
+    if(e.target.closest && e.target.closest("#homeScreen .sbp-banner-v26-layer")){
+      setTimeout(restart, 120);
+    }
+  }, true);
+
+  document.addEventListener("visibilitychange", function(){
+    if(document.hidden){
+      paused = true;
+    }else{
+      restart();
+    }
+  });
+
+  window.SBP_BANNER_PROGRESS_RESTART = restart;
+
+  function boot(){
+    restart();
+    // Banner layer is async, so retry a few times after the JSON/images load.
+    setTimeout(restart, 500);
+    setTimeout(restart, 1200);
+    setTimeout(restart, 2500);
   }
 
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
