@@ -1,12 +1,23 @@
 [
   {
+    "id": "new-shoes",
+    "title": "тестовый\nбаннер",
+    "subtitle": "NEW SHOES",
+    "button_text": "Смотреть →",
+    "link": "home",
+    "image": "images/banners/new-shoes-ea44fe659e.jpg",
+    "sort": -1779851214,
+    "active": true,
+    "updated_at": "2026-05-27T03:06:49.779851+00:00"
+  },
+  {
     "id": "sbp-selection",
     "title": "Curated drop\\ninside Telegram",
     "subtitle": "SBP SELECTION",
     "button_text": "Смотреть →",
     "link": "catalog",
     "image": "",
-    "sort": 0,
+    "sort": 1,
     "active": true,
     "updated_at": ""
   },
