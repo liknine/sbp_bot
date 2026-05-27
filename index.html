@@ -8761,62 +8761,48 @@ a,
     }
 
     const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-    let attempted = false;
-    let sentBy = [];
 
-    function markSent(method){
-      attempted = true;
-      sentBy.push(method);
-    }
-
-    function cleanupAfterAttempt(){
-      saveLocalSubmittedOrder();
-      try{ localStorage.setItem("sbp_last_order_send_attempt", JSON.stringify({at:new Date().toISOString(), methods:sentBy, client_order_id:data.client_order_id})); }catch(e){}
-      if(window.SBP_BONUS_STATE && data.bonus_request) window.SBP_BONUS_STATE.clear();
-      clearClientOrderId();
-    }
+    // Telegram Bot API has a small sendData limit. Send a compact payload only.
+    const compact = {
+      type:data.type,
+      client_order_id:data.client_order_id,
+      product_id:data.product_id,
+      product_name:data.product_name,
+      brand:data.brand,
+      color:data.color,
+      size:data.size,
+      price_byn:data.price_byn,
+      discount_byn:data.discount_byn,
+      final_price_byn:data.final_price_byn,
+      bonus_request:data.bonus_request || null,
+      image:data.image,
+      delivery_method:data.delivery_method,
+      customer_fields:data.customer_fields || {},
+      created_at:data.created_at
+    };
+    const compactRaw = JSON.stringify(compact);
 
     try{
       if(tg && typeof tg.ready === "function") tg.ready();
-    }catch(e){}
-
-    // 1) Low-level Telegram bridge from the official WebApp script.
-    // This is more reliable in some Telegram WebViews than calling sendData alone.
-    try{
-      if(window.Telegram && window.Telegram.WebView && typeof window.Telegram.WebView.postEvent === "function"){
-        window.Telegram.WebView.postEvent("web_app_data_send", false, {data: raw});
-        markSent("Telegram.WebView.postEvent");
-      }
-    }catch(e){
-      console.error("[SBP] Telegram.WebView.postEvent failed", e);
-    }
-
-    // 2) Native proxy fallback.
-    try{
-      if(window.TelegramWebviewProxy && typeof window.TelegramWebviewProxy.postEvent === "function"){
-        window.TelegramWebviewProxy.postEvent("web_app_data_send", JSON.stringify({data: raw}));
-        markSent("TelegramWebviewProxy.postEvent");
-      }
-    }catch(e){
-      console.error("[SBP] TelegramWebviewProxy failed", e);
-    }
-
-    // 3) Public WebApp API.
-    try{
       if(tg && typeof tg.sendData === "function"){
-        tg.sendData(raw);
-        markSent("Telegram.WebApp.sendData");
+        if(compactRaw.length > 3900){
+          alert("Заявка слишком большая для Telegram. Уменьши комментарий или данные доставки.");
+          return false;
+        }
+        tg.sendData(compactRaw);
+        saveLocalSubmittedOrder();
+        try{ localStorage.setItem("sbp_last_order_send_attempt", JSON.stringify({at:new Date().toISOString(), method:"Telegram.WebApp.sendData", length:compactRaw.length, client_order_id:data.client_order_id})); }catch(e){}
+        if(window.SBP_BONUS_STATE && data.bonus_request) window.SBP_BONUS_STATE.clear();
+        clearClientOrderId();
+        return true;
       }
     }catch(e){
       console.error("[SBP] tg.sendData failed", e);
+      alert("Telegram не принял заявку: " + (e && e.message ? e.message : e));
+      return false;
     }
 
-    if(attempted){
-      cleanupAfterAttempt();
-      return true;
-    }
-
-    alert("Заявка сохранилась в истории, но Telegram не дал отправить её боту. Открой приложение именно через кнопку «🛍 Открыть приложение» в чате с ботом и попробуй ещё раз.");
+    alert("Заявка не отправилась. Открой приложение именно через нижнюю кнопку «🛍 Открыть приложение» в чате с ботом.");
     return false;
   }
 
@@ -10777,7 +10763,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v33";
+  const VERSION = "v34";
   let active = 0;
   let timer = null;
   let banners = [];
