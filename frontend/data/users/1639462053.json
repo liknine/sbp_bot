@@ -25,6 +25,20 @@
   ],
   "orders": [
     {
+      "order_number": "SBP-00006",
+      "product_id": "1-2-3",
+      "product_name": "2",
+      "brand": "1",
+      "image": "images/products/1-2-3-1-81d35fa294.jpg",
+      "size": "44",
+      "price_byn": 4,
+      "discount_byn": 0,
+      "final_price_byn": 4,
+      "status": "processing",
+      "created_at": "2026-05-28 10:50:39",
+      "updated_at": "2026-05-28T10:50:39.601867"
+    },
+    {
       "order_number": "SBP-00005",
       "product_id": "debug-product",
       "product_name": "Debug test order",
@@ -95,5 +109,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-05-28T10:46:17.749927+00:00"
+  "updated_at": "2026-05-28T10:50:39.606102+00:00"
 }
