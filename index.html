@@ -7936,6 +7936,15 @@ a,
 }
 </style>
 
+
+<style id="sbp-v48-core-loyalty-sync-css">
+.sbp-sync-note-v48{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:12px;
+}
+</style>
+
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -11071,7 +11080,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v47";
+  const VERSION = "v48";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12401,6 +12410,141 @@ a,
   }, true);
   window.addEventListener("storage", renderCheckoutBonus);
   document.addEventListener("visibilitychange", function(){ if(!document.hidden) renderCheckoutBonus(); });
+})();
+</script>
+
+
+<script id="sbp-v48-orders-profile-sync-fix">
+(function(){
+  const PROFILE_KEY = "sbp_profile_state_v1";
+  const LOCAL_ORDERS_KEY = "sbp_local_orders_v1";
+
+  function safeJson(raw, fallback){ try{return JSON.parse(raw)}catch(e){return fallback} }
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+
+  const STATUS_LABELS = {
+    processing:"В обработке",
+    awaiting_payment:"Ожидает оплаты",
+    sent:"Отправлен",
+    in_transit:"В пути",
+    arrived:"Прибыл",
+    completed:"Завершен",
+    cancelled:"Отменен"
+  };
+
+  function readProfile(){
+    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.read === "function"){
+      try{return window.SBP_PROFILE_STATE.read()}catch(e){}
+    }
+    return safeJson(localStorage.getItem(PROFILE_KEY) || "{}", {});
+  }
+
+  function readLocalOrders(){
+    return safeJson(localStorage.getItem(LOCAL_ORDERS_KEY) || "[]", []);
+  }
+
+  function orderKey(order){
+    return String(order && (order.order_number || order.client_order_id || order.local_order_id || order.created_at || order.product_name || ""));
+  }
+
+  function mergedOrders(){
+    const profile = readProfile() || {};
+    const remote = Array.isArray(profile.orders) ? profile.orders : [];
+    const local = readLocalOrders();
+
+    const map = new Map();
+
+    // Local first for immediate display.
+    local.forEach(order => {
+      const k = orderKey(order);
+      if(k) map.set(k, Object.assign({}, order, {_source:"local"}));
+    });
+
+    // Remote must override local because it contains real admin status/coins data.
+    remote.forEach(order => {
+      const k = orderKey(order);
+      if(k) map.set(k, Object.assign({}, map.get(k) || {}, order, {_source:"remote"}));
+    });
+
+    return Array.from(map.values()).sort((a,b) => {
+      const ad = Date.parse(a.updated_at || a.created_at || "") || 0;
+      const bd = Date.parse(b.updated_at || b.created_at || "") || 0;
+      return bd - ad;
+    });
+  }
+
+  function renderOrdersV48(){
+    const screen = qs("#ordersScreen");
+    if(!screen) return;
+    const listEl = qs("[data-orders-list]", screen);
+    const emptyEl = qs("[data-orders-empty]", screen);
+    if(!listEl) return;
+
+    const orders = mergedOrders();
+    if(!orders.length){
+      listEl.innerHTML = "";
+      if(emptyEl) emptyEl.style.display = "";
+      return;
+    }
+
+    if(emptyEl) emptyEl.style.display = "none";
+    listEl.innerHTML = orders.map(order => {
+      const status = String(order.status || "processing");
+      const label = STATUS_LABELS[status] || status || "В обработке";
+      const price = Number(order.final_price_byn || order.price_byn || 0);
+      const title = order.product_name || order.name || "SBP order";
+      const img = order.image ? `<img src="${String(order.image).replace(/"/g,"&quot;")}" alt="">` : "";
+      return `
+        <article class="order-card sbp-order-v48" data-order-number="${String(order.order_number || "").replace(/"/g,"&quot;")}">
+          <div class="order-img">${img}</div>
+          <div class="order-info">
+            <small>${order.created_at ? new Date(order.created_at).toLocaleDateString("ru-RU") : ""} · ${order.order_number || ""}</small>
+            <h3>${String(title).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}</h3>
+            <p>Размер: ${order.size || "-"} · ${price} BYN</p>
+            <span class="order-status">${label}</span>
+          </div>
+        </article>`;
+    }).join("");
+  }
+
+  function forceProfileSync(){
+    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.sync === "function"){
+      try{return window.SBP_PROFILE_STATE.sync()}catch(e){}
+    }
+    return false;
+  }
+
+  // Expose debug helpers.
+  window.SBP_ORDERS_V48 = {
+    render: renderOrdersV48,
+    merged: mergedOrders,
+    sync: forceProfileSync
+  };
+
+  function boot(){
+    renderOrdersV48();
+    setTimeout(() => { forceProfileSync(); renderOrdersV48(); }, 250);
+    setTimeout(renderOrdersV48, 1200);
+    setInterval(renderOrdersV48, 3500);
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
+  else boot();
+
+  document.addEventListener("click", function(e){
+    if(e.target.closest && e.target.closest('label[for="tab-orders"], .orders-top-btn, label[for="tab-profile"], label[for="tab-coins"]')){
+      setTimeout(() => { forceProfileSync(); renderOrdersV48(); }, 80);
+      setTimeout(renderOrdersV48, 900);
+    }
+  }, true);
+  window.addEventListener("storage", renderOrdersV48);
+  document.addEventListener("visibilitychange", function(){
+    if(!document.hidden){
+      forceProfileSync();
+      setTimeout(renderOrdersV48, 250);
+    }
+  });
 })();
 </script>
 
