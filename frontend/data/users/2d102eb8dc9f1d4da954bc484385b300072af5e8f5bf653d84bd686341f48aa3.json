@@ -4,8 +4,8 @@
   "username": "liknine",
   "first_name": "ликнайн",
   "status": "Entry",
-  "coins": 1526,
-  "coins_balance": 1526,
+  "coins": 1026,
+  "coins_balance": 1026,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
   "completed_orders_count": 2,
@@ -17,6 +17,12 @@
   },
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": -500,
+      "type": "bonus_used",
+      "comment": "Discount used on order: -15 BYN",
+      "created_at": "2026-05-28 12:38:48"
+    },
     {
       "amount": 1000,
       "type": "order_completed",
@@ -49,6 +55,20 @@
     }
   ],
   "orders": [
+    {
+      "order_number": "SBP-00011",
+      "product_id": "oo-prol-prold",
+      "product_name": "прол",
+      "brand": "оо",
+      "image": "images/products/oo-prol-prold-1.jpg",
+      "size": "43",
+      "price_byn": 77,
+      "discount_byn": 15,
+      "final_price_byn": 62,
+      "status": "processing",
+      "created_at": "2026-05-28 12:38:48",
+      "updated_at": "2026-05-28T12:38:48.887980"
+    },
     {
       "order_number": "SBP-00010",
       "product_id": "maison-margiela-maison-margiela-evolution-low-black",
@@ -190,5 +210,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-05-28T12:36:49.227068+00:00"
+  "updated_at": "2026-05-28T12:38:48.894740+00:00"
 }
