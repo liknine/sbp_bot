@@ -8807,6 +8807,24 @@ a,
     return "Самовывоз";
   }
 
+
+  function collectCustomerFieldsForOrder(){
+    const deliveryName = selectedDelivery();
+    const deliveryKey = deliveryName === "Европочта" ? "evropochta" : (deliveryName === "Белпочта" ? "belpochta" : "pickup");
+    const fields = {"Способ получения": deliveryName};
+    const deliveryBlock = qs(`#checkoutScreen [data-fields="${deliveryKey}"]`);
+
+    if(deliveryBlock){
+      qsa("textarea, input", deliveryBlock).forEach((el, i) => {
+        const key = el.getAttribute("placeholder") || el.name || `field_${i+1}`;
+        const value = String(el.value || "").trim();
+        if(value) fields[key] = value;
+      });
+    }
+
+    return fields;
+  }
+
   function isVisibleField(el){
     if(!el) return false;
     if(el.disabled) return false;
@@ -8901,18 +8919,7 @@ a,
   function orderPayload(){
     const p = productById(localStorage.getItem(ACTIVE_KEY)) || products[0];
     if(!p) return null;
-    const fields = {};
-    const deliveryName = selectedDelivery();
-    const deliveryKey = deliveryName === "Европочта" ? "evropochta" : (deliveryName === "Белпочта" ? "belpochta" : "pickup");
-    const deliveryBlock = qs(`#checkoutScreen [data-fields="${deliveryKey}"]`);
-    if(deliveryBlock){
-      qsa("textarea, input", deliveryBlock).forEach((el, i) => {
-        const key = el.getAttribute("placeholder") || el.name || `field_${i+1}`;
-        const value = String(el.value || "").trim();
-        if(value) fields[key] = value;
-      });
-    }
-    fields["Способ получения"] = deliveryName;
+    const fields = collectCustomerFieldsForOrder();
 
     const requestedBonus = (window.SBP_BONUS_STATE && typeof window.SBP_BONUS_STATE.read === "function") ? window.SBP_BONUS_STATE.read() : null;
     return {
@@ -8946,6 +8953,12 @@ a,
     const data = orderPayload();
     if(!data) return false;
 
+    // Hard refresh delivery fields at the exact send moment.
+    // This guarantees admin receives the visible form fields from the selected delivery category.
+    const liveCustomerFields = collectCustomerFieldsForOrder();
+    data.customer_fields = liveCustomerFields;
+    data.delivery_method = liveCustomerFields["Способ получения"] || selectedDelivery();
+
     const compact = {
       type: "order_create",
       product_id: data.product_id,
@@ -8959,7 +8972,7 @@ a,
       bonus_request: data.bonus_request || null,
       image: data.image,
       delivery_method: data.delivery_method,
-      customer_fields: data.customer_fields || {},
+      customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now())
     };
@@ -10800,7 +10813,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v52";
+  const VERSION = "v53";
   let active = 0;
   let timer = null;
   let banners = [];
