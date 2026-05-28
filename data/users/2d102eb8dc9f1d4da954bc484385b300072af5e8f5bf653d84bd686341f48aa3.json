@@ -4,12 +4,18 @@
   "username": "liknine",
   "first_name": "ликнайн",
   "status": "Entry",
-  "coins": 626,
-  "coins_balance": 626,
+  "coins": 526,
+  "coins_balance": 526,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": -100,
+      "type": "bonus_used",
+      "comment": "Discount used on order: -5 BYN",
+      "created_at": "2026-05-28 12:21:58"
+    },
     {
       "amount": 400,
       "type": "manual_bonus",
@@ -30,6 +36,20 @@
     }
   ],
   "orders": [
+    {
+      "order_number": "SBP-00010",
+      "product_id": "maison-margiela-maison-margiela-evolution-low-black",
+      "product_name": "Maison Margiela Evolution Low",
+      "brand": "Maison Margiela",
+      "image": "images/products/maison-margiela-maison-margiela-evolution-low-black-1.jpg",
+      "size": "44",
+      "price_byn": 1000,
+      "discount_byn": 5,
+      "final_price_byn": 995,
+      "status": "processing",
+      "created_at": "2026-05-28 12:21:58",
+      "updated_at": "2026-05-28T12:21:58.440395"
+    },
     {
       "order_number": "SBP-00009",
       "product_id": "pppp-latal-chernye",
@@ -157,5 +177,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-05-28T12:20:29.515975+00:00"
+  "updated_at": "2026-05-28T12:21:58.443511+00:00"
 }
