@@ -25,6 +25,34 @@
   ],
   "orders": [
     {
+      "order_number": "SBP-00005",
+      "product_id": "debug-product",
+      "product_name": "Debug test order",
+      "brand": "SBP",
+      "image": "",
+      "size": "43",
+      "price_byn": 1,
+      "discount_byn": 0,
+      "final_price_byn": 1,
+      "status": "processing",
+      "created_at": "2026-05-28 04:21:04",
+      "updated_at": "2026-05-28T04:21:04.138627"
+    },
+    {
+      "order_number": "SBP-00004",
+      "product_id": "oo-prol-prold",
+      "product_name": "прол",
+      "brand": "оо",
+      "image": "images/products/oo-prol-prold-1.jpg",
+      "size": "44",
+      "price_byn": 77,
+      "discount_byn": 0,
+      "final_price_byn": 77,
+      "status": "processing",
+      "created_at": "2026-05-27 20:42:09",
+      "updated_at": "2026-05-27T20:42:09.540831"
+    },
+    {
       "order_number": "SBP-00003",
       "product_id": "1-2-3",
       "product_name": "2",
@@ -67,5 +95,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-05-27T20:41:16.554813+00:00"
+  "updated_at": "2026-05-28T04:35:46.517527+00:00"
 }
