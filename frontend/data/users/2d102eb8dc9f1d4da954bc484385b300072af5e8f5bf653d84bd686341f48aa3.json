@@ -25,6 +25,20 @@
   ],
   "orders": [
     {
+      "order_number": "SBP-00007",
+      "product_id": "maison-margiela-maison-margiela-evolution-low-black",
+      "product_name": "Maison Margiela Evolution Low",
+      "brand": "Maison Margiela",
+      "image": "images/products/maison-margiela-maison-margiela-evolution-low-black-1.jpg",
+      "size": "44",
+      "price_byn": 1000,
+      "discount_byn": 0,
+      "final_price_byn": 1000,
+      "status": "processing",
+      "created_at": "2026-05-28 11:19:47",
+      "updated_at": "2026-05-28T11:19:47.901682"
+    },
+    {
       "order_number": "SBP-00006",
       "product_id": "1-2-3",
       "product_name": "2",
@@ -109,5 +123,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-05-28T11:19:08.465703+00:00"
+  "updated_at": "2026-05-28T11:19:47.904971+00:00"
 }
