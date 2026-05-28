@@ -7644,174 +7644,6 @@ a,
 </style>
 
 
-<style id="sbp-v44-requested-fixes-css">
-/* 1) empty favorites button: hard contrast fix */
-#favoritesScreen .favorites-empty-link,
-#favoritesScreen .empty-state label[for="tab-catalog"].primary-link{
-  color:#fff!important;
-  opacity:1!important;
-  -webkit-text-fill-color:#fff!important;
-  text-shadow:none!important;
-  filter:none!important;
-  mix-blend-mode:normal!important;
-}
-#favoritesScreen .favorites-empty-link *,
-#favoritesScreen .empty-state label[for="tab-catalog"].primary-link *{
-  color:#fff!important;
-  -webkit-text-fill-color:#fff!important;
-  opacity:1!important;
-}
-
-/* 2) banner fullscreen overlay */
-.sbp-banner-fullscreen-v44{
-  position:fixed;
-  inset:0;
-  z-index:2147483600;
-  display:none;
-  background:
-    radial-gradient(circle at 68% 25%,rgba(255,255,255,.12),transparent 24%),
-    radial-gradient(circle at 14% 10%,rgba(255,255,255,.06),transparent 28%),
-    linear-gradient(145deg,#050505,#111 58%,#020202);
-  padding:calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom));
-  overflow:hidden;
-}
-.sbp-banner-fullscreen-v44.is-open{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  animation:sbpV44OverlayIn .2s ease both;
-}
-.sbp-banner-fullscreen-v44.has-image::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background-image:var(--sbp-banner-image);
-  background-size:cover;
-  background-position:center;
-  opacity:.45;
-  filter:blur(2px) saturate(.95);
-  transform:scale(1.03);
-}
-.sbp-banner-fullscreen-v44::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(0deg,rgba(0,0,0,.72),rgba(0,0,0,.26) 44%,rgba(0,0,0,.66));
-}
-.sbp-banner-full-card-v44{
-  position:relative;
-  z-index:2;
-  width:min(100%,380px);
-  min-height:min(72vh,620px);
-  border-radius:34px;
-  border:1px solid rgba(255,255,255,.16);
-  background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.045));
-  box-shadow:0 36px 110px rgba(0,0,0,.58);
-  padding:26px 22px;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-}
-.sbp-banner-full-card-v44 .kicker{
-  margin:0 0 10px;
-  color:rgba(255,255,255,.66);
-  font-size:12px;
-  font-weight:800;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-}
-.sbp-banner-full-card-v44 h2{
-  margin:0;
-  color:#fff;
-  font-size:40px;
-  line-height:.96;
-  letter-spacing:-1.5px;
-}
-.sbp-banner-full-card-v44 p.desc{
-  margin:14px 0 0;
-  color:rgba(255,255,255,.72);
-  font-size:15px;
-  line-height:1.38;
-}
-.sbp-banner-full-action-v44{
-  margin-top:24px;
-  min-height:56px;
-  border-radius:19px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#fff;
-  color:#111!important;
-  -webkit-text-fill-color:#111!important;
-  font-weight:900;
-  text-decoration:none;
-}
-.sbp-banner-full-close-v44{
-  position:absolute;
-  top:calc(18px + env(safe-area-inset-top));
-  right:18px;
-  z-index:3;
-  width:48px;
-  height:48px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:rgba(255,255,255,.10);
-  border:1px solid rgba(255,255,255,.14);
-  color:#fff;
-  font-size:30px;
-}
-@keyframes sbpV44OverlayIn{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:scale(1)}}
-
-/* 3) size warning */
-.sbp-size-alert-v44{
-  display:none;
-  margin:10px 0 0;
-  border-radius:14px;
-  padding:11px 12px;
-  background:rgba(255,193,7,.12);
-  border:1px solid rgba(255,193,7,.28);
-  color:var(--text);
-  font-size:13px;
-  line-height:1.28;
-}
-.sbp-size-alert-v44.is-visible{
-  display:block;
-  animation:sbpV44Shake .26s ease both;
-}
-@keyframes sbpV44Shake{
-  0%,100%{transform:translateX(0)}
-  30%{transform:translateX(-4px)}
-  65%{transform:translateX(4px)}
-}
-
-/* 4) bonus state */
-#bonusesScreen .bonus-item{
-  cursor:pointer;
-  transition:opacity .18s ease,border-color .18s ease,background .18s ease,transform .18s ease;
-}
-#bonusesScreen .bonus-item:not(.is-locked):active{transform:scale(.99)}
-#bonusesScreen .bonus-item.is-locked{
-  opacity:.48;
-  cursor:not-allowed;
-}
-#bonusesScreen .bonus-item.is-selected{
-  border-color:var(--inverse)!important;
-  background:linear-gradient(145deg,var(--card1),var(--card2))!important;
-}
-#bonusesScreen .bonus-item.is-selected .bonus-cost::after{
-  content:" ✓";
-}
-#bonusesScreen .active-bonus-preview{
-  display:none;
-}
-#bonusesScreen .active-bonus-preview.is-visible{
-  display:block;
-}
-</style>
-
-
 <style id="sbp-v45-bonus-size-banner-fav-css">
 /* Favorites empty button: theme-aware contrast.
    Dark theme button is light -> text must be black.
@@ -7937,61 +7769,8 @@ a,
 </style>
 
 
-<style id="sbp-v48-core-loyalty-sync-css">
-.sbp-sync-note-v48{
-  margin-top:8px;
-  color:var(--muted);
-  font-size:12px;
-}
-</style>
 
-
-<style id="sbp-v49-orders-admin-fix-css">
-#ordersScreen .orders-timeline{
-  display:grid!important;
-  gap:12px!important;
-}
-#ordersScreen .product-order-card.sbp-order-v49{
-  display:grid!important;
-  grid-template-columns:88px minmax(0,1fr)!important;
-  gap:12px!important;
-  align-items:center!important;
-  min-height:112px!important;
-  padding:10px!important;
-  border-radius:24px!important;
-  overflow:hidden!important;
-  background:linear-gradient(145deg,var(--card1),var(--card2))!important;
-  border:1px solid var(--line)!important;
-}
-#ordersScreen .product-order-card.sbp-order-v49 .order-product-photo img{
-  width:100%!important;
-  height:100%!important;
-  max-width:none!important;
-  max-height:none!important;
-  object-fit:cover!important;
-  object-position:center!important;
-  display:block!important;
-}
-#ordersScreen .product-order-card.sbp-order-v49 .order-product-info{
-  min-width:0!important;
-}
-#ordersScreen .product-order-card.sbp-order-v49 .order-product-info h2{
-  white-space:normal!important;
-  display:-webkit-box!important;
-  -webkit-line-clamp:2!important;
-  -webkit-box-orient:vertical!important;
-}
-#ordersScreen .order-status-pill.completed{background:rgba(46,204,113,.18)!important;color:#2ecc71!important}
-#ordersScreen .order-status-pill.cancelled{background:rgba(255,79,79,.16)!important;color:#ff6969!important}
-#ordersScreen .order-status-pill.awaiting_payment{background:rgba(255,193,7,.18)!important;color:#ffd166!important}
-#ordersScreen .order-status-pill.sent,
-#ordersScreen .order-status-pill.in_transit,
-#ordersScreen .order-status-pill.arrived{background:rgba(88,166,255,.18)!important;color:#58a6ff!important}
-</style>
-
-
-<style id="sbp-v50-final-ui-css">
-/* Empty favorites: on dark theme button is light, so text must be black. */
+<style id="sbp-v51-final-fix-css">
 #favoritesScreen .favorites-empty-link,
 #favoritesScreen .empty-state label[for="tab-catalog"].primary-link{
   color:#111!important;
@@ -8007,12 +7786,8 @@ a,
   -webkit-text-fill-color:#fff!important;
 }
 
-/* Final stable order history cards */
-#ordersScreen [data-orders-list].sbp-v50-orders{
-  display:grid!important;
-  gap:12px!important;
-}
-#ordersScreen .sbp-v50-order-card{
+#ordersScreen [data-orders-list]{display:grid!important;gap:12px!important;}
+#ordersScreen .sbp-v51-order-card{
   display:grid!important;
   grid-template-columns:86px minmax(0,1fr)!important;
   gap:12px!important;
@@ -8024,93 +7799,25 @@ a,
   background:linear-gradient(145deg,var(--card1),var(--card2))!important;
   border:1px solid var(--line)!important;
 }
-#ordersScreen .sbp-v50-order-img{
-  height:92px!important;
-  border-radius:18px!important;
-  overflow:hidden!important;
-  background:var(--input)!important;
-  border:1px solid var(--line)!important;
-  display:grid!important;
-  place-items:center!important;
+#ordersScreen .sbp-v51-order-img{
+  width:86px!important;height:92px!important;border-radius:18px!important;overflow:hidden!important;
+  background:var(--input)!important;border:1px solid var(--line)!important;display:grid!important;place-items:center!important;
 }
-#ordersScreen .sbp-v50-order-img img{
-  width:100%!important;
-  height:100%!important;
-  max-width:none!important;
-  max-height:none!important;
-  object-fit:cover!important;
-  object-position:center!important;
-  display:block!important;
-}
-#ordersScreen .sbp-v50-order-info{
-  min-width:0!important;
-}
-#ordersScreen .sbp-v50-order-top{
-  display:flex!important;
-  align-items:flex-start!important;
-  justify-content:space-between!important;
-  gap:8px!important;
-  margin-bottom:7px!important;
-}
-#ordersScreen .sbp-v50-order-top small{
-  color:var(--muted)!important;
-  font-size:10px!important;
-  letter-spacing:.08em!important;
-  line-height:1.2!important;
-  min-width:0!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-}
-#ordersScreen .sbp-v50-order-status{
-  min-height:26px!important;
-  padding:0 9px!important;
-  border-radius:999px!important;
-  display:inline-flex!important;
-  align-items:center!important;
-  background:var(--soft)!important;
-  color:var(--text)!important;
-  font-size:10px!important;
-  font-weight:900!important;
-  white-space:nowrap!important;
-}
-#ordersScreen .sbp-v50-order-status.processing{background:#f1f1f1!important;color:#111!important}
-#ordersScreen .sbp-v50-order-status.completed{background:rgba(46,204,113,.18)!important;color:#2ecc71!important}
-#ordersScreen .sbp-v50-order-status.cancelled{background:rgba(255,79,79,.16)!important;color:#ff6969!important}
-#ordersScreen .sbp-v50-order-status.awaiting_payment{background:rgba(255,193,7,.18)!important;color:#ffd166!important}
-#ordersScreen .sbp-v50-order-status.sent,
-#ordersScreen .sbp-v50-order-status.in_transit,
-#ordersScreen .sbp-v50-order-status.arrived{background:rgba(88,166,255,.18)!important;color:#58a6ff!important}
-#ordersScreen .sbp-v50-order-info h2{
-  margin:0!important;
-  font-size:16px!important;
-  line-height:1.15!important;
-  white-space:normal!important;
-  display:-webkit-box!important;
-  -webkit-line-clamp:2!important;
-  -webkit-box-orient:vertical!important;
-  overflow:hidden!important;
-}
-#ordersScreen .sbp-v50-order-meta{
-  margin-top:8px!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:space-between!important;
-  gap:10px!important;
-}
-#ordersScreen .sbp-v50-order-meta span{
-  color:var(--muted)!important;
-  font-size:13px!important;
-}
-#ordersScreen .sbp-v50-order-meta b{
-  color:var(--text)!important;
-  font-size:14px!important;
-  white-space:nowrap!important;
-}
-#ordersScreen .sbp-v50-order-sync{
-  margin:0 0 12px;
-  color:var(--muted);
-  font-size:12px;
-}
+#ordersScreen .sbp-v51-order-img img{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;display:block!important;}
+#ordersScreen .sbp-v51-order-info{min-width:0!important;}
+#ordersScreen .sbp-v51-order-top{display:flex!important;align-items:flex-start!important;justify-content:space-between!important;gap:8px!important;margin-bottom:7px!important;}
+#ordersScreen .sbp-v51-order-top small{color:var(--muted)!important;font-size:10px!important;letter-spacing:.08em!important;line-height:1.2!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+#ordersScreen .sbp-v51-status{min-height:26px!important;padding:0 9px!important;border-radius:999px!important;display:inline-flex!important;align-items:center!important;background:var(--soft)!important;color:var(--text)!important;font-size:10px!important;font-weight:900!important;white-space:nowrap!important;}
+#ordersScreen .sbp-v51-status.processing{background:#f1f1f1!important;color:#111!important;}
+#ordersScreen .sbp-v51-status.completed{background:rgba(46,204,113,.18)!important;color:#2ecc71!important;}
+#ordersScreen .sbp-v51-status.cancelled{background:rgba(255,79,79,.16)!important;color:#ff6969!important;}
+#ordersScreen .sbp-v51-status.awaiting_payment{background:rgba(255,193,7,.18)!important;color:#ffd166!important;}
+#ordersScreen .sbp-v51-status.sent,#ordersScreen .sbp-v51-status.in_transit,#ordersScreen .sbp-v51-status.arrived{background:rgba(88,166,255,.18)!important;color:#58a6ff!important;}
+#ordersScreen .sbp-v51-order-info h2{margin:0!important;font-size:16px!important;line-height:1.15!important;white-space:normal!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important;}
+#ordersScreen .sbp-v51-meta{margin-top:8px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;}
+#ordersScreen .sbp-v51-meta span{color:var(--muted)!important;font-size:13px!important;}
+#ordersScreen .sbp-v51-meta b{color:var(--text)!important;font-size:14px!important;white-space:nowrap!important;}
+#ordersScreen .sbp-v51-sync-note{margin:0 0 12px;color:var(--muted);font-size:12px;}
 </style>
 
 </head>
@@ -9183,21 +8890,18 @@ a,
   function orderPayload(){
     const p = productById(localStorage.getItem(ACTIVE_KEY)) || products[0];
     if(!p) return null;
-    let fields = {};
-    if(window.SBP_DELIVERY_FIELDS_V50 && typeof window.SBP_DELIVERY_FIELDS_V50 === "function"){
-      fields = window.SBP_DELIVERY_FIELDS_V50();
-    }else{
-      qsa("#checkoutScreen .delivery-fields").forEach(block => {
-        const visible = window.getComputedStyle(block).display !== "none";
-        if(!visible) return;
-        qsa("textarea, input", block).forEach((el, i) => {
-          const key = el.getAttribute("placeholder") || el.name || `field_${i+1}`;
-          const value = String(el.value || "").trim();
-          if(value) fields[key] = value;
-        });
+    const fields = {};
+    const deliveryName = selectedDelivery();
+    const deliveryKey = deliveryName === "Европочта" ? "evropochta" : (deliveryName === "Белпочта" ? "belpochta" : "pickup");
+    const deliveryBlock = qs(`#checkoutScreen [data-fields="${deliveryKey}"]`);
+    if(deliveryBlock){
+      qsa("textarea, input", deliveryBlock).forEach((el, i) => {
+        const key = el.getAttribute("placeholder") || el.name || `field_${i+1}`;
+        const value = String(el.value || "").trim();
+        if(value) fields[key] = value;
       });
-      fields["Способ получения"] = selectedDelivery();
     }
+    fields["Способ получения"] = deliveryName;
 
     const requestedBonus = (window.SBP_BONUS_STATE && typeof window.SBP_BONUS_STATE.read === "function") ? window.SBP_BONUS_STATE.read() : null;
     return {
@@ -9881,181 +9585,6 @@ a,
 
 
 
-
-<script id="sbp-local-orders-repair-script">
-/* SBP local orders: real submitted orders only, no fake demo cards. */
-(function(){
-  const ORDER_KEYS = ["sbp_orders", "sbp_local_orders_v1", "sbp_orders_v1"];
-  const PRIMARY_KEY = "sbp_orders";
-
-  const STATUS_LABELS = {
-    processing: "В обработке",
-    awaiting_payment: "Ожидает оплаты",
-    sent: "Отправлен",
-    shipped: "Отправлен",
-    in_transit: "В пути",
-    waiting: "Прибыл",
-    arrived: "Прибыл",
-    completed: "Завершен",
-    done: "Завершен",
-    cancelled: "Отменен",
-    canceled: "Отменен"
-  };
-
-  function qs(sel, root=document){ return root.querySelector(sel); }
-  function esc(value){
-    return String(value ?? "").replace(/[&<>"']/g, function(ch){
-      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[ch];
-    });
-  }
-  function parseList(key){
-    try{
-      const raw = localStorage.getItem(key);
-      const data = raw ? JSON.parse(raw) : [];
-      return Array.isArray(data) ? data : [];
-    }catch(e){ return []; }
-  }
-  function normalizeOrder(order){
-    const created = order.created_at || order.createdAt || new Date().toISOString();
-    const localId = order.local_order_id || order.local_id || order.id || ("LOCAL-" + Date.parse(created || Date.now()) + "-" + Math.random().toString(16).slice(2,6));
-    const number = order.order_number || order.orderNumber || ("SBP-" + String(localId).replace(/\D/g,"").slice(-6).padStart(6,"0"));
-    return {
-      ...order,
-      local_order_id: String(localId),
-      order_number: String(number),
-      product_name: order.product_name || order.name || order.product || "SBP order",
-      image: order.image || order.product_image || "",
-      size: order.size || order.selected_size || "-",
-      price_byn: Number(order.price_byn || order.price || order.total || 0),
-      final_price_byn: Number(order.final_price_byn || order.final_price || order.price_byn || order.price || 0),
-      status: String(order.status || "processing"),
-      created_at: created
-    };
-  }
-  function readOrders(){
-    const map = new Map();
-    ORDER_KEYS.forEach(function(key){
-      parseList(key).forEach(function(item){
-        const order = normalizeOrder(item);
-        const id = order.local_order_id || order.order_number;
-        if(!map.has(id)) map.set(id, order);
-      });
-    });
-    return Array.from(map.values()).sort(function(a,b){
-      return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
-    });
-  }
-  function writeOrders(orders){
-    const cleaned = orders.map(normalizeOrder);
-    try{ localStorage.setItem(PRIMARY_KEY, JSON.stringify(cleaned)); }catch(e){}
-    try{ localStorage.setItem("sbp_local_orders_v1", JSON.stringify(cleaned)); }catch(e){}
-  }
-  function dateLabel(value){
-    const d = value ? new Date(value) : new Date();
-    if(Number.isNaN(d.getTime())) return "Сегодня";
-    return d.toLocaleDateString("ru-RU", {day:"numeric", month:"long", year:"numeric"});
-  }
-  function priceLabel(order){
-    const value = Number(order.final_price_byn || order.price_byn || order.price || 0);
-    return value ? value + " BYN" : "Цена уточняется";
-  }
-  function statusLabel(status){
-    return STATUS_LABELS[status] || STATUS_LABELS.processing;
-  }
-  function orderHtml(order){
-    const title = order.product_name || "SBP order";
-    const image = order.image || "";
-    const status = order.status || "processing";
-    return `
-      <article class="order-card product-order-card" data-local-order-id="${esc(order.local_order_id)}">
-        <div class="order-product-photo">${image ? `<img src="${esc(image)}" alt="${esc(title)}" loading="lazy" decoding="async">` : ""}</div>
-        <div class="order-product-info">
-          <div class="order-headline">
-            <small>ORDER #${esc(order.order_number)}</small>
-            <span class="order-status-pill ${esc(status)}">${esc(statusLabel(status))}</span>
-          </div>
-          <h2>${esc(title)}</h2>
-          <div class="order-product-meta">
-            <span>Размер ${esc(order.size || "-")}</span>
-            <b>${esc(priceLabel(order))}</b>
-          </div>
-        </div>
-      </article>`;
-  }
-  function renderOrders(){
-    const screen = qs("#ordersScreen");
-    if(!screen) return;
-    const list = qs("[data-orders-list]", screen) || qs(".orders-timeline", screen);
-    const empty = qs("[data-orders-empty]", screen) || qs(".orders-empty-template", screen);
-    if(!list) return;
-
-    const orders = readOrders();
-    list.innerHTML = "";
-
-    if(!orders.length){
-      list.classList.remove("has-orders");
-      if(empty){
-        empty.hidden = false;
-        empty.style.display = "";
-      }
-      return;
-    }
-
-    if(empty){
-      empty.hidden = true;
-      empty.style.display = "none";
-    }
-    list.classList.add("has-orders");
-
-    let last = "";
-    list.innerHTML = orders.map(function(order){
-      const d = dateLabel(order.created_at);
-      const head = d !== last ? `<h3 class="order-date">${esc(d)}</h3>` : "";
-      last = d;
-      return head + orderHtml(order);
-    }).join("");
-  }
-
-  window.SBP_SAVE_LOCAL_ORDER = function(payload){
-    const orders = readOrders();
-    const created = payload.created_at || new Date().toISOString();
-    const stamp = Date.now();
-    const order = normalizeOrder({
-      ...payload,
-      status: payload.status || "processing",
-      created_at: created,
-      local_order_id: payload.local_order_id || ("LOCAL-" + stamp),
-      order_number: payload.order_number || ("SBP-" + String(stamp).slice(-6))
-    });
-
-    const exists = orders.some(function(item){
-      return item.local_order_id === order.local_order_id || (
-        item.product_id === order.product_id &&
-        item.size === order.size &&
-        Math.abs(new Date(item.created_at).getTime() - new Date(order.created_at).getTime()) < 2000
-      );
-    });
-
-    if(!exists) orders.unshift(order);
-    writeOrders(orders);
-    renderOrders();
-  };
-
-  window.SBP_RENDER_ORDERS = renderOrders;
-
-  document.addEventListener("DOMContentLoaded", renderOrders);
-  window.addEventListener("storage", renderOrders);
-  document.addEventListener("change", function(e){
-    if(e.target && e.target.id === "tab-orders") setTimeout(renderOrders, 40);
-  }, true);
-  document.addEventListener("click", function(e){
-    if(e.target.closest('label[for="tab-orders"], .orders-top-btn, .profile-item[for="tab-orders"]')){
-      setTimeout(renderOrders, 70);
-    }
-  }, true);
-  setTimeout(renderOrders, 250);
-})();
-</script>
 
 <script id="sbp-final-frontend-patch-script">
 /* Final frontend patch: stable hearts, Telegram profile, selected sizes and theme preservation. */
@@ -11258,7 +10787,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v50";
+  const VERSION = "v51";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12592,328 +12121,18 @@ a,
 </script>
 
 
-<script id="sbp-v48-orders-profile-sync-fix">
+
+<script id="sbp-v51-final-orders-delivery-renderer">
 (function(){
   const PROFILE_KEY = "sbp_profile_state_v1";
-  const LOCAL_ORDERS_KEY = "sbp_local_orders_v1";
-
-  function safeJson(raw, fallback){ try{return JSON.parse(raw)}catch(e){return fallback} }
-  function qs(sel, root=document){ return root.querySelector(sel); }
-  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
-
-  const STATUS_LABELS = {
-    processing:"В обработке",
-    awaiting_payment:"Ожидает оплаты",
-    sent:"Отправлен",
-    in_transit:"В пути",
-    arrived:"Прибыл",
-    completed:"Завершен",
-    cancelled:"Отменен"
-  };
-
-  function readProfile(){
-    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.read === "function"){
-      try{return window.SBP_PROFILE_STATE.read()}catch(e){}
-    }
-    return safeJson(localStorage.getItem(PROFILE_KEY) || "{}", {});
-  }
-
-  function readLocalOrders(){
-    return safeJson(localStorage.getItem(LOCAL_ORDERS_KEY) || "[]", []);
-  }
-
-  function orderKey(order){
-    return String(order && (order.order_number || order.client_order_id || order.local_order_id || order.created_at || order.product_name || ""));
-  }
-
-  function mergedOrders(){
-    const profile = readProfile() || {};
-    const remote = Array.isArray(profile.orders) ? profile.orders : [];
-    const local = readLocalOrders();
-
-    const map = new Map();
-
-    // Local first for immediate display.
-    local.forEach(order => {
-      const k = orderKey(order);
-      if(k) map.set(k, Object.assign({}, order, {_source:"local"}));
-    });
-
-    // Remote must override local because it contains real admin status/coins data.
-    remote.forEach(order => {
-      const k = orderKey(order);
-      if(k) map.set(k, Object.assign({}, map.get(k) || {}, order, {_source:"remote"}));
-    });
-
-    return Array.from(map.values()).sort((a,b) => {
-      const ad = Date.parse(a.updated_at || a.created_at || "") || 0;
-      const bd = Date.parse(b.updated_at || b.created_at || "") || 0;
-      return bd - ad;
-    });
-  }
-
-  function renderOrdersV48(){
-    const screen = qs("#ordersScreen");
-    if(!screen) return;
-    const listEl = qs("[data-orders-list]", screen);
-    const emptyEl = qs("[data-orders-empty]", screen);
-    if(!listEl) return;
-
-    const orders = mergedOrders();
-    if(!orders.length){
-      listEl.innerHTML = "";
-      if(emptyEl) emptyEl.style.display = "";
-      return;
-    }
-
-    if(emptyEl) emptyEl.style.display = "none";
-    listEl.innerHTML = orders.map(order => {
-      const status = String(order.status || "processing");
-      const label = STATUS_LABELS[status] || status || "В обработке";
-      const price = Number(order.final_price_byn || order.price_byn || 0);
-      const title = order.product_name || order.name || "SBP order";
-      const img = order.image ? `<img src="${String(order.image).replace(/"/g,"&quot;")}" alt="">` : "";
-      return `
-        <article class="order-card sbp-order-v48" data-order-number="${String(order.order_number || "").replace(/"/g,"&quot;")}">
-          <div class="order-img">${img}</div>
-          <div class="order-info">
-            <small>${order.created_at ? new Date(order.created_at).toLocaleDateString("ru-RU") : ""} · ${order.order_number || ""}</small>
-            <h3>${String(title).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}</h3>
-            <p>Размер: ${order.size || "-"} · ${price} BYN</p>
-            <span class="order-status">${label}</span>
-          </div>
-        </article>`;
-    }).join("");
-  }
-
-  function forceProfileSync(){
-    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.sync === "function"){
-      try{return window.SBP_PROFILE_STATE.sync()}catch(e){}
-    }
-    return false;
-  }
-
-  // Expose debug helpers.
-  window.SBP_ORDERS_V48 = {
-    render: renderOrdersV48,
-    merged: mergedOrders,
-    sync: forceProfileSync
-  };
-
-  function boot(){
-    renderOrdersV48();
-    setTimeout(() => { forceProfileSync(); renderOrdersV48(); }, 250);
-    setTimeout(renderOrdersV48, 1200);
-    setInterval(renderOrdersV48, 3500);
-  }
-
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
-  else boot();
-
-  document.addEventListener("click", function(e){
-    if(e.target.closest && e.target.closest('label[for="tab-orders"], .orders-top-btn, label[for="tab-profile"], label[for="tab-coins"]')){
-      setTimeout(() => { forceProfileSync(); renderOrdersV48(); }, 80);
-      setTimeout(renderOrdersV48, 900);
-    }
-  }, true);
-  window.addEventListener("storage", renderOrdersV48);
-  document.addEventListener("visibilitychange", function(){
-    if(!document.hidden){
-      forceProfileSync();
-      setTimeout(renderOrdersV48, 250);
-    }
-  });
-})();
-</script>
-
-
-<script id="sbp-v49-orders-remote-status-render">
-(function(){
-  const PROFILE_KEY = "sbp_profile_state_v1";
-  const LOCAL_ORDERS_KEY = "sbp_local_orders_v1";
-  const STATUS_LABELS = {
-    processing:"В обработке",
-    awaiting_payment:"Ожидает оплаты",
-    sent:"Отправлен",
-    in_transit:"В пути",
-    arrived:"Прибыл",
-    completed:"Завершен",
-    cancelled:"Отменен"
-  };
-
-  function qs(sel, root=document){ return root.querySelector(sel); }
-  function safeJson(raw, fallback){ try{return JSON.parse(raw)}catch(e){return fallback} }
-  function esc(v){ return String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
-
-  function readProfile(){
-    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.read === "function"){
-      try{return window.SBP_PROFILE_STATE.read()}catch(e){}
-    }
-    return safeJson(localStorage.getItem(PROFILE_KEY) || "{}", {});
-  }
-
-  function readLocal(){
-    return safeJson(localStorage.getItem(LOCAL_ORDERS_KEY) || "[]", []);
-  }
-
-  function strongKey(order){
-    if(!order) return "";
-    return String(order.order_number || order.client_order_id || order.local_order_id || "");
-  }
-
-  function fuzzyKey(order){
-    if(!order) return "";
-    return [
-      order.product_id || "",
-      order.product_name || order.name || "",
-      order.size || "",
-      order.created_at ? String(order.created_at).slice(0,10) : ""
-    ].join("|");
-  }
-
-  function mergedOrders(){
-    const profile = readProfile() || {};
-    const remote = Array.isArray(profile.orders) ? profile.orders : [];
-    const local = readLocal();
-
-    const out = [];
-    const byStrong = new Map();
-    const byFuzzy = new Map();
-
-    local.forEach(order => {
-      const copy = Object.assign({}, order, {_source:"local"});
-      const sk = strongKey(copy);
-      const fk = fuzzyKey(copy);
-      out.push(copy);
-      if(sk) byStrong.set(sk, copy);
-      if(fk) byFuzzy.set(fk, copy);
-    });
-
-    remote.forEach(order => {
-      const remoteCopy = Object.assign({}, order, {_source:"remote"});
-      const sk = strongKey(remoteCopy);
-      const fk = fuzzyKey(remoteCopy);
-      let target = (sk && byStrong.get(sk)) || (fk && byFuzzy.get(fk));
-      if(target){
-        Object.assign(target, remoteCopy);
-      }else{
-        out.push(remoteCopy);
-        if(sk) byStrong.set(sk, remoteCopy);
-        if(fk) byFuzzy.set(fk, remoteCopy);
-      }
-    });
-
-    return out.sort((a,b) => {
-      const ad = Date.parse(a.updated_at || a.created_at || "") || 0;
-      const bd = Date.parse(b.updated_at || b.created_at || "") || 0;
-      return bd - ad;
-    });
-  }
-
-  function imageUrl(order){
-    let img = String(order.image || order.product_image || "");
-    if(!img) return "";
-    if(/^https?:\/\//i.test(img)) return img;
-    img = img.replace(/^\//,"");
-    const repo = (location.pathname.split("/").filter(Boolean)[0] || "").trim();
-    const repoBase = repo ? "/" + repo + "/" : "/";
-    return repoBase + img.replace(/^frontend\//,"");
-  }
-
-  function render(){
-    const screen = qs("#ordersScreen");
-    if(!screen) return;
-    const list = qs("[data-orders-list]", screen);
-    const empty = qs("[data-orders-empty]", screen);
-    if(!list) return;
-
-    const orders = mergedOrders();
-    if(!orders.length){
-      list.innerHTML = "";
-      if(empty) empty.style.display = "";
-      return;
-    }
-
-    if(empty) empty.style.display = "none";
-    list.innerHTML = orders.map(order => {
-      const status = String(order.status || "processing");
-      const label = STATUS_LABELS[status] || status;
-      const img = imageUrl(order);
-      const title = order.product_name || order.name || "SBP order";
-      const price = Number(order.final_price_byn || order.price_byn || order.price || 0);
-      const date = order.created_at ? new Date(order.created_at).toLocaleDateString("ru-RU") : "";
-      const number = order.order_number || "";
-      return `
-        <article class="product-order-card sbp-order-v49">
-          <div class="order-product-photo">${img ? `<img src="${esc(img)}" alt="">` : `<span>□</span>`}</div>
-          <div class="order-product-info">
-            <div class="order-headline">
-              <small>${esc(date)}${number ? " · " + esc(number) : ""}</small>
-              <span class="order-status-pill ${esc(status)}">${esc(label)}</span>
-            </div>
-            <h2>${esc(title)}</h2>
-            <div class="order-product-meta">
-              <span>Размер: ${esc(order.size || "-")}</span>
-              <b>${price} BYN</b>
-            </div>
-          </div>
-        </article>`;
-    }).join("");
-  }
-
-  function syncAndRender(){
-    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.sync === "function"){
-      try{ window.SBP_PROFILE_STATE.sync(); }catch(e){}
-    }
-    setTimeout(render, 120);
-    setTimeout(render, 900);
-  }
-
-  window.SBP_ORDERS_V49 = {render, merged:mergedOrders, sync:syncAndRender};
-
-  function boot(){
-    render();
-    syncAndRender();
-    setInterval(render, 2500);
-  }
-
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
-  else boot();
-
-  document.addEventListener("click", function(e){
-    if(e.target.closest && e.target.closest('label[for="tab-orders"], label[for="tab-profile"], label[for="tab-coins"]')){
-      syncAndRender();
-    }
-  }, true);
-  window.addEventListener("storage", render);
-  document.addEventListener("visibilitychange", function(){
-    if(!document.hidden) syncAndRender();
-  });
-})();
-</script>
-
-
-<script id="sbp-v50-final-orders-delivery-open">
-(function(){
-  const PROFILE_KEY = "sbp_profile_state_v1";
-  const LOCAL_ORDERS_KEY = "sbp_local_orders_v1";
-
-  const STATUS_LABELS = {
-    processing:"В обработке",
-    awaiting_payment:"Ожидает оплаты",
-    sent:"Отправлен",
-    in_transit:"В пути",
-    arrived:"Прибыл",
-    completed:"Завершен",
-    cancelled:"Отменен"
-  };
-
+  const LOCAL_KEYS = ["sbp_local_orders_v1", "sbp_orders", "sbp_orders_v1"];
+  const PRIMARY_LOCAL_KEY = "sbp_local_orders_v1";
+  const STATUS_LABELS = {processing:"В обработке", awaiting_payment:"Ожидает оплаты", sent:"Отправлен", shipped:"Отправлен", in_transit:"В пути", arrived:"Прибыл", waiting:"Прибыл", completed:"Завершен", done:"Завершен", cancelled:"Отменен", canceled:"Отменен"};
   function qs(sel, root=document){ return root.querySelector(sel); }
   function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
   function safeJson(raw, fallback){ try{return JSON.parse(raw)}catch(e){return fallback} }
   function esc(v){ return String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
 
-  // Better UX: make Telegram ready immediately and expand Mini App when possible.
   try{
     if(window.Telegram && Telegram.WebApp){
       Telegram.WebApp.ready && Telegram.WebApp.ready();
@@ -12922,201 +12141,100 @@ a,
     }
   }catch(e){}
 
+  function normalizeOrder(order){
+    order = order || {};
+    const created = order.created_at || order.createdAt || new Date().toISOString();
+    const localId = order.local_order_id || order.client_order_id || order.local_id || order.id || ("LOCAL-" + Date.now());
+    return Object.assign({}, order, {
+      local_order_id:String(localId),
+      order_number:String(order.order_number || order.orderNumber || ""),
+      product_id:order.product_id || order.id || "",
+      product_name:order.product_name || order.name || order.product || "SBP order",
+      image:order.image || order.product_image || "",
+      size:order.size || order.selected_size || "-",
+      price_byn:Number(order.price_byn || order.price || order.total || 0),
+      final_price_byn:Number(order.final_price_byn || order.final_price || order.price_byn || order.price || 0),
+      status:String(order.status || "processing"),
+      created_at:created,
+      updated_at:order.updated_at || created
+    });
+  }
+
   function readProfile(){
     if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.read === "function"){
-      try{return window.SBP_PROFILE_STATE.read()}catch(e){}
+      try{return window.SBP_PROFILE_STATE.read() || {}}catch(e){}
     }
     return safeJson(localStorage.getItem(PROFILE_KEY) || "{}", {});
   }
-
-  function readLocalOrders(){
-    return safeJson(localStorage.getItem(LOCAL_ORDERS_KEY) || "[]", []);
+  function readLocal(){
+    const map = new Map();
+    LOCAL_KEYS.forEach(key => {
+      const arr = safeJson(localStorage.getItem(key) || "[]", []);
+      if(!Array.isArray(arr)) return;
+      arr.forEach(item => { const o = normalizeOrder(item); map.set(strongKey(o) || fuzzyKey(o), o); });
+    });
+    return Array.from(map.values());
   }
-
-  function strongKey(order){
-    if(!order) return "";
-    return String(order.order_number || order.client_order_id || order.local_order_id || "");
+  function writeLocal(order){
+    const current = readLocal();
+    const normalized = normalizeOrder(order);
+    const key = strongKey(normalized) || fuzzyKey(normalized);
+    const filtered = current.filter(o => (strongKey(o) || fuzzyKey(o)) !== key);
+    filtered.unshift(normalized);
+    try{ localStorage.setItem(PRIMARY_LOCAL_KEY, JSON.stringify(filtered.slice(0,50))); }catch(e){}
   }
+  window.SBP_SAVE_LOCAL_ORDER = writeLocal;
 
-  function fuzzyKey(order){
-    if(!order) return "";
-    return [
-      order.product_id || "",
-      order.product_name || order.name || "",
-      order.size || "",
-      String(order.created_at || "").slice(0,10)
-    ].join("|");
-  }
-
+  function strongKey(order){ return String(order && (order.order_number || order.client_order_id || order.local_order_id) || ""); }
+  function fuzzyKey(order){ return [order?.product_id||"", order?.product_name||order?.name||"", order?.size||"", String(order?.created_at||"").slice(0,10)].join("|"); }
+  function sortOrders(a,b){ return (Date.parse(b.updated_at||b.created_at||"")||0) - (Date.parse(a.updated_at||a.created_at||"")||0); }
   function mergedOrders(){
-    const profile = readProfile() || {};
-    const remote = Array.isArray(profile.orders) ? profile.orders : [];
-    const local = readLocalOrders();
-
-    // If backend profile has orders, trust backend first. Local entries are only instant fallback.
-    if(remote.length){
-      const result = remote.map(o => Object.assign({_source:"remote"}, o));
-      const remoteStrong = new Set(result.map(strongKey).filter(Boolean));
-      const remoteFuzzy = new Set(result.map(fuzzyKey).filter(Boolean));
-      local.forEach(localOrder => {
-        const sk = strongKey(localOrder);
-        const fk = fuzzyKey(localOrder);
-        if((sk && remoteStrong.has(sk)) || (fk && remoteFuzzy.has(fk))) return;
-        result.push(Object.assign({_source:"local"}, localOrder));
-      });
-      return result.sort(sortOrders);
-    }
-
-    return local.map(o => Object.assign({_source:"local"}, o)).sort(sortOrders);
+    const profile = readProfile();
+    const remote = Array.isArray(profile.orders) ? profile.orders.map(o => Object.assign({_source:"remote"}, normalizeOrder(o))) : [];
+    const local = readLocal().map(o => Object.assign({_source:"local"}, normalizeOrder(o)));
+    if(!remote.length) return local.sort(sortOrders);
+    const result = remote.slice();
+    const remoteStrong = new Set(remote.map(strongKey).filter(Boolean));
+    const remoteFuzzy = new Set(remote.map(fuzzyKey).filter(Boolean));
+    local.forEach(o => { const sk=strongKey(o), fk=fuzzyKey(o); if((sk&&remoteStrong.has(sk)) || (fk&&remoteFuzzy.has(fk))) return; result.push(o); });
+    return result.sort(sortOrders);
   }
-
-  function sortOrders(a,b){
-    const ad = Date.parse(a.updated_at || a.created_at || "") || 0;
-    const bd = Date.parse(b.updated_at || b.created_at || "") || 0;
-    return bd - ad;
-  }
-
   function imageUrl(order){
     let img = String(order.image || order.product_image || "");
     if(!img) return "";
     if(/^https?:\/\//i.test(img)) return img;
-    img = img.replace(/^\//,"").replace(/^frontend\//,"");
+    img = img.replace(/^\//, "").replace(/^frontend\//, "");
     const repo = (location.pathname.split("/").filter(Boolean)[0] || "").trim();
-    const base = repo ? "/" + repo + "/" : "/";
-    return base + img;
+    return (repo ? "/" + repo + "/" : "/") + img;
   }
-
   function renderOrders(){
-    const screen = qs("#ordersScreen");
-    if(!screen) return;
-    const list = qs("[data-orders-list]", screen);
-    const empty = qs("[data-orders-empty]", screen);
-    if(!list) return;
-
-    list.classList.add("sbp-v50-orders");
-
+    const screen = qs("#ordersScreen"); if(!screen) return;
+    const list = qs("[data-orders-list]", screen); const empty = qs("[data-orders-empty]", screen); if(!list) return;
+    let note = qs(".sbp-v51-sync-note", screen); if(!note){ note=document.createElement("p"); note.className="sbp-v51-sync-note"; list.insertAdjacentElement("beforebegin", note); }
+    const profile = readProfile();
+    note.textContent = profile.updated_at ? "Обновлено: " + new Date(profile.updated_at).toLocaleString("ru-RU") : "";
     const orders = mergedOrders();
-
-    let syncNote = qs(".sbp-v50-order-sync", screen);
-    if(!syncNote){
-      syncNote = document.createElement("p");
-      syncNote.className = "sbp-v50-order-sync";
-      list.insertAdjacentElement("beforebegin", syncNote);
-    }
-    const profile = readProfile() || {};
-    syncNote.textContent = profile.updated_at ? `Обновлено: ${new Date(profile.updated_at).toLocaleString("ru-RU")}` : "";
-
-    if(!orders.length){
-      list.innerHTML = "";
-      if(empty) empty.style.display = "";
-      return;
-    }
-
-    if(empty) empty.style.display = "none";
+    if(!orders.length){ list.innerHTML=""; if(empty) empty.style.display=""; return; }
+    if(empty) empty.style.display="none";
     list.innerHTML = orders.map(order => {
-      const status = String(order.status || "processing");
-      const label = STATUS_LABELS[status] || status;
-      const img = imageUrl(order);
-      const title = order.product_name || order.name || "SBP order";
-      const price = Number(order.final_price_byn || order.price_byn || order.price || 0);
-      const date = order.created_at ? new Date(order.created_at).toLocaleDateString("ru-RU") : "";
-      const number = order.order_number || "";
-      return `
-        <article class="sbp-v50-order-card" data-source="${esc(order._source)}">
-          <div class="sbp-v50-order-img">${img ? `<img src="${esc(img)}" alt="">` : `<span>□</span>`}</div>
-          <div class="sbp-v50-order-info">
-            <div class="sbp-v50-order-top">
-              <small>${esc(date)}${number ? " · " + esc(number) : ""}</small>
-              <span class="sbp-v50-order-status ${esc(status)}">${esc(label)}</span>
-            </div>
-            <h2>${esc(title)}</h2>
-            <div class="sbp-v50-order-meta">
-              <span>Размер: ${esc(order.size || "-")}</span>
-              <b>${price} BYN</b>
-            </div>
-          </div>
-        </article>`;
+      const status = String(order.status || "processing"); const label = STATUS_LABELS[status] || status;
+      const img = imageUrl(order); const price = Number(order.final_price_byn || order.price_byn || order.price || 0);
+      const date = order.created_at ? new Date(order.created_at).toLocaleDateString("ru-RU") : ""; const number = order.order_number || "";
+      return `<article class="sbp-v51-order-card" data-source="${esc(order._source)}"><div class="sbp-v51-order-img">${img ? `<img src="${esc(img)}" alt="">` : `<span>□</span>`}</div><div class="sbp-v51-order-info"><div class="sbp-v51-order-top"><small>${esc(date)}${number ? " · " + esc(number) : ""}</small><span class="sbp-v51-status ${esc(status)}">${esc(label)}</span></div><h2>${esc(order.product_name || order.name || "SBP order")}</h2><div class="sbp-v51-meta"><span>Размер: ${esc(order.size || "-")}</span><b>${price} BYN</b></div></div></article>`;
     }).join("");
   }
-
-  async function syncProfileAndRender(){
+  async function syncAndRender(){
     if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.sync === "function"){
       try{ await window.SBP_PROFILE_STATE.sync(); }catch(e){}
     }
-    renderOrders();
-    setTimeout(renderOrders, 500);
+    renderOrders(); setTimeout(renderOrders, 400); setTimeout(renderOrders, 1200);
   }
-
-  // Collect only visible fields from selected delivery category and use readable keys.
-  function selectedDeliveryKey(){
-    const checked = qs('input[name="delivery"]:checked');
-    if(!checked) return "";
-    if(checked.id === "delivery-evro") return "evropochta";
-    if(checked.id === "delivery-bel") return "belpochta";
-    return "pickup";
-  }
-
-  function collectDeliveryFields(){
-    const key = selectedDeliveryKey();
-    const block = qs(`#checkoutScreen [data-fields="${key}"]`);
-    const fields = {};
-    if(!block) return fields;
-    qsa("input, textarea", block).forEach((el, i) => {
-      const label = el.getAttribute("placeholder") || el.name || `Поле ${i+1}`;
-      const value = String(el.value || "").trim();
-      if(value) fields[label] = value;
-    });
-    fields["Способ получения"] = ({pickup:"Самовывоз", evropochta:"Европочта", belpochta:"Белпочта"}[key] || key || "-");
-    return fields;
-  }
-
-  // Patch orderPayload without touching sendData. This ensures admin receives exactly visible form fields.
-  function patchOrderPayload(){
-    if(typeof window.orderPayload === "function" && !window.orderPayload.__sbp_v50_patched){
-      const original = window.orderPayload;
-      const patched = function(){
-        const data = original();
-        if(data){
-          data.customer_fields = collectDeliveryFields();
-          data.delivery_method = data.customer_fields["Способ получения"] || data.delivery_method || "-";
-        }
-        return data;
-      };
-      patched.__sbp_v50_patched = true;
-      window.orderPayload = patched;
-    }
-  }
-
-  // If orderPayload is not global in this file, patch submit payload at send time by overriding SBP_SAVE_LOCAL_ORDER
-  // is not enough for Telegram payload. Therefore we also monkey-patch JSON.stringify only for order_create payload generation.
-  // Safer: before submit click, copy visible fields into all inputs container through a global side-channel.
-  window.SBP_DELIVERY_FIELDS_V50 = collectDeliveryFields;
-
-  function boot(){
-    patchOrderPayload();
-    renderOrders();
-    syncProfileAndRender();
-    setInterval(renderOrders, 2500);
-    setInterval(patchOrderPayload, 1200);
-  }
-
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
-  else boot();
-
-  document.addEventListener("click", function(e){
-    if(e.target.closest && e.target.closest('label[for="tab-orders"], label[for="tab-profile"], label[for="tab-coins"]')){
-      syncProfileAndRender();
-    }
-    if(e.target.closest && e.target.closest('#checkoutScreen label[for="tab-success"]')){
-      patchOrderPayload();
-    }
-  }, true);
-
-  window.SBP_ORDERS_V50 = {render:renderOrders, sync:syncProfileAndRender, merged:mergedOrders};
+  window.SBP_ORDERS_V51 = {render:renderOrders, sync:syncAndRender, merged:mergedOrders};
+  function boot(){ renderOrders(); syncAndRender(); setInterval(renderOrders, 2500); }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true}); else boot();
+  document.addEventListener("click", e => { if(e.target.closest && e.target.closest('label[for="tab-orders"], label[for="tab-profile"], label[for="tab-coins"]')) syncAndRender(); }, true);
   window.addEventListener("storage", renderOrders);
-  document.addEventListener("visibilitychange", function(){
-    if(!document.hidden) syncProfileAndRender();
-  });
+  document.addEventListener("visibilitychange", () => { if(!document.hidden) syncAndRender(); });
 })();
 </script>
 
