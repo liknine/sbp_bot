@@ -7853,6 +7853,137 @@ a,
 #ordersScreen .sbp-v57-meta b{color:var(--text)!important;font-size:14px!important;white-space:nowrap!important;}
 </style>
 
+
+<style id="sbp-v59-banner-fullscreen-css">
+.sbp-banner-fullscreen-v59{
+  position:fixed!important;
+  inset:0!important;
+  left:0!important;
+  top:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  max-width:none!important;
+  max-height:none!important;
+  z-index:2147483647!important;
+  display:none!important;
+  padding:calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom))!important;
+  background:rgba(0,0,0,.92)!important;
+  overflow:hidden!important;
+  transform:none!important;
+  box-sizing:border-box!important;
+}
+.sbp-banner-fullscreen-v59.is-open{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+.sbp-banner-fullscreen-v59::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:var(--sbp-banner-full-bg);
+  background-size:cover;
+  background-position:center;
+  opacity:.38;
+  filter:blur(12px) saturate(.9);
+  transform:scale(1.06);
+}
+.sbp-banner-fullscreen-v59::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(0deg,rgba(0,0,0,.82),rgba(0,0,0,.28) 45%,rgba(0,0,0,.72));
+}
+.sbp-banner-fullscreen-v59 .sbp-banner-v59-close{
+  position:absolute!important;
+  top:calc(14px + env(safe-area-inset-top))!important;
+  right:16px!important;
+  z-index:4!important;
+  width:46px!important;
+  height:46px!important;
+  border:0!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+  background:rgba(0,0,0,.34)!important;
+  color:#fff!important;
+  font-size:32px!important;
+  line-height:1!important;
+}
+.sbp-banner-fullscreen-v59 .sbp-banner-v59-card{
+  position:relative!important;
+  z-index:2!important;
+  width:min(100%,430px)!important;
+  max-height:calc(100vh - 52px - env(safe-area-inset-top) - env(safe-area-inset-bottom))!important;
+  border-radius:34px!important;
+  overflow:hidden!important;
+  background:linear-gradient(145deg,rgba(18,18,18,.92),rgba(5,5,5,.96))!important;
+  border:1px solid rgba(255,255,255,.14)!important;
+  box-shadow:0 40px 120px rgba(0,0,0,.7)!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+.sbp-banner-fullscreen-v59 .sbp-banner-v59-image{
+  width:100%!important;
+  height:min(52vh,440px)!important;
+  min-height:260px!important;
+  background:#080808!important;
+  overflow:hidden!important;
+}
+.sbp-banner-fullscreen-v59 .sbp-banner-v59-image img{
+  width:100%!important;
+  height:100%!important;
+  display:block!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  opacity:1!important;
+  filter:none!important;
+  transform:none!important;
+}
+.sbp-banner-fullscreen-v59 .sbp-banner-v59-body{
+  padding:22px 22px 24px!important;
+  color:#fff!important;
+}
+.sbp-banner-fullscreen-v59 .sbp-banner-v59-kicker{
+  margin:0 0 10px!important;
+  color:rgba(255,255,255,.62)!important;
+  font-size:12px!important;
+  line-height:1.1!important;
+  font-weight:900!important;
+  letter-spacing:.16em!important;
+  text-transform:uppercase!important;
+}
+.sbp-banner-fullscreen-v59 .sbp-banner-v59-title{
+  margin:0!important;
+  color:#fff!important;
+  font-size:36px!important;
+  line-height:.98!important;
+  letter-spacing:-1.2px!important;
+  font-weight:950!important;
+}
+.sbp-banner-fullscreen-v59 .sbp-banner-v59-desc{
+  margin:14px 0 0!important;
+  color:rgba(255,255,255,.72)!important;
+  font-size:15px!important;
+  line-height:1.35!important;
+}
+.sbp-banner-fullscreen-v59 .sbp-banner-v59-action{
+  margin-top:20px!important;
+  width:100%!important;
+  min-height:56px!important;
+  border:0!important;
+  border-radius:20px!important;
+  background:#fff!important;
+  color:#111!important;
+  -webkit-text-fill-color:#111!important;
+  font-size:17px!important;
+  font-weight:950!important;
+}
+body.sbp-banner-v59-locked{
+  overflow:hidden!important;
+}
+</style>
+
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -8997,7 +9128,7 @@ a,
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v57"
+      client_app_version: "v58"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v57", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -10838,7 +10969,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v57";
+  const VERSION = "v59";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -11239,327 +11370,6 @@ a,
 
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
   else boot();
-})();
-</script>
-
-
-<script id="sbp-v44-requested-fixes-js">
-(function(){
-  const SIZE_KEY = "sbp_selected_size";
-  const SIZE_PID_KEY = "sbp_selected_size_product_id";
-  const BONUS_KEY = "sbp_requested_bonus_v1";
-  const PROFILE_KEY = "sbp_profile_state_v1";
-  const BONUS_OPTIONS = [
-    {coins_cost:100, discount_byn:5, title:"Скидка 5 BYN"},
-    {coins_cost:250, discount_byn:15, title:"Скидка 15 BYN"},
-    {coins_cost:500, discount_byn:35, title:"Скидка 35 BYN"}
-  ];
-
-  function qs(sel, root=document){ return root.querySelector(sel); }
-  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
-  function safeJson(raw, fallback){ try{return JSON.parse(raw)}catch(e){return fallback} }
-  function num(v){ const n=Number(v||0); return Number.isFinite(n) && n>0 ? Math.floor(n) : 0; }
-  function activeProductId(){ return localStorage.getItem("sbp_active_product") || ""; }
-
-  /* 2) Banner fullscreen */
-  function ensureBannerOverlay(){
-    let overlay = qs(".sbp-banner-fullscreen-v44");
-    if(overlay) return overlay;
-    overlay = document.createElement("div");
-    overlay.className = "sbp-banner-fullscreen-v44";
-    overlay.innerHTML = `
-      <button type="button" class="sbp-banner-full-close-v44" aria-label="Закрыть">×</button>
-      <div class="sbp-banner-full-card-v44">
-        <div class="sbp-banner-full-image-v45"><img alt=""></div>
-        <div class="sbp-banner-full-text-v45">
-          <p class="kicker"></p>
-          <h2></h2>
-          <p class="desc">Нажмите кнопку ниже, чтобы перейти к разделу.</p>
-          <button type="button" class="sbp-banner-full-action-v44">Открыть →</button>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(overlay);
-    overlay.addEventListener("click", function(e){
-      if(e.target === overlay || e.target.closest(".sbp-banner-full-close-v44")){
-        closeBannerOverlay();
-      }
-    }, true);
-    return overlay;
-  }
-  function closeBannerOverlay(){
-    const overlay = qs(".sbp-banner-fullscreen-v44");
-    if(overlay) overlay.classList.remove("is-open");
-  }
-  function openBannerOverlay(slide, index){
-    const overlay = ensureBannerOverlay();
-    const debug = window.SBP_BANNERS_DEBUG ? window.SBP_BANNERS_DEBUG() : null;
-    const data = debug && Array.isArray(debug.banners) ? debug.banners[index] : null;
-    const kicker = data && data.subtitle || qs(".sbp-banner-v26-kicker", slide)?.textContent || qs(".story p", slide)?.textContent || "SBP";
-    const title = data && data.title || qs(".sbp-banner-v26-title", slide)?.innerText || qs(".story h1", slide)?.innerText || "SBP";
-    const buttonText = data && data.button_text || qs(".sbp-banner-v26-btn", slide)?.textContent || qs(".story-open-btn", slide)?.textContent || "Открыть →";
-    const link = data && data.link || "catalog";
-    const img = qs(".sbp-banner-v26-img", slide)?.getAttribute("src") || "";
-
-    qs(".kicker", overlay).textContent = kicker;
-    qs("h2", overlay).innerHTML = String(title).replace(/\n/g, "<br>");
-    qs(".sbp-banner-full-action-v44", overlay).textContent = buttonText;
-    qs(".sbp-banner-full-action-v44", overlay).onclick = function(){
-      closeBannerOverlay();
-      const map = {catalog:"tab-catalog", coins:"tab-coins", bonuses:"tab-bonuses", archive:"tab-archive", home:"tab-home", profile:"tab-profile", orders:"tab-orders"};
-      if(map[link]){
-        const input = document.getElementById(map[link]);
-        if(input) input.checked = true;
-        return;
-      }
-      if(/^https?:\/\//i.test(String(link||""))){
-        try{
-          if(window.Telegram && Telegram.WebApp && Telegram.WebApp.openLink) Telegram.WebApp.openLink(link);
-          else window.open(link, "_blank");
-        }catch(e){ window.open(link, "_blank"); }
-      }
-    };
-
-    const fullImg = qs(".sbp-banner-full-image-v45 img", overlay);
-    if(img){
-      overlay.classList.add("has-image");
-      overlay.style.setProperty("--sbp-banner-image", `url("${img}")`);
-      if(fullImg) fullImg.src = img;
-    }else{
-      overlay.classList.remove("has-image");
-      overlay.style.removeProperty("--sbp-banner-image");
-      if(fullImg) fullImg.removeAttribute("src");
-    }
-    overlay.classList.add("is-open");
-  }
-  document.addEventListener("click", function(e){
-    const arrowOrDot = e.target.closest && e.target.closest(".sbp-banner-v26-arrow,.sbp-banner-v26-dot,[data-banner-dot]");
-    if(arrowOrDot) return;
-
-    const btn = e.target.closest && e.target.closest("#homeScreen [data-banner-action], #homeScreen .sbp-banner-v26-slide, #homeScreen .story-open-btn");
-    if(!btn) return;
-
-    const slide = btn.closest(".sbp-banner-v26-slide") || btn.closest(".story") || qs("#homeScreen .sbp-banner-v26-slide.is-active");
-    if(!slide) return;
-    e.preventDefault();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-
-    let idx = 0;
-    const actionBtn = btn.closest("[data-banner-action]") || qs("[data-banner-action]", slide);
-    if(actionBtn) idx = Number(actionBtn.getAttribute("data-banner-action") || 0);
-    else if(slide.dataset && slide.dataset.bannerIndex) idx = Number(slide.dataset.bannerIndex || 0);
-    openBannerOverlay(slide, idx);
-  }, true);
-  document.addEventListener("keydown", function(e){
-    if(e.key === "Escape") closeBannerOverlay();
-  }, true);
-
-  /* 3) Size selection */
-  function currentSizeButtons(){
-    return qsa("#productScreen .sbp-size-option[data-size]");
-  }
-  function currentSizes(){
-    return currentSizeButtons().map(btn => String(btn.dataset.size || "").trim()).filter(Boolean);
-  }
-  function setSelectedSize(size){
-    const pid = activeProductId();
-    if(!size || !pid) return;
-    localStorage.setItem(SIZE_KEY, String(size));
-    localStorage.setItem(SIZE_PID_KEY, pid);
-    currentSizeButtons().forEach(btn => btn.classList.toggle("is-selected", String(btn.dataset.size) === String(size)));
-  }
-  function clearSelectedSize(){
-    localStorage.removeItem(SIZE_KEY);
-    localStorage.removeItem(SIZE_PID_KEY);
-    currentSizeButtons().forEach(btn => btn.classList.remove("is-selected"));
-  }
-  function ensureSizeAlert(){
-    const block = qs("#productScreen .product-block:has(.sizes-grid)") || qs("#productScreen .sizes-grid")?.closest(".product-block") || qs("#productScreen .sizes-grid")?.parentElement;
-    if(!block) return null;
-    let alert = qs(".sbp-size-alert-v44", block);
-    if(!alert){
-      alert = document.createElement("div");
-      alert.className = "sbp-size-alert-v44";
-      alert.textContent = "Выберите размер перед добавлением в корзину.";
-      const grid = qs(".sizes-grid", block);
-      grid ? grid.insertAdjacentElement("afterend", alert) : block.appendChild(alert);
-    }
-    return alert;
-  }
-  function showSizeAlert(){
-    const alert = ensureSizeAlert();
-    if(!alert) return;
-    alert.classList.remove("is-visible");
-    void alert.offsetWidth;
-    alert.classList.add("is-visible");
-    setTimeout(() => alert.classList.remove("is-visible"), 2600);
-  }
-  function normalizeSizeForActiveProduct(){
-    const pid = activeProductId();
-    const sizes = currentSizes();
-    if(!pid || !sizes.length) return true;
-
-    const selected = localStorage.getItem(SIZE_KEY) || "";
-    const selectedPid = localStorage.getItem(SIZE_PID_KEY) || "";
-
-    if(sizes.length === 1){
-      setSelectedSize(sizes[0]);
-      return true;
-    }
-
-    if(selectedPid !== pid || !sizes.includes(selected)){
-      clearSelectedSize();
-      return false;
-    }
-
-    currentSizeButtons().forEach(btn => btn.classList.toggle("is-selected", String(btn.dataset.size) === String(selected)));
-    return true;
-  }
-  function canGoToCart(){
-    normalizeSizeForActiveProduct();
-    const sizes = currentSizes();
-    if(!sizes.length) return true;
-    const selected = localStorage.getItem(SIZE_KEY) || "";
-    const selectedPid = localStorage.getItem(SIZE_PID_KEY) || "";
-    return !!selected && selectedPid === activeProductId() && sizes.includes(selected);
-  }
-  document.addEventListener("click", function(e){
-    const sizeBtn = e.target.closest && e.target.closest("#productScreen .sbp-size-option[data-size]");
-    if(sizeBtn){
-      localStorage.setItem(SIZE_PID_KEY, activeProductId());
-      setTimeout(normalizeSizeForActiveProduct, 10);
-      return;
-    }
-
-    const cartBtn = e.target.closest && e.target.closest('label[for="tab-cart"], .main-action[for="tab-cart"]');
-    if(cartBtn){
-      if(!canGoToCart()){
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        showSizeAlert();
-        return false;
-      }
-    }
-  }, true);
-  const sizeObserver = new MutationObserver(function(){
-    setTimeout(normalizeSizeForActiveProduct, 30);
-  });
-  if(document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", () => {
-      const screen = qs("#productScreen");
-      if(screen) sizeObserver.observe(screen, {childList:true, subtree:true});
-      normalizeSizeForActiveProduct();
-    }, {once:true});
-  }else{
-    const screen = qs("#productScreen");
-    if(screen) sizeObserver.observe(screen, {childList:true, subtree:true});
-    normalizeSizeForActiveProduct();
-  }
-
-  /* 4) Bonus request logic */
-  function profileState(){
-    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.read === "function"){
-      try{return window.SBP_PROFILE_STATE.read()}catch(e){}
-    }
-    return safeJson(localStorage.getItem(PROFILE_KEY) || "{}", {});
-  }
-  function coinsBalance(){
-    const state = profileState() || {};
-    return num(state.coins_balance ?? state.coins ?? localStorage.getItem("sbp_coins_balance"));
-  }
-  function readBonus(){
-    const data = safeJson(localStorage.getItem(BONUS_KEY) || "null", null);
-    if(!data || !data.coins_cost || !data.discount_byn) return null;
-    return data;
-  }
-  function writeBonus(bonus){
-    if(!bonus) localStorage.removeItem(BONUS_KEY);
-    else localStorage.setItem(BONUS_KEY, JSON.stringify(bonus));
-    renderBonusState();
-  }
-  function renderBonusState(){
-    const balance = coinsBalance();
-    const selected = readBonus();
-    const note = qs("#bonusesScreen .bonuses-zero-note");
-    if(note){
-      note.textContent = balance > 0
-        ? `Сейчас доступно ${balance} Coins. Выберите один бонус — он уйдёт менеджеру вместе с заявкой.`
-        : "Сейчас доступно 0 Coins. Бонусы станут доступны после завершённых заказов.";
-    }
-
-    qsa("#bonusesScreen .bonus-list .bonus-item").forEach((item, i) => {
-      const opt = BONUS_OPTIONS[i];
-      if(!opt) return;
-      item.dataset.coinsCost = opt.coins_cost;
-      item.dataset.discountByn = opt.discount_byn;
-      item.dataset.bonusTitle = opt.title;
-      const available = balance >= opt.coins_cost;
-      item.classList.toggle("is-locked", !available);
-      item.classList.toggle("is-selected", !!selected && selected.coins_cost === opt.coins_cost);
-      item.setAttribute("aria-disabled", available ? "false" : "true");
-    });
-
-    const preview = qs("#bonusesScreen .active-bonus-preview");
-    if(preview){
-      preview.classList.toggle("is-visible", !!selected);
-      const b = qs(".activated-bonus-card b", preview);
-      const small = qs(".activated-bonus-card small", preview);
-      const badge = qs(".activated-bonus-card span", preview);
-      if(selected){
-        if(b) b.textContent = `−${selected.discount_byn} BYN`;
-        if(small) small.textContent = `Запрос на бонус за ${selected.coins_cost} Coins будет отправлен вместе с заказом`;
-        if(badge) badge.textContent = "request";
-      }
-    }
-  }
-  document.addEventListener("click", function(e){
-    const item = e.target.closest && e.target.closest("#bonusesScreen .bonus-list .bonus-item");
-    if(!item) return;
-    e.preventDefault();
-    e.stopPropagation();
-
-    const cost = Number(item.dataset.coinsCost || 0);
-    const discount = Number(item.dataset.discountByn || 0);
-    const title = item.dataset.bonusTitle || `Скидка ${discount} BYN`;
-    const balance = coinsBalance();
-
-    if(!cost || !discount) return;
-    if(balance < cost){
-      alert(`Недостаточно SBP Coins. Нужно ${cost}, сейчас доступно ${balance}.`);
-      renderBonusState();
-      return;
-    }
-
-    const current = readBonus();
-    if(current && current.coins_cost === cost){
-      writeBonus(null);
-    }else{
-      writeBonus({
-        coins_cost:cost,
-        discount_byn:discount,
-        title:title,
-        requested_at:new Date().toISOString()
-      });
-    }
-  }, true);
-
-  window.SBP_BONUS_STATE = {
-    read: readBonus,
-    clear: function(){ writeBonus(null); },
-    render: renderBonusState
-  };
-
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", renderBonusState, {once:true});
-  else renderBonusState();
-  window.addEventListener("storage", renderBonusState);
-  document.addEventListener("visibilitychange", function(){ if(!document.hidden) renderBonusState(); });
-  document.addEventListener("click", function(e){
-    if(e.target.closest && e.target.closest('label[for="tab-bonuses"], label[for="tab-coins"], label[for="tab-profile"]')){
-      setTimeout(renderBonusState, 120);
-    }
-  }, true);
 })();
 </script>
 
@@ -12228,6 +12038,139 @@ a,
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", boot, {once:true}); else boot();
   document.addEventListener("click", e=>{ if(e.target.closest && e.target.closest('label[for="tab-orders"], label[for="tab-profile"], label[for="tab-coins"]')) syncAndRender(); }, true);
   window.addEventListener("storage", renderOrders); document.addEventListener("visibilitychange",()=>{ if(!document.hidden) syncAndRender(); });
+})();
+</script>
+
+
+<script id="sbp-v59-banner-fullscreen-js">
+(function(){
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function escAttr(v){ return String(v || "").replace(/"/g,"&quot;"); }
+
+  function dataAt(index, slide){
+    const debug = window.SBP_BANNERS_DEBUG ? window.SBP_BANNERS_DEBUG() : null;
+    const banners = debug && Array.isArray(debug.banners) ? debug.banners : [];
+    const b = banners[index] || {};
+    return {
+      title: b.title || qs(".sbp-banner-v26-title", slide)?.innerText || "SBP",
+      subtitle: b.subtitle || qs(".sbp-banner-v26-kicker", slide)?.textContent || "SBP",
+      button_text: b.button_text || qs(".sbp-banner-v26-btn", slide)?.textContent || "Смотреть →",
+      link: b.link || "catalog",
+      image: qs(".sbp-banner-v26-img", slide)?.getAttribute("src") || b._resolved_image || b.image || ""
+    };
+  }
+
+  function ensure(){
+    let overlay = qs(".sbp-banner-fullscreen-v59");
+    if(overlay) return overlay;
+
+    overlay = document.createElement("div");
+    overlay.className = "sbp-banner-fullscreen-v59";
+    overlay.innerHTML = `
+      <button type="button" class="sbp-banner-v59-close" aria-label="Закрыть">×</button>
+      <article class="sbp-banner-v59-card">
+        <div class="sbp-banner-v59-image"><img alt=""></div>
+        <div class="sbp-banner-v59-body">
+          <p class="sbp-banner-v59-kicker"></p>
+          <h2 class="sbp-banner-v59-title"></h2>
+          <p class="sbp-banner-v59-desc">Нажмите кнопку ниже, чтобы перейти к разделу.</p>
+          <button type="button" class="sbp-banner-v59-action">Смотреть →</button>
+        </div>
+      </article>
+    `;
+    document.body.appendChild(overlay);
+
+    overlay.addEventListener("click", function(e){
+      if(e.target === overlay || e.target.closest(".sbp-banner-v59-close")){
+        close();
+      }
+    }, true);
+
+    return overlay;
+  }
+
+  function close(){
+    const overlay = qs(".sbp-banner-fullscreen-v59");
+    if(overlay) overlay.classList.remove("is-open");
+    document.body.classList.remove("sbp-banner-v59-locked");
+  }
+
+  function go(link){
+    const map = {
+      catalog:"tab-catalog",
+      coins:"tab-coins",
+      bonuses:"tab-bonuses",
+      archive:"tab-archive",
+      home:"tab-home",
+      profile:"tab-profile",
+      orders:"tab-orders"
+    };
+    if(map[link]){
+      const input = document.getElementById(map[link]);
+      if(input) input.checked = true;
+      return;
+    }
+    if(/^https?:\/\//i.test(String(link || ""))){
+      try{
+        if(window.Telegram && Telegram.WebApp && Telegram.WebApp.openLink) Telegram.WebApp.openLink(link);
+        else window.open(link, "_blank");
+      }catch(e){ window.open(link, "_blank"); }
+    }
+  }
+
+  function open(slide, index){
+    const overlay = ensure();
+    const d = dataAt(index, slide);
+
+    overlay.style.setProperty("--sbp-banner-full-bg", d.image ? `url("${escAttr(d.image)}")` : "none");
+    qs(".sbp-banner-v59-kicker", overlay).textContent = d.subtitle || "SBP";
+    qs(".sbp-banner-v59-title", overlay).innerHTML = String(d.title || "SBP").replace(/\n/g,"<br>");
+    qs(".sbp-banner-v59-action", overlay).textContent = d.button_text || "Смотреть →";
+
+    const img = qs(".sbp-banner-v59-image img", overlay);
+    if(d.image){
+      img.src = d.image;
+      qs(".sbp-banner-v59-image", overlay).style.display = "";
+    }else{
+      img.removeAttribute("src");
+      qs(".sbp-banner-v59-image", overlay).style.display = "none";
+    }
+
+    qs(".sbp-banner-v59-action", overlay).onclick = function(){
+      close();
+      go(d.link || "catalog");
+    };
+
+    overlay.classList.add("is-open");
+    document.body.classList.add("sbp-banner-v59-locked");
+  }
+
+  document.addEventListener("click", function(e){
+    const ignored = e.target.closest && e.target.closest(".sbp-banner-v26-arrow,.sbp-banner-v26-dot,[data-banner-dot]");
+    if(ignored) return;
+
+    const target = e.target.closest && e.target.closest("#homeScreen .sbp-banner-v26-slide, #homeScreen [data-banner-action]");
+    if(!target) return;
+
+    const slide = target.closest(".sbp-banner-v26-slide") || qs("#homeScreen .sbp-banner-v26-slide.is-active");
+    if(!slide) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    let index = Number(slide.getAttribute("data-banner-index") || 0);
+    const btn = target.closest("[data-banner-action]");
+    if(btn) index = Number(btn.getAttribute("data-banner-action") || index);
+
+    open(slide, index);
+  }, true);
+
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape") close();
+  }, true);
+
+  window.SBP_BANNER_FULLSCREEN_V59 = {open, close};
 })();
 </script>
 
