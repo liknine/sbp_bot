@@ -7643,23 +7643,6 @@ a,
 }
 </style>
 
-
-<style id="sbp-v42-favorites-button-white-only">
-#favoritesScreen .favorites-empty-link{
-  color:#fff!important;
-  opacity:1!important;
-  -webkit-text-fill-color:#fff!important;
-  mix-blend-mode:normal!important;
-  filter:none!important;
-  text-shadow:none!important;
-}
-#favoritesScreen .favorites-empty-link *{
-  color:#fff!important;
-  -webkit-text-fill-color:#fff!important;
-  opacity:1!important;
-}
-</style>
-
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -7820,7 +7803,7 @@ a,
       <div class="empty-icon">♡</div>
       <h2>Избранного пока нет</h2>
       <p>Добавляйте товары в избранное, чтобы быстро вернуться к ним позже.</p>
-      <label class="primary-link favorites-empty-link" for="tab-catalog" style="color:#fff!important;opacity:1!important;-webkit-text-fill-color:#fff!important;text-shadow:none!important;filter:none!important;">Перейти в каталог</label>
+      <label class="primary-link" for="tab-catalog">Перейти в каталог</label>
     </section>
   </main>
   <main class="screen" id="archiveScreen">
@@ -10795,7 +10778,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v42";
+  const VERSION = "v36";
   let active = 0;
   let timer = null;
   let banners = [];
