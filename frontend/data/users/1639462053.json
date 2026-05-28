@@ -83,9 +83,9 @@
       "price_byn": 77,
       "discount_byn": 0,
       "final_price_byn": 77,
-      "status": "processing",
+      "status": "in_transit",
       "created_at": "2026-05-28 12:56:56",
-      "updated_at": "2026-05-28T12:56:56.072896"
+      "updated_at": "2026-05-28T12:58:56.248653"
     },
     {
       "order_number": "SBP-00013",
@@ -270,5 +270,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-05-28T12:56:56.078231+00:00"
+  "updated_at": "2026-05-28T12:58:56.252065+00:00"
 }
