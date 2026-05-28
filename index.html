@@ -7811,6 +7811,69 @@ a,
 }
 </style>
 
+
+<style id="sbp-v45-bonus-size-banner-fav-css">
+/* Favorites empty button: theme-aware contrast.
+   Dark theme button is light -> text must be black.
+   Light theme button is dark -> text must be white. */
+#favoritesScreen .favorites-empty-link,
+#favoritesScreen .empty-state label[for="tab-catalog"].primary-link{
+  color:var(--inverseText)!important;
+  -webkit-text-fill-color:var(--inverseText)!important;
+  opacity:1!important;
+  text-shadow:none!important;
+  filter:none!important;
+  mix-blend-mode:normal!important;
+}
+#favoritesScreen .favorites-empty-link *,
+#favoritesScreen .empty-state label[for="tab-catalog"].primary-link *{
+  color:var(--inverseText)!important;
+  -webkit-text-fill-color:var(--inverseText)!important;
+  opacity:1!important;
+}
+
+/* Fullscreen banner: real clear image inside card + blurred background remains. */
+.sbp-banner-full-image-v45{
+  width:100%;
+  height:230px;
+  border-radius:26px;
+  overflow:hidden;
+  margin:0 0 22px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  display:none;
+  box-shadow:0 20px 50px rgba(0,0,0,.28);
+}
+.sbp-banner-full-image-v45 img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  object-position:center;
+  filter:none!important;
+  opacity:1!important;
+}
+.sbp-banner-fullscreen-v44.has-image .sbp-banner-full-image-v45{
+  display:block;
+}
+.sbp-banner-full-card-v44{
+  justify-content:flex-start!important;
+}
+.sbp-banner-full-card-v44 .sbp-banner-full-text-v45{
+  margin-top:auto;
+}
+
+/* Size alert on product button */
+.sbp-size-alert-v44{
+  font-weight:700;
+}
+
+/* Bonus usage visual */
+#bonusesScreen .bonus-item.is-selected{
+  box-shadow:0 0 0 1px var(--inverse) inset;
+}
+</style>
+
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -10946,7 +11009,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v44";
+  const VERSION = "v45";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -11378,10 +11441,13 @@ a,
     overlay.innerHTML = `
       <button type="button" class="sbp-banner-full-close-v44" aria-label="Закрыть">×</button>
       <div class="sbp-banner-full-card-v44">
-        <p class="kicker"></p>
-        <h2></h2>
-        <p class="desc">Нажмите кнопку ниже, чтобы перейти к разделу.</p>
-        <button type="button" class="sbp-banner-full-action-v44">Открыть →</button>
+        <div class="sbp-banner-full-image-v45"><img alt=""></div>
+        <div class="sbp-banner-full-text-v45">
+          <p class="kicker"></p>
+          <h2></h2>
+          <p class="desc">Нажмите кнопку ниже, чтобы перейти к разделу.</p>
+          <button type="button" class="sbp-banner-full-action-v44">Открыть →</button>
+        </div>
       </div>
     `;
     document.body.appendChild(overlay);
@@ -11425,12 +11491,15 @@ a,
       }
     };
 
+    const fullImg = qs(".sbp-banner-full-image-v45 img", overlay);
     if(img){
       overlay.classList.add("has-image");
       overlay.style.setProperty("--sbp-banner-image", `url("${img}")`);
+      if(fullImg) fullImg.src = img;
     }else{
       overlay.classList.remove("has-image");
       overlay.style.removeProperty("--sbp-banner-image");
+      if(fullImg) fullImg.removeAttribute("src");
     }
     overlay.classList.add("is-open");
   }
@@ -11662,6 +11731,140 @@ a,
       setTimeout(renderBonusState, 120);
     }
   }, true);
+})();
+</script>
+
+
+<script id="sbp-v45-size-cart-guard">
+(function(){
+  const SIZE_KEY = "sbp_selected_size";
+  const SIZE_PID_KEY = "sbp_selected_size_product_id";
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function activeProductId(){ return localStorage.getItem("sbp_active_product") || ""; }
+
+  function dynamicButtons(){
+    return qsa("#productScreen .sbp-size-option[data-size]");
+  }
+  function staticRadios(){
+    return qsa("#productScreen .size-radio");
+  }
+  function visibleSizes(){
+    const dyn = dynamicButtons().map(btn => String(btn.dataset.size || "").trim()).filter(Boolean);
+    if(dyn.length) return dyn;
+    return staticRadios().map(r => {
+      const label = document.querySelector(`label[for="${r.id}"]`);
+      return String((label && label.querySelector("b") && label.querySelector("b").textContent) || r.value || r.id.replace(/^size-/,"")).trim();
+    }).filter(Boolean);
+  }
+  function markSelected(size){
+    const pid = activeProductId();
+    if(size && pid){
+      localStorage.setItem(SIZE_KEY, String(size));
+      localStorage.setItem(SIZE_PID_KEY, pid);
+    }
+    dynamicButtons().forEach(btn => btn.classList.toggle("is-selected", String(btn.dataset.size) === String(size)));
+    staticRadios().forEach(r => {
+      const label = document.querySelector(`label[for="${r.id}"]`);
+      const labelSize = String((label && label.querySelector("b") && label.querySelector("b").textContent) || r.value || r.id.replace(/^size-/,"")).trim();
+      r.checked = String(labelSize) === String(size);
+    });
+  }
+  function clearSize(){
+    localStorage.removeItem(SIZE_KEY);
+    localStorage.removeItem(SIZE_PID_KEY);
+    dynamicButtons().forEach(btn => btn.classList.remove("is-selected"));
+    staticRadios().forEach(r => r.checked = false);
+  }
+  function ensureAlert(){
+    const grid = qs("#productScreen .sizes-grid");
+    if(!grid) return null;
+    let alert = qs("#productScreen .sbp-size-alert-v45");
+    if(!alert){
+      alert = document.createElement("div");
+      alert.className = "sbp-size-alert-v44 sbp-size-alert-v45";
+      alert.textContent = "Сначала выберите размер.";
+      grid.insertAdjacentElement("afterend", alert);
+    }
+    return alert;
+  }
+  function showAlert(){
+    const alert = ensureAlert();
+    if(!alert) return;
+    alert.classList.remove("is-visible");
+    void alert.offsetWidth;
+    alert.classList.add("is-visible");
+    setTimeout(() => alert.classList.remove("is-visible"), 2600);
+  }
+  function normalize(){
+    const pid = activeProductId();
+    const sizes = visibleSizes();
+    if(!pid || !sizes.length) return true;
+
+    const current = localStorage.getItem(SIZE_KEY) || "";
+    const currentPid = localStorage.getItem(SIZE_PID_KEY) || "";
+
+    if(sizes.length === 1){
+      markSelected(sizes[0]);
+      return true;
+    }
+
+    if(currentPid !== pid || !sizes.includes(current)){
+      clearSize();
+      return false;
+    }
+
+    markSelected(current);
+    return true;
+  }
+  function hasSelectedSize(){
+    normalize();
+    const sizes = visibleSizes();
+    if(!sizes.length) return true;
+    if(sizes.length === 1) return true;
+
+    const current = localStorage.getItem(SIZE_KEY) || "";
+    const currentPid = localStorage.getItem(SIZE_PID_KEY) || "";
+    return !!current && currentPid === activeProductId() && sizes.includes(current);
+  }
+
+  document.addEventListener("click", function(e){
+    const sizeBtn = e.target.closest && e.target.closest("#productScreen .sbp-size-option[data-size]");
+    if(sizeBtn){
+      localStorage.setItem(SIZE_PID_KEY, activeProductId());
+      markSelected(sizeBtn.dataset.size);
+      return;
+    }
+
+    const radioLabel = e.target.closest && e.target.closest("#productScreen .size-option");
+    if(radioLabel){
+      const b = radioLabel.querySelector("b");
+      if(b){
+        localStorage.setItem(SIZE_PID_KEY, activeProductId());
+        setTimeout(() => markSelected(b.textContent.trim()), 0);
+      }
+      return;
+    }
+
+    const cartBtn = e.target.closest && e.target.closest('#productScreen label[for="tab-cart"], #productScreen .main-action[for="tab-cart"]');
+    if(cartBtn && !hasSelectedSize()){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      showAlert();
+      return false;
+    }
+  }, true);
+
+  const observer = new MutationObserver(() => setTimeout(normalize, 20));
+  function boot(){
+    const screen = qs("#productScreen");
+    if(screen) observer.observe(screen, {childList:true, subtree:true});
+    normalize();
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
+  else boot();
 })();
 </script>
 
