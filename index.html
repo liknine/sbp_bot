@@ -7874,6 +7874,37 @@ a,
 }
 </style>
 
+
+<style id="sbp-v46-bonus-checkout-size-css">
+.sbp-size-alert-v46{
+  display:none;
+  margin:12px 0 0;
+  border-radius:14px;
+  padding:12px 13px;
+  background:rgba(255,193,7,.14);
+  border:1px solid rgba(255,193,7,.34);
+  color:var(--text);
+  font-size:13px;
+  line-height:1.3;
+  font-weight:800;
+}
+.sbp-size-alert-v46.is-visible{
+  display:block;
+  animation:sbpV46Shake .28s ease both;
+}
+@keyframes sbpV46Shake{
+  0%,100%{transform:translateX(0)}
+  30%{transform:translateX(-4px)}
+  65%{transform:translateX(4px)}
+}
+.sbp-bonus-active-v46{
+  border-color:rgba(255,255,255,.22)!important;
+}
+#theme-light:checked ~ .app .sbp-bonus-active-v46{
+  border-color:rgba(0,0,0,.14)!important;
+}
+</style>
+
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -11009,7 +11040,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v45";
+  const VERSION = "v46";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -11865,6 +11896,252 @@ a,
   }
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
   else boot();
+})();
+</script>
+
+
+<script id="sbp-v46-bonus-checkout-size-guard">
+(function(){
+  const SIZE_KEY = "sbp_selected_size";
+  const SIZE_PID_KEY = "sbp_selected_size_product_id";
+  const BONUS_KEY = "sbp_requested_bonus_v1";
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function safeJson(raw, fallback){ try{return JSON.parse(raw)}catch(e){return fallback} }
+
+  function activeProductId(){
+    return localStorage.getItem("sbp_active_product") || "";
+  }
+
+  function visibleSizeControls(){
+    const screen = qs("#productScreen");
+    if(!screen) return [];
+    const dyn = qsa(".sbp-size-option[data-size]", screen).filter(el => el.offsetParent !== null || el.getClientRects().length);
+    if(dyn.length){
+      return dyn.map(el => ({
+        el,
+        size:String(el.dataset.size || "").trim(),
+        selected:el.classList.contains("is-selected")
+      })).filter(x => x.size);
+    }
+
+    const radios = qsa(".size-radio", screen).filter(r => {
+      const label = r.id ? qs(`label[for="${r.id}"]`, screen) : null;
+      return label && (label.offsetParent !== null || label.getClientRects().length);
+    });
+    return radios.map(r => {
+      const label = qs(`label[for="${r.id}"]`, screen);
+      const b = label && qs("b", label);
+      const size = String((b && b.textContent) || r.value || r.id.replace(/^size-/,"")).trim();
+      return {el:r, label, size, selected:!!r.checked};
+    }).filter(x => x.size);
+  }
+
+  function markSize(size){
+    const pid = activeProductId();
+    if(!size || !pid) return;
+    localStorage.setItem(SIZE_KEY, String(size));
+    localStorage.setItem(SIZE_PID_KEY, pid);
+
+    visibleSizeControls().forEach(item => {
+      if(item.el.classList && item.el.classList.contains("sbp-size-option")){
+        item.el.classList.toggle("is-selected", String(item.size) === String(size));
+      }
+      if(item.el.classList && item.el.classList.contains("size-radio")){
+        item.el.checked = String(item.size) === String(size);
+      }
+    });
+  }
+
+  function clearSize(){
+    localStorage.removeItem(SIZE_KEY);
+    localStorage.removeItem(SIZE_PID_KEY);
+    visibleSizeControls().forEach(item => {
+      if(item.el.classList && item.el.classList.contains("sbp-size-option")) item.el.classList.remove("is-selected");
+      if(item.el.classList && item.el.classList.contains("size-radio")) item.el.checked = false;
+    });
+  }
+
+  function ensureSizeAlert(){
+    const screen = qs("#productScreen");
+    if(!screen) return null;
+    let alert = qs(".sbp-size-alert-v46", screen);
+    if(alert) return alert;
+    alert = document.createElement("div");
+    alert.className = "sbp-size-alert-v46";
+    alert.textContent = "Сначала выберите размер, потом товар можно добавить в корзину.";
+    const grid = qs(".sizes-grid", screen);
+    if(grid) grid.insertAdjacentElement("afterend", alert);
+    else screen.appendChild(alert);
+    return alert;
+  }
+
+  function showSizeAlert(){
+    const alert = ensureSizeAlert();
+    if(!alert) return;
+    alert.classList.remove("is-visible");
+    void alert.offsetWidth;
+    alert.classList.add("is-visible");
+    try{ alert.scrollIntoView({behavior:"smooth", block:"center"}); }catch(e){}
+    setTimeout(() => alert.classList.remove("is-visible"), 3000);
+  }
+
+  function normalizeSize(){
+    const pid = activeProductId();
+    const controls = visibleSizeControls();
+    if(!pid || !controls.length) return true;
+
+    if(controls.length === 1){
+      markSize(controls[0].size);
+      return true;
+    }
+
+    const selected = localStorage.getItem(SIZE_KEY) || "";
+    const selectedPid = localStorage.getItem(SIZE_PID_KEY) || "";
+
+    if(selectedPid === pid && controls.some(x => x.size === selected)){
+      markSize(selected);
+      return true;
+    }
+
+    // Important: product changed or several sizes exist; do not keep old stale size.
+    clearSize();
+    return false;
+  }
+
+  function hasValidSize(){
+    const controls = visibleSizeControls();
+    if(!controls.length) return true;
+    if(controls.length === 1){
+      markSize(controls[0].size);
+      return true;
+    }
+    const pid = activeProductId();
+    const selected = localStorage.getItem(SIZE_KEY) || "";
+    const selectedPid = localStorage.getItem(SIZE_PID_KEY) || "";
+    return !!selected && selectedPid === pid && controls.some(x => x.size === selected);
+  }
+
+  function isCartButton(target){
+    return !!(target && target.closest && target.closest('#productScreen label[for="tab-cart"], #productScreen .main-action[for="tab-cart"], #productScreen [for="tab-cart"]'));
+  }
+
+  ["pointerdown","mousedown","touchstart","click"].forEach(type => {
+    document.addEventListener(type, function(e){
+      if(!isCartButton(e.target)) return;
+      if(!hasValidSize()){
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        showSizeAlert();
+        return false;
+      }
+    }, true);
+  });
+
+  document.addEventListener("click", function(e){
+    const dyn = e.target.closest && e.target.closest("#productScreen .sbp-size-option[data-size]");
+    if(dyn){
+      markSize(dyn.dataset.size);
+      return;
+    }
+    const label = e.target.closest && e.target.closest("#productScreen .size-option");
+    if(label){
+      const b = qs("b", label);
+      if(b) setTimeout(() => markSize(b.textContent.trim()), 0);
+    }
+  }, true);
+
+  const observer = new MutationObserver(() => setTimeout(normalizeSize, 40));
+  function bootSize(){
+    const screen = qs("#productScreen");
+    if(screen) observer.observe(screen, {childList:true, subtree:true});
+    normalizeSize();
+  }
+
+  // Checkout bonus block should display the selected bonus, not only active backend bonuses.
+  function readBonus(){
+    if(window.SBP_BONUS_STATE && typeof window.SBP_BONUS_STATE.read === "function"){
+      try{
+        const fromApi = window.SBP_BONUS_STATE.read();
+        if(fromApi) return fromApi;
+      }catch(e){}
+    }
+    return safeJson(localStorage.getItem(BONUS_KEY) || "null", null);
+  }
+
+  function priceFromCheckout(){
+    let total = 0;
+    qsa("#cartScreen .summary-row, #checkoutScreen .summary-row").forEach(row => {
+      const label = (qs("span", row)?.textContent || "").toLowerCase();
+      const value = qs("b", row)?.textContent || "";
+      if(label.includes("товар") || label.includes("итого")){
+        const n = Number(String(value).replace(/[^\d.]/g,""));
+        if(Number.isFinite(n) && n > total) total = n;
+      }
+    });
+    return total;
+  }
+
+  function renderCheckoutBonus(){
+    const bonus = readBonus();
+    const screen = qs("#checkoutScreen");
+    if(!screen) return;
+
+    const card = Array.from(qsa(".coins-card", screen)).find(el => (qs("h2", el)?.textContent || "").toLowerCase().includes("sbp coins"));
+    if(!card) return;
+
+    const title = qs("h3, b", card);
+    const desc = qs("p, small", card);
+    const pill = qs(".stock-pill, .bonus-cost, span:last-child", card);
+
+    if(!bonus){
+      card.classList.remove("sbp-bonus-active-v46");
+      if(title) title.textContent = "Активных бонусов нет";
+      if(desc) desc.textContent = "0 BYN доступно к заказу";
+      if(pill) pill.textContent = "Нет бонуса";
+      updateSummaryDiscount(0);
+      return;
+    }
+
+    const price = priceFromCheckout();
+    const maxDiscount = price ? Math.floor(price * 0.2) : Number(bonus.discount_byn || 0);
+    const applied = Math.min(Number(bonus.discount_byn || 0), maxDiscount || Number(bonus.discount_byn || 0));
+
+    card.classList.add("sbp-bonus-active-v46");
+    if(title) title.textContent = `Бонус −${applied} BYN`;
+    if(desc) desc.textContent = `${bonus.coins_cost} Coins будут списаны после отправки заявки`;
+    if(pill) pill.textContent = "Будет использован";
+    updateSummaryDiscount(applied);
+  }
+
+  function updateSummaryDiscount(discount){
+    qsa("#cartScreen .summary-row, #checkoutScreen .summary-row").forEach(row => {
+      const label = qs("span", row)?.textContent || "";
+      const value = qs("b", row);
+      if(!value) return;
+      if(label.includes("Скидка SBP Coins")) value.textContent = `${Number(discount || 0)} BYN`;
+    });
+  }
+
+  function boot(){
+    bootSize();
+    renderCheckoutBonus();
+    setInterval(renderCheckoutBonus, 1200);
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
+  else boot();
+
+  document.addEventListener("click", function(e){
+    if(e.target.closest && e.target.closest('label[for="tab-checkout"], label[for="tab-cart"], label[for="tab-bonuses"], label[for="tab-coins"]')){
+      setTimeout(renderCheckoutBonus, 80);
+      setTimeout(renderCheckoutBonus, 450);
+    }
+  }, true);
+  window.addEventListener("storage", renderCheckoutBonus);
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden) renderCheckoutBonus(); });
 })();
 </script>
 
