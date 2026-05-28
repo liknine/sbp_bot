@@ -4,12 +4,18 @@
   "username": "liknine",
   "first_name": "ликнайн",
   "status": "Entry",
-  "coins": 226,
-  "coins_balance": 226,
+  "coins": 626,
+  "coins_balance": 626,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": 400,
+      "type": "manual_bonus",
+      "comment": "Admin manual operation",
+      "created_at": "2026-05-28 11:34:52"
+    },
     {
       "amount": 222,
       "type": "manual_bonus",
@@ -137,5 +143,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-05-28T11:34:03.658073+00:00"
+  "updated_at": "2026-05-28T11:34:52.257474+00:00"
 }
