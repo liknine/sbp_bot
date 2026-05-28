@@ -8974,10 +8974,13 @@ a,
       delivery_method: data.delivery_method,
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
-      client_order_id: data.client_order_id || ("WEB-" + Date.now())
+      client_order_id: data.client_order_id || ("WEB-" + Date.now()),
+      client_app_version: "v54"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v52", JSON.stringify(compact.customer_fields || {})); }catch(e){}
+
+    try{ localStorage.setItem("sbp_last_payload_v54", JSON.stringify(compact)); }catch(e){}
 
     const raw = JSON.stringify(compact);
 
@@ -10813,7 +10816,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v53";
+  const VERSION = "v54";
   let active = 0;
   let timer = null;
   let banners = [];
