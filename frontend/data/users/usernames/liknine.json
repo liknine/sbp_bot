@@ -74,6 +74,20 @@
   ],
   "orders": [
     {
+      "order_number": "SBP-00016",
+      "product_id": "test-test-chernyy",
+      "product_name": "тест",
+      "brand": "тест",
+      "image": "images/products/test-test-chernyy-1-98942a5a02.jpg",
+      "size": "43",
+      "price_byn": 350,
+      "discount_byn": 0,
+      "final_price_byn": 350,
+      "status": "processing",
+      "created_at": "2026-05-28 13:28:06",
+      "updated_at": "2026-05-28T13:28:06.893746"
+    },
+    {
       "order_number": "SBP-00015",
       "product_id": "maison-margiela-maison-margiela-evolution-low-black",
       "product_name": "Maison Margiela Evolution Low",
@@ -284,5 +298,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-05-28T13:13:12.541393+00:00"
+  "updated_at": "2026-05-28T13:28:06.896339+00:00"
 }
