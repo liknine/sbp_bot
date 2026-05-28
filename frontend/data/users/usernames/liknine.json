@@ -62,6 +62,20 @@
   ],
   "orders": [
     {
+      "order_number": "SBP-00012",
+      "product_id": "test-test-chernyy",
+      "product_name": "тест",
+      "brand": "тест",
+      "image": "images/products/test-test-chernyy-1-98942a5a02.jpg",
+      "size": "45.5",
+      "price_byn": 350,
+      "discount_byn": 0,
+      "final_price_byn": 350,
+      "status": "processing",
+      "created_at": "2026-05-28 12:43:03",
+      "updated_at": "2026-05-28T12:43:03.746268"
+    },
+    {
       "order_number": "SBP-00011",
       "product_id": "oo-prol-prold",
       "product_name": "прол",
@@ -216,5 +230,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-05-28T12:39:54.831586+00:00"
+  "updated_at": "2026-05-28T12:43:03.750374+00:00"
 }
