@@ -4,8 +4,8 @@
   "username": "liknine",
   "first_name": "ликнайн",
   "status": "Selected",
-  "coins": 1103,
-  "coins_balance": 1103,
+  "coins": 853,
+  "coins_balance": 853,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
   "completed_orders_count": 3,
@@ -17,6 +17,12 @@
   },
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": -250,
+      "type": "bonus_used",
+      "comment": "Discount used on order: -15 BYN",
+      "created_at": "2026-05-28 12:46:23"
+    },
     {
       "amount": 77,
       "type": "order_completed",
@@ -61,6 +67,20 @@
     }
   ],
   "orders": [
+    {
+      "order_number": "SBP-00013",
+      "product_id": "1-2-3",
+      "product_name": "2",
+      "brand": "1",
+      "image": "images/products/1-2-3-1-81d35fa294.jpg",
+      "size": "44",
+      "price_byn": 4,
+      "discount_byn": 15,
+      "final_price_byn": 4,
+      "status": "processing",
+      "created_at": "2026-05-28 12:46:23",
+      "updated_at": "2026-05-28T12:46:23.448774"
+    },
     {
       "order_number": "SBP-00012",
       "product_id": "test-test-chernyy",
@@ -230,5 +250,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-05-28T12:43:37.114481+00:00"
+  "updated_at": "2026-05-28T12:46:23.453724+00:00"
 }
