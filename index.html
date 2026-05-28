@@ -7820,6 +7820,17 @@ a,
 #ordersScreen .sbp-v51-sync-note{margin:0 0 12px;color:var(--muted);font-size:12px;}
 </style>
 
+
+<style id="sbp-v52-fav-button-final">
+#favoritesScreen .favorites-empty-link,
+#favoritesScreen .empty-state label[for="tab-catalog"].primary-link{
+  color:#111!important;
+  -webkit-text-fill-color:#111!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+</style>
+
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -8952,6 +8963,8 @@ a,
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now())
     };
+
+    try{ localStorage.setItem("sbp_last_customer_fields_v52", JSON.stringify(compact.customer_fields || {})); }catch(e){}
 
     const raw = JSON.stringify(compact);
 
@@ -10787,7 +10800,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v51";
+  const VERSION = "v52";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12235,6 +12248,18 @@ a,
   document.addEventListener("click", e => { if(e.target.closest && e.target.closest('label[for="tab-orders"], label[for="tab-profile"], label[for="tab-coins"]')) syncAndRender(); }, true);
   window.addEventListener("storage", renderOrders);
   document.addEventListener("visibilitychange", () => { if(!document.hidden) syncAndRender(); });
+})();
+</script>
+
+
+<script id="sbp-v52-ready-and-debug">
+(function(){
+  try{
+    if(window.Telegram && Telegram.WebApp){
+      Telegram.WebApp.ready && Telegram.WebApp.ready();
+      Telegram.WebApp.expand && Telegram.WebApp.expand();
+    }
+  }catch(e){}
 })();
 </script>
 
