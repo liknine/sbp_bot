@@ -3,12 +3,12 @@
   "telegram_id": 1639462053,
   "username": "liknine",
   "first_name": "ликнайн",
-  "status": "Entry",
-  "coins": 1026,
-  "coins_balance": 1026,
+  "status": "Selected",
+  "coins": 1103,
+  "coins_balance": 1103,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
-  "completed_orders_count": 2,
+  "completed_orders_count": 3,
   "status_rules": {
     "Entry": 0,
     "Selected": 3,
@@ -17,6 +17,12 @@
   },
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": 77,
+      "type": "order_completed",
+      "comment": "Order completed / Entry",
+      "created_at": "2026-05-28 12:39:54"
+    },
     {
       "amount": -500,
       "type": "bonus_used",
@@ -65,9 +71,9 @@
       "price_byn": 77,
       "discount_byn": 15,
       "final_price_byn": 62,
-      "status": "processing",
+      "status": "completed",
       "created_at": "2026-05-28 12:38:48",
-      "updated_at": "2026-05-28T12:38:48.887980"
+      "updated_at": "2026-05-28T12:39:54.823113"
     },
     {
       "order_number": "SBP-00010",
@@ -210,5 +216,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-05-28T12:38:48.894740+00:00"
+  "updated_at": "2026-05-28T12:39:54.831586+00:00"
 }
