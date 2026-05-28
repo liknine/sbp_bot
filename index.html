@@ -7905,6 +7905,37 @@ a,
 }
 </style>
 
+
+<style id="sbp-v47-hard-fix-css">
+.sbp-size-alert-v47{
+  display:none;
+  margin:12px 0 0;
+  border-radius:14px;
+  padding:12px 13px;
+  background:rgba(255,193,7,.16);
+  border:1px solid rgba(255,193,7,.38);
+  color:var(--text);
+  font-size:13px;
+  line-height:1.3;
+  font-weight:900;
+}
+.sbp-size-alert-v47.is-visible{
+  display:block;
+  animation:sbpV47Shake .28s ease both;
+}
+@keyframes sbpV47Shake{
+  0%,100%{transform:translateX(0)}
+  30%{transform:translateX(-4px)}
+  65%{transform:translateX(4px)}
+}
+#checkoutScreen .discount-card.sbp-bonus-active-v47{
+  border-color:rgba(255,255,255,.24)!important;
+}
+#checkoutScreen .discount-card.sbp-bonus-active-v47 button{
+  opacity:1!important;
+}
+</style>
+
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -8100,7 +8131,7 @@ a,
 <input class="size-radio" type="radio" name="size" id="size-43"><label class="size-option" for="size-43"><b>43</b><small>27.5 cm</small></label>
 <input class="size-radio" type="radio" name="size" id="size-44"><label class="size-option" for="size-44"><b>44</b><small>28 cm</small></label>
 <input class="size-radio" type="radio" name="size" id="size-45"><label class="size-option" for="size-45"><b>45</b><small>29 cm</small></label></div><p class="size-warning">Выберите размер перед добавлением в корзину</p></section>
-<section class="product-action-stack"><label class="main-action" for="tab-cart">В корзину</label><a class="dark-action" href="https://t.me/SBP_Admin" target="_blank">Связаться с менеджером</a><label class="dark-action" for="tab-catalog">Назад в каталог</label></section></section></main>
+<section class="product-action-stack"><button type="button" class="main-action sbp-cart-button-v47">В корзину</button><a class="dark-action" href="https://t.me/SBP_Admin" target="_blank">Связаться с менеджером</a><label class="dark-action" for="tab-catalog">Назад в каталог</label></section></section></main>
 
   <main class="screen" id="cartScreen">
     <label class="screen-back" for="tab-home"><span>‹</span><b>Назад</b></label><header class="page-head"><h1>Корзина</h1><p>Проверь товары перед оформлением заявки.</p></header><section class="cart-list"><article class="cart-item"><div class="cart-img"><img src="assets/embedded/embedded-2-3eefccdda3.png" alt="" loading="lazy" decoding="async"></div><div class="cart-info"><h3>Nike Air Force 1 ’07</h3><p>Размер выбранный · Black</p><div class="cart-bottom"><b>179 BYN</b></div></div></article></section><section class="empty-state compact-empty cart-empty-template"><div class="empty-icon">□</div><h2>Пустая корзина</h2><p>Если товаров нет, пользователь увидит это состояние и кнопку возврата в каталог.</p><label class="secondary-link" for="tab-catalog">В каталог</label></section><section class="cart-summary"><div class="summary-row"><span>Товары</span><b>179 BYN</b></div><div class="summary-row"><span>Скидка SBP Coins</span><b>0 BYN</b></div><div class="summary-row"><span>Доставка</span><b>уточнит менеджер</b></div><div class="summary-row"><span>SBP Coins после завершения</span><b>+179</b></div><div class="summary-row total"><span>Итого</span><b>179 BYN</b></div></section><label class="primary-link" for="tab-checkout">Оформить заказ</label><label class="secondary-link" for="tab-home">Продолжить покупки</label></main>
@@ -11040,7 +11071,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v46";
+  const VERSION = "v47";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12138,6 +12169,234 @@ a,
     if(e.target.closest && e.target.closest('label[for="tab-checkout"], label[for="tab-cart"], label[for="tab-bonuses"], label[for="tab-coins"]')){
       setTimeout(renderCheckoutBonus, 80);
       setTimeout(renderCheckoutBonus, 450);
+    }
+  }, true);
+  window.addEventListener("storage", renderCheckoutBonus);
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden) renderCheckoutBonus(); });
+})();
+</script>
+
+
+<script id="sbp-v47-hard-bonus-size-fix">
+(function(){
+  const SIZE_KEY = "sbp_selected_size";
+  const SIZE_PID_KEY = "sbp_selected_size_product_id";
+  const BONUS_KEY = "sbp_requested_bonus_v1";
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function safeJson(raw, fallback){ try{return JSON.parse(raw)}catch(e){return fallback} }
+
+  function activeProductId(){
+    return localStorage.getItem("sbp_active_product") || "static-product";
+  }
+
+  function getControls(){
+    const screen = qs("#productScreen");
+    if(!screen) return [];
+    const dyn = qsa(".sbp-size-option[data-size]", screen);
+    if(dyn.length){
+      return dyn.map(el => ({type:"dyn", el, size:String(el.dataset.size || "").trim(), checked:el.classList.contains("is-selected")})).filter(x => x.size);
+    }
+    return qsa(".size-radio", screen).map(r => {
+      const label = r.id ? qs(`label[for="${r.id}"]`, screen) : null;
+      const b = label ? qs("b", label) : null;
+      const size = String((b && b.textContent) || r.value || r.id.replace(/^size-/,"")).trim();
+      return {type:"radio", el:r, label, size, checked:!!r.checked};
+    }).filter(x => x.size && x.label);
+  }
+
+  function setSize(size){
+    const pid = activeProductId();
+    localStorage.setItem(SIZE_KEY, String(size));
+    localStorage.setItem(SIZE_PID_KEY, pid);
+    getControls().forEach(c => {
+      if(c.type === "dyn") c.el.classList.toggle("is-selected", String(c.size) === String(size));
+      if(c.type === "radio") c.el.checked = String(c.size) === String(size);
+    });
+  }
+
+  function clearSize(){
+    localStorage.removeItem(SIZE_KEY);
+    localStorage.removeItem(SIZE_PID_KEY);
+    getControls().forEach(c => {
+      if(c.type === "dyn") c.el.classList.remove("is-selected");
+      if(c.type === "radio") c.el.checked = false;
+    });
+  }
+
+  function ensureAlert(){
+    const screen = qs("#productScreen");
+    if(!screen) return null;
+    let alert = qs(".sbp-size-alert-v47", screen);
+    if(alert) return alert;
+    alert = document.createElement("div");
+    alert.className = "sbp-size-alert-v47";
+    alert.textContent = "Сначала выберите размер, потом товар можно добавить в корзину.";
+    const grid = qs(".sizes-grid", screen);
+    if(grid) grid.insertAdjacentElement("afterend", alert);
+    else screen.appendChild(alert);
+    return alert;
+  }
+
+  function showAlert(){
+    const alert = ensureAlert();
+    if(!alert) return;
+    alert.classList.remove("is-visible");
+    void alert.offsetWidth;
+    alert.classList.add("is-visible");
+    try{ alert.scrollIntoView({behavior:"smooth", block:"center"}); }catch(e){}
+    setTimeout(() => alert.classList.remove("is-visible"), 3200);
+  }
+
+  function canCart(){
+    const controls = getControls();
+    if(!controls.length) return true;
+    if(controls.length === 1){
+      setSize(controls[0].size);
+      return true;
+    }
+
+    // Trust actual radio/button state first; this avoids stale localStorage.
+    const checked = controls.find(c => c.checked || (c.type === "radio" && c.el.checked));
+    if(checked){
+      setSize(checked.size);
+      return true;
+    }
+
+    const pid = activeProductId();
+    const saved = localStorage.getItem(SIZE_KEY) || "";
+    const savedPid = localStorage.getItem(SIZE_PID_KEY) || "";
+    if(saved && savedPid === pid && controls.some(c => c.size === saved)){
+      setSize(saved);
+      return true;
+    }
+
+    clearSize();
+    return false;
+  }
+
+  function goCartIfPossible(){
+    if(!canCart()){
+      showAlert();
+      return false;
+    }
+    const cart = document.getElementById("tab-cart");
+    if(cart) cart.checked = true;
+    return true;
+  }
+
+  document.addEventListener("click", function(e){
+    const cartBtn = e.target.closest && e.target.closest("#productScreen .sbp-cart-button-v47");
+    if(cartBtn){
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      goCartIfPossible();
+      return false;
+    }
+
+    const dyn = e.target.closest && e.target.closest("#productScreen .sbp-size-option[data-size]");
+    if(dyn){
+      setSize(dyn.dataset.size);
+      return;
+    }
+
+    const label = e.target.closest && e.target.closest("#productScreen .size-option");
+    if(label){
+      const b = qs("b", label);
+      if(b) setTimeout(() => setSize(b.textContent.trim()), 10);
+    }
+  }, true);
+
+  // Clear stale size when active product changes / product page updates unless one size.
+  let lastPid = "";
+  function normalize(){
+    const pid = activeProductId();
+    const controls = getControls();
+    if(pid !== lastPid){
+      lastPid = pid;
+      if(controls.length > 1) clearSize();
+    }
+    if(controls.length === 1) setSize(controls[0].size);
+  }
+
+  const mo = new MutationObserver(() => setTimeout(normalize, 50));
+
+  function readBonus(){
+    if(window.SBP_BONUS_STATE && typeof window.SBP_BONUS_STATE.read === "function"){
+      try{
+        const b = window.SBP_BONUS_STATE.read();
+        if(b) return b;
+      }catch(e){}
+    }
+    return safeJson(localStorage.getItem(BONUS_KEY) || "null", null);
+  }
+
+  function renderCheckoutBonus(){
+    const screen = qs("#checkoutScreen");
+    if(!screen) return;
+
+    const card = qs(".discount-card", screen);
+    if(!card) return;
+
+    const bonus = readBonus();
+    const title = qs("b", card);
+    const sub = qs("span", card);
+    const btn = qs("button", card);
+
+    if(!bonus){
+      card.classList.add("is-empty");
+      card.classList.remove("sbp-bonus-active-v47");
+      if(title) title.textContent = "Активных бонусов нет";
+      if(sub) sub.textContent = "0 BYN доступно к заказу";
+      if(btn){
+        btn.textContent = "Нет бонуса";
+        btn.disabled = true;
+      }
+      updateDiscountRows(0);
+      return;
+    }
+
+    const discount = Number(bonus.discount_byn || 0);
+    const cost = Number(bonus.coins_cost || 0);
+
+    card.classList.remove("is-empty");
+    card.classList.add("sbp-bonus-active-v47");
+    if(title) title.textContent = `Бонус −${discount} BYN`;
+    if(sub) sub.textContent = `${cost} Coins будут списаны при отправке заявки`;
+    if(btn){
+      btn.textContent = "Будет использован";
+      btn.disabled = true;
+    }
+    updateDiscountRows(discount);
+  }
+
+  function updateDiscountRows(discount){
+    qsa("#cartScreen .summary-row, #checkoutScreen .summary-row").forEach(row => {
+      const label = qs("span", row)?.textContent || "";
+      const val = qs("b", row);
+      if(val && label.includes("Скидка SBP Coins")){
+        val.textContent = `${Number(discount || 0)} BYN`;
+      }
+    });
+  }
+
+  function boot(){
+    const ps = qs("#productScreen");
+    if(ps) mo.observe(ps, {childList:true, subtree:true});
+    normalize();
+    renderCheckoutBonus();
+    setInterval(renderCheckoutBonus, 800);
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
+  else boot();
+
+  document.addEventListener("click", function(e){
+    if(e.target.closest && e.target.closest('label[for="tab-checkout"], label[for="tab-cart"], label[for="tab-bonuses"], label[for="tab-coins"], .bonus-item')){
+      setTimeout(renderCheckoutBonus, 80);
+      setTimeout(renderCheckoutBonus, 350);
     }
   }, true);
   window.addEventListener("storage", renderCheckoutBonus);
