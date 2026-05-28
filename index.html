@@ -7945,6 +7945,50 @@ a,
 }
 </style>
 
+
+<style id="sbp-v49-orders-admin-fix-css">
+#ordersScreen .orders-timeline{
+  display:grid!important;
+  gap:12px!important;
+}
+#ordersScreen .product-order-card.sbp-order-v49{
+  display:grid!important;
+  grid-template-columns:88px minmax(0,1fr)!important;
+  gap:12px!important;
+  align-items:center!important;
+  min-height:112px!important;
+  padding:10px!important;
+  border-radius:24px!important;
+  overflow:hidden!important;
+  background:linear-gradient(145deg,var(--card1),var(--card2))!important;
+  border:1px solid var(--line)!important;
+}
+#ordersScreen .product-order-card.sbp-order-v49 .order-product-photo img{
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  display:block!important;
+}
+#ordersScreen .product-order-card.sbp-order-v49 .order-product-info{
+  min-width:0!important;
+}
+#ordersScreen .product-order-card.sbp-order-v49 .order-product-info h2{
+  white-space:normal!important;
+  display:-webkit-box!important;
+  -webkit-line-clamp:2!important;
+  -webkit-box-orient:vertical!important;
+}
+#ordersScreen .order-status-pill.completed{background:rgba(46,204,113,.18)!important;color:#2ecc71!important}
+#ordersScreen .order-status-pill.cancelled{background:rgba(255,79,79,.16)!important;color:#ff6969!important}
+#ordersScreen .order-status-pill.awaiting_payment{background:rgba(255,193,7,.18)!important;color:#ffd166!important}
+#ordersScreen .order-status-pill.sent,
+#ordersScreen .order-status-pill.in_transit,
+#ordersScreen .order-status-pill.arrived{background:rgba(88,166,255,.18)!important;color:#58a6ff!important}
+</style>
+
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -11080,7 +11124,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v48";
+  const VERSION = "v49";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12544,6 +12588,172 @@ a,
       forceProfileSync();
       setTimeout(renderOrdersV48, 250);
     }
+  });
+})();
+</script>
+
+
+<script id="sbp-v49-orders-remote-status-render">
+(function(){
+  const PROFILE_KEY = "sbp_profile_state_v1";
+  const LOCAL_ORDERS_KEY = "sbp_local_orders_v1";
+  const STATUS_LABELS = {
+    processing:"В обработке",
+    awaiting_payment:"Ожидает оплаты",
+    sent:"Отправлен",
+    in_transit:"В пути",
+    arrived:"Прибыл",
+    completed:"Завершен",
+    cancelled:"Отменен"
+  };
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function safeJson(raw, fallback){ try{return JSON.parse(raw)}catch(e){return fallback} }
+  function esc(v){ return String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
+
+  function readProfile(){
+    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.read === "function"){
+      try{return window.SBP_PROFILE_STATE.read()}catch(e){}
+    }
+    return safeJson(localStorage.getItem(PROFILE_KEY) || "{}", {});
+  }
+
+  function readLocal(){
+    return safeJson(localStorage.getItem(LOCAL_ORDERS_KEY) || "[]", []);
+  }
+
+  function strongKey(order){
+    if(!order) return "";
+    return String(order.order_number || order.client_order_id || order.local_order_id || "");
+  }
+
+  function fuzzyKey(order){
+    if(!order) return "";
+    return [
+      order.product_id || "",
+      order.product_name || order.name || "",
+      order.size || "",
+      order.created_at ? String(order.created_at).slice(0,10) : ""
+    ].join("|");
+  }
+
+  function mergedOrders(){
+    const profile = readProfile() || {};
+    const remote = Array.isArray(profile.orders) ? profile.orders : [];
+    const local = readLocal();
+
+    const out = [];
+    const byStrong = new Map();
+    const byFuzzy = new Map();
+
+    local.forEach(order => {
+      const copy = Object.assign({}, order, {_source:"local"});
+      const sk = strongKey(copy);
+      const fk = fuzzyKey(copy);
+      out.push(copy);
+      if(sk) byStrong.set(sk, copy);
+      if(fk) byFuzzy.set(fk, copy);
+    });
+
+    remote.forEach(order => {
+      const remoteCopy = Object.assign({}, order, {_source:"remote"});
+      const sk = strongKey(remoteCopy);
+      const fk = fuzzyKey(remoteCopy);
+      let target = (sk && byStrong.get(sk)) || (fk && byFuzzy.get(fk));
+      if(target){
+        Object.assign(target, remoteCopy);
+      }else{
+        out.push(remoteCopy);
+        if(sk) byStrong.set(sk, remoteCopy);
+        if(fk) byFuzzy.set(fk, remoteCopy);
+      }
+    });
+
+    return out.sort((a,b) => {
+      const ad = Date.parse(a.updated_at || a.created_at || "") || 0;
+      const bd = Date.parse(b.updated_at || b.created_at || "") || 0;
+      return bd - ad;
+    });
+  }
+
+  function imageUrl(order){
+    let img = String(order.image || order.product_image || "");
+    if(!img) return "";
+    if(/^https?:\/\//i.test(img)) return img;
+    img = img.replace(/^\//,"");
+    const repo = (location.pathname.split("/").filter(Boolean)[0] || "").trim();
+    const repoBase = repo ? "/" + repo + "/" : "/";
+    return repoBase + img.replace(/^frontend\//,"");
+  }
+
+  function render(){
+    const screen = qs("#ordersScreen");
+    if(!screen) return;
+    const list = qs("[data-orders-list]", screen);
+    const empty = qs("[data-orders-empty]", screen);
+    if(!list) return;
+
+    const orders = mergedOrders();
+    if(!orders.length){
+      list.innerHTML = "";
+      if(empty) empty.style.display = "";
+      return;
+    }
+
+    if(empty) empty.style.display = "none";
+    list.innerHTML = orders.map(order => {
+      const status = String(order.status || "processing");
+      const label = STATUS_LABELS[status] || status;
+      const img = imageUrl(order);
+      const title = order.product_name || order.name || "SBP order";
+      const price = Number(order.final_price_byn || order.price_byn || order.price || 0);
+      const date = order.created_at ? new Date(order.created_at).toLocaleDateString("ru-RU") : "";
+      const number = order.order_number || "";
+      return `
+        <article class="product-order-card sbp-order-v49">
+          <div class="order-product-photo">${img ? `<img src="${esc(img)}" alt="">` : `<span>□</span>`}</div>
+          <div class="order-product-info">
+            <div class="order-headline">
+              <small>${esc(date)}${number ? " · " + esc(number) : ""}</small>
+              <span class="order-status-pill ${esc(status)}">${esc(label)}</span>
+            </div>
+            <h2>${esc(title)}</h2>
+            <div class="order-product-meta">
+              <span>Размер: ${esc(order.size || "-")}</span>
+              <b>${price} BYN</b>
+            </div>
+          </div>
+        </article>`;
+    }).join("");
+  }
+
+  function syncAndRender(){
+    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.sync === "function"){
+      try{ window.SBP_PROFILE_STATE.sync(); }catch(e){}
+    }
+    setTimeout(render, 120);
+    setTimeout(render, 900);
+  }
+
+  window.SBP_ORDERS_V49 = {render, merged:mergedOrders, sync:syncAndRender};
+
+  function boot(){
+    render();
+    syncAndRender();
+    setInterval(render, 2500);
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
+  else boot();
+
+  document.addEventListener("click", function(e){
+    if(e.target.closest && e.target.closest('label[for="tab-orders"], label[for="tab-profile"], label[for="tab-coins"]')){
+      syncAndRender();
+    }
+  }, true);
+  window.addEventListener("storage", render);
+  document.addEventListener("visibilitychange", function(){
+    if(!document.hidden) syncAndRender();
   });
 })();
 </script>
