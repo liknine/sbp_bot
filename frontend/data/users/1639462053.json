@@ -74,6 +74,20 @@
   ],
   "orders": [
     {
+      "order_number": "SBP-00023",
+      "product_id": "oo-prol-prold",
+      "product_name": "прол",
+      "brand": "оо",
+      "image": "images/products/oo-prol-prold-1.jpg",
+      "size": "43",
+      "price_byn": 77,
+      "discount_byn": 0,
+      "final_price_byn": 77,
+      "status": "processing",
+      "created_at": "2026-05-28 14:16:14",
+      "updated_at": "2026-05-28T14:16:14.676622"
+    },
+    {
       "order_number": "SBP-00022",
       "product_id": "pppp-latal-chernye",
       "product_name": "Латал",
@@ -382,5 +396,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-05-28T14:15:37.297763+00:00"
+  "updated_at": "2026-05-28T14:16:14.679924+00:00"
 }
