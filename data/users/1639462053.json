@@ -86,10 +86,10 @@
       "price_byn": 77,
       "discount_byn": 0,
       "final_price_byn": 77,
-      "status": "processing",
-      "status_label": "В обработке",
+      "status": "sent",
+      "status_label": "Отправлен",
       "created_at": "2026-05-28 15:05:02",
-      "updated_at": "2026-05-28T15:05:02.377050"
+      "updated_at": "2026-05-28T15:06:01.214992"
     },
     {
       "id": 25,
@@ -542,5 +542,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-05-28T15:05:02.380297+00:00"
+  "updated_at": "2026-05-28T15:06:01.218313+00:00"
 }
