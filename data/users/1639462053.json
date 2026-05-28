@@ -31,6 +31,20 @@
   ],
   "orders": [
     {
+      "order_number": "SBP-00009",
+      "product_id": "pppp-latal-chernye",
+      "product_name": "Латал",
+      "brand": "Пппп",
+      "image": "images/products/pppp-latal-chernye-1.jpg",
+      "size": "40",
+      "price_byn": 150,
+      "discount_byn": 0,
+      "final_price_byn": 150,
+      "status": "processing",
+      "created_at": "2026-05-28 12:13:48",
+      "updated_at": "2026-05-28T12:13:48.769224"
+    },
+    {
       "order_number": "SBP-00008",
       "product_id": "1-2-3",
       "product_name": "2",
@@ -143,5 +157,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-05-28T12:06:57.826265+00:00"
+  "updated_at": "2026-05-28T12:13:48.775902+00:00"
 }
