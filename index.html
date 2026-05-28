@@ -7989,6 +7989,130 @@ a,
 #ordersScreen .order-status-pill.arrived{background:rgba(88,166,255,.18)!important;color:#58a6ff!important}
 </style>
 
+
+<style id="sbp-v50-final-ui-css">
+/* Empty favorites: on dark theme button is light, so text must be black. */
+#favoritesScreen .favorites-empty-link,
+#favoritesScreen .empty-state label[for="tab-catalog"].primary-link{
+  color:#111!important;
+  -webkit-text-fill-color:#111!important;
+  opacity:1!important;
+  text-shadow:none!important;
+  filter:none!important;
+  mix-blend-mode:normal!important;
+}
+#theme-light:checked ~ .app #favoritesScreen .favorites-empty-link,
+#theme-light:checked ~ .app #favoritesScreen .empty-state label[for="tab-catalog"].primary-link{
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+}
+
+/* Final stable order history cards */
+#ordersScreen [data-orders-list].sbp-v50-orders{
+  display:grid!important;
+  gap:12px!important;
+}
+#ordersScreen .sbp-v50-order-card{
+  display:grid!important;
+  grid-template-columns:86px minmax(0,1fr)!important;
+  gap:12px!important;
+  align-items:center!important;
+  min-height:112px!important;
+  padding:10px!important;
+  border-radius:24px!important;
+  overflow:hidden!important;
+  background:linear-gradient(145deg,var(--card1),var(--card2))!important;
+  border:1px solid var(--line)!important;
+}
+#ordersScreen .sbp-v50-order-img{
+  height:92px!important;
+  border-radius:18px!important;
+  overflow:hidden!important;
+  background:var(--input)!important;
+  border:1px solid var(--line)!important;
+  display:grid!important;
+  place-items:center!important;
+}
+#ordersScreen .sbp-v50-order-img img{
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  display:block!important;
+}
+#ordersScreen .sbp-v50-order-info{
+  min-width:0!important;
+}
+#ordersScreen .sbp-v50-order-top{
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:space-between!important;
+  gap:8px!important;
+  margin-bottom:7px!important;
+}
+#ordersScreen .sbp-v50-order-top small{
+  color:var(--muted)!important;
+  font-size:10px!important;
+  letter-spacing:.08em!important;
+  line-height:1.2!important;
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+#ordersScreen .sbp-v50-order-status{
+  min-height:26px!important;
+  padding:0 9px!important;
+  border-radius:999px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  background:var(--soft)!important;
+  color:var(--text)!important;
+  font-size:10px!important;
+  font-weight:900!important;
+  white-space:nowrap!important;
+}
+#ordersScreen .sbp-v50-order-status.processing{background:#f1f1f1!important;color:#111!important}
+#ordersScreen .sbp-v50-order-status.completed{background:rgba(46,204,113,.18)!important;color:#2ecc71!important}
+#ordersScreen .sbp-v50-order-status.cancelled{background:rgba(255,79,79,.16)!important;color:#ff6969!important}
+#ordersScreen .sbp-v50-order-status.awaiting_payment{background:rgba(255,193,7,.18)!important;color:#ffd166!important}
+#ordersScreen .sbp-v50-order-status.sent,
+#ordersScreen .sbp-v50-order-status.in_transit,
+#ordersScreen .sbp-v50-order-status.arrived{background:rgba(88,166,255,.18)!important;color:#58a6ff!important}
+#ordersScreen .sbp-v50-order-info h2{
+  margin:0!important;
+  font-size:16px!important;
+  line-height:1.15!important;
+  white-space:normal!important;
+  display:-webkit-box!important;
+  -webkit-line-clamp:2!important;
+  -webkit-box-orient:vertical!important;
+  overflow:hidden!important;
+}
+#ordersScreen .sbp-v50-order-meta{
+  margin-top:8px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+}
+#ordersScreen .sbp-v50-order-meta span{
+  color:var(--muted)!important;
+  font-size:13px!important;
+}
+#ordersScreen .sbp-v50-order-meta b{
+  color:var(--text)!important;
+  font-size:14px!important;
+  white-space:nowrap!important;
+}
+#ordersScreen .sbp-v50-order-sync{
+  margin:0 0 12px;
+  color:var(--muted);
+  font-size:12px;
+}
+</style>
+
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -8149,7 +8273,7 @@ a,
       <div class="empty-icon">♡</div>
       <h2>Избранного пока нет</h2>
       <p>Добавляйте товары в избранное, чтобы быстро вернуться к ним позже.</p>
-      <label class="primary-link favorites-empty-link" for="tab-catalog" style="color:#fff!important;opacity:1!important;-webkit-text-fill-color:#fff!important;text-shadow:none!important;filter:none!important;">Перейти в каталог</label>
+      <label class="primary-link favorites-empty-link" for="tab-catalog" style="color:#111!important;opacity:1!important;-webkit-text-fill-color:#111!important;text-shadow:none!important;filter:none!important;">Перейти в каталог</label>
     </section>
   </main>
   <main class="screen" id="archiveScreen">
@@ -9059,11 +9183,21 @@ a,
   function orderPayload(){
     const p = productById(localStorage.getItem(ACTIVE_KEY)) || products[0];
     if(!p) return null;
-    const fields = {};
-    qsa("#checkoutScreen textarea, #checkoutScreen input").forEach((el, i) => {
-      const key = el.getAttribute("placeholder") || el.name || `field_${i+1}`;
-      fields[key] = el.value || "";
-    });
+    let fields = {};
+    if(window.SBP_DELIVERY_FIELDS_V50 && typeof window.SBP_DELIVERY_FIELDS_V50 === "function"){
+      fields = window.SBP_DELIVERY_FIELDS_V50();
+    }else{
+      qsa("#checkoutScreen .delivery-fields").forEach(block => {
+        const visible = window.getComputedStyle(block).display !== "none";
+        if(!visible) return;
+        qsa("textarea, input", block).forEach((el, i) => {
+          const key = el.getAttribute("placeholder") || el.name || `field_${i+1}`;
+          const value = String(el.value || "").trim();
+          if(value) fields[key] = value;
+        });
+      });
+      fields["Способ получения"] = selectedDelivery();
+    }
 
     const requestedBonus = (window.SBP_BONUS_STATE && typeof window.SBP_BONUS_STATE.read === "function") ? window.SBP_BONUS_STATE.read() : null;
     return {
@@ -11124,7 +11258,7 @@ a,
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v49";
+  const VERSION = "v50";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12754,6 +12888,234 @@ a,
   window.addEventListener("storage", render);
   document.addEventListener("visibilitychange", function(){
     if(!document.hidden) syncAndRender();
+  });
+})();
+</script>
+
+
+<script id="sbp-v50-final-orders-delivery-open">
+(function(){
+  const PROFILE_KEY = "sbp_profile_state_v1";
+  const LOCAL_ORDERS_KEY = "sbp_local_orders_v1";
+
+  const STATUS_LABELS = {
+    processing:"В обработке",
+    awaiting_payment:"Ожидает оплаты",
+    sent:"Отправлен",
+    in_transit:"В пути",
+    arrived:"Прибыл",
+    completed:"Завершен",
+    cancelled:"Отменен"
+  };
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function safeJson(raw, fallback){ try{return JSON.parse(raw)}catch(e){return fallback} }
+  function esc(v){ return String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
+
+  // Better UX: make Telegram ready immediately and expand Mini App when possible.
+  try{
+    if(window.Telegram && Telegram.WebApp){
+      Telegram.WebApp.ready && Telegram.WebApp.ready();
+      Telegram.WebApp.expand && Telegram.WebApp.expand();
+      Telegram.WebApp.disableVerticalSwipes && Telegram.WebApp.disableVerticalSwipes();
+    }
+  }catch(e){}
+
+  function readProfile(){
+    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.read === "function"){
+      try{return window.SBP_PROFILE_STATE.read()}catch(e){}
+    }
+    return safeJson(localStorage.getItem(PROFILE_KEY) || "{}", {});
+  }
+
+  function readLocalOrders(){
+    return safeJson(localStorage.getItem(LOCAL_ORDERS_KEY) || "[]", []);
+  }
+
+  function strongKey(order){
+    if(!order) return "";
+    return String(order.order_number || order.client_order_id || order.local_order_id || "");
+  }
+
+  function fuzzyKey(order){
+    if(!order) return "";
+    return [
+      order.product_id || "",
+      order.product_name || order.name || "",
+      order.size || "",
+      String(order.created_at || "").slice(0,10)
+    ].join("|");
+  }
+
+  function mergedOrders(){
+    const profile = readProfile() || {};
+    const remote = Array.isArray(profile.orders) ? profile.orders : [];
+    const local = readLocalOrders();
+
+    // If backend profile has orders, trust backend first. Local entries are only instant fallback.
+    if(remote.length){
+      const result = remote.map(o => Object.assign({_source:"remote"}, o));
+      const remoteStrong = new Set(result.map(strongKey).filter(Boolean));
+      const remoteFuzzy = new Set(result.map(fuzzyKey).filter(Boolean));
+      local.forEach(localOrder => {
+        const sk = strongKey(localOrder);
+        const fk = fuzzyKey(localOrder);
+        if((sk && remoteStrong.has(sk)) || (fk && remoteFuzzy.has(fk))) return;
+        result.push(Object.assign({_source:"local"}, localOrder));
+      });
+      return result.sort(sortOrders);
+    }
+
+    return local.map(o => Object.assign({_source:"local"}, o)).sort(sortOrders);
+  }
+
+  function sortOrders(a,b){
+    const ad = Date.parse(a.updated_at || a.created_at || "") || 0;
+    const bd = Date.parse(b.updated_at || b.created_at || "") || 0;
+    return bd - ad;
+  }
+
+  function imageUrl(order){
+    let img = String(order.image || order.product_image || "");
+    if(!img) return "";
+    if(/^https?:\/\//i.test(img)) return img;
+    img = img.replace(/^\//,"").replace(/^frontend\//,"");
+    const repo = (location.pathname.split("/").filter(Boolean)[0] || "").trim();
+    const base = repo ? "/" + repo + "/" : "/";
+    return base + img;
+  }
+
+  function renderOrders(){
+    const screen = qs("#ordersScreen");
+    if(!screen) return;
+    const list = qs("[data-orders-list]", screen);
+    const empty = qs("[data-orders-empty]", screen);
+    if(!list) return;
+
+    list.classList.add("sbp-v50-orders");
+
+    const orders = mergedOrders();
+
+    let syncNote = qs(".sbp-v50-order-sync", screen);
+    if(!syncNote){
+      syncNote = document.createElement("p");
+      syncNote.className = "sbp-v50-order-sync";
+      list.insertAdjacentElement("beforebegin", syncNote);
+    }
+    const profile = readProfile() || {};
+    syncNote.textContent = profile.updated_at ? `Обновлено: ${new Date(profile.updated_at).toLocaleString("ru-RU")}` : "";
+
+    if(!orders.length){
+      list.innerHTML = "";
+      if(empty) empty.style.display = "";
+      return;
+    }
+
+    if(empty) empty.style.display = "none";
+    list.innerHTML = orders.map(order => {
+      const status = String(order.status || "processing");
+      const label = STATUS_LABELS[status] || status;
+      const img = imageUrl(order);
+      const title = order.product_name || order.name || "SBP order";
+      const price = Number(order.final_price_byn || order.price_byn || order.price || 0);
+      const date = order.created_at ? new Date(order.created_at).toLocaleDateString("ru-RU") : "";
+      const number = order.order_number || "";
+      return `
+        <article class="sbp-v50-order-card" data-source="${esc(order._source)}">
+          <div class="sbp-v50-order-img">${img ? `<img src="${esc(img)}" alt="">` : `<span>□</span>`}</div>
+          <div class="sbp-v50-order-info">
+            <div class="sbp-v50-order-top">
+              <small>${esc(date)}${number ? " · " + esc(number) : ""}</small>
+              <span class="sbp-v50-order-status ${esc(status)}">${esc(label)}</span>
+            </div>
+            <h2>${esc(title)}</h2>
+            <div class="sbp-v50-order-meta">
+              <span>Размер: ${esc(order.size || "-")}</span>
+              <b>${price} BYN</b>
+            </div>
+          </div>
+        </article>`;
+    }).join("");
+  }
+
+  async function syncProfileAndRender(){
+    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.sync === "function"){
+      try{ await window.SBP_PROFILE_STATE.sync(); }catch(e){}
+    }
+    renderOrders();
+    setTimeout(renderOrders, 500);
+  }
+
+  // Collect only visible fields from selected delivery category and use readable keys.
+  function selectedDeliveryKey(){
+    const checked = qs('input[name="delivery"]:checked');
+    if(!checked) return "";
+    if(checked.id === "delivery-evro") return "evropochta";
+    if(checked.id === "delivery-bel") return "belpochta";
+    return "pickup";
+  }
+
+  function collectDeliveryFields(){
+    const key = selectedDeliveryKey();
+    const block = qs(`#checkoutScreen [data-fields="${key}"]`);
+    const fields = {};
+    if(!block) return fields;
+    qsa("input, textarea", block).forEach((el, i) => {
+      const label = el.getAttribute("placeholder") || el.name || `Поле ${i+1}`;
+      const value = String(el.value || "").trim();
+      if(value) fields[label] = value;
+    });
+    fields["Способ получения"] = ({pickup:"Самовывоз", evropochta:"Европочта", belpochta:"Белпочта"}[key] || key || "-");
+    return fields;
+  }
+
+  // Patch orderPayload without touching sendData. This ensures admin receives exactly visible form fields.
+  function patchOrderPayload(){
+    if(typeof window.orderPayload === "function" && !window.orderPayload.__sbp_v50_patched){
+      const original = window.orderPayload;
+      const patched = function(){
+        const data = original();
+        if(data){
+          data.customer_fields = collectDeliveryFields();
+          data.delivery_method = data.customer_fields["Способ получения"] || data.delivery_method || "-";
+        }
+        return data;
+      };
+      patched.__sbp_v50_patched = true;
+      window.orderPayload = patched;
+    }
+  }
+
+  // If orderPayload is not global in this file, patch submit payload at send time by overriding SBP_SAVE_LOCAL_ORDER
+  // is not enough for Telegram payload. Therefore we also monkey-patch JSON.stringify only for order_create payload generation.
+  // Safer: before submit click, copy visible fields into all inputs container through a global side-channel.
+  window.SBP_DELIVERY_FIELDS_V50 = collectDeliveryFields;
+
+  function boot(){
+    patchOrderPayload();
+    renderOrders();
+    syncProfileAndRender();
+    setInterval(renderOrders, 2500);
+    setInterval(patchOrderPayload, 1200);
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
+  else boot();
+
+  document.addEventListener("click", function(e){
+    if(e.target.closest && e.target.closest('label[for="tab-orders"], label[for="tab-profile"], label[for="tab-coins"]')){
+      syncProfileAndRender();
+    }
+    if(e.target.closest && e.target.closest('#checkoutScreen label[for="tab-success"]')){
+      patchOrderPayload();
+    }
+  }, true);
+
+  window.SBP_ORDERS_V50 = {render:renderOrders, sync:syncProfileAndRender, merged:mergedOrders};
+  window.addEventListener("storage", renderOrders);
+  document.addEventListener("visibilitychange", function(){
+    if(!document.hidden) syncProfileAndRender();
   });
 })();
 </script>
