@@ -8,6 +8,13 @@
   "coins_balance": 1526,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
+  "completed_orders_count": 2,
+  "status_rules": {
+    "Entry": 0,
+    "Selected": 3,
+    "Priority": 10,
+    "Black Access": 20
+  },
   "active_bonus": null,
   "coin_history": [
     {
@@ -183,5 +190,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-05-28T12:22:52.614561+00:00"
+  "updated_at": "2026-05-28T12:36:42.983549+00:00"
 }
