@@ -9106,8 +9106,6 @@ body.sbp-banner-v59-locked{
     const data = orderPayload();
     if(!data) return false;
 
-    // Hard refresh delivery fields at the exact send moment.
-    // This guarantees admin receives the visible form fields from the selected delivery category.
     const liveCustomerFields = collectCustomerFieldsForOrder();
     data.customer_fields = liveCustomerFields;
     data.delivery_method = liveCustomerFields["Способ получения"] || selectedDelivery();
@@ -9128,12 +9126,11 @@ body.sbp-banner-v59-locked{
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v62"
+      client_app_version: "v63"
     };
 
-    try{ localStorage.setItem("sbp_last_customer_fields_v62", JSON.stringify(compact.customer_fields || {})); }catch(e){}
-
-    try{ localStorage.setItem("sbp_last_payload_v62", JSON.stringify(compact)); }catch(e){}
+    try{ localStorage.setItem("sbp_last_customer_fields_v63", JSON.stringify(compact.customer_fields || {})); }catch(e){}
+    try{ localStorage.setItem("sbp_last_payload_v63", JSON.stringify(compact)); }catch(e){}
 
     const raw = JSON.stringify(compact);
 
@@ -9145,75 +9142,136 @@ body.sbp-banner-v59-locked{
       }
     }
 
+    function lowLevelTelegramPost(eventType, eventData){
+      let ok = false;
+      const payloadString = JSON.stringify(eventData || {});
+
+      try{
+        if(window.TelegramWebviewProxy && typeof window.TelegramWebviewProxy.postEvent === "function"){
+          window.TelegramWebviewProxy.postEvent(eventType, payloadString);
+          ok = true;
+        }
+      }catch(e){
+        console.warn("[SBP] TelegramWebviewProxy.postEvent failed", e);
+      }
+
+      try{
+        if(window.external && typeof window.external.notify === "function"){
+          window.external.notify(JSON.stringify({eventType:eventType, eventData:eventData || {}}));
+          ok = true;
+        }
+      }catch(e){
+        console.warn("[SBP] external.notify failed", e);
+      }
+
+      try{
+        if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.TelegramWebviewProxy){
+          window.webkit.messageHandlers.TelegramWebviewProxy.postMessage(JSON.stringify({eventType:eventType, eventData:eventData || {}}));
+          ok = true;
+        }
+      }catch(e){
+        console.warn("[SBP] webkit TelegramWebviewProxy failed", e);
+      }
+
+      try{
+        if(window.parent && window.parent !== window){
+          window.parent.postMessage(JSON.stringify({eventType:eventType, eventData:eventData || {}}), "https://web.telegram.org");
+          ok = true;
+        }
+      }catch(e){
+        console.warn("[SBP] parent.postMessage failed", e);
+      }
+
+      return ok;
+    }
+
     const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 
     try{
-      const hasTelegram = !!tg;
-      const hasSendData = !!(tg && typeof tg.sendData === "function");
       const initUser = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
       const initDataLen = tg && typeof tg.initData === "string" ? tg.initData.length : 0;
+      const hasTelegram = !!tg;
+      const hasSendData = !!(tg && typeof tg.sendData === "function");
 
       try{
-        localStorage.setItem("sbp_last_send_context_v62", JSON.stringify({
+        localStorage.setItem("sbp_last_send_context_v63", JSON.stringify({
           at:new Date().toISOString(),
-          hasTelegram,
-          hasSendData,
+          hasTelegram:hasTelegram,
+          hasSendData:hasSendData,
+          hasProxy:!!(window.TelegramWebviewProxy && typeof window.TelegramWebviewProxy.postEvent === "function"),
+          hasExternalNotify:!!(window.external && typeof window.external.notify === "function"),
+          hasWebkitProxy:!!(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.TelegramWebviewProxy),
           initUserId:initUser && initUser.id ? initUser.id : "",
-          initDataLen,
+          initDataLen:initDataLen,
           rawLength:raw.length,
           url:location.href
         }));
       }catch(e){}
-
-      if(!hasTelegram || !hasSendData){
-        alert(
-          "Заявка не отправилась: Telegram не дал приложению sendData.\n\n" +
-          "Открой бота, напиши /client_open и запускай Mini App ТОЛЬКО нижней кнопкой «🛍 Открыть приложение» возле поля ввода."
-        );
-        return false;
-      }
-
-      if(!initUser || !initUser.id){
-        alert(
-          "Заявка не отправилась: Telegram не передал пользователя в Mini App.\n\n" +
-          "Напиши боту /client_open и открой приложение ТОЛЬКО нижней кнопкой возле поля ввода в личном чате с ботом."
-        );
-        return false;
-      }
 
       if(raw.length > 3900){
         alert("Заявка слишком большая для Telegram. Уменьши комментарий или данные доставки.");
         return false;
       }
 
-      if(typeof tg.ready === "function") tg.ready();
-      tg.sendData(raw);
+      if(tg && typeof tg.ready === "function"){
+        try{ tg.ready(); }catch(e){}
+      }
+
+      let methods = [];
+
+      if(hasSendData){
+        try{
+          tg.sendData(raw);
+          methods.push("Telegram.WebApp.sendData");
+        }catch(e){
+          console.error("[SBP] tg.sendData threw", e);
+          try{ localStorage.setItem("sbp_last_send_error_v63", String(e && e.message ? e.message : e)); }catch(_e){}
+        }
+      }
+
+      // Low-level fallback. If sendData already worked, duplicate is safe because backend uses client_order_id idempotency.
+      const lowOk = lowLevelTelegramPost("web_app_data_send", {data:raw});
+      if(lowOk) methods.push("lowLevelPostEvent");
+
+      if(!methods.length){
+        alert(
+          "Заявка не отправилась: Telegram не дал приложению способ отправки.\\n\\n" +
+          "Открой личный чат с ботом, напиши /client_open и нажми нижнюю кнопку «🛍 Открыть приложение»."
+        );
+        return false;
+      }
 
       saveLocalSubmittedOrder();
       try{
         localStorage.setItem("sbp_last_order_send_attempt", JSON.stringify({
           at:new Date().toISOString(),
-          method:"Telegram.WebApp.sendData",
+          methods:methods,
           length:raw.length,
-          preview:raw.slice(0,220)
+          preview:raw.slice(0,220),
+          initUserId:initUser && initUser.id ? initUser.id : "",
+          initDataLen:initDataLen
         }));
       }catch(e){}
 
       if(window.SBP_BONUS_STATE && data.bonus_request) window.SBP_BONUS_STATE.clear();
 
+      alert("Заявка передана Telegram. Сейчас она должна появиться у менеджера.");
+
       try{
         setTimeout(function(){
           if(tg && typeof tg.close === "function") tg.close();
-        }, 1200);
+        }, 900);
       }catch(e){}
 
       return true;
     }catch(e){
-      console.error("[SBP] tg.sendData failed", e);
+      console.error("[SBP] order send failed", e);
+      try{ localStorage.setItem("sbp_last_send_error_v63", String(e && e.message ? e.message : e)); }catch(_e){}
       alert("Telegram не принял заявку: " + (e && e.message ? e.message : e));
       return false;
     }
   }
+
 
   const filterState = {
     mode: "all",
@@ -10997,7 +11055,7 @@ body.sbp-banner-v59-locked{
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v62";
+  const VERSION = "v63";
   let active = 0;
   let timer = null;
   let banners = [];
