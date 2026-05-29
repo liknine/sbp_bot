@@ -9096,7 +9096,48 @@ body.sbp-banner-v59-locked{
     };
   }
 
-  function sendOrder(){
+  
+  function encodeOrderSubmitPayloadV64(payload){
+    const json = JSON.stringify(payload);
+    const bytes = new TextEncoder().encode(json);
+    let binary = "";
+    bytes.forEach(b => binary += String.fromCharCode(b));
+    return btoa(binary).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+  }
+
+  async function copyOrderSubmitCommandV64(payload){
+    const code = encodeOrderSubmitPayloadV64(payload);
+    const command = "/order_submit " + code;
+    try{ localStorage.setItem("sbp_last_order_submit_command_v64", command); }catch(e){}
+
+    let copied = false;
+    try{
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        await navigator.clipboard.writeText(command);
+        copied = true;
+      }
+    }catch(e){ copied = false; }
+
+    return {command, copied};
+  }
+
+  function showManualSubmitFallbackV64(payload, reason){
+    copyOrderSubmitCommandV64(payload).then(({command, copied}) => {
+      const shortCommand = command.length > 900 ? command.slice(0,900) + "..." : command;
+      alert(
+        (reason || "Telegram не доставил заявку автоматически.") + "\\n\\n" +
+        (copied ? "Я скопировал резервную команду в буфер обмена.\\n" : "Резервная команда сохранена в localStorage: sbp_last_order_submit_command_v64.\\n") +
+        "Открой чат с ботом и отправь эту команду:\\n\\n" +
+        shortCommand
+      );
+    }).catch(() => {
+      try{ localStorage.setItem("sbp_last_order_submit_payload_v64", JSON.stringify(payload)); }catch(e){}
+      alert("Telegram не доставил заявку автоматически. Резервный payload сохранён в localStorage: sbp_last_order_submit_payload_v64");
+    });
+  }
+
+
+function sendOrder(){
     if(!validateCheckout(true)) return false;
 
     const now = Date.now();
@@ -9126,11 +9167,18 @@ body.sbp-banner-v59-locked{
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v63"
+      client_app_version: "v64"
     };
 
-    try{ localStorage.setItem("sbp_last_customer_fields_v63", JSON.stringify(compact.customer_fields || {})); }catch(e){}
-    try{ localStorage.setItem("sbp_last_payload_v63", JSON.stringify(compact)); }catch(e){}
+    try{ localStorage.setItem("sbp_last_customer_fields_v64", JSON.stringify(compact.customer_fields || {})); }catch(e){}
+    try{ localStorage.setItem("sbp_last_payload_v64", JSON.stringify(compact)); }catch(e){}
+
+    copyOrderSubmitCommandV64(compact).then(function(result){
+      try{
+        localStorage.setItem("sbp_last_order_submit_command_v64", result.command);
+        localStorage.setItem("sbp_last_order_submit_copied_v64", String(result.copied));
+      }catch(e){}
+    });
 
     const raw = JSON.stringify(compact);
 
@@ -9194,7 +9242,7 @@ body.sbp-banner-v59-locked{
       const hasSendData = !!(tg && typeof tg.sendData === "function");
 
       try{
-        localStorage.setItem("sbp_last_send_context_v63", JSON.stringify({
+        localStorage.setItem("sbp_last_send_context_v64", JSON.stringify({
           at:new Date().toISOString(),
           hasTelegram:hasTelegram,
           hasSendData:hasSendData,
@@ -9225,7 +9273,7 @@ body.sbp-banner-v59-locked{
           methods.push("Telegram.WebApp.sendData");
         }catch(e){
           console.error("[SBP] tg.sendData threw", e);
-          try{ localStorage.setItem("sbp_last_send_error_v63", String(e && e.message ? e.message : e)); }catch(_e){}
+          try{ localStorage.setItem("sbp_last_send_error_v64", String(e && e.message ? e.message : e)); }catch(_e){}
         }
       }
 
@@ -9234,12 +9282,10 @@ body.sbp-banner-v59-locked{
       if(lowOk) methods.push("lowLevelPostEvent");
 
       if(!methods.length){
-        alert(
-          "Заявка не отправилась: Telegram не дал приложению способ отправки.\\n\\n" +
-          "Открой личный чат с ботом, напиши /client_open и нажми нижнюю кнопку «🛍 Открыть приложение»."
-        );
+        showManualSubmitFallbackV64(compact, "Telegram не дал приложению автоматический способ отправки.");
         return false;
       }
+
 
       saveLocalSubmittedOrder();
       try{
@@ -9255,7 +9301,11 @@ body.sbp-banner-v59-locked{
 
       if(window.SBP_BONUS_STATE && data.bonus_request) window.SBP_BONUS_STATE.clear();
 
-      alert("Заявка передана Telegram. Сейчас она должна появиться у менеджера.");
+      alert(
+        "Заявка передана Telegram.\\n\\n" +
+        "Если через 5 секунд она не появилась у менеджера, резервная команда уже сохранена в буфере обмена. " +
+        "Открой чат с ботом и отправь её сообщением."
+      );
 
       try{
         setTimeout(function(){
@@ -9266,7 +9316,7 @@ body.sbp-banner-v59-locked{
       return true;
     }catch(e){
       console.error("[SBP] order send failed", e);
-      try{ localStorage.setItem("sbp_last_send_error_v63", String(e && e.message ? e.message : e)); }catch(_e){}
+      try{ localStorage.setItem("sbp_last_send_error_v64", String(e && e.message ? e.message : e)); }catch(_e){}
       alert("Telegram не принял заявку: " + (e && e.message ? e.message : e));
       return false;
     }
@@ -11055,7 +11105,7 @@ body.sbp-banner-v59-locked{
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v63";
+  const VERSION = "v64";
   let active = 0;
   let timer = null;
   let banners = [];
