@@ -9128,12 +9128,12 @@ body.sbp-banner-v59-locked{
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v61"
+      client_app_version: "v62"
     };
 
-    try{ localStorage.setItem("sbp_last_customer_fields_v61", JSON.stringify(compact.customer_fields || {})); }catch(e){}
+    try{ localStorage.setItem("sbp_last_customer_fields_v62", JSON.stringify(compact.customer_fields || {})); }catch(e){}
 
-    try{ localStorage.setItem("sbp_last_payload_v61", JSON.stringify(compact)); }catch(e){}
+    try{ localStorage.setItem("sbp_last_payload_v62", JSON.stringify(compact)); }catch(e){}
 
     const raw = JSON.stringify(compact);
 
@@ -9154,7 +9154,7 @@ body.sbp-banner-v59-locked{
       const initDataLen = tg && typeof tg.initData === "string" ? tg.initData.length : 0;
 
       try{
-        localStorage.setItem("sbp_last_send_context_v61", JSON.stringify({
+        localStorage.setItem("sbp_last_send_context_v62", JSON.stringify({
           at:new Date().toISOString(),
           hasTelegram,
           hasSendData,
@@ -9168,7 +9168,7 @@ body.sbp-banner-v59-locked{
       if(!hasTelegram || !hasSendData){
         alert(
           "Заявка не отправилась: Telegram не дал приложению sendData.\n\n" +
-          "Открой бота, напиши /client_open и запускай Mini App нижней кнопкой «🛍 Открыть приложение»."
+          "Открой бота, напиши /client_open и запускай Mini App ТОЛЬКО нижней кнопкой «🛍 Открыть приложение» возле поля ввода."
         );
         return false;
       }
@@ -9176,7 +9176,7 @@ body.sbp-banner-v59-locked{
       if(!initUser || !initUser.id){
         alert(
           "Заявка не отправилась: Telegram не передал пользователя в Mini App.\n\n" +
-          "Напиши боту /client_open и открой приложение нижней кнопкой в личном чате с ботом."
+          "Напиши боту /client_open и открой приложение ТОЛЬКО нижней кнопкой возле поля ввода в личном чате с ботом."
         );
         return false;
       }
@@ -9204,7 +9204,7 @@ body.sbp-banner-v59-locked{
       try{
         setTimeout(function(){
           if(tg && typeof tg.close === "function") tg.close();
-        }, 180);
+        }, 1200);
       }catch(e){}
 
       return true;
@@ -10997,7 +10997,7 @@ body.sbp-banner-v59-locked{
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v61";
+  const VERSION = "v62";
   let active = 0;
   let timer = null;
   let banners = [];
