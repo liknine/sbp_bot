@@ -17,6 +17,25 @@
   },
   "active_bonus": null,
   "coin_history": [],
-  "orders": [],
-  "updated_at": "2026-05-29T16:14:07.324456+00:00"
+  "orders": [
+    {
+      "id": 27,
+      "order_id": 27,
+      "order_number": "SBP-00027",
+      "client_order_id": "WEB-1780071465169-emo3n6ll",
+      "product_id": "pppp-latal-chernye",
+      "product_name": "Латал",
+      "brand": "Пппп",
+      "image": "images/products/pppp-latal-chernye-1.jpg",
+      "size": "40",
+      "price_byn": 150,
+      "discount_byn": 0,
+      "final_price_byn": 150,
+      "status": "processing",
+      "status_label": "В обработке",
+      "created_at": "2026-05-29 16:17:54",
+      "updated_at": "2026-05-29T16:17:54.341458"
+    }
+  ],
+  "updated_at": "2026-05-29T16:17:54.346590+00:00"
 }
