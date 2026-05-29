@@ -9177,7 +9177,7 @@ body.sbp-banner-v59-locked{
   async function copyOrderSubmitCommandV66(payload){
     const code = encodeOrderSubmitPayloadV67(payload);
     const command = "/order_submit " + code;
-    try{ localStorage.setItem("sbp_last_order_submit_command_v67", command); }catch(e){}
+    try{ localStorage.setItem("sbp_last_order_submit_command_v68", command); }catch(e){}
 
     let copied = false;
     try{
@@ -9195,13 +9195,13 @@ body.sbp-banner-v59-locked{
       const shortCommand = command.length > 900 ? command.slice(0,900) + "..." : command;
       alert(
         (reason || "Telegram не доставил заявку автоматически.") + "\\n\\n" +
-        (copied ? "Я скопировал резервную команду в буфер обмена.\\n" : "Резервная команда сохранена в localStorage: sbp_last_order_submit_command_v67.\\n") +
+        (copied ? "Я скопировал резервную команду в буфер обмена.\\n" : "Резервная команда сохранена в localStorage: sbp_last_order_submit_command_v68.\\n") +
         "Открой чат с ботом и отправь эту команду:\\n\\n" +
         shortCommand
       );
     }).catch(() => {
-      try{ localStorage.setItem("sbp_last_order_submit_payload_v67", JSON.stringify(payload)); }catch(e){}
-      alert("Telegram не доставил заявку автоматически. Резервный payload сохранён в localStorage: sbp_last_order_submit_payload_v67");
+      try{ localStorage.setItem("sbp_last_order_submit_payload_v68", JSON.stringify(payload)); }catch(e){}
+      alert("Telegram не доставил заявку автоматически. Резервный payload сохранён в localStorage: sbp_last_order_submit_payload_v68");
     });
   }
 
@@ -9242,7 +9242,7 @@ body.sbp-banner-v59-locked{
 
   function showOrderSubmitFallbackV67(payload, reason){
     const command = getOrderSubmitCommandV67(payload);
-    try{ localStorage.setItem("sbp_last_order_submit_command_v67", command); }catch(e){}
+    try{ localStorage.setItem("sbp_last_order_submit_command_v68", command); }catch(e){}
     const modal = ensureOrderSubmitFallbackV67();
     const textarea = modal.querySelector("textarea");
     const copyBtn = modal.querySelector(".copy");
@@ -9297,20 +9297,20 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v67"
+      client_app_version: "v68"
     };
 
-    try{ localStorage.setItem("sbp_last_customer_fields_v67", JSON.stringify(compact.customer_fields || {})); }catch(e){}
-    try{ localStorage.setItem("sbp_last_payload_v67", JSON.stringify(compact)); }catch(e){}
+    try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
+    try{ localStorage.setItem("sbp_last_payload_v68", JSON.stringify(compact)); }catch(e){}
 
     copyOrderSubmitCommandV66(compact).then(function(result){
       try{
-        localStorage.setItem("sbp_last_order_submit_command_v67", result.command);
-        localStorage.setItem("sbp_last_order_submit_copied_v67", String(result.copied));
+        localStorage.setItem("sbp_last_order_submit_command_v68", result.command);
+        localStorage.setItem("sbp_last_order_submit_copied_v68", String(result.copied));
       }catch(e){}
     });
 
-    try{ localStorage.setItem("sbp_last_order_submit_command_v67", getOrderSubmitCommandV67(compact)); }catch(e){}
+    try{ localStorage.setItem("sbp_last_order_submit_command_v68", getOrderSubmitCommandV67(compact)); }catch(e){}
 
     const raw = JSON.stringify(compact);
 
@@ -9374,7 +9374,7 @@ window.sendOrder = function sendOrder(){
       const hasSendData = !!(tg && typeof tg.sendData === "function");
 
       try{
-        localStorage.setItem("sbp_last_send_context_v67", JSON.stringify({
+        localStorage.setItem("sbp_last_send_context_v68", JSON.stringify({
           at:new Date().toISOString(),
           hasTelegram:hasTelegram,
           hasSendData:hasSendData,
@@ -9405,7 +9405,7 @@ window.sendOrder = function sendOrder(){
           methods.push("Telegram.WebApp.sendData");
         }catch(e){
           console.error("[SBP] tg.sendData threw", e);
-          try{ localStorage.setItem("sbp_last_send_error_v67", String(e && e.message ? e.message : e)); }catch(_e){}
+          try{ localStorage.setItem("sbp_last_send_error_v68", String(e && e.message ? e.message : e)); }catch(_e){}
         }
       }
 
@@ -9442,7 +9442,7 @@ window.sendOrder = function sendOrder(){
       return false;
     }catch(e){
       console.error("[SBP] order send failed", e);
-      try{ localStorage.setItem("sbp_last_send_error_v67", String(e && e.message ? e.message : e)); }catch(_e){}
+      try{ localStorage.setItem("sbp_last_send_error_v68", String(e && e.message ? e.message : e)); }catch(_e){}
       alert("Telegram не принял заявку: " + (e && e.message ? e.message : e));
       return false;
     }
@@ -11233,7 +11233,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v67";
+  const VERSION = "v68";
   let active = 0;
   let timer = null;
   let banners = [];
