@@ -1,0 +1,22 @@
+{
+  "schema_version": 4,
+  "telegram_id": 6679851290,
+  "username": "finance_log",
+  "first_name": "фараксус",
+  "status": "Entry",
+  "coins": 0,
+  "coins_balance": 0,
+  "activeBonuses": 0,
+  "active_bonuses_count": 0,
+  "completed_orders_count": 0,
+  "status_rules": {
+    "Entry": 0,
+    "Selected": 3,
+    "Priority": 10,
+    "Black Access": 20
+  },
+  "active_bonus": null,
+  "coin_history": [],
+  "orders": [],
+  "updated_at": "2026-05-29T14:51:52.106423+00:00"
+}
