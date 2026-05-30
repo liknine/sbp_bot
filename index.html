@@ -8216,17 +8216,23 @@ body.sbp-banner-v59-locked{
 </style>
 
 
-<style id="sbp-v71-intro-css">
-body.sbp-intro-active{background:#000!important;overflow:hidden!important;}
-body.sbp-intro-active .app,
-body.sbp-intro-active .bottom-nav-fixed{opacity:0!important;pointer-events:none!important;}
-#sbpIntroOverlayV71{position:fixed;inset:0;z-index:2147483647;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .42s ease,visibility .42s ease;}
-#sbpIntroOverlayV71.is-hidden{opacity:0;visibility:hidden;pointer-events:none;}
-#sbpIntroOverlayV71 iframe{width:100%;height:100%;border:0;background:#000;display:block;}
-#sbpIntroSkipV71{position:absolute;right:14px;top:calc(14px + env(safe-area-inset-top));z-index:2;width:42px;height:42px;border:1px solid rgba(255,255,255,.12);border-radius:50%;background:rgba(0,0,0,.38);color:#fff;font-size:22px;font-weight:900;display:grid;place-items:center;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);}
+
+<style id="sbp-v72-intro-css">
+body.sbp-intro-active-v72{background:#000!important;overflow:hidden!important;}
+body.sbp-intro-active-v72 .app{opacity:0!important;visibility:hidden!important;pointer-events:none!important;}
+#sbpIntroOverlayV72{position:fixed;inset:0;z-index:2147483647;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .42s ease,visibility .42s ease;}
+#sbpIntroOverlayV72.is-hidden{opacity:0;visibility:hidden;pointer-events:none;}
+#sbpIntroOverlayV72 iframe{width:100%;height:100%;border:0;background:#000;display:block;}
+#sbpIntroSkipV72{position:absolute;right:14px;top:calc(14px + env(safe-area-inset-top));z-index:2;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.36);color:#fff;font-size:26px;font-weight:900;display:grid;place-items:center;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);}
+.sbp-broken-product-hidden-v72{display:none!important;}
 </style>
 </head>
-<body>
+<body class="sbp-intro-active-v72">
+<div id="sbpIntroOverlayV72" aria-label="SBP intro">
+  <iframe id="sbpIntroFrameV72" src="intro.html?sbp_intro_v=v72" title="SBP intro" loading="eager"></iframe>
+  <button id="sbpIntroSkipV72" type="button" aria-label="Пропустить">×</button>
+</div>
+
 <input class="state" type="radio" name="tab" id="tab-home" checked>
 <input class="state" type="radio" name="tab" id="tab-catalog">
 <input class="state" type="radio" name="tab" id="tab-favorites">
@@ -9494,7 +9500,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v71"
+      client_app_version: "v72"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11429,7 +11435,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v71";
+  const VERSION = "v72";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12920,6 +12926,54 @@ window.sendOrder = function sendOrder(){
     return !!(name && brand && color && price > 0 && sizes.length && images.length);
   }
   window.SBP_PRODUCT_IS_VALID_V71 = validProduct;
+})();
+</script>
+
+<script id="sbp-v72-intro-and-product-guard">
+(function(){
+  let introClosed=false;
+  function closeIntro(){
+    if(introClosed) return;
+    introClosed=true;
+    const overlay=document.getElementById('sbpIntroOverlayV72');
+    document.body.classList.remove('sbp-intro-active-v72');
+    if(overlay){
+      overlay.classList.add('is-hidden');
+      setTimeout(()=>{ try{ overlay.remove(); }catch(e){} }, 520);
+    }
+  }
+  window.addEventListener('message', function(e){
+    if(e && e.data && e.data.type === 'SBP_INTRO_DONE_V72') closeIntro();
+  });
+  document.addEventListener('DOMContentLoaded', function(){
+    const skip=document.getElementById('sbpIntroSkipV72');
+    if(skip) skip.addEventListener('click', closeIntro, {once:true});
+  });
+  setTimeout(closeIntro, 4700);
+
+  function brokenProductCard(card){
+    if(!card || !card.classList || !card.classList.contains('card')) return false;
+    const title=(card.querySelector('h3')?.textContent || '').trim().toLowerCase();
+    const price=(card.querySelector('.card-bottom b')?.textContent || '').trim().toLowerCase();
+    const img=card.querySelector('.photo img[src], img[src]');
+    const brand=(card.querySelector('.brand')?.textContent || '').trim();
+    return !img || !brand || !title || title === 'без названия' || price.includes('цена уточняется');
+  }
+  function cleanBrokenCards(){
+    document.querySelectorAll('#homeScreen .product-grid .card, #catalogScreen .product-grid .card').forEach(card => {
+      if(brokenProductCard(card)) card.classList.add('sbp-broken-product-hidden-v72');
+    });
+  }
+  const mo=new MutationObserver(cleanBrokenCards);
+  document.addEventListener('DOMContentLoaded', function(){
+    cleanBrokenCards();
+    const home=document.querySelector('#homeScreen .product-grid');
+    const catalog=document.querySelector('#catalogScreen .product-grid');
+    if(home) mo.observe(home,{childList:true,subtree:true});
+    if(catalog) mo.observe(catalog,{childList:true,subtree:true});
+    setTimeout(cleanBrokenCards, 250);
+    setTimeout(cleanBrokenCards, 1200);
+  });
 })();
 </script>
 </body>
