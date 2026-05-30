@@ -111,6 +111,15 @@
     }
 
   </style>
+
+<style id="sbp-v79-exact-intro-fullscreen-patch">
+  html, body { width:100% !important; height:100% !important; min-height:100% !important; margin:0 !important; padding:0 !important; overflow:hidden !important; background:#000 !important; display:block !important; }
+  body { display:block !important; place-items:unset !important; padding:0 !important; }
+  .stage { position:fixed !important; inset:0 !important; width:100vw !important; height:100vh !important; max-width:none !important; display:block !important; gap:0 !important; }
+  .canvas-shell { position:absolute !important; inset:0 !important; width:100vw !important; height:100vh !important; aspect-ratio:auto !important; border:0 !important; box-shadow:none !important; background:#000 !important; }
+  canvas#intro { width:100vw !important; height:100vh !important; display:block !important; background:#000 !important; }
+  .controls { display:none !important; visibility:hidden !important; pointer-events:none !important; }
+</style>
 </head>
 <body>
   <main class="stage" aria-label="SBP CRT coded intro">
@@ -1731,9 +1740,9 @@
       function play() {
         cancelAnimationFrame(animationId);
         isPlaying = true;
-        startedAt = performance.now();
+        startedAt = performance.now() - 2000;
         playButton.disabled = false;
-        loop(startedAt);
+        loop(performance.now());
       }
 
       function loop(now) {
@@ -1807,57 +1816,9 @@
       playButton.addEventListener("click", play);
       recordButton.addEventListener("click", record);
 
-      drawScene(0);
+      drawScene(2);
+      setTimeout(play, 30);
     })();
   </script>
-
-<script id="sbp-v77-intro-last2s-runner">
-(function(){
-  const MAX_MS = 2000;
-
-  function clickPlay(){
-    const candidates = Array.from(document.querySelectorAll("button, [role='button'], input[type='button'], input[type='submit']"));
-    const play = candidates.find(el => /play|старт|start|▶/i.test(el.textContent || el.value || ""));
-    if(play) try{ play.click(); }catch(e){}
-  }
-
-  function seekMedia(){
-    document.querySelectorAll("video,audio").forEach(function(m){
-      try{
-        if(Number.isFinite(m.duration) && m.duration > 2){
-          m.currentTime = Math.max(0, m.duration - 2);
-        }
-        m.play && m.play().catch(function(){});
-      }catch(e){}
-    });
-  }
-
-  function speedAnimations(){
-    try{
-      document.getAnimations().forEach(function(a){
-        try{
-          const timing = a.effect && a.effect.getTiming ? a.effect.getTiming() : {};
-          const dur = Number(timing.duration || 0);
-          if(dur && dur > MAX_MS){
-            a.currentTime = Math.max(0, dur - MAX_MS);
-          }
-        }catch(e){}
-      });
-    }catch(e){}
-  }
-
-  function run(){
-    clickPlay();
-    seekMedia();
-    speedAnimations();
-  }
-
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", run, {once:true});
-  else run();
-  setTimeout(run, 120);
-  setTimeout(run, 480);
-})();
-</script>
-
 </body>
 </html>
