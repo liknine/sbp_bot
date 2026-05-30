@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v79_EXACT_INTRO_FIXED -->
+<!-- SBP_DEPLOY_MARKER_v81_SAFE_INTRO_NO_LAYOUT_SHIFT -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -8217,70 +8217,118 @@ body.sbp-banner-v59-locked{
 </style>
 
 
-
-
-
-
-<style id="sbp-v79-exact-intro-overlay-css">
-#sbp-v79-intro-overlay{
-  position:fixed!important;
-  left:-200vw!important;
-  top:-200vh!important;
-  width:500vw!important;
-  height:500vh!important;
-  z-index:2147483647!important;
-  background:#000!important;
-  opacity:1!important;
-  visibility:visible!important;
-  pointer-events:auto!important;
-  overflow:hidden!important;
-}
-#sbp-v79-intro-frame{
+<style id="sbp-v81-safe-intro-css">
+#sbp-v81-intro{
   position:fixed!important;
   left:0!important;
   top:0!important;
-  width:100vw!important;
-  height:100vh!important;
-  min-width:100vw!important;
-  min-height:100vh!important;
-  border:0!important;
-  background:#000!important;
-  display:block!important;
+  width:100%!important;
+  height:100%!important;
   z-index:2147483647!important;
+  background:#000!important;
+  overflow:hidden!important;
+  pointer-events:auto!important;
+  opacity:1!important;
+  visibility:visible!important;
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  transform:none!important;
+  contain:paint!important;
+  isolation:isolate!important;
 }
-#sbp-v79-intro-overlay.is-hiding{
+#sbp-v81-intro.is-closing{
   opacity:0!important;
   pointer-events:none!important;
-  transition:opacity .2s ease!important;
+  transition:opacity .22s ease!important;
 }
-#sbp-v79-intro-skip{
-  position:fixed!important;
-  top:calc(14px + env(safe-area-inset-top))!important;
+#sbp-v81-intro *{box-sizing:border-box!important}
+#sbp-v81-intro .crt-bg{
+  position:absolute!important;
+  inset:0!important;
+  background:#000!important;
+}
+#sbp-v81-intro .crt-bg::before{
+  content:""!important;
+  position:absolute!important;
+  inset:-10%!important;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,.18), rgba(255,255,255,.035) 24%, rgba(0,0,0,0) 54%),
+    repeating-linear-gradient(to bottom, rgba(255,255,255,.055) 0 1px, transparent 1px 5px)!important;
+  opacity:.55!important;
+  animation:sbpV81Scan 2s linear forwards!important;
+}
+#sbp-v81-intro .crt-logo{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  transform:translate(-50%,-50%) skewX(-8deg) scaleX(1.14)!important;
+  color:#fff!important;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Arial Black",Arial,sans-serif!important;
+  font-weight:1000!important;
+  font-size:clamp(82px,24vw,190px)!important;
+  letter-spacing:-.13em!important;
+  line-height:.8!important;
+  text-shadow:-3px 0 rgba(255,0,0,.28),3px 0 rgba(0,220,255,.25),0 0 34px rgba(255,255,255,.25)!important;
+  animation:sbpV81Logo 2s cubic-bezier(.2,.8,.2,1) forwards!important;
+  white-space:nowrap!important;
+}
+#sbp-v81-intro .crt-tag{
+  position:absolute!important;
+  left:calc(50% + 58px)!important;
+  top:calc(50% + 14px)!important;
+  width:12px!important;
+  height:58px!important;
+  border-radius:8px!important;
+  background:#fff!important;
+  box-shadow:0 33px 0 -1px #fff!important;
+  transform:rotate(4deg)!important;
+  animation:sbpV81Tag 2s ease forwards!important;
+}
+#sbp-v81-intro .crt-flash{
+  position:absolute!important;
+  inset:0!important;
+  background:#fff!important;
+  opacity:0!important;
+  animation:sbpV81Flash 2s ease forwards!important;
+}
+#sbp-v81-intro .skip{
+  position:absolute!important;
   right:14px!important;
+  top:calc(14px + env(safe-area-inset-top))!important;
   width:42px!important;
   height:42px!important;
-  z-index:2147483647!important;
   border:0!important;
   border-radius:50%!important;
-  display:grid!important;
-  place-items:center!important;
   background:rgba(255,255,255,.16)!important;
   color:#fff!important;
-  font-size:25px!important;
+  font-size:26px!important;
   line-height:1!important;
+  display:grid!important;
+  place-items:center!important;
+  z-index:2!important;
   backdrop-filter:blur(12px)!important;
   -webkit-backdrop-filter:blur(12px)!important;
 }
-html.sbp-intro-running, body.sbp-intro-running{overflow:hidden!important;}
+html.sbp-v81-intro-running,body.sbp-v81-intro-running{overflow:hidden!important}
+@keyframes sbpV81Logo{
+  0%{opacity:0;filter:blur(14px);transform:translate(-50%,-50%) skewX(-8deg) scaleX(1.14) scale(.82)}
+  16%{opacity:1;filter:blur(1px);transform:translate(-50%,-50%) skewX(-8deg) scaleX(1.14) scale(1.04)}
+  65%{opacity:1;filter:blur(0);transform:translate(-50%,-50%) skewX(-8deg) scaleX(1.14) scale(1)}
+  100%{opacity:0;filter:blur(16px);transform:translate(-50%,-50%) skewX(-8deg) scaleX(1.14) scale(1.16)}
+}
+@keyframes sbpV81Tag{
+  0%,20%{opacity:0;transform:rotate(4deg) translateY(16px)}
+  32%,74%{opacity:1;transform:rotate(4deg) translateY(0)}
+  100%{opacity:0;transform:rotate(4deg) translateY(-16px)}
+}
+@keyframes sbpV81Scan{0%{transform:translateY(-28px)}100%{transform:translateY(32px)}}
+@keyframes sbpV81Flash{0%,72%{opacity:0}82%{opacity:.22}100%{opacity:0}}
 </style>
 
 </head>
-<body class="sbp-intro-active-v72">
-<div id="sbpIntroOverlayV72" aria-label="SBP intro">
-  <iframe id="sbpIntroFrameV72" src="intro.html?v=77" title="SBP intro" loading="eager"></iframe>
-  <button id="sbpIntroSkipV72" type="button" aria-label="Пропустить">×</button>
-</div>
-
+<body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
 <input class="state" type="radio" name="tab" id="tab-catalog">
 <input class="state" type="radio" name="tab" id="tab-favorites">
@@ -9033,31 +9081,6 @@ html.sbp-intro-running, body.sbp-intro-running{overflow:hidden!important;}
   const priceOf = (p) => priceNum(p) ? `${priceNum(p)} BYN` : "Цена уточняется";
   const sizesOf = (p) => Array.isArray(p.sizes) && p.sizes.length ? p.sizes.join(" ") : "Размеры уточняются";
 
-  function isValidCatalogProductV71(p){
-    if(!p || typeof p !== "object") return false;
-    const name = String(p.name || "").trim();
-    const brand = String(p.brand || "").trim();
-    const color = String(p.color || "").trim();
-    const price = Number(p.price || p.price_byn || 0) || 0;
-    const sizes = Array.isArray(p.sizes) ? p.sizes.filter(Boolean) : String(p.sizes || "").split(/[ ,]+/).filter(Boolean);
-    const images = Array.isArray(p.images) ? p.images.filter(Boolean) : (p.images ? [p.images] : []);
-    return !!(name && brand && color && price > 0 && sizes.length && images.length);
-  }
-
-  function normalizeCatalogProductsV71(raw){
-    const cleaned = [];
-    const seen = new Set();
-    (Array.isArray(raw) ? raw : []).forEach((p, i) => {
-      if(!isValidCatalogProductV71(p)) return;
-      const id = idOf(p);
-      const key = id || [p.brand,p.name,p.color].map(x => String(x||"").trim().toLowerCase()).join("|");
-      if(seen.has(key)) return;
-      seen.add(key);
-      cleaned.push(Object.assign({_sbpOriginalIndex:i}, p));
-    });
-    return cleaned;
-  }
-
   let products = [];
   let ready = false;
   let lastOrderSentAt = 0;
@@ -9548,7 +9571,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v79"
+      client_app_version: "v81"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -9832,8 +9855,9 @@ window.sendOrder = function sendOrder(){
         }catch(_e){}
       }
       localStorage.setItem("sbp_products_loaded_url", loadedUrl || "");
-      products = normalizeCatalogProductsV71(data);
+      products = Array.isArray(data) ? data.slice() : [];
       products = products
+        .map((p, i) => Object.assign({_sbpOriginalIndex:i}, p))
         .sort((a,b) => {
           const ad = Date.parse(a.created_at || a.updated_at || a.date || "");
           const bd = Date.parse(b.created_at || b.updated_at || b.date || "");
@@ -11483,7 +11507,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v79";
+  const VERSION = "v81";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12961,61 +12985,76 @@ window.sendOrder = function sendOrder(){
 </script>
 
 
-<script id="sbp-v71-product-clean-guard">
+<script id="sbp-v81-safe-intro-controller">
 (function(){
-  function validProduct(p){
-    if(!p || typeof p !== "object") return false;
-    const name = String(p.name || "").trim();
-    const brand = String(p.brand || "").trim();
-    const color = String(p.color || "").trim();
-    const price = Number(p.price || p.price_byn || 0) || 0;
-    const sizes = Array.isArray(p.sizes) ? p.sizes.filter(Boolean) : String(p.sizes || "").split(/[ ,]+/).filter(Boolean);
-    const images = Array.isArray(p.images) ? p.images.filter(Boolean) : (p.images ? [p.images] : []);
-    return !!(name && brand && color && price > 0 && sizes.length && images.length);
+  const DURATION = 2000;
+
+  function removeIntro(){
+    document.documentElement.classList.remove("sbp-v81-intro-running");
+    document.body.classList.remove("sbp-v81-intro-running");
+
+    document.querySelectorAll("#sbp-v81-intro").forEach(function(el){
+      try{ el.remove(); }catch(e){}
+    });
+
+    const app = document.querySelector(".app");
+    if(app){
+      app.style.visibility = "";
+      app.style.opacity = "";
+      app.style.display = "";
+      app.style.pointerEvents = "";
+      app.style.transform = "";
+    }
+
+    document.body.style.overflow = "";
+    document.body.style.visibility = "";
+    document.body.style.opacity = "";
+    document.body.style.background = "";
   }
-  window.SBP_PRODUCT_IS_VALID_V71 = validProduct;
-})();
-</script>
 
-
-
-
-
-
-
-<script id="sbp-v79-exact-intro-controller">
-(function(){
-  const INTRO_MS = 2000;
-  function cleanup(){
-    document.documentElement.classList.remove('sbp-intro-running');
-    document.body.classList.remove('sbp-intro-running');
-    document.body.style.overflow='';
-    const app=document.querySelector('.app');
-    if(app){ app.style.visibility=''; app.style.opacity=''; app.style.display=''; app.style.pointerEvents=''; }
-    document.querySelectorAll('#sbp-v79-intro-overlay,#sbp-v78-intro-overlay,#sbp-v77-intro-overlay,#sbp-v76-intro-overlay,#sbp-v75-intro-overlay').forEach(function(el){ try{el.remove();}catch(e){} });
-  }
   function closeIntro(){
-    const overlay=document.getElementById('sbp-v79-intro-overlay');
-    if(!overlay){ cleanup(); return; }
-    overlay.classList.add('is-hiding');
-    setTimeout(cleanup,220);
+    const el = document.getElementById("sbp-v81-intro");
+    if(!el){
+      removeIntro();
+      return;
+    }
+    el.classList.add("is-closing");
+    setTimeout(removeIntro, 240);
   }
-  function boot(){
-    cleanup();
-    document.documentElement.classList.add('sbp-intro-running');
-    document.body.classList.add('sbp-intro-running');
-    const overlay=document.createElement('div');
-    overlay.id='sbp-v79-intro-overlay';
-    overlay.innerHTML='<iframe id="sbp-v79-intro-frame" src="intro.html?v=79#last2s" allow="autoplay; fullscreen"></iframe><button id="sbp-v79-intro-skip" type="button" aria-label="Пропустить">×</button>';
-    document.body.appendChild(overlay);
-    const skip=document.getElementById('sbp-v79-intro-skip');
-    if(skip) skip.addEventListener('click', closeIntro, {once:true});
-    setTimeout(closeIntro, INTRO_MS);
-    setTimeout(cleanup, INTRO_MS+900);
+
+  function bootIntro(){
+    removeIntro();
+
+    document.documentElement.classList.add("sbp-v81-intro-running");
+    document.body.classList.add("sbp-v81-intro-running");
+
+    const el = document.createElement("div");
+    el.id = "sbp-v81-intro";
+    el.innerHTML = [
+      '<div class="crt-bg"></div>',
+      '<div class="crt-logo">SBP</div>',
+      '<div class="crt-tag"></div>',
+      '<div class="crt-flash"></div>',
+      '<button type="button" class="skip" aria-label="Пропустить">×</button>'
+    ].join("");
+
+    document.body.appendChild(el);
+
+    const skip = el.querySelector(".skip");
+    if(skip) skip.addEventListener("click", closeIntro, {once:true});
+
+    setTimeout(closeIntro, DURATION);
+    setTimeout(removeIntro, DURATION + 1000);
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot, {once:true}); else boot();
-  window.SBP_CLOSE_INTRO_V79=closeIntro;
-  window.SBP_CLEAN_INTRO_V79=cleanup;
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", bootIntro, {once:true});
+  }else{
+    bootIntro();
+  }
+
+  window.SBP_CLOSE_INTRO_V81 = closeIntro;
+  window.SBP_REMOVE_INTRO_V81 = removeIntro;
 })();
 </script>
 
