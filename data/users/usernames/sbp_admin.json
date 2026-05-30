@@ -1,22 +1,22 @@
 {
-  "schema_version": 2,
+  "schema_version": 4,
   "telegram_id": 7952353435,
   "username": "SBP_Admin",
   "first_name": "SBP_Admin",
-  "status": "Black Access",
-  "coins": 55,
-  "coins_balance": 55,
+  "status": "Entry",
+  "coins": 0,
+  "coins_balance": 0,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
+  "completed_orders_count": 0,
+  "status_rules": {
+    "Entry": 0,
+    "Selected": 3,
+    "Priority": 10,
+    "Black Access": 20
+  },
   "active_bonus": null,
-  "coin_history": [
-    {
-      "amount": 55,
-      "type": "manual_bonus",
-      "comment": "Admin manual operation",
-      "created_at": "2026-05-26 05:12:57"
-    }
-  ],
+  "coin_history": [],
   "orders": [],
-  "updated_at": "2026-05-26T15:21:13.722191+00:00"
+  "updated_at": "2026-05-30T13:54:18.210447+00:00"
 }
