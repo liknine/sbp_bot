@@ -8053,6 +8053,165 @@ body.sbp-banner-v59-locked{
 .sbp-order-submit-fallback-v67 .close{background:#222!important;color:#fff!important}
 </style>
 
+
+<style id="sbp-v69-bonus-history-modal-css">
+#bonusesScreen .bonus-item{
+  cursor:pointer;
+  transition:transform .16s ease, border-color .16s ease, opacity .16s ease;
+}
+#bonusesScreen .bonus-item:not(.is-locked):active{transform:scale(.985)}
+#bonusesScreen .bonus-item.is-selected{
+  border-color:rgba(255,255,255,.44)!important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.18) inset;
+}
+#bonusesScreen .bonus-item.is-locked{
+  opacity:.48;
+}
+#theme-light:checked ~ .app #bonusesScreen .bonus-item.is-selected{
+  border-color:rgba(0,0,0,.32)!important;
+}
+.sbp-v69-toast{
+  position:fixed;
+  left:50%;
+  bottom:calc(92px + env(safe-area-inset-bottom));
+  transform:translateX(-50%) translateY(20px);
+  z-index:2147483645;
+  max-width:min(360px,calc(100vw - 32px));
+  padding:13px 16px;
+  border-radius:999px;
+  background:rgba(20,20,20,.92);
+  color:#fff;
+  font-weight:850;
+  font-size:14px;
+  line-height:1.2;
+  opacity:0;
+  pointer-events:none;
+  transition:.22s ease;
+  box-shadow:0 14px 38px rgba(0,0,0,.35);
+}
+.sbp-v69-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.sbp-v69-order-modal{
+  position:fixed!important;
+  inset:0!important;
+  z-index:2147483644!important;
+  display:none!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:18px!important;
+  background:rgba(0,0,0,.52)!important;
+  backdrop-filter:blur(16px)!important;
+  -webkit-backdrop-filter:blur(16px)!important;
+}
+.sbp-v69-order-modal.is-open{display:flex!important}
+.sbp-v69-order-box{
+  width:min(100%,430px);
+  max-height:88vh;
+  overflow:auto;
+  position:relative;
+  border-radius:34px;
+  background:linear-gradient(145deg,rgba(22,22,22,.97),rgba(8,8,8,.98));
+  border:1px solid rgba(255,255,255,.14);
+  color:#fff;
+  box-shadow:0 36px 100px rgba(0,0,0,.58);
+}
+#theme-light:checked ~ .app .sbp-v69-order-box{
+  background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(238,238,238,.98));
+  color:#111;
+  border-color:rgba(0,0,0,.12);
+}
+.sbp-v69-order-close{
+  position:absolute;
+  z-index:3;
+  top:12px;
+  right:12px;
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:50%;
+  background:rgba(0,0,0,.48);
+  color:#fff;
+  font-size:28px;
+  line-height:1;
+  display:grid;
+  place-items:center;
+}
+.sbp-v69-order-img{
+  width:100%;
+  height:300px;
+  background:#0b0b0b;
+  overflow:hidden;
+}
+.sbp-v69-order-img img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.sbp-v69-order-img span{
+  height:100%;
+  display:grid;
+  place-items:center;
+  font-size:54px;
+  opacity:.7;
+}
+.sbp-v69-order-body{
+  padding:22px;
+}
+.sbp-v69-order-body small{
+  display:block;
+  color:rgba(255,255,255,.58);
+  font-weight:800;
+  letter-spacing:.08em;
+  margin-bottom:10px;
+}
+#theme-light:checked ~ .app .sbp-v69-order-body small{color:rgba(0,0,0,.55)}
+.sbp-v69-order-body h2{
+  margin:0 0 16px;
+  font-size:34px;
+  line-height:.98;
+  letter-spacing:-1.2px;
+}
+.sbp-v69-order-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.sbp-v69-order-grid div{
+  border-radius:18px;
+  padding:12px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.08);
+}
+#theme-light:checked ~ .app .sbp-v69-order-grid div{
+  background:rgba(0,0,0,.045);
+  border-color:rgba(0,0,0,.08);
+}
+.sbp-v69-order-grid span{
+  display:block;
+  color:rgba(255,255,255,.55);
+  font-size:12px;
+  margin-bottom:6px;
+}
+#theme-light:checked ~ .app .sbp-v69-order-grid span{color:rgba(0,0,0,.52)}
+.sbp-v69-order-grid b{
+  display:block;
+  font-size:17px;
+  line-height:1.15;
+}
+.sbp-v69-order-status{
+  margin-top:12px;
+  padding:14px;
+  border-radius:18px;
+  background:#fff;
+  color:#111;
+  font-weight:950;
+}
+#theme-light:checked ~ .app .sbp-v69-order-status{
+  background:#111;
+  color:#fff;
+}
+</style>
+
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -9297,7 +9456,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v68"
+      client_app_version: "v69"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11233,7 +11392,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v68";
+  const VERSION = "v69";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12468,6 +12627,245 @@ window.sendOrder = function sendOrder(){
     const target = e.target && e.target.closest ? e.target.closest('[data-sbp-submit-order="1"], label[for="tab-success"]') : null;
     if(target) handleSubmitTap(e);
   }, true);
+})();
+</script>
+
+
+
+<script id="sbp-v69-bonus-state-bridge">
+(function(){
+  const KEY = "sbp_requested_bonus_v1";
+  function safeJson(raw, fallback){ try{return JSON.parse(raw)}catch(e){return fallback} }
+  window.SBP_BONUS_STATE = window.SBP_BONUS_STATE || {};
+  if(typeof window.SBP_BONUS_STATE.read !== "function"){
+    window.SBP_BONUS_STATE.read = function(){ return safeJson(localStorage.getItem(KEY) || "null", null); };
+  }
+  if(typeof window.SBP_BONUS_STATE.clear !== "function"){
+    window.SBP_BONUS_STATE.clear = function(){ localStorage.removeItem(KEY); };
+  }
+})();
+</script>
+
+<script id="sbp-v69-bonus-and-order-modal">
+(function(){
+  const BONUS_KEY = "sbp_requested_bonus_v1";
+  const BONUS_PRESETS = [
+    {coins_cost:100, discount_byn:5, title:"Скидка 5 BYN", subtitle:"К следующему заказу"},
+    {coins_cost:250, discount_byn:15, title:"Скидка 15 BYN", subtitle:"Оптимальный бонус для следующего заказа"},
+    {coins_cost:500, discount_byn:35, title:"Скидка 35 BYN", subtitle:"Не больше 20% заказа"}
+  ];
+  const STATUS_LABELS = {processing:"В обработке", awaiting_payment:"Ожидает оплаты", sent:"Отправлен", in_transit:"В пути", arrived:"Прибыл", completed:"Завершен", cancelled:"Отменен"};
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function safeJson(raw, fallback){ try{return JSON.parse(raw)}catch(e){return fallback} }
+  function esc(v){ return String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
+
+  function profile(){
+    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.read === "function"){
+      try{return window.SBP_PROFILE_STATE.read() || {}}catch(e){}
+    }
+    return safeJson(localStorage.getItem("sbp_profile_state_v1") || "{}", {});
+  }
+
+  async function syncProfile(){
+    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.sync === "function"){
+      try{ await window.SBP_PROFILE_STATE.sync(); }catch(e){}
+    }
+  }
+
+  function activeBonus(){
+    return safeJson(localStorage.getItem(BONUS_KEY) || "null", null);
+  }
+
+  function setActiveBonus(bonus){
+    localStorage.setItem(BONUS_KEY, JSON.stringify({
+      coins_cost:Number(bonus.coins_cost),
+      discount_byn:Number(bonus.discount_byn),
+      title:bonus.title,
+      created_at:new Date().toISOString(),
+      source:"frontend_v69"
+    }));
+    window.dispatchEvent(new StorageEvent("storage", {key:BONUS_KEY}));
+  }
+
+  function clearActiveBonus(){
+    localStorage.removeItem(BONUS_KEY);
+    window.dispatchEvent(new StorageEvent("storage", {key:BONUS_KEY}));
+  }
+
+  function toast(text){
+    let el = qs(".sbp-v69-toast");
+    if(!el){
+      el = document.createElement("div");
+      el.className = "sbp-v69-toast";
+      document.body.appendChild(el);
+    }
+    el.textContent = text;
+    el.classList.add("show");
+    clearTimeout(el._t);
+    el._t = setTimeout(()=>el.classList.remove("show"), 2300);
+  }
+
+  function renderBonuses(){
+    const screen = qs("#bonusesScreen");
+    if(!screen) return;
+
+    const state = profile();
+    const coins = Number(state.coins_balance ?? state.coins ?? 0) || 0;
+    const current = activeBonus();
+
+    const note = qs(".bonuses-zero-note", screen);
+    if(note){
+      note.textContent = coins > 0
+        ? `Сейчас доступно ${coins} Coins. Выберите один бонус для следующего заказа.`
+        : "Сейчас доступно 0 Coins. Бонусы станут доступны после завершённых заказов.";
+    }
+
+    const list = qs(".bonus-list", screen);
+    if(list){
+      list.innerHTML = BONUS_PRESETS.map(b => {
+        const locked = coins < b.coins_cost;
+        const selected = current && Number(current.coins_cost) === b.coins_cost;
+        return `<button type="button" class="bonus-item ${locked?"is-locked":""} ${selected?"is-selected":""}" data-bonus-cost="${b.coins_cost}" data-bonus-discount="${b.discount_byn}" ${locked?"aria-disabled='true'":""}>
+          <div><h3>${esc(b.title)}</h3><p>${esc(b.subtitle)}</p></div>
+          <span class="bonus-cost">${b.coins_cost} Coins</span>
+        </button>`;
+      }).join("");
+    }
+
+    const preview = qs(".active-bonus-preview", screen);
+    if(preview){
+      if(current){
+        preview.style.display = "";
+        const b = qs(".activated-bonus-card b", preview);
+        const small = qs(".activated-bonus-card small", preview);
+        const pill = qs(".activated-bonus-card span", preview);
+        if(b) b.textContent = `−${Number(current.discount_byn || 0)} BYN`;
+        if(small) small.textContent = `${Number(current.coins_cost || 0)} Coins будут списаны при отправке следующей заявки`;
+        if(pill) pill.textContent = "selected";
+      }else{
+        preview.style.display = "none";
+      }
+    }
+  }
+
+  document.addEventListener("click", function(e){
+    const btn = e.target.closest && e.target.closest("#bonusesScreen .bonus-item[data-bonus-cost]");
+    if(!btn) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const state = profile();
+    const coins = Number(state.coins_balance ?? state.coins ?? 0) || 0;
+    const cost = Number(btn.dataset.bonusCost || 0);
+    const discount = Number(btn.dataset.bonusDiscount || 0);
+
+    if(coins < cost){
+      toast(`Недостаточно Coins: нужно ${cost}, сейчас ${coins}`);
+      renderBonuses();
+      return;
+    }
+
+    setActiveBonus({coins_cost:cost, discount_byn:discount, title:`Скидка ${discount} BYN`});
+    toast(`Бонус −${discount} BYN выбран для следующего заказа`);
+    renderBonuses();
+  }, true);
+
+  function repoBase(){ const repo=(location.pathname.split("/").filter(Boolean)[0]||"").trim(); return repo ? "/"+repo+"/" : "/"; }
+  function imgUrl(order){
+    let img = String(order.image || order.product_image || "");
+    if(!img) return "";
+    if(/^https?:\/\//i.test(img)) return img;
+    img = img.replace(/^\//,"").replace(/^frontend\//,"");
+    return repoBase()+img;
+  }
+
+  function ensureOrderModal(){
+    let modal = qs(".sbp-v69-order-modal");
+    if(modal) return modal;
+    modal = document.createElement("div");
+    modal.className = "sbp-v69-order-modal";
+    modal.innerHTML = `
+      <article class="sbp-v69-order-box">
+        <button type="button" class="sbp-v69-order-close" aria-label="Закрыть">×</button>
+        <div class="sbp-v69-order-img"><span>□</span></div>
+        <div class="sbp-v69-order-body">
+          <small></small>
+          <h2></h2>
+          <div class="sbp-v69-order-grid">
+            <div><span>Размер</span><b data-field="size">-</b></div>
+            <div><span>Цена</span><b data-field="price">-</b></div>
+            <div><span>Доставка</span><b data-field="delivery">-</b></div>
+            <div><span>Номер</span><b data-field="number">-</b></div>
+          </div>
+          <div class="sbp-v69-order-status"></div>
+        </div>
+      </article>
+    `;
+    document.body.appendChild(modal);
+    modal.addEventListener("click", e => {
+      if(e.target === modal || e.target.closest(".sbp-v69-order-close")) closeOrderModal();
+    }, true);
+    return modal;
+  }
+
+  function closeOrderModal(){
+    const modal = qs(".sbp-v69-order-modal");
+    if(modal) modal.classList.remove("is-open");
+  }
+
+  function openOrderModal(order){
+    const modal = ensureOrderModal();
+    const img = imgUrl(order);
+    const imgBox = qs(".sbp-v69-order-img", modal);
+    imgBox.innerHTML = img ? `<img src="${esc(img)}" alt="">` : "<span>□</span>";
+    const title = order.product_name || order.name || "SBP order";
+    const status = String(order.status || "processing");
+    const label = order.status_label || STATUS_LABELS[status] || status;
+    const date = order.created_at ? new Date(order.created_at).toLocaleDateString("ru-RU") : "";
+    const number = order.order_number || order.id || "-";
+    qs("small", modal).textContent = [date, number].filter(Boolean).join(" · ");
+    qs("h2", modal).textContent = title;
+    qs('[data-field="size"]', modal).textContent = order.size || "-";
+    qs('[data-field="price"]', modal).textContent = `${Number(order.final_price_byn || order.price_byn || order.price || 0)} BYN`;
+    qs('[data-field="delivery"]', modal).textContent = order.delivery_method || order.delivery || "-";
+    qs('[data-field="number"]', modal).textContent = number;
+    qs(".sbp-v69-order-status", modal).textContent = label;
+    modal.classList.add("is-open");
+  }
+
+  document.addEventListener("click", function(e){
+    const card = e.target.closest && e.target.closest(".sbp-v57-order-card");
+    if(!card) return;
+    if(e.target.closest("a,button,label,input")) return;
+    const index = qsa(".sbp-v57-order-card").indexOf(card);
+    let order = null;
+    try{
+      const orders = window.SBP_ORDERS_V57 && typeof window.SBP_ORDERS_V57.merged === "function" ? window.SBP_ORDERS_V57.merged() : [];
+      order = orders[index];
+    }catch(err){}
+    if(!order) return;
+    e.preventDefault();
+    e.stopPropagation();
+    openOrderModal(order);
+  }, true);
+
+  document.addEventListener("keydown", e => { if(e.key === "Escape") closeOrderModal(); }, true);
+
+  async function boot(){
+    renderBonuses();
+    await syncProfile();
+    renderBonuses();
+    setTimeout(renderBonuses, 1000);
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
+  else boot();
+
+  window.addEventListener("storage", renderBonuses);
+  window.addEventListener("focus", () => { syncProfile().then(renderBonuses); });
+  document.addEventListener("visibilitychange", () => { if(!document.hidden) syncProfile().then(renderBonuses); });
 })();
 </script>
 
