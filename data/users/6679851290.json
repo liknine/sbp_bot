@@ -19,6 +19,24 @@
   "coin_history": [],
   "orders": [
     {
+      "id": 29,
+      "order_id": 29,
+      "order_number": "SBP-00029",
+      "client_order_id": "WEB-1780149933458-b26etimb",
+      "product_id": "test-test-chernyy",
+      "product_name": "тест",
+      "brand": "тест",
+      "image": "images/products/test-test-chernyy-1-98942a5a02.jpg",
+      "size": "43",
+      "price_byn": 350,
+      "discount_byn": 0,
+      "final_price_byn": 350,
+      "status": "processing",
+      "status_label": "В обработке",
+      "created_at": "2026-05-30 14:05:34",
+      "updated_at": "2026-05-30T14:05:34.150914"
+    },
+    {
       "id": 28,
       "order_id": 28,
       "order_number": "SBP-00028",
@@ -55,5 +73,5 @@
       "updated_at": "2026-05-29T16:17:54.341458"
     }
   ],
-  "updated_at": "2026-05-29T16:45:07.336646+00:00"
+  "updated_at": "2026-05-30T14:05:34.154523+00:00"
 }
