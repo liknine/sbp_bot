@@ -129,5 +129,23 @@
     "images": [],
     "created_at": "2026-05-27T15:38:02.981715+00:00",
     "updated_at": "2026-05-27T15:38:02.981951+00:00"
+  },
+  {
+    "id": "bh-junk-ggg",
+    "brand": "Bh",
+    "name": "Junk",
+    "color": "Ggg",
+    "price": 3000,
+    "sizes": [
+      "3000"
+    ],
+    "badge": "Новинка",
+    "description": "Олд",
+    "images": [
+      "images/products/bh-junk-ggg-1-c6e709a637.jpg",
+      "images/products/bh-junk-ggg-2-ad77cd6e8a.jpg"
+    ],
+    "created_at": "2026-05-30T15:33:07.570777+00:00",
+    "updated_at": "2026-05-30T15:33:07.570842+00:00"
   }
 ]
