@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v74_CACHE_BUST_INTRO -->
+<!-- SBP_DEPLOY_MARKER_v75_INTRO_LAST_2S_OVERLAY -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -8227,10 +8227,73 @@ body.sbp-intro-active-v72 .app{opacity:0!important;visibility:hidden!important;p
 #sbpIntroSkipV72{position:absolute;right:14px;top:calc(14px + env(safe-area-inset-top));z-index:2;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.36);color:#fff;font-size:26px;font-weight:900;display:grid;place-items:center;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);}
 .sbp-broken-product-hidden-v72{display:none!important;}
 </style>
+
+<style id="sbp-v75-intro-overlay-fix">
+.sbp-intro-overlay,
+#sbp-intro-overlay,
+.sbp-v75-intro-overlay{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  z-index:2147483647!important;
+  background:#000!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+  pointer-events:auto!important;
+}
+.sbp-intro-overlay iframe,
+#sbp-intro-overlay iframe,
+.sbp-v75-intro-overlay iframe{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  border:0!important;
+  display:block!important;
+  background:#000!important;
+}
+.sbp-intro-overlay.is-hidden,
+#sbp-intro-overlay.is-hidden,
+.sbp-v75-intro-overlay.is-hidden{
+  opacity:0!important;
+  pointer-events:none!important;
+  visibility:hidden!important;
+  transition:opacity .26s ease, visibility .26s ease!important;
+}
+body.sbp-intro-running .bottom-nav,
+body.sbp-intro-running .tabbar,
+body.sbp-intro-running nav,
+body.sbp-intro-running [class*="bottom"],
+body.sbp-intro-running [class*="Bottom"]{
+  visibility:hidden!important;
+}
+.sbp-v75-intro-skip{
+  position:fixed!important;
+  top:calc(14px + env(safe-area-inset-top))!important;
+  right:14px!important;
+  z-index:2147483647!important;
+  width:42px!important;
+  height:42px!important;
+  border:0!important;
+  border-radius:50%!important;
+  background:rgba(255,255,255,.16)!important;
+  color:#fff!important;
+  font-size:25px!important;
+  line-height:1!important;
+  display:grid!important;
+  place-items:center!important;
+  backdrop-filter:blur(10px)!important;
+  -webkit-backdrop-filter:blur(10px)!important;
+}
+</style>
+
 </head>
 <body class="sbp-intro-active-v72">
 <div id="sbpIntroOverlayV72" aria-label="SBP intro">
-  <iframe id="sbpIntroFrameV72" src="intro.html?v=74" title="SBP intro" loading="eager"></iframe>
+  <iframe id="sbpIntroFrameV72" src="intro.html?v=75" title="SBP intro" loading="eager"></iframe>
   <button id="sbpIntroSkipV72" type="button" aria-label="Пропустить">×</button>
 </div>
 
@@ -9501,7 +9564,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v74"
+      client_app_version: "v75"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11436,7 +11499,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v74";
+  const VERSION = "v75";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12930,62 +12993,60 @@ window.sendOrder = function sendOrder(){
 })();
 </script>
 
-<script id="sbp-v72-intro-and-product-guard">
-(function(){
-  let introClosed=false;
-  function closeIntro(){
-    if(introClosed) return;
-    introClosed=true;
-    const overlay=document.getElementById('sbpIntroOverlayV72');
-    document.body.classList.remove('sbp-intro-active-v72');
-    if(overlay){
-      overlay.classList.add('is-hidden');
-      setTimeout(()=>{ try{ overlay.remove(); }catch(e){} }, 520);
-    }
-  }
-  window.addEventListener('message', function(e){
-    if(e && e.data && e.data.type === 'SBP_INTRO_DONE_V72') closeIntro();
-  });
-  document.addEventListener('DOMContentLoaded', function(){
-    const skip=document.getElementById('sbpIntroSkipV72');
-    if(skip) skip.addEventListener('click', closeIntro, {once:true});
-    const frame=document.getElementById('sbpIntroFrameV72');
-    if(frame){
-      frame.addEventListener('load', function(){
-        try{
-          const doc=frame.contentDocument || (frame.contentWindow && frame.contentWindow.document);
-          const play=doc && doc.getElementById('play');
-          if(play) setTimeout(()=>play.click(), 80);
-        }catch(e){ console.warn('SBP_PARENT_AUTOPLAY_EXACT_INTRO_V73 failed', e); }
-      }, {once:true});
-    }
-  });
-  setTimeout(closeIntro, 4700);
 
-  function brokenProductCard(card){
-    if(!card || !card.classList || !card.classList.contains('card')) return false;
-    const title=(card.querySelector('h3')?.textContent || '').trim().toLowerCase();
-    const price=(card.querySelector('.card-bottom b')?.textContent || '').trim().toLowerCase();
-    const img=card.querySelector('.photo img[src], img[src]');
-    const brand=(card.querySelector('.brand')?.textContent || '').trim();
-    return !img || !brand || !title || title === 'без названия' || price.includes('цена уточняется');
-  }
-  function cleanBrokenCards(){
-    document.querySelectorAll('#homeScreen .product-grid .card, #catalogScreen .product-grid .card').forEach(card => {
-      if(brokenProductCard(card)) card.classList.add('sbp-broken-product-hidden-v72');
+
+<script id="sbp-v75-intro-controller">
+(function(){
+  const INTRO_DURATION_MS = 2000;
+  const INTRO_URL = "intro.html?v=75#last2s";
+
+  function removeOldIntroNodes(){
+    document.querySelectorAll('[id*="intro" i], [class*="intro" i]').forEach(function(el){
+      if(el.id === "sbp-v75-intro-overlay" || el.id === "sbp-v75-intro-controller" || el.id === "sbp-v75-intro-overlay-fix") return;
+      if(el.tagName === "SCRIPT" || el.tagName === "STYLE") return;
+      if(el.closest && el.closest("#sbp-v75-intro-overlay")) return;
+      const st = getComputedStyle(el);
+      if(st.position === "fixed" || st.position === "absolute"){
+        try{ el.remove(); }catch(e){}
+      }
     });
   }
-  const mo=new MutationObserver(cleanBrokenCards);
-  document.addEventListener('DOMContentLoaded', function(){
-    cleanBrokenCards();
-    const home=document.querySelector('#homeScreen .product-grid');
-    const catalog=document.querySelector('#catalogScreen .product-grid');
-    if(home) mo.observe(home,{childList:true,subtree:true});
-    if(catalog) mo.observe(catalog,{childList:true,subtree:true});
-    setTimeout(cleanBrokenCards, 250);
-    setTimeout(cleanBrokenCards, 1200);
-  });
+
+  function finishIntro(){
+    const overlay = document.getElementById("sbp-v75-intro-overlay");
+    if(!overlay) return;
+    overlay.classList.add("is-hidden");
+    document.body.classList.remove("sbp-intro-running");
+    setTimeout(function(){ try{ overlay.remove(); }catch(e){} }, 360);
+  }
+
+  function bootIntro(){
+    if(sessionStorage.getItem("sbp_intro_seen_v75") === "1") return;
+    sessionStorage.setItem("sbp_intro_seen_v75", "1");
+
+    removeOldIntroNodes();
+    document.body.classList.add("sbp-intro-running");
+
+    const overlay = document.createElement("div");
+    overlay.id = "sbp-v75-intro-overlay";
+    overlay.className = "sbp-v75-intro-overlay sbp-intro-overlay";
+    overlay.innerHTML = '<iframe src="'+INTRO_URL+'" allow="autoplay; fullscreen"></iframe><button class="sbp-v75-intro-skip" type="button" aria-label="Пропустить">×</button>';
+    document.body.appendChild(overlay);
+
+    const skip = overlay.querySelector(".sbp-v75-intro-skip");
+    if(skip) skip.addEventListener("click", finishIntro, {once:true});
+
+    setTimeout(finishIntro, INTRO_DURATION_MS);
+    setTimeout(finishIntro, INTRO_DURATION_MS + 1200);
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", bootIntro, {once:true});
+  }else{
+    bootIntro();
+  }
 })();
 </script>
+
 </body>
 </html>
