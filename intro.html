@@ -1,61 +1,1814 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>SBP Intro</title>
-<style>
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Inter,Arial,sans-serif}
-body{position:relative;display:grid;place-items:center}
-canvas{position:fixed;inset:0;width:100%;height:100%;display:block;background:#000}
-.skip-hint{position:fixed;left:0;right:0;bottom:calc(22px + env(safe-area-inset-bottom));z-index:2;text-align:center;color:rgba(255,255,255,.42);font-size:12px;letter-spacing:.14em;font-weight:800;opacity:.0;animation:hint 1.2s ease 1.3s forwards;text-transform:uppercase;pointer-events:none}
-@keyframes hint{to{opacity:1}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SBP CRT Intro</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --panel: rgba(12, 13, 13, 0.86);
+      --line: rgba(255, 255, 255, 0.12);
+      --text: rgba(246, 247, 244, 0.92);
+      --muted: rgba(246, 247, 244, 0.58);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: #030404;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      padding: 22px;
+    }
+
+    .stage {
+      width: min(100%, 520px);
+      display: grid;
+      gap: 14px;
+    }
+
+    .canvas-shell {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      background: #000;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow:
+        0 28px 90px rgba(0, 0, 0, 0.72),
+        0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: #000;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 10px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+    }
+
+    button {
+      min-height: 44px;
+      border: 1px solid rgba(255, 255, 255, 0.17);
+      background: rgba(235, 237, 232, 0.09);
+      color: var(--text);
+      font: 700 14px/1 Inter, ui-sans-serif, system-ui, sans-serif;
+      letter-spacing: 0;
+      cursor: pointer;
+      transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    button:hover {
+      background: rgba(235, 237, 232, 0.15);
+      border-color: rgba(255, 255, 255, 0.32);
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    button:disabled {
+      cursor: progress;
+      color: var(--muted);
+      background: rgba(235, 237, 232, 0.05);
+    }
+
+    .meter {
+      grid-column: 1 / -1;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .meter span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      background: rgba(247, 247, 242, 0.82);
+      transform-origin: left center;
+    }
+
+  </style>
 </head>
 <body>
-<canvas id="intro" width="1080" height="1920"></canvas>
-<div class="skip-hint">SBP LOADING</div>
-<script>
-(() => {
-  "use strict";
-  const canvas = document.getElementById("intro");
-  const ctx = canvas.getContext("2d", {alpha:false});
-  const W = canvas.width, H = canvas.height;
-  const DURATION = 4.05;
-  const START = performance.now();
-  let raf = 0;
-  function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
-  function smooth(a,b,x){x=clamp((x-a)/(b-a),0,1);return x*x*(3-2*x);}
-  function easeOut(t){return 1-Math.pow(1-clamp(t,0,1),3);}
-  function noise(seed){let x=seed|0;return()=>{x^=x<<13;x^=x>>>17;x^=x<<5;return((x>>>0)/4294967295)}}
-  function roundedRect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
-  function drawRoom(t){
-    const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#030404");g.addColorStop(.45,"#080a09");g.addColorStop(1,"#000");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-    const glow=ctx.createRadialGradient(W/2,900,80,W/2,910,720);glow.addColorStop(0,`rgba(210,220,215,${.12+.05*Math.sin(t*15)})`);glow.addColorStop(.45,"rgba(120,130,125,.05)");glow.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=glow;ctx.fillRect(0,0,W,H);
-    ctx.fillStyle="rgba(255,255,255,.025)";for(let y=0;y<H;y+=6){ctx.fillRect(0,y,W,1)}
-  }
-  function drawTV(t){
-    const x=110,y=595,w=860,h=620;ctx.save();ctx.shadowColor="rgba(0,0,0,.85)";ctx.shadowBlur=80;ctx.shadowOffsetY=44;
-    const bg=ctx.createLinearGradient(x,y,x,y+h);bg.addColorStop(0,"#1a1b1b");bg.addColorStop(.4,"#060707");bg.addColorStop(1,"#101111");roundedRect(x,y,w,h,34);ctx.fillStyle=bg;ctx.fill();ctx.restore();
-    ctx.strokeStyle="rgba(255,255,255,.12)";ctx.lineWidth=2;roundedRect(x+10,y+10,w-20,h-20,28);ctx.stroke();
-    const sx=190,sy=720,sw=610,sh=370;roundedRect(sx-38,sy-38,sw+76,sh+86,34);ctx.fillStyle="#020303";ctx.fill();ctx.strokeStyle="rgba(255,255,255,.09)";ctx.stroke();
-    roundedRect(sx,sy,sw,sh,34);ctx.save();ctx.clip();
-    const signal=.7+.25*Math.sin(t*42)+.08*Math.sin(t*97);const sg=ctx.createRadialGradient(sx+sw/2,sy+sh/2,10,sx+sw/2,sy+sh/2,sw*.7);sg.addColorStop(0,`rgba(245,248,244,${.45+signal*.25})`);sg.addColorStop(.24,`rgba(210,215,210,${.12+signal*.06})`);sg.addColorStop(1,"rgba(0,0,0,1)");ctx.fillStyle=sg;ctx.fillRect(sx,sy,sw,sh);
-    const r=noise(900+Math.floor(t*60));ctx.globalCompositeOperation="lighter";for(let i=0;i<92;i++){const yy=sy+r()*sh;ctx.fillStyle=`rgba(255,255,255,${.04+r()*.18})`;ctx.fillRect(sx+r()*sw,yy,20+r()*260,1+r()*4)}
-    ctx.globalCompositeOperation="source-over";ctx.fillStyle="rgba(0,0,0,.36)";for(let yy=sy;yy<sy+sh;yy+=5)ctx.fillRect(sx,yy,sw,2);
-    ctx.save();ctx.translate(sx+92+Math.sin(t*44)*7,sy+210+Math.sin(t*12)*3);ctx.transform(1,0,-.13,1,0,0);ctx.font="900 142px Arial Black, Impact, sans-serif";ctx.lineWidth=14;ctx.strokeStyle="rgba(0,0,0,.88)";ctx.fillStyle="#f7f7f2";ctx.shadowColor="rgba(255,255,255,.7)";ctx.shadowBlur=14;ctx.strokeText("SBP",0,0);ctx.fillText("SBP",0,0);ctx.restore();
-    ctx.restore();ctx.strokeStyle=`rgba(255,255,255,${.22+signal*.08})`;ctx.lineWidth=3;roundedRect(sx,sy,sw,sh,34);ctx.stroke();
-    const panelX=820,panelY=655;roundedRect(panelX,panelY,105,500,18);ctx.fillStyle="#080909";ctx.fill();ctx.strokeStyle="rgba(255,255,255,.08)";ctx.stroke();ctx.fillStyle="rgba(255,255,255,.055)";for(let i=0;i<12;i++){roundedRect(panelX+18,panelY+35+i*30,68,9,4);ctx.fill()}
-  }
-  function drawGlitch(t){
-    const r=noise(2000+Math.floor(t*80));ctx.save();ctx.globalCompositeOperation="lighter";for(let i=0;i<24;i++){const y=r()*H;const h=1+r()*9;const a=.025+r()*.12;ctx.fillStyle=`rgba(245,248,244,${a})`;if(r()>.45)ctx.fillRect(0,y,180+r()*760,h);else ctx.fillRect(W-(180+r()*760),y,400+r()*500,h)}ctx.restore();
-    const vign=ctx.createRadialGradient(W/2,H/2,260,W/2,H/2,920);vign.addColorStop(0,"rgba(0,0,0,0)");vign.addColorStop(1,"rgba(0,0,0,.62)");ctx.fillStyle=vign;ctx.fillRect(0,0,W,H);
-  }
-  function drawFlash(t){const a=smooth(3.25,4.0,t);if(a<=0)return;ctx.fillStyle=`rgba(255,255,255,${easeOut(a)})`;ctx.fillRect(0,0,W,H)}
-  function finish(){try{parent.postMessage({type:"SBP_INTRO_DONE_V72"},"*")}catch(e){};try{window.dispatchEvent(new Event("SBP_INTRO_DONE_V72"))}catch(e){}}
-  function frame(now){const t=(now-START)/1000;drawRoom(t);drawTV(t);drawGlitch(t);drawFlash(t);if(t<DURATION){raf=requestAnimationFrame(frame)}else{ctx.fillStyle="#fff";ctx.fillRect(0,0,W,H);finish();}}
-  raf=requestAnimationFrame(frame);setTimeout(finish,4300);
-})();
-</script>
+  <main class="stage" aria-label="SBP CRT coded intro">
+    <div class="canvas-shell">
+      <canvas id="intro" width="1080" height="1920"></canvas>
+    </div>
+    <div class="controls">
+      <button id="play" type="button">Play / Replay</button>
+      <button id="record" type="button">Record WebM</button>
+      <div class="meter" aria-hidden="true"><span id="progress"></span></div>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const canvas = document.getElementById("intro");
+      const ctx = canvas.getContext("2d", { alpha: false });
+      const playButton = document.getElementById("play");
+      const recordButton = document.getElementById("record");
+      const progressBar = document.getElementById("progress");
+
+      const W = canvas.width;
+      const H = canvas.height;
+      const DURATION = 4;
+      const FPS = 60;
+
+      const screenBuffer = document.createElement("canvas");
+      const sctx = screenBuffer.getContext("2d", { alpha: true });
+      screenBuffer.width = 640;
+      screenBuffer.height = 390;
+
+      const sourceBuffer = document.createElement("canvas");
+      const sourceCtx = sourceBuffer.getContext("2d", { alpha: true });
+      sourceBuffer.width = screenBuffer.width;
+      sourceBuffer.height = screenBuffer.height;
+
+      const noiseCanvas = document.createElement("canvas");
+      const noiseCtx = noiseCanvas.getContext("2d", { alpha: true });
+      noiseCanvas.width = 320;
+      noiseCanvas.height = 195;
+      const noiseImage = noiseCtx.createImageData(noiseCanvas.width, noiseCanvas.height);
+
+      const roomGrain = document.createElement("canvas");
+      const grainCtx = roomGrain.getContext("2d", { alpha: true });
+      roomGrain.width = 270;
+      roomGrain.height = 480;
+      const grainImage = grainCtx.createImageData(roomGrain.width, roomGrain.height);
+      buildRoomGrain();
+      const dustParticles = buildDustParticles();
+
+      const sbpLogoImage = new Image();
+      sbpLogoImage.decoding = "async";
+      sbpLogoImage.src = "sbp-logo.png";
+      sbpLogoImage.onload = () => drawScene(lastT);
+
+      const logoWorkCanvas = document.createElement("canvas");
+      const logoWorkCtx = logoWorkCanvas.getContext("2d", { alpha: true });
+      logoWorkCanvas.width = 580;
+      logoWorkCanvas.height = 374;
+
+      let animationId = 0;
+      let startedAt = 0;
+      let isPlaying = false;
+      let lastT = 0;
+
+      const tv = {
+        x: 136,
+        y: 686,
+        w: 808,
+        h: 520,
+        screen: {
+          x: 205,
+          y: 760,
+          w: 564,
+          h: 342,
+          r: 34
+        }
+      };
+
+      function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+
+      function smoothstep(edge0, edge1, x) {
+        const t = clamp((x - edge0) / (edge1 - edge0), 0, 1);
+        return t * t * (3 - 2 * t);
+      }
+
+      function easeOutCubic(t) {
+        return 1 - Math.pow(1 - clamp(t, 0, 1), 3);
+      }
+
+      function xorshift(seed) {
+        let x = seed | 0;
+        return () => {
+          x ^= x << 13;
+          x ^= x >>> 17;
+          x ^= x << 5;
+          return ((x >>> 0) / 4294967295);
+        };
+      }
+
+      function hashNoise(x, y, seed) {
+        let n = x * 374761393 + y * 668265263 + seed * 1442695041;
+        n = (n ^ (n >>> 13)) * 1274126177;
+        return ((n ^ (n >>> 16)) >>> 0) / 4294967295;
+      }
+
+      function roundedRect(context, x, y, w, h, r) {
+        const radius = Math.min(r, w / 2, h / 2);
+        context.beginPath();
+        context.moveTo(x + radius, y);
+        context.lineTo(x + w - radius, y);
+        context.quadraticCurveTo(x + w, y, x + w, y + radius);
+        context.lineTo(x + w, y + h - radius);
+        context.quadraticCurveTo(x + w, y + h, x + w - radius, y + h);
+        context.lineTo(x + radius, y + h);
+        context.quadraticCurveTo(x, y + h, x, y + h - radius);
+        context.lineTo(x, y + radius);
+        context.quadraticCurveTo(x, y, x + radius, y);
+        context.closePath();
+      }
+
+      function buildRoomGrain() {
+        const data = grainImage.data;
+        for (let y = 0; y < roomGrain.height; y++) {
+          for (let x = 0; x < roomGrain.width; x++) {
+            const i = (y * roomGrain.width + x) * 4;
+            const r = hashNoise(x, y, 91);
+            const v = Math.floor(r * 34);
+            data[i] = 220;
+            data[i + 1] = 225;
+            data[i + 2] = 220;
+            data[i + 3] = v;
+          }
+        }
+        grainCtx.putImageData(grainImage, 0, 0);
+      }
+
+      function buildDustParticles() {
+        const rand = xorshift(54891);
+        const particles = [];
+        for (let i = 0; i < 132; i++) {
+          const depth = rand();
+          const sideBias = (rand() - 0.5) * (560 + depth * 240);
+          particles.push({
+            x: W / 2 + sideBias,
+            y: 485 + rand() * 660,
+            z: depth,
+            r: 0.48 + rand() * 1.15,
+            vx: -5.0 + rand() * 10.0,
+            vy: -1.4 + rand() * 3.5,
+            sway: 4 + rand() * 17,
+            phase: rand() * Math.PI * 2,
+            alpha: 0.42 + rand() * 0.72,
+            front: rand() > 0.46
+          });
+        }
+        return particles;
+      }
+
+      function signalLevel(t) {
+        const unstable = smoothstep(3.1, 3.45, t);
+        const flicker =
+          0.58 +
+          Math.sin(t * 46.0) * 0.065 +
+          Math.sin(t * 91.0 + 1.4) * 0.04 +
+          Math.sin(t * 17.0 + 2.5) * 0.035;
+        const pulses =
+          Math.pow(Math.max(0, Math.sin(t * 8.4 + 0.7)), 8) * 0.34 +
+          Math.pow(Math.max(0, Math.sin(t * 15.1 + 2.3)), 12) * 0.22;
+        return clamp(flicker + pulses + unstable * 0.5, 0.18, 1.55);
+      }
+
+      function drawScene(t) {
+        if (t >= DURATION) {
+          ctx.save();
+          ctx.globalCompositeOperation = "source-over";
+          ctx.fillStyle = "#fff";
+          ctx.fillRect(0, 0, W, H);
+          ctx.restore();
+          progressBar.style.width = "100%";
+          lastT = DURATION;
+          return;
+        }
+
+        const signal = signalLevel(t);
+        drawRoom(t, signal);
+        drawDustMotes(t, signal, false);
+        drawTelevisionShadow(signal);
+        drawTelevisionBody(t, signal);
+        drawScreenContent(t, signal);
+        drawDistortedScreen(t, signal);
+        drawScreenGlass(t, signal);
+        drawTelevisionDetails(t, signal);
+        drawCRTGlow(t, signal);
+        drawDustMotes(t, signal, true);
+        drawOuterFrameGlitch(t, signal);
+        drawFinalFlash(t);
+
+        lastT = t;
+        progressBar.style.width = `${Math.min(100, (t / DURATION) * 100)}%`;
+      }
+
+      function drawRoom(t, signal) {
+        const floorY = 1192;
+        const cx = tv.screen.x + tv.screen.w / 2;
+        const cy = tv.screen.y + tv.screen.h / 2;
+
+        const back = ctx.createLinearGradient(0, 0, 0, H);
+        back.addColorStop(0, "#020303");
+        back.addColorStop(0.32, "#070908");
+        back.addColorStop(0.62, "#101312");
+        back.addColorStop(1, "#020202");
+        ctx.fillStyle = back;
+        ctx.fillRect(0, 0, W, H);
+
+        ctx.save();
+        ctx.globalAlpha = 0.32;
+        ctx.drawImage(roomGrain, 0, 0, W, H);
+        ctx.restore();
+
+        const wallTop = 144;
+        const leftCorner = 172;
+        const rightCorner = W - 172;
+
+        const wall = ctx.createLinearGradient(0, wallTop, 0, floorY);
+        wall.addColorStop(0, "#070908");
+        wall.addColorStop(0.34, "#121615");
+        wall.addColorStop(0.75, "#0b0e0d");
+        wall.addColorStop(1, "#050606");
+        ctx.fillStyle = wall;
+        ctx.fillRect(leftCorner, wallTop, rightCorner - leftCorner, floorY - wallTop);
+
+        const leftWall = ctx.createLinearGradient(0, 0, leftCorner, 0);
+        leftWall.addColorStop(0, "#010202");
+        leftWall.addColorStop(0.64, "#080a09");
+        leftWall.addColorStop(1, "#111514");
+        ctx.fillStyle = leftWall;
+        ctx.beginPath();
+        ctx.moveTo(0, wallTop + 30);
+        ctx.lineTo(leftCorner, wallTop);
+        ctx.lineTo(leftCorner, floorY);
+        ctx.lineTo(0, H);
+        ctx.closePath();
+        ctx.fill();
+
+        const rightWall = ctx.createLinearGradient(W, 0, rightCorner, 0);
+        rightWall.addColorStop(0, "#010202");
+        rightWall.addColorStop(0.64, "#070908");
+        rightWall.addColorStop(1, "#101413");
+        ctx.fillStyle = rightWall;
+        ctx.beginPath();
+        ctx.moveTo(W, wallTop + 30);
+        ctx.lineTo(rightCorner, wallTop);
+        ctx.lineTo(rightCorner, floorY);
+        ctx.lineTo(W, H);
+        ctx.closePath();
+        ctx.fill();
+
+        const wallGlow = ctx.createRadialGradient(cx, cy - 26, 80, cx, cy + 40, 610);
+        wallGlow.addColorStop(0, `rgba(218, 225, 220, ${0.17 + signal * 0.07})`);
+        wallGlow.addColorStop(0.28, `rgba(155, 164, 158, ${0.08 + signal * 0.045})`);
+        wallGlow.addColorStop(0.68, "rgba(48, 55, 52, 0.05)");
+        wallGlow.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.fillStyle = wallGlow;
+        ctx.fillRect(0, wallTop, W, floorY - wallTop + 60);
+
+        const ceilingShade = ctx.createLinearGradient(0, 0, 0, 410);
+        ceilingShade.addColorStop(0, "rgba(0, 0, 0, 0.66)");
+        ceilingShade.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.fillStyle = ceilingShade;
+        ctx.fillRect(0, 0, W, 430);
+
+        drawWallTexture(wallTop, floorY, leftCorner, rightCorner, t, signal);
+        drawBackWallDepth(wallTop, floorY, leftCorner, rightCorner, t, signal);
+
+        const floor = ctx.createLinearGradient(0, floorY, 0, H);
+        floor.addColorStop(0, "#171c1a");
+        floor.addColorStop(0.18, "#101312");
+        floor.addColorStop(0.6, "#070808");
+        floor.addColorStop(1, "#010101");
+        ctx.fillStyle = floor;
+        ctx.beginPath();
+        ctx.moveTo(0, floorY);
+        ctx.lineTo(W, floorY);
+        ctx.lineTo(W, H);
+        ctx.lineTo(0, H);
+        ctx.closePath();
+        ctx.fill();
+
+        drawFloorTexture(floorY, t, signal);
+        drawWetFloorReflection(floorY, t, signal);
+
+        const lightCone = ctx.createLinearGradient(cx, tv.screen.y + tv.screen.h, cx, H);
+        lightCone.addColorStop(0, `rgba(235, 240, 235, ${0.1 + signal * 0.05})`);
+        lightCone.addColorStop(0.42, `rgba(168, 178, 171, ${0.055 + signal * 0.035})`);
+        lightCone.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.fillStyle = lightCone;
+        ctx.beginPath();
+        ctx.moveTo(tv.screen.x + 72, tv.screen.y + tv.screen.h - 12);
+        ctx.lineTo(tv.screen.x + tv.screen.w - 72, tv.screen.y + tv.screen.h - 12);
+        ctx.lineTo(W + 84, H);
+        ctx.lineTo(-84, H);
+        ctx.closePath();
+        ctx.fill();
+
+        drawCRTEnvironmentalLight(floorY, signal);
+        drawScreenReflection(floorY, signal);
+        drawRoomCastShadows(floorY, signal);
+
+        const edgeFalloff = ctx.createRadialGradient(cx, 900, 280, cx, 900, 920);
+        edgeFalloff.addColorStop(0, "rgba(0,0,0,0)");
+        edgeFalloff.addColorStop(0.58, "rgba(0,0,0,0.22)");
+        edgeFalloff.addColorStop(1, "rgba(0,0,0,0.84)");
+        ctx.fillStyle = edgeFalloff;
+        ctx.fillRect(0, 0, W, H);
+
+        const bottomVignette = ctx.createLinearGradient(0, H * 0.74, 0, H);
+        bottomVignette.addColorStop(0, "rgba(0,0,0,0)");
+        bottomVignette.addColorStop(1, "rgba(0,0,0,0.58)");
+        ctx.fillStyle = bottomVignette;
+        ctx.fillRect(0, H * 0.72, W, H * 0.28);
+      }
+
+      function drawCRTEnvironmentalLight(floorY, signal) {
+        const sx = tv.screen.x;
+        const sy = tv.screen.y;
+        const sw = tv.screen.w;
+        const sh = tv.screen.h;
+        const cx = sx + sw / 2;
+        const cy = sy + sh / 2;
+
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+
+        ctx.filter = "blur(34px)";
+        ctx.fillStyle = `rgba(226, 234, 228, ${0.12 + signal * 0.085})`;
+        roundedRect(ctx, sx - 44, sy - 54, sw + 88, sh + 120, 54);
+        ctx.fill();
+
+        ctx.filter = "blur(72px)";
+        const wallBloom = ctx.createRadialGradient(cx, cy, 60, cx, cy + 14, 520);
+        wallBloom.addColorStop(0, `rgba(220, 228, 222, ${0.13 + signal * 0.095})`);
+        wallBloom.addColorStop(0.44, `rgba(170, 180, 174, ${0.055 + signal * 0.042})`);
+        wallBloom.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = wallBloom;
+        ctx.fillRect(0, 430, W, 760);
+
+        ctx.filter = "blur(46px)";
+        const floorBloom = ctx.createRadialGradient(cx, floorY + 118, 34, cx, floorY + 228, 620);
+        floorBloom.addColorStop(0, `rgba(235, 241, 235, ${0.19 + signal * 0.11})`);
+        floorBloom.addColorStop(0.34, `rgba(164, 174, 168, ${0.08 + signal * 0.055})`);
+        floorBloom.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = floorBloom;
+        ctx.beginPath();
+        ctx.ellipse(cx, floorY + 210, 540, 145, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.filter = "none";
+        ctx.restore();
+      }
+
+      function drawBackWallDepth(wallTop, floorY, leftCorner, rightCorner, t, signal) {
+        ctx.save();
+        ctx.globalCompositeOperation = "source-over";
+
+        const cx = tv.screen.x + tv.screen.w / 2;
+        const sideShade = ctx.createLinearGradient(0, 0, W, 0);
+        sideShade.addColorStop(0, "rgba(0,0,0,0.46)");
+        sideShade.addColorStop(0.18, "rgba(0,0,0,0.12)");
+        sideShade.addColorStop(0.5, "rgba(0,0,0,0)");
+        sideShade.addColorStop(0.82, "rgba(0,0,0,0.13)");
+        sideShade.addColorStop(1, "rgba(0,0,0,0.48)");
+        ctx.fillStyle = sideShade;
+        ctx.fillRect(0, wallTop, W, floorY - wallTop);
+
+        const upperLedge = ctx.createLinearGradient(0, wallTop + 198, 0, wallTop + 260);
+        upperLedge.addColorStop(0, "rgba(255,255,255,0)");
+        upperLedge.addColorStop(0.34, `rgba(218,225,219,${0.05 + signal * 0.014})`);
+        upperLedge.addColorStop(0.48, "rgba(0,0,0,0.38)");
+        upperLedge.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = upperLedge;
+        ctx.fillRect(leftCorner - 86, wallTop + 192, rightCorner - leftCorner + 172, 78);
+
+        ctx.strokeStyle = `rgba(231,236,231,${0.035 + signal * 0.012})`;
+        ctx.lineWidth = 2;
+        for (let i = 0; i < 4; i++) {
+          const y = wallTop + 218 + i * 11 + Math.sin(t * 0.7 + i) * 0.8;
+          ctx.beginPath();
+          ctx.moveTo(leftCorner - 54, y);
+          ctx.lineTo(rightCorner + 54, y + Math.sin(i) * 2);
+          ctx.stroke();
+        }
+
+        const stainRand = xorshift(21130);
+        for (let i = 0; i < 26; i++) {
+          const x = leftCorner + stainRand() * (rightCorner - leftCorner);
+          const y = wallTop + 70 + stainRand() * (floorY - wallTop - 260);
+          const h = 44 + stainRand() * 210;
+          const w = 10 + stainRand() * 44;
+          const a = 0.025 + stainRand() * 0.055;
+          const stain = ctx.createLinearGradient(x, y, x + w, y + h);
+          stain.addColorStop(0, "rgba(255,255,255,0)");
+          stain.addColorStop(0.18, `rgba(214,221,215,${a * (0.72 + signal * 0.4)})`);
+          stain.addColorStop(0.86, `rgba(0,0,0,${a * 1.9})`);
+          stain.addColorStop(1, "rgba(255,255,255,0)");
+          ctx.fillStyle = stain;
+          ctx.beginPath();
+          ctx.ellipse(x, y + h * 0.5, w, h * 0.5, (stainRand() - 0.5) * 0.18, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.globalCompositeOperation = "lighter";
+        const rearHalo = ctx.createRadialGradient(cx, tv.y + 180, 80, cx, tv.y + 170, 520);
+        rearHalo.addColorStop(0, `rgba(235,241,235,${0.07 + signal * 0.04})`);
+        rearHalo.addColorStop(0.42, `rgba(170,180,173,${0.03 + signal * 0.022})`);
+        rearHalo.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = rearHalo;
+        ctx.fillRect(0, wallTop + 280, W, 560);
+
+        ctx.restore();
+      }
+
+      function drawWallTexture(wallTop, floorY, leftCorner, rightCorner, t, signal) {
+        ctx.save();
+        ctx.strokeStyle = "rgba(225, 231, 225, 0.075)";
+        ctx.lineWidth = 1;
+
+        ctx.beginPath();
+        ctx.moveTo(leftCorner, wallTop);
+        ctx.lineTo(leftCorner, floorY);
+        ctx.moveTo(rightCorner, wallTop);
+        ctx.lineTo(rightCorner, floorY);
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(225, 231, 225, 0.052)";
+        for (let y = wallTop + 118; y < floorY - 92; y += 132) {
+          ctx.beginPath();
+          ctx.moveTo(leftCorner + 12, y + Math.sin(y * 0.02) * 3);
+          ctx.lineTo(rightCorner - 12, y + Math.cos(y * 0.017) * 3);
+          ctx.stroke();
+        }
+
+        ctx.strokeStyle = "rgba(0, 0, 0, 0.34)";
+        for (let x = leftCorner + 130; x < rightCorner; x += 150) {
+          ctx.beginPath();
+          ctx.moveTo(x, wallTop + 4);
+          ctx.lineTo(lerp(x, W / 2, 0.07), floorY - 8);
+          ctx.stroke();
+        }
+
+        const rand = xorshift(4300 + Math.floor(t * 4));
+        for (let i = 0; i < 85; i++) {
+          const x = leftCorner + rand() * (rightCorner - leftCorner);
+          const y = wallTop + rand() * (floorY - wallTop);
+          const len = 8 + rand() * 72;
+          const a = 0.015 + rand() * 0.045 + signal * 0.006;
+          ctx.strokeStyle = `rgba(232, 237, 232, ${a})`;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x + len, y + (rand() - 0.5) * 5);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function drawRoomCastShadows(floorY, signal) {
+        ctx.save();
+        const backShadow = ctx.createRadialGradient(W / 2, tv.y + tv.h * 0.42, 170, W / 2, tv.y + tv.h * 0.42, 560);
+        backShadow.addColorStop(0, "rgba(0,0,0,0)");
+        backShadow.addColorStop(0.5, "rgba(0,0,0,0.3)");
+        backShadow.addColorStop(1, "rgba(0,0,0,0.66)");
+        ctx.fillStyle = backShadow;
+        ctx.fillRect(0, 520, W, 780);
+
+        const floorShadow = ctx.createRadialGradient(W / 2, floorY + 36, 80, W / 2, floorY + 86, 520);
+        floorShadow.addColorStop(0, "rgba(0,0,0,0.9)");
+        floorShadow.addColorStop(0.42, "rgba(0,0,0,0.46)");
+        floorShadow.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = floorShadow;
+        ctx.beginPath();
+        ctx.ellipse(W / 2, floorY + 68, 510, 108, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.globalCompositeOperation = "lighter";
+        const thinRim = ctx.createLinearGradient(tv.screen.x - 70, floorY + 10, tv.screen.x + tv.screen.w + 70, floorY + 10);
+        thinRim.addColorStop(0, "rgba(255,255,255,0)");
+        thinRim.addColorStop(0.5, `rgba(255,255,255,${0.08 + signal * 0.035})`);
+        thinRim.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.strokeStyle = thinRim;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(tv.screen.x - 92, floorY + 16);
+        ctx.lineTo(tv.screen.x + tv.screen.w + 92, floorY + 16);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawFloorTexture(floorY, t, signal) {
+        ctx.save();
+        ctx.strokeStyle = "rgba(230, 235, 231, 0.078)";
+        ctx.lineWidth = 1;
+        for (let y = floorY + 44; y < H; y += 72) {
+          const spread = (y - floorY) * 0.7;
+          ctx.beginPath();
+          ctx.moveTo(W / 2 - 460 - spread * 0.1, y);
+          ctx.lineTo(W / 2 + 460 + spread * 0.1, y + Math.sin(y * 0.03) * 2);
+          ctx.stroke();
+        }
+        for (let i = -5; i <= 5; i++) {
+          const x = W / 2 + i * 94;
+          ctx.beginPath();
+          ctx.moveTo(x, floorY);
+          ctx.lineTo(W / 2 + i * 220, H);
+          ctx.stroke();
+        }
+
+        ctx.save();
+        ctx.globalCompositeOperation = "multiply";
+        const floorDepth = ctx.createRadialGradient(W / 2, floorY + 105, 60, W / 2, H, 680);
+        floorDepth.addColorStop(0, "rgba(255,255,255,1)");
+        floorDepth.addColorStop(0.58, "rgba(70,74,72,0.9)");
+        floorDepth.addColorStop(1, "rgba(0,0,0,0.82)");
+        ctx.fillStyle = floorDepth;
+        ctx.fillRect(0, floorY, W, H - floorY);
+        ctx.restore();
+
+        ctx.save();
+        ctx.strokeStyle = "rgba(0, 0, 0, 0.62)";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(W / 2 + 34, floorY + 18);
+        ctx.bezierCurveTo(W / 2 + 18, floorY + 168, W / 2 + 76, floorY + 372, W / 2 + 42, H);
+        ctx.stroke();
+        ctx.strokeStyle = `rgba(238, 243, 238, ${0.035 + signal * 0.02})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(W / 2 + 39, floorY + 22);
+        ctx.bezierCurveTo(W / 2 + 24, floorY + 164, W / 2 + 82, floorY + 370, W / 2 + 48, H);
+        ctx.stroke();
+
+        const crackRand = xorshift(12021);
+        for (let i = 0; i < 18; i++) {
+          const startX = W / 2 + (crackRand() - 0.5) * 720;
+          const startY = floorY + 44 + crackRand() * 560;
+          ctx.strokeStyle = `rgba(0,0,0,${0.18 + crackRand() * 0.22})`;
+          ctx.lineWidth = 1 + crackRand() * 1.2;
+          ctx.beginPath();
+          ctx.moveTo(startX, startY);
+          let x = startX;
+          let y = startY;
+          for (let p = 0; p < 3; p++) {
+            x += (crackRand() - 0.5) * 110;
+            y += 24 + crackRand() * 76;
+            ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        ctx.globalAlpha = 0.18 + signal * 0.04;
+        const scratchRand = xorshift(7000 + Math.floor(t * 12));
+        ctx.strokeStyle = "rgba(248, 250, 246, 0.18)";
+        for (let i = 0; i < 38; i++) {
+          const x = scratchRand() * W;
+          const y = floorY + 25 + scratchRand() * 610;
+          const len = 18 + scratchRand() * 84;
+          ctx.globalAlpha = 0.015 + scratchRand() * 0.045;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x + len, y + (scratchRand() - 0.5) * 4);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function drawWetFloorReflection(floorY, t, signal) {
+        const cx = tv.screen.x + tv.screen.w / 2;
+        const sx = tv.screen.x;
+        const sw = tv.screen.w;
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        ctx.filter = "blur(18px)";
+
+        const pulse = 0.85 + signal * 0.45 + Math.sin(t * 13.5) * 0.035;
+        const reflectedScreen = ctx.createLinearGradient(cx, floorY + 10, cx, floorY + 420);
+        reflectedScreen.addColorStop(0, `rgba(248,251,246,${0.11 * pulse})`);
+        reflectedScreen.addColorStop(0.22, `rgba(214,222,216,${0.07 * pulse})`);
+        reflectedScreen.addColorStop(0.68, `rgba(148,158,151,${0.025 * pulse})`);
+        reflectedScreen.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = reflectedScreen;
+        ctx.beginPath();
+        ctx.moveTo(sx + 80, floorY + 8);
+        ctx.lineTo(sx + sw - 80, floorY + 8);
+        ctx.lineTo(cx + 360, floorY + 456);
+        ctx.lineTo(cx - 360, floorY + 456);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.filter = "blur(6px)";
+        for (let i = 0; i < 9; i++) {
+          const y = floorY + 52 + i * 43 + Math.sin(t * 1.4 + i) * 3;
+          const half = 84 + i * 34;
+          const a = (0.032 + signal * 0.018) * (1 - i / 12);
+          const streak = ctx.createLinearGradient(cx - half, y, cx + half, y);
+          streak.addColorStop(0, "rgba(255,255,255,0)");
+          streak.addColorStop(0.5, `rgba(236,242,236,${a})`);
+          streak.addColorStop(1, "rgba(255,255,255,0)");
+          ctx.strokeStyle = streak;
+          ctx.lineWidth = 2 + (i % 3);
+          ctx.beginPath();
+          ctx.moveTo(cx - half, y + Math.sin(i) * 3);
+          ctx.lineTo(cx + half, y + Math.cos(i) * 3);
+          ctx.stroke();
+        }
+
+        ctx.filter = "none";
+        const puddleRand = xorshift(16200);
+        for (let i = 0; i < 20; i++) {
+          const y = floorY + 60 + puddleRand() * 490;
+          const x = cx + (puddleRand() - 0.5) * (370 + (y - floorY) * 0.8);
+          const rx = 18 + puddleRand() * 82;
+          const ry = 1.2 + puddleRand() * 5.5;
+          const a = (0.012 + puddleRand() * 0.036 + signal * 0.008) * clamp(1 - (y - floorY) / 650, 0.12, 1);
+          ctx.fillStyle = `rgba(238,244,238,${a})`;
+          ctx.beginPath();
+          ctx.ellipse(x, y, rx, ry, (puddleRand() - 0.5) * 0.08, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      function drawScreenReflection(floorY, signal) {
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        const reflection = ctx.createRadialGradient(W / 2, floorY + 96, 20, W / 2, floorY + 188, 420);
+        reflection.addColorStop(0, `rgba(238, 242, 238, ${0.18 + signal * 0.08})`);
+        reflection.addColorStop(0.28, `rgba(195, 202, 196, ${0.07 + signal * 0.035})`);
+        reflection.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.fillStyle = reflection;
+        ctx.beginPath();
+        ctx.ellipse(W / 2, floorY + 174, 480, 86, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        const line = ctx.createLinearGradient(260, floorY + 18, 820, floorY + 18);
+        line.addColorStop(0, "rgba(255, 255, 255, 0)");
+        line.addColorStop(0.5, `rgba(255, 255, 255, ${0.16 + signal * 0.08})`);
+        line.addColorStop(1, "rgba(255, 255, 255, 0)");
+        ctx.strokeStyle = line;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(246, floorY + 34);
+        ctx.lineTo(834, floorY + 34);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawTelevisionShadow(signal) {
+        ctx.save();
+        const shadow = ctx.createRadialGradient(W / 2, 1228, 110, W / 2, 1228, 480);
+        shadow.addColorStop(0, "rgba(0, 0, 0, 0.94)");
+        shadow.addColorStop(0.48, "rgba(0, 0, 0, 0.56)");
+        shadow.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.fillStyle = shadow;
+        ctx.beginPath();
+        ctx.ellipse(W / 2, 1228, 470, 100, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.globalCompositeOperation = "lighter";
+        const halo = ctx.createRadialGradient(W / 2, 930, 30, W / 2, 930, 610);
+        halo.addColorStop(0, `rgba(220, 225, 220, ${0.075 + signal * 0.047})`);
+        halo.addColorStop(0.22, `rgba(218, 222, 216, ${0.026 + signal * 0.019})`);
+        halo.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.fillStyle = halo;
+        ctx.fillRect(0, 440, W, 850);
+        ctx.restore();
+      }
+
+      function drawTelevisionBody(t, signal) {
+        const bodyGrad = ctx.createLinearGradient(tv.x, tv.y, tv.x, tv.y + tv.h);
+        bodyGrad.addColorStop(0, "#171818");
+        bodyGrad.addColorStop(0.16, "#0d0e0e");
+        bodyGrad.addColorStop(0.62, "#070808");
+        bodyGrad.addColorStop(1, "#151615");
+
+        ctx.save();
+        ctx.shadowColor = "rgba(0, 0, 0, 0.86)";
+        ctx.shadowBlur = 44;
+        ctx.shadowOffsetY = 28;
+        roundedRect(ctx, tv.x, tv.y, tv.w, tv.h, 22);
+        ctx.fillStyle = bodyGrad;
+        ctx.fill();
+        ctx.restore();
+
+        ctx.save();
+        roundedRect(ctx, tv.x + 6, tv.y + 6, tv.w - 12, tv.h - 12, 18);
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.16)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        roundedRect(ctx, tv.x + 18, tv.y + 18, tv.w - 36, tv.h - 36, 14);
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.075)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        const topHighlight = ctx.createLinearGradient(tv.x + 24, 0, tv.x + tv.w - 24, 0);
+        topHighlight.addColorStop(0, "rgba(255, 255, 255, 0)");
+        topHighlight.addColorStop(0.18, "rgba(255, 255, 255, 0.72)");
+        topHighlight.addColorStop(0.52, "rgba(255, 255, 255, 0.34)");
+        topHighlight.addColorStop(0.85, "rgba(255, 255, 255, 0.52)");
+        topHighlight.addColorStop(1, "rgba(255, 255, 255, 0)");
+        ctx.strokeStyle = topHighlight;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(tv.x + 34, tv.y + 20);
+        ctx.lineTo(tv.x + tv.w - 34, tv.y + 20);
+        ctx.stroke();
+
+        const leftEdge = ctx.createLinearGradient(tv.x, tv.y, tv.x + 54, tv.y);
+        leftEdge.addColorStop(0, "rgba(255, 255, 255, 0.15)");
+        leftEdge.addColorStop(1, "rgba(255, 255, 255, 0)");
+        ctx.fillStyle = leftEdge;
+        roundedRect(ctx, tv.x + 8, tv.y + 32, 42, tv.h - 58, 13);
+        ctx.fill();
+
+        const rightEdge = ctx.createLinearGradient(tv.x + tv.w - 64, tv.y, tv.x + tv.w, tv.y);
+        rightEdge.addColorStop(0, "rgba(255, 255, 255, 0)");
+        rightEdge.addColorStop(1, "rgba(255, 255, 255, 0.13)");
+        ctx.fillStyle = rightEdge;
+        roundedRect(ctx, tv.x + tv.w - 54, tv.y + 34, 43, tv.h - 70, 13);
+        ctx.fill();
+        ctx.restore();
+
+        drawScreenCavity(signal);
+        drawSidePanel(t, signal);
+        drawTVFeet();
+      }
+
+      function drawScreenCavity(signal) {
+        const sx = tv.screen.x - 38;
+        const sy = tv.screen.y - 42;
+        const sw = tv.screen.w + 74;
+        const sh = tv.screen.h + 92;
+
+        const bezel = ctx.createLinearGradient(sx, sy, sx, sy + sh);
+        bezel.addColorStop(0, "#030404");
+        bezel.addColorStop(0.36, "#0a0b0b");
+        bezel.addColorStop(1, "#020303");
+        roundedRect(ctx, sx, sy, sw, sh, 26);
+        ctx.fillStyle = bezel;
+        ctx.fill();
+
+        ctx.save();
+        ctx.strokeStyle = `rgba(236, 240, 235, ${0.10 + signal * 0.02})`;
+        ctx.lineWidth = 2;
+        roundedRect(ctx, sx + 8, sy + 9, sw - 16, sh - 18, 22);
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.26)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(sx + 28, sy + sh - 30);
+        ctx.quadraticCurveTo(sx + 55, sy + sh - 12, sx + 86, sy + sh - 18);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(sx + sw - 28, sy + sh - 30);
+        ctx.quadraticCurveTo(sx + sw - 55, sy + sh - 12, sx + sw - 86, sy + sh - 18);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawSidePanel(t, signal) {
+        const px = tv.x + tv.w - 162;
+        const py = tv.y + 54;
+        const pw = 126;
+        const ph = tv.h - 94;
+
+        const panel = ctx.createLinearGradient(px, py, px + pw, py + ph);
+        panel.addColorStop(0, "#101111");
+        panel.addColorStop(0.46, "#050606");
+        panel.addColorStop(1, "#121313");
+        roundedRect(ctx, px, py, pw, ph, 13);
+        ctx.fillStyle = panel;
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        const ventX = px + 16;
+        const ventY = py + 34;
+        ctx.save();
+        for (let i = 0; i < 7; i++) {
+          const y = ventY + i * 30;
+          roundedRect(ctx, ventX, y, pw - 32, 11, 4);
+          ctx.fillStyle = i % 2 ? "rgba(0, 0, 0, 0.84)" : "rgba(0, 0, 0, 0.66)";
+          ctx.fill();
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.055)";
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        drawKnob(px + 28, py + 236, 16, t * 0.5);
+        drawKnob(px + 96, py + 236, 14, -t * 0.4);
+
+        ctx.save();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.06)";
+        ctx.lineWidth = 1;
+        for (let i = 0; i < 14; i++) {
+          const y = py + 286 + i * 8;
+          ctx.beginPath();
+          ctx.moveTo(px + 16, y);
+          ctx.lineTo(px + pw - 16, y);
+          ctx.stroke();
+        }
+        ctx.restore();
+
+        ctx.save();
+        for (let y = 0; y < 4; y++) {
+          for (let x = 0; x < 4; x++) {
+            const bx = px + 24 + x * 23;
+            const by = py + 394 + y * 21;
+            const lit = hashNoise(x, y, Math.floor(t * 9)) > 0.85;
+            ctx.fillStyle = lit
+              ? `rgba(238, 242, 236, ${0.14 + signal * 0.05})`
+              : "rgba(255, 255, 255, 0.035)";
+            ctx.beginPath();
+            ctx.arc(bx, by, 3.1, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+        ctx.restore();
+      }
+
+      function drawKnob(x, y, r, angle) {
+        const knob = ctx.createRadialGradient(x - r * 0.35, y - r * 0.35, 2, x, y, r);
+        knob.addColorStop(0, "#2a2c2b");
+        knob.addColorStop(0.52, "#090a0a");
+        knob.addColorStop(1, "#000");
+        ctx.fillStyle = knob;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.13)";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(angle);
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.34)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, -r + 4);
+        ctx.lineTo(0, -r * 0.25);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawTVFeet() {
+        const footY = tv.y + tv.h - 10;
+        ctx.save();
+        ctx.fillStyle = "#050606";
+        roundedRect(ctx, tv.x + 60, footY, 92, 34, 9);
+        ctx.fill();
+        roundedRect(ctx, tv.x + tv.w - 156, footY, 92, 34, 9);
+        ctx.fill();
+        ctx.fillStyle = "rgba(255, 255, 255, 0.06)";
+        roundedRect(ctx, tv.x + 68, footY + 4, 76, 4, 3);
+        ctx.fill();
+        roundedRect(ctx, tv.x + tv.w - 148, footY + 4, 76, 4, 3);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawScreenContent(t, signal) {
+        const w = screenBuffer.width;
+        const h = screenBuffer.height;
+        const frame = Math.floor(t * FPS);
+        const rand = xorshift(12000 + frame * 97);
+        const unstable = smoothstep(3.1, 3.45, t);
+        const screenBloom = smoothstep(3.1, 3.35, t);
+
+        sctx.save();
+        sctx.setTransform(1, 0, 0, 1, 0, 0);
+        sctx.clearRect(0, 0, w, h);
+        const base = sctx.createLinearGradient(0, 0, 0, h);
+        base.addColorStop(0, "#020303");
+        base.addColorStop(0.46, "#080909");
+        base.addColorStop(1, "#010202");
+        sctx.fillStyle = base;
+        sctx.fillRect(0, 0, w, h);
+
+        drawAnalogNoise(t, signal, rand, unstable);
+        drawSignalBands(t, signal, rand, unstable);
+        drawRollingDarkBars(t, signal, unstable);
+        drawSBPLogo(sctx, w, h, t, signal, unstable);
+        drawLogoInterference(t, signal, rand, unstable);
+        drawScreenBloomInBuffer(screenBloom, t);
+        sctx.restore();
+
+        sourceCtx.clearRect(0, 0, w, h);
+        sourceCtx.drawImage(screenBuffer, 0, 0);
+      }
+
+      function drawAnalogNoise(t, signal, rand, unstable) {
+        const data = noiseImage.data;
+        const frame = Math.floor(t * FPS);
+        for (let y = 0; y < noiseCanvas.height; y++) {
+          const rowPulse = Math.sin((y + t * 180) * 0.15) * 0.5 + 0.5;
+          for (let x = 0; x < noiseCanvas.width; x++) {
+            const i = (y * noiseCanvas.width + x) * 4;
+            const r = hashNoise(x + frame * 17, y - frame * 3, 33);
+            const sparse = r > 0.71 - unstable * 0.1;
+            const bright = sparse ? Math.floor(104 + r * 138 + rowPulse * 44 + signal * 26) : Math.floor(r * 18);
+            const alpha = sparse ? Math.floor(58 + rand() * 88 + unstable * 58) : Math.floor(rand() * 15);
+            data[i] = bright;
+            data[i + 1] = bright;
+            data[i + 2] = bright;
+            data[i + 3] = alpha;
+          }
+        }
+        noiseCtx.putImageData(noiseImage, 0, 0);
+        sctx.save();
+        sctx.globalCompositeOperation = "lighter";
+        sctx.imageSmoothingEnabled = false;
+        sctx.globalAlpha = 0.68 + signal * 0.12;
+        sctx.drawImage(noiseCanvas, 0, 0, screenBuffer.width, screenBuffer.height);
+        sctx.restore();
+      }
+
+      function drawSignalBands(t, signal, rand, unstable) {
+        const w = screenBuffer.width;
+        const h = screenBuffer.height;
+        sctx.save();
+        sctx.globalCompositeOperation = "lighter";
+
+        for (let i = 0; i < 58; i++) {
+          const y = (rand() * h + t * (22 + rand() * 72) + i * 29) % h;
+          const bandH = 1 + rand() * (5 + unstable * 12);
+          const alpha = 0.11 + rand() * 0.25 + signal * 0.045 + unstable * 0.11;
+          sctx.fillStyle = `rgba(234, 238, 234, ${alpha})`;
+          const segments = 11 + Math.floor(rand() * 26);
+          for (let s = 0; s < segments; s++) {
+            const x = rand() * w;
+            const segW = 10 + rand() * (220 + unstable * 190);
+            sctx.fillRect(x, y + rand() * 2, segW, bandH);
+          }
+        }
+
+        for (let i = 0; i < 8 + unstable * 10; i++) {
+          const y = (Math.sin(t * (1.9 + i * 0.7) + i * 1.2) * 0.5 + 0.5) * h;
+          const bandH = 8 + Math.sin(t * 12 + i) * 4 + unstable * 20;
+          const g = sctx.createLinearGradient(0, y - bandH, 0, y + bandH);
+          g.addColorStop(0, "rgba(255, 255, 255, 0)");
+          g.addColorStop(0.5, `rgba(255, 255, 255, ${0.2 + unstable * 0.26})`);
+          g.addColorStop(1, "rgba(255, 255, 255, 0)");
+          sctx.fillStyle = g;
+          sctx.fillRect(0, y - bandH, w, bandH * 2);
+        }
+
+        for (let i = 0; i < 4 + unstable * 4; i++) {
+          const y = (rand() * h + Math.sin(t * 5.8 + i) * 42) % h;
+          const thick = 5 + rand() * (9 + unstable * 14);
+          sctx.fillStyle = `rgba(245, 247, 243, ${0.15 + rand() * 0.17 + unstable * 0.18})`;
+          sctx.fillRect(rand() * 24, y, w - rand() * 48, thick);
+          sctx.fillStyle = `rgba(0, 0, 0, ${0.18 + rand() * 0.22})`;
+          sctx.fillRect(0, y + thick * 0.62, w, 2 + rand() * 4);
+        }
+
+        const rollY = (t * 96) % h;
+        const roll = sctx.createLinearGradient(0, rollY - 56, 0, rollY + 66);
+        roll.addColorStop(0, "rgba(255,255,255,0)");
+        roll.addColorStop(0.5, `rgba(255,255,255,${0.13 + signal * 0.035})`);
+        roll.addColorStop(1, "rgba(255,255,255,0)");
+        sctx.fillStyle = roll;
+        sctx.fillRect(0, rollY - 56, w, 122);
+
+        sctx.restore();
+      }
+
+      function drawSBPLogo(context, w, h, t, signal, unstable) {
+        const flick = 0.78 + Math.sin(t * 70) * 0.035 + signal * 0.06 - unstable * 0.05;
+        const jitter = Math.sin(t * 95) * 1.8 + Math.sin(t * 31) * 1.2;
+        if (sbpLogoImage.complete && sbpLogoImage.naturalWidth) {
+          drawSBPLogoAsset(context, w, h, t, signal, unstable, flick, jitter);
+          return;
+        }
+
+        context.save();
+        context.globalCompositeOperation = "source-over";
+        context.globalAlpha = clamp(flick, 0.45, 0.96);
+        context.shadowColor = "rgba(246, 248, 244, 0.68)";
+        context.shadowBlur = 13 + signal * 4;
+        context.fillStyle = "#f8f9f4";
+        context.strokeStyle = "rgba(0, 0, 0, 0.82)";
+        context.lineWidth = 18;
+        context.lineJoin = "round";
+        context.textBaseline = "middle";
+        context.textAlign = "left";
+
+        const y = h * 0.52 + Math.sin(t * 16) * 0.7;
+        const x = 76 + jitter;
+        context.font = "900 166px Arial Black, Impact, sans-serif";
+
+        context.save();
+        context.translate(x + 6, y);
+        context.transform(1, 0, -0.16, 1, 0, 0);
+        context.strokeText("S", 0, 0);
+        context.fillText("S", 0, 0);
+        context.restore();
+
+        context.strokeText("B", x + 186, y);
+        context.strokeText("P", x + 356, y);
+        context.fillText("B", x + 186, y);
+        context.fillText("P", x + 356, y);
+
+        drawTagDetail(context, x + 495, y + 26, t, signal);
+        context.restore();
+      }
+
+      function drawSBPLogoAsset(context, w, h, t, signal, unstable, flick, jitter) {
+        const logoW = w * 0.86;
+        const logoH = logoW * (sbpLogoImage.naturalHeight / sbpLogoImage.naturalWidth);
+        const x = (w - logoW) / 2 + jitter * 0.8;
+        const y = (h - logoH) / 2 + 10 + Math.sin(t * 17) * 0.8;
+
+        logoWorkCanvas.width = Math.ceil(logoW);
+        logoWorkCanvas.height = Math.ceil(logoH);
+
+        logoWorkCtx.setTransform(1, 0, 0, 1, 0, 0);
+        logoWorkCtx.clearRect(0, 0, logoWorkCanvas.width, logoWorkCanvas.height);
+        logoWorkCtx.globalCompositeOperation = "source-over";
+        logoWorkCtx.drawImage(sbpLogoImage, 0, 0, logoWorkCanvas.width, logoWorkCanvas.height);
+        logoWorkCtx.globalCompositeOperation = "source-in";
+        logoWorkCtx.fillStyle = "rgba(0, 0, 0, 0.86)";
+        logoWorkCtx.fillRect(0, 0, logoWorkCanvas.width, logoWorkCanvas.height);
+
+        context.save();
+        context.globalCompositeOperation = "source-over";
+        context.globalAlpha = clamp(flick, 0.5, 0.96);
+        context.shadowColor = "rgba(0, 0, 0, 0.88)";
+        context.shadowBlur = 8;
+        for (let ox = -2; ox <= 2; ox += 2) {
+          for (let oy = -2; oy <= 2; oy += 2) {
+            context.drawImage(logoWorkCanvas, x + ox, y + oy, logoW, logoH);
+          }
+        }
+
+        logoWorkCtx.clearRect(0, 0, logoWorkCanvas.width, logoWorkCanvas.height);
+        logoWorkCtx.globalCompositeOperation = "source-over";
+        logoWorkCtx.drawImage(sbpLogoImage, 0, 0, logoWorkCanvas.width, logoWorkCanvas.height);
+        logoWorkCtx.globalCompositeOperation = "source-in";
+        const logoFill = logoWorkCtx.createLinearGradient(0, 0, 0, logoWorkCanvas.height);
+        logoFill.addColorStop(0, "rgba(255, 255, 250, 0.97)");
+        logoFill.addColorStop(0.58, "rgba(235, 239, 234, 0.93)");
+        logoFill.addColorStop(1, "rgba(178, 184, 178, 0.86)");
+        logoWorkCtx.fillStyle = logoFill;
+        logoWorkCtx.fillRect(0, 0, logoWorkCanvas.width, logoWorkCanvas.height);
+
+        context.shadowColor = "rgba(246, 250, 244, 0.72)";
+        context.shadowBlur = 10 + signal * 5 + unstable * 9;
+
+        const sliceCount = 18;
+        const sliceH = logoWorkCanvas.height / sliceCount;
+        for (let i = 0; i < sliceCount; i++) {
+          const sy = i * sliceH;
+          const dy = y + i * (logoH / sliceCount);
+          const wave = Math.sin(t * 19 + i * 0.9) * (1.2 + unstable * 3.2);
+          const tear = hashNoise(i, Math.floor(t * FPS), 610) > 0.78 ? (hashNoise(i, Math.floor(t * FPS), 611) - 0.5) * (16 + unstable * 30) : 0;
+          context.globalAlpha = clamp(flick + Math.sin(t * 65 + i) * 0.025, 0.46, 0.98);
+          context.drawImage(
+            logoWorkCanvas,
+            0,
+            sy,
+            logoWorkCanvas.width,
+            sliceH + 1,
+            x + wave + tear,
+            dy,
+            logoW,
+            logoH / sliceCount + 1.2
+          );
+        }
+        context.restore();
+      }
+
+      function drawTagDetail(context, x, y, t, signal) {
+        context.save();
+        context.shadowColor = "rgba(0, 0, 0, 0.52)";
+        context.shadowBlur = 3;
+        context.strokeStyle = `rgba(245, 247, 244, ${0.72 + signal * 0.05})`;
+        context.lineWidth = 2;
+
+        drawBeadChain(context, x - 4, y - 38, x + 24, y + 80, 18, t, 0);
+        drawBeadChain(context, x + 8, y - 38, x + 78, y + 100, 19, t, 1.7);
+
+        drawDogTag(context, x - 18, y + 80, 54, 82, -0.01, signal);
+        drawDogTag(context, x + 62, y + 108, 52, 80, -0.02, signal * 0.85);
+        context.restore();
+      }
+
+      function drawBeadChain(context, x1, y1, x2, y2, count, t, phase) {
+        for (let i = 0; i < count; i++) {
+          const p = i / (count - 1);
+          const arc = Math.sin(p * Math.PI + phase) * 14;
+          const x = lerp(x1, x2, p) + arc * 0.25 + Math.sin(t * 8 + i) * 0.25;
+          const y = lerp(y1, y2, p) + arc;
+          const alpha = 0.42 + p * 0.35;
+          context.fillStyle = `rgba(250, 251, 248, ${alpha})`;
+          context.beginPath();
+          context.arc(x, y, 2.9, 0, Math.PI * 2);
+          context.fill();
+          context.strokeStyle = "rgba(20, 21, 21, 0.52)";
+          context.lineWidth = 0.8;
+          context.stroke();
+        }
+      }
+
+      function drawDogTag(context, x, y, w, h, rot, signal) {
+        context.save();
+        context.translate(x + w / 2, y + h / 2);
+        context.rotate(rot);
+        const tag = context.createLinearGradient(-w / 2, -h / 2, w / 2, h / 2);
+        tag.addColorStop(0, `rgba(255, 255, 252, ${0.88 + signal * 0.04})`);
+        tag.addColorStop(0.46, "rgba(224, 226, 222, 0.84)");
+        tag.addColorStop(1, "rgba(163, 166, 162, 0.76)");
+        roundedRect(context, -w / 2, -h / 2, w, h, 8);
+        context.fillStyle = tag;
+        context.fill();
+        context.strokeStyle = "rgba(255, 255, 255, 0.52)";
+        context.lineWidth = 1;
+        context.stroke();
+        context.fillStyle = "rgba(22, 23, 23, 0.32)";
+        context.beginPath();
+        context.arc(0, -h / 2 + 12, 4.2, 0, Math.PI * 2);
+        context.fill();
+        context.restore();
+      }
+
+      function drawLogoInterference(t, signal, rand, unstable) {
+        const w = screenBuffer.width;
+        const h = screenBuffer.height;
+        sctx.save();
+        sctx.globalCompositeOperation = "source-atop";
+        for (let i = 0; i < 12 + unstable * 13; i++) {
+          const y = 110 + rand() * 168;
+          const x = 50 + rand() * 520;
+          const rw = 25 + rand() * 210;
+          const rh = 1 + rand() * (4 + unstable * 10);
+          sctx.fillStyle = `rgba(0, 0, 0, ${0.18 + rand() * 0.32})`;
+          sctx.fillRect(x, y, rw, rh);
+        }
+        sctx.globalCompositeOperation = "lighter";
+        for (let i = 0; i < 8 + unstable * 8; i++) {
+          const y = 122 + rand() * 154;
+          sctx.fillStyle = `rgba(255, 255, 255, ${0.09 + rand() * 0.14 + signal * 0.02})`;
+          sctx.fillRect(rand() * 80, y, w - rand() * 140, 1 + rand() * 3);
+        }
+        sctx.restore();
+      }
+
+      function drawRollingDarkBars(t, signal, unstable) {
+        const w = screenBuffer.width;
+        const h = screenBuffer.height;
+        sctx.save();
+        sctx.globalCompositeOperation = "multiply";
+        for (let i = 0; i < 4; i++) {
+          const y = (h + Math.sin(t * (1.6 + i * 0.25) + i) * h * 0.5 + t * (14 + i * 13)) % h;
+          const barH = 16 + i * 7 + unstable * 24;
+          const g = sctx.createLinearGradient(0, y - barH, 0, y + barH);
+          g.addColorStop(0, "rgba(255,255,255,1)");
+          g.addColorStop(0.5, `rgba(22,24,24,${0.48 + signal * 0.04})`);
+          g.addColorStop(1, "rgba(255,255,255,1)");
+          sctx.fillStyle = g;
+          sctx.fillRect(0, y - barH, w, barH * 2);
+        }
+        sctx.restore();
+      }
+
+      function drawScreenBloomInBuffer(amount, t) {
+        if (amount <= 0) return;
+        const w = screenBuffer.width;
+        const h = screenBuffer.height;
+        sctx.save();
+        sctx.globalCompositeOperation = "lighter";
+        const pulse = 0.82 + Math.sin(t * 56) * 0.18;
+        const r = lerp(28, 270, easeOutCubic(amount));
+        const cx = w * 0.5 + Math.sin(t * 21) * 9;
+        const cy = h * 0.52 + Math.cos(t * 17) * 6;
+        const bloom = sctx.createRadialGradient(cx, cy, 4, cx, cy, r);
+        bloom.addColorStop(0, `rgba(255, 255, 255, ${0.78 * amount})`);
+        bloom.addColorStop(0.2, `rgba(255, 255, 255, ${0.58 * amount * pulse})`);
+        bloom.addColorStop(0.58, `rgba(255, 255, 255, ${0.16 * amount})`);
+        bloom.addColorStop(1, "rgba(255, 255, 255, 0)");
+        sctx.fillStyle = bloom;
+        sctx.fillRect(0, 0, w, h);
+
+        if (amount > 0.74) {
+          sctx.globalAlpha = smoothstep(0.74, 0.96, amount);
+          sctx.fillStyle = "#fff";
+          sctx.fillRect(0, 0, w, h);
+        }
+        sctx.restore();
+      }
+
+      function drawDistortedScreen(t, signal) {
+        const sx = tv.screen.x;
+        const sy = tv.screen.y;
+        const sw = tv.screen.w;
+        const sh = tv.screen.h;
+        const unstable = smoothstep(3.1, 3.45, t);
+        const frame = Math.floor(t * FPS);
+        const rand = xorshift(30100 + frame * 151);
+
+        ctx.save();
+        roundedRect(ctx, sx, sy, sw, sh, tv.screen.r);
+        ctx.clip();
+
+        const backgroundGlow = ctx.createRadialGradient(sx + sw / 2, sy + sh / 2, 30, sx + sw / 2, sy + sh / 2, sw * 0.62);
+        backgroundGlow.addColorStop(0, `rgba(240, 244, 240, ${0.08 + signal * 0.035})`);
+        backgroundGlow.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.fillStyle = backgroundGlow;
+        ctx.fillRect(sx, sy, sw, sh);
+
+        ctx.imageSmoothingEnabled = true;
+        const sliceCount = 84;
+        const sliceH = screenBuffer.height / sliceCount;
+        const destSliceH = sh / sliceCount;
+        const tear1 = (Math.sin(t * 2.2) * 0.5 + 0.5) * screenBuffer.height;
+        const tear2 = (Math.sin(t * 3.1 + 2.2) * 0.5 + 0.5) * screenBuffer.height;
+        const heavyTear = rand() > 0.58 || unstable > 0.12;
+
+        for (let i = 0; i < sliceCount; i++) {
+          const y = i * sliceH;
+          const n = hashNoise(i, frame, 7) - 0.5;
+          const wave = Math.sin(y * 0.038 + t * 10.4) * 9 + Math.sin(y * 0.091 - t * 18.0) * 4.4;
+          let offset = wave + n * (23 + unstable * 36);
+          if (heavyTear && Math.abs(y - tear1) < 24 + unstable * 62) offset += (rand() - 0.5) * (86 + unstable * 108);
+          if (Math.abs(y - tear2) < 14 + unstable * 40) offset += Math.sin(t * 42) * (38 + unstable * 58);
+
+          const dy = sy + (i / sliceCount) * sh;
+          ctx.globalAlpha = 0.92 + Math.sin(t * 49 + i) * 0.02;
+          ctx.drawImage(
+            sourceBuffer,
+            0,
+            y,
+            screenBuffer.width,
+            sliceH + 1,
+            sx + offset,
+            dy,
+            sw,
+            destSliceH + 1.4
+          );
+        }
+
+        drawScreenScanlines(sx, sy, sw, sh, t, signal);
+        drawScreenEdgeVignette(sx, sy, sw, sh);
+        ctx.restore();
+      }
+
+      function drawScreenScanlines(sx, sy, sw, sh, t, signal) {
+        ctx.save();
+        ctx.globalCompositeOperation = "multiply";
+        ctx.fillStyle = "rgba(0, 0, 0, 0.34)";
+        for (let y = sy; y < sy + sh; y += 4) {
+          ctx.fillRect(sx, y, sw, 1.7);
+        }
+        ctx.globalCompositeOperation = "lighter";
+        ctx.strokeStyle = `rgba(255, 255, 255, ${0.028 + signal * 0.006})`;
+        ctx.lineWidth = 1;
+        const drift = (t * 50) % 8;
+        for (let y = sy + drift; y < sy + sh; y += 8) {
+          ctx.beginPath();
+          ctx.moveTo(sx, y);
+          ctx.lineTo(sx + sw, y);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function drawScreenEdgeVignette(sx, sy, sw, sh) {
+        const edge = ctx.createRadialGradient(sx + sw / 2, sy + sh / 2, 90, sx + sw / 2, sy + sh / 2, sw * 0.58);
+        edge.addColorStop(0, "rgba(0,0,0,0)");
+        edge.addColorStop(0.72, "rgba(0,0,0,0.12)");
+        edge.addColorStop(1, "rgba(0,0,0,0.78)");
+        ctx.fillStyle = edge;
+        ctx.fillRect(sx, sy, sw, sh);
+      }
+
+      function drawScreenGlass(t, signal) {
+        const sx = tv.screen.x;
+        const sy = tv.screen.y;
+        const sw = tv.screen.w;
+        const sh = tv.screen.h;
+        ctx.save();
+        roundedRect(ctx, sx, sy, sw, sh, tv.screen.r);
+        ctx.clip();
+
+        const glass = ctx.createLinearGradient(sx, sy, sx + sw, sy + sh);
+        glass.addColorStop(0, "rgba(255, 255, 255, 0.11)");
+        glass.addColorStop(0.14, "rgba(255, 255, 255, 0.018)");
+        glass.addColorStop(0.72, "rgba(255, 255, 255, 0)");
+        glass.addColorStop(1, "rgba(255, 255, 255, 0.08)");
+        ctx.fillStyle = glass;
+        ctx.fillRect(sx, sy, sw, sh);
+
+        ctx.strokeStyle = `rgba(246, 249, 244, ${0.16 + signal * 0.025})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(sx + 52, sy + 30);
+        ctx.quadraticCurveTo(sx + sw * 0.5, sy - 8, sx + sw - 52, sy + 31);
+        ctx.stroke();
+
+        ctx.globalCompositeOperation = "lighter";
+        const lowerGlow = ctx.createLinearGradient(sx, sy + sh * 0.65, sx, sy + sh);
+        lowerGlow.addColorStop(0, "rgba(255,255,255,0)");
+        lowerGlow.addColorStop(1, `rgba(255,255,255,${0.08 + signal * 0.028})`);
+        ctx.fillStyle = lowerGlow;
+        ctx.fillRect(sx, sy + sh * 0.6, sw, sh * 0.4);
+        ctx.restore();
+
+        ctx.save();
+        ctx.strokeStyle = "rgba(0, 0, 0, 0.78)";
+        ctx.lineWidth = 13;
+        roundedRect(ctx, sx - 4, sy - 4, sw + 8, sh + 8, tv.screen.r + 5);
+        ctx.stroke();
+        ctx.strokeStyle = `rgba(255, 255, 255, ${0.11 + signal * 0.018})`;
+        ctx.lineWidth = 2;
+        roundedRect(ctx, sx - 1, sy - 1, sw + 2, sh + 2, tv.screen.r + 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawTelevisionDetails(t, signal) {
+        ctx.save();
+        const sx = tv.screen.x;
+        const sy = tv.screen.y;
+        const sw = tv.screen.w;
+        const sh = tv.screen.h;
+
+        ctx.globalCompositeOperation = "lighter";
+        const leftInner = ctx.createLinearGradient(sx - 48, sy + sh * 0.62, sx + 28, sy + sh);
+        leftInner.addColorStop(0, "rgba(255,255,255,0)");
+        leftInner.addColorStop(0.75, `rgba(255,255,255,${0.16 + signal * 0.045})`);
+        leftInner.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = leftInner;
+        ctx.beginPath();
+        ctx.moveTo(sx - 34, sy + sh + 42);
+        ctx.lineTo(sx + 34, sy + sh - 12);
+        ctx.lineTo(sx + 96, sy + sh + 42);
+        ctx.closePath();
+        ctx.fill();
+
+        const rightInner = ctx.createLinearGradient(sx + sw - 28, sy + sh, sx + sw + 48, sy + sh * 0.65);
+        rightInner.addColorStop(0, `rgba(255,255,255,${0.12 + signal * 0.035})`);
+        rightInner.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = rightInner;
+        ctx.beginPath();
+        ctx.moveTo(sx + sw - 96, sy + sh + 42);
+        ctx.lineTo(sx + sw - 34, sy + sh - 12);
+        ctx.lineTo(sx + sw + 34, sy + sh + 42);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+
+        ctx.save();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.045)";
+        ctx.lineWidth = 1;
+        for (let i = 0; i < 22; i++) {
+          const y = tv.y + 78 + i * 17;
+          const jitter = Math.sin(t * 9 + i) * 1.5;
+          ctx.beginPath();
+          ctx.moveTo(tv.x + 36, y + jitter);
+          ctx.lineTo(tv.x + tv.w - 36, y + jitter * 0.3);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function drawCRTGlow(t, signal) {
+        const sx = tv.screen.x;
+        const sy = tv.screen.y;
+        const sw = tv.screen.w;
+        const sh = tv.screen.h;
+        const cx = sx + sw / 2;
+        const cy = sy + sh / 2;
+        const preFlash = smoothstep(3.35, 3.7, t);
+
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+
+        ctx.filter = `blur(${14 + preFlash * 22}px)`;
+        const screenBloom = ctx.createRadialGradient(cx, cy, 26, cx, cy, 400 + preFlash * 280);
+        screenBloom.addColorStop(0, `rgba(244, 248, 242, ${0.13 + signal * 0.055 + preFlash * 0.24})`);
+        screenBloom.addColorStop(0.34, `rgba(210, 218, 211, ${0.052 + signal * 0.038 + preFlash * 0.12})`);
+        screenBloom.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = screenBloom;
+        ctx.fillRect(sx - 260, sy - 240, sw + 520, sh + 640);
+
+        ctx.filter = "blur(4px)";
+        ctx.strokeStyle = `rgba(247, 250, 244, ${0.16 + signal * 0.06 + preFlash * 0.24})`;
+        ctx.lineWidth = 3 + preFlash * 2;
+        roundedRect(ctx, sx - 2, sy - 2, sw + 4, sh + 4, tv.screen.r + 4);
+        ctx.stroke();
+
+        ctx.filter = "blur(24px)";
+        const floorKiss = ctx.createRadialGradient(cx, tv.y + tv.h + 34, 20, cx, tv.y + tv.h + 130, 470);
+        floorKiss.addColorStop(0, `rgba(242, 247, 241, ${0.075 + signal * 0.045 + preFlash * 0.16})`);
+        floorKiss.addColorStop(0.38, `rgba(185, 195, 188, ${0.035 + signal * 0.026 + preFlash * 0.06})`);
+        floorKiss.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = floorKiss;
+        ctx.beginPath();
+        ctx.ellipse(cx, tv.y + tv.h + 112, 430, 92, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.filter = "none";
+        ctx.restore();
+      }
+
+      function drawDustMotes(t, signal, frontLayer) {
+        const cx = tv.screen.x + tv.screen.w / 2;
+        const cy = tv.screen.y + tv.screen.h / 2;
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        for (let i = 0; i < dustParticles.length; i++) {
+          const p = dustParticles[i];
+          if (p.front !== frontLayer) continue;
+
+          const driftX = Math.sin(t * (0.34 + p.z * 0.22) + p.phase) * p.sway + p.vx * t;
+          const driftY = Math.cos(t * (0.22 + p.z * 0.18) + p.phase * 0.7) * (p.sway * 0.25) + p.vy * t;
+          let x = p.x + driftX;
+          let y = p.y + driftY;
+          if (x < 42) x += W - 84;
+          if (x > W - 42) x -= W - 84;
+          if (y < 330) y += 760;
+          if (y > 1210) y -= 760;
+
+          const dx = (x - cx) / (430 + p.z * 330);
+          const dy = (y - cy) / (270 + p.z * 340);
+          const glow = Math.exp(-(dx * dx + dy * dy) * 1.35);
+          const cone = clamp(1 - Math.abs(x - cx) / (350 + (y - 520) * 0.22), 0, 1);
+          const cornerFade = clamp(1 - Math.abs(x - W / 2) / 560, 0, 1);
+          const heightFade = clamp(1 - Math.abs(y - 840) / 650, 0, 1);
+          const screenCover =
+            x > tv.screen.x - 10 &&
+            x < tv.screen.x + tv.screen.w + 10 &&
+            y > tv.screen.y - 8 &&
+            y < tv.screen.y + tv.screen.h + 8;
+          const layerFade = frontLayer ? 0.96 : 0.68;
+          const alpha = p.alpha * layerFade * (0.18 + signal * 0.21) * glow * (0.22 + cone * 0.78) * (0.24 + cornerFade * 0.76) * heightFade * (screenCover ? 0.12 : 1);
+          if (alpha < 0.003) continue;
+
+          const r = p.r * (0.9 + p.z * 0.75);
+          if (alpha > 0.022) {
+            const halo = ctx.createRadialGradient(x, y, 0, x, y, r * 5.5);
+            halo.addColorStop(0, `rgba(238, 241, 236, ${alpha * 0.55})`);
+            halo.addColorStop(1, "rgba(238, 241, 236, 0)");
+            ctx.fillStyle = halo;
+            ctx.beginPath();
+            ctx.arc(x, y, r * 5.5, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.fillStyle = `rgba(238, 241, 236, ${alpha})`;
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fill();
+
+          if (p.z > 0.56 && alpha > 0.006) {
+            ctx.strokeStyle = `rgba(238, 241, 236, ${alpha * 0.42})`;
+            ctx.lineWidth = 0.55;
+            ctx.beginPath();
+            ctx.moveTo(x - r * 1.2, y + r * 0.3);
+            ctx.lineTo(x + r * 1.4, y - r * 0.2);
+            ctx.stroke();
+          }
+        }
+        ctx.restore();
+      }
+
+      function drawOuterFrameGlitch(t, signal) {
+        const frame = Math.floor(t * FPS);
+        const rand = xorshift(73300 + frame * 211);
+        const unstable = smoothstep(3.1, 3.45, t);
+        const energy = clamp(0.95 + signal * 0.34 + unstable * 0.58, 0, 1.8);
+
+        ctx.save();
+        ctx.globalCompositeOperation = "source-over";
+        for (let i = 0; i < 10; i++) {
+          const y = Math.floor((Math.sin(t * (1.1 + i * 0.31) + i * 1.7) * 0.5 + 0.5) * H);
+          const h = 2 + rand() * (11 + unstable * 13);
+          const off = (rand() - 0.5) * (24 + unstable * 34);
+          ctx.globalAlpha = 0.075 + rand() * 0.08 + unstable * 0.06;
+          ctx.drawImage(canvas, 0, y, W, h, off, y, W, h);
+          ctx.globalAlpha = 1;
+          ctx.fillStyle = `rgba(0, 0, 0, ${0.05 + rand() * 0.1})`;
+          ctx.fillRect(0, y + h, W, 1 + rand() * 2);
+        }
+        ctx.restore();
+
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+
+        for (let i = 0; i < 190; i++) {
+          const left = rand() > 0.5;
+          const topBias = rand();
+          const edgeDepth = Math.pow(rand(), 2) * 190;
+          const x = left ? edgeDepth : W - edgeDepth;
+          const y = topBias < 0.34
+            ? rand() * 470
+            : topBias > 0.72
+              ? H - rand() * 470
+              : rand() * H;
+          const a = (0.02 + rand() * 0.06) * energy;
+          ctx.fillStyle = `rgba(232, 236, 231, ${a})`;
+          ctx.fillRect(x, y, 1 + rand() * 3.4, 1 + rand() * 12);
+        }
+
+        for (let i = 0; i < 28; i++) {
+          const y = (rand() * H + t * (44 + rand() * 90) + i * 97) % H;
+          const bandH = 1.5 + rand() * (5 + unstable * 6);
+          const len = 150 + rand() * (430 + unstable * 230);
+          const crawl = Math.sin(t * (3.2 + i * 0.19) + i) * 64;
+          const a = (0.055 + rand() * 0.14 + unstable * 0.07) * energy;
+
+          const leftGrad = ctx.createLinearGradient(0, y, len, y);
+          leftGrad.addColorStop(0, `rgba(245, 247, 243, ${a})`);
+          leftGrad.addColorStop(1, "rgba(245, 247, 243, 0)");
+          ctx.fillStyle = leftGrad;
+          ctx.fillRect(0, y, len + crawl, bandH);
+
+          const rightGrad = ctx.createLinearGradient(W, y, W - len, y);
+          rightGrad.addColorStop(0, `rgba(245, 247, 243, ${a * 0.94})`);
+          rightGrad.addColorStop(1, "rgba(245, 247, 243, 0)");
+          ctx.fillStyle = rightGrad;
+          ctx.fillRect(W - len - crawl, y + rand() * 2, len + crawl, bandH);
+        }
+
+        for (let i = 0; i < 12; i++) {
+          const y = tv.screen.y - 120 + ((t * (75 + i * 17) + i * 81) % 610);
+          const leftLen = 190 + rand() * 560;
+          const rightStart = W - (190 + rand() * 560);
+          const alpha = (0.045 + rand() * 0.082 + unstable * 0.045) * energy;
+          ctx.strokeStyle = `rgba(244, 246, 242, ${alpha})`;
+          ctx.lineWidth = 1 + rand() * 2.2;
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(leftLen, y + (rand() - 0.5) * 7);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(W, y + rand() * 4);
+          ctx.lineTo(rightStart, y + (rand() - 0.5) * 7);
+          ctx.stroke();
+        }
+
+        const borderRollY = (t * 116) % H;
+        const roll = ctx.createLinearGradient(0, borderRollY - 120, 0, borderRollY + 120);
+        roll.addColorStop(0, "rgba(255,255,255,0)");
+        roll.addColorStop(0.48, `rgba(255,255,255,${0.045 * energy})`);
+        roll.addColorStop(0.52, `rgba(255,255,255,${0.105 * energy})`);
+        roll.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = roll;
+        ctx.fillRect(0, borderRollY - 120, W, 240);
+
+        ctx.globalCompositeOperation = "source-over";
+        const edgeDark = ctx.createRadialGradient(W / 2, 900, 340, W / 2, 900, 990);
+        edgeDark.addColorStop(0, "rgba(0,0,0,0)");
+        edgeDark.addColorStop(0.72, "rgba(0,0,0,0.08)");
+        edgeDark.addColorStop(1, "rgba(0,0,0,0.28)");
+        ctx.fillStyle = edgeDark;
+        ctx.fillRect(0, 0, W, H);
+        ctx.restore();
+      }
+
+      function drawFinalFlash(t) {
+        const screenAmount = smoothstep(3.1, 3.35, t);
+        const spread = smoothstep(3.35, 3.92, t);
+        if (screenAmount <= 0 && spread <= 0) return;
+
+        const cx = tv.screen.x + tv.screen.w / 2;
+        const cy = tv.screen.y + tv.screen.h / 2;
+
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        if (screenAmount > 0) {
+          const localRadius = lerp(38, 230, easeOutCubic(screenAmount));
+          const local = ctx.createRadialGradient(cx, cy, 5, cx, cy, localRadius);
+          local.addColorStop(0, `rgba(255,255,255,${0.34 * screenAmount})`);
+          local.addColorStop(0.44, `rgba(255,255,255,${0.14 * screenAmount})`);
+          local.addColorStop(1, "rgba(255,255,255,0)");
+          ctx.fillStyle = local;
+          ctx.fillRect(0, 0, W, H);
+        }
+
+        if (spread > 0) {
+          const e = easeOutCubic(spread);
+          const radius = lerp(230, 1580, e);
+          const outer = ctx.createRadialGradient(cx, cy, 12, cx, cy, radius);
+          outer.addColorStop(0, "rgba(255,255,255,1)");
+          outer.addColorStop(0.22, `rgba(255,255,255,${0.97})`);
+          outer.addColorStop(0.66, `rgba(255,255,255,${0.68 * e})`);
+          outer.addColorStop(1, "rgba(255,255,255,0)");
+          ctx.fillStyle = outer;
+          ctx.fillRect(0, 0, W, H);
+
+          ctx.globalCompositeOperation = "source-over";
+          ctx.fillStyle = `rgba(255,255,255,${smoothstep(3.7, 3.98, t)})`;
+          ctx.fillRect(0, 0, W, H);
+        }
+        ctx.restore();
+      }
+
+      function play() {
+        cancelAnimationFrame(animationId);
+        isPlaying = true;
+        startedAt = performance.now();
+        playButton.disabled = false;
+        loop(startedAt);
+      }
+
+      function loop(now) {
+        const t = clamp((now - startedAt) / 1000, 0, DURATION);
+        drawScene(t);
+        if (t < DURATION && isPlaying) {
+          animationId = requestAnimationFrame(loop);
+          return;
+        }
+        drawScene(DURATION);
+        isPlaying = false;
+      }
+
+      async function record() {
+        if (!canvas.captureStream || typeof MediaRecorder === "undefined") {
+          alert("MediaRecorder is not available in this browser.");
+          return;
+        }
+
+        cancelAnimationFrame(animationId);
+        recordButton.disabled = true;
+        playButton.disabled = true;
+        recordButton.textContent = "Recording...";
+
+        const chunks = [];
+        const stream = canvas.captureStream(FPS);
+        const mime = MediaRecorder.isTypeSupported("video/webm;codecs=vp9")
+          ? "video/webm;codecs=vp9"
+          : "video/webm";
+        const recorder = new MediaRecorder(stream, {
+          mimeType: mime,
+          videoBitsPerSecond: 12_000_000
+        });
+
+        console.log("SBP intro recording started");
+
+        recorder.ondataavailable = (event) => {
+          if (event.data && event.data.size) chunks.push(event.data);
+        };
+
+        recorder.onstop = () => {
+          console.log("SBP intro recording finished");
+          stream.getTracks().forEach((track) => track.stop());
+          const blob = new Blob(chunks, { type: "video/webm" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "sbp-crt-intro-4s.webm";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(url), 2000);
+          recordButton.disabled = false;
+          playButton.disabled = false;
+          recordButton.textContent = "Record WebM";
+        };
+
+        startedAt = performance.now();
+        isPlaying = true;
+        recorder.start();
+        loop(startedAt);
+
+        setTimeout(() => {
+          drawScene(DURATION);
+          isPlaying = false;
+          cancelAnimationFrame(animationId);
+          recorder.stop();
+        }, DURATION * 1000);
+      }
+
+      playButton.addEventListener("click", play);
+      recordButton.addEventListener("click", record);
+
+      drawScene(0);
+    })();
+  </script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
+<!-- SBP_DEPLOY_MARKER_v74_CACHE_BUST_INTRO -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -8229,7 +8230,7 @@ body.sbp-intro-active-v72 .app{opacity:0!important;visibility:hidden!important;p
 </head>
 <body class="sbp-intro-active-v72">
 <div id="sbpIntroOverlayV72" aria-label="SBP intro">
-  <iframe id="sbpIntroFrameV72" src="intro.html?sbp_intro_v=v72" title="SBP intro" loading="eager"></iframe>
+  <iframe id="sbpIntroFrameV72" src="intro.html?v=74" title="SBP intro" loading="eager"></iframe>
   <button id="sbpIntroSkipV72" type="button" aria-label="Пропустить">×</button>
 </div>
 
@@ -9500,7 +9501,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v72"
+      client_app_version: "v74"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11435,7 +11436,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v72";
+  const VERSION = "v74";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12948,6 +12949,16 @@ window.sendOrder = function sendOrder(){
   document.addEventListener('DOMContentLoaded', function(){
     const skip=document.getElementById('sbpIntroSkipV72');
     if(skip) skip.addEventListener('click', closeIntro, {once:true});
+    const frame=document.getElementById('sbpIntroFrameV72');
+    if(frame){
+      frame.addEventListener('load', function(){
+        try{
+          const doc=frame.contentDocument || (frame.contentWindow && frame.contentWindow.document);
+          const play=doc && doc.getElementById('play');
+          if(play) setTimeout(()=>play.click(), 80);
+        }catch(e){ console.warn('SBP_PARENT_AUTOPLAY_EXACT_INTRO_V73 failed', e); }
+      }, {once:true});
+    }
   });
   setTimeout(closeIntro, 4700);
 
