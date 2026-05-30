@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v76_INTRO_BLACK_SCREEN_FIXED -->
+<!-- SBP_DEPLOY_MARKER_v77_INTRO_2S_CLEAN_OVERLAY -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -8218,35 +8218,21 @@ body.sbp-banner-v59-locked{
 
 
 
-<style id="sbp-v72-intro-css">
-body.sbp-intro-active-v72{background:#000!important;overflow:hidden!important;}
-body.sbp-intro-active-v72 .app{opacity:0!important;visibility:hidden!important;pointer-events:none!important;}
-#sbpIntroOverlayV72{position:fixed;inset:0;z-index:2147483647;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .42s ease,visibility .42s ease;}
-#sbpIntroOverlayV72.is-hidden{opacity:0;visibility:hidden;pointer-events:none;}
-#sbpIntroOverlayV72 iframe{width:100%;height:100%;border:0;background:#000;display:block;}
-#sbpIntroSkipV72{position:absolute;right:14px;top:calc(14px + env(safe-area-inset-top));z-index:2;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.36);color:#fff;font-size:26px;font-weight:900;display:grid;place-items:center;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);}
-.sbp-broken-product-hidden-v72{display:none!important;}
-</style>
 
-<style id="sbp-v75-intro-overlay-fix">
-.sbp-intro-overlay,
-#sbp-intro-overlay,
-.sbp-v75-intro-overlay{
+<style id="sbp-v77-intro-overlay-css">
+#sbp-v77-intro-overlay{
   position:fixed!important;
   inset:0!important;
   width:100vw!important;
   height:100vh!important;
   z-index:2147483647!important;
   background:#000!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
   overflow:hidden!important;
+  opacity:1!important;
+  visibility:visible!important;
   pointer-events:auto!important;
 }
-.sbp-intro-overlay iframe,
-#sbp-intro-overlay iframe,
-.sbp-v75-intro-overlay iframe{
+#sbp-v77-intro-overlay iframe{
   position:absolute!important;
   inset:0!important;
   width:100%!important;
@@ -8255,15 +8241,12 @@ body.sbp-intro-active-v72 .app{opacity:0!important;visibility:hidden!important;p
   display:block!important;
   background:#000!important;
 }
-.sbp-intro-overlay.is-hidden,
-#sbp-intro-overlay.is-hidden,
-.sbp-v75-intro-overlay.is-hidden{
+#sbp-v77-intro-overlay.is-hiding{
   opacity:0!important;
   pointer-events:none!important;
-  visibility:hidden!important;
-  transition:opacity .26s ease, visibility .26s ease!important;
+  transition:opacity .22s ease!important;
 }
-.sbp-v75-intro-skip{
+#sbp-v77-intro-overlay .sbp-v77-intro-skip{
   position:fixed!important;
   top:calc(14px + env(safe-area-inset-top))!important;
   right:14px!important;
@@ -8283,45 +8266,10 @@ body.sbp-intro-active-v72 .app{opacity:0!important;visibility:hidden!important;p
 }
 </style>
 
-
-<style id="sbp-v76-intro-black-screen-fix">
-.sbp-v76-intro-overlay{
-  position:fixed!important;
-  inset:0!important;
-  width:100vw!important;
-  height:100vh!important;
-  z-index:2147483647!important;
-  background:#000!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  overflow:hidden!important;
-  pointer-events:auto!important;
-}
-.sbp-v76-intro-overlay iframe{
-  position:absolute!important;
-  inset:0!important;
-  width:100%!important;
-  height:100%!important;
-  border:0!important;
-  display:block!important;
-  background:#000!important;
-}
-.sbp-v76-intro-overlay.is-hidden{
-  opacity:0!important;
-  pointer-events:none!important;
-  visibility:hidden!important;
-}
-body:not(.sbp-intro-running) .app{
-  visibility:visible!important;
-  opacity:1!important;
-}
-</style>
-
 </head>
 <body class="sbp-intro-active-v72">
 <div id="sbpIntroOverlayV72" aria-label="SBP intro">
-  <iframe id="sbpIntroFrameV72" src="intro.html?v=76" title="SBP intro" loading="eager"></iframe>
+  <iframe id="sbpIntroFrameV72" src="intro.html?v=77" title="SBP intro" loading="eager"></iframe>
   <button id="sbpIntroSkipV72" type="button" aria-label="Пропустить">×</button>
 </div>
 
@@ -9592,7 +9540,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v76"
+      client_app_version: "v77"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11527,7 +11475,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v76";
+  const VERSION = "v77";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -13024,64 +12972,58 @@ window.sendOrder = function sendOrder(){
 
 
 
-<script id="sbp-v76-intro-controller">
+
+<script id="sbp-v77-intro-controller">
 (function(){
   const INTRO_DURATION_MS = 2000;
-  const INTRO_URL = "intro.html?v=76#last2s";
+  const INTRO_URL = "intro.html?v=77#last2s";
 
-  function cleanupIntro(){
+  function cleanup(){
     document.documentElement.classList.remove("sbp-intro-running");
     document.body.classList.remove("sbp-intro-running");
-    document.body.style.overflow = "";
-    document.body.style.visibility = "";
-    document.body.style.opacity = "";
-    document.body.style.background = "";
 
     const app = document.querySelector(".app");
     if(app){
       app.style.visibility = "";
       app.style.opacity = "";
-      app.style.pointerEvents = "";
       app.style.display = "";
+      app.style.pointerEvents = "";
     }
 
-    document.querySelectorAll(".sbp-v76-intro-overlay,.sbp-v75-intro-overlay,#sbp-v75-intro-overlay,#sbp-v76-intro-overlay").forEach(function(el){
+    document.querySelectorAll("#sbp-v77-intro-overlay,#sbp-v76-intro-overlay,#sbp-v75-intro-overlay").forEach(function(el){
       try{ el.remove(); }catch(e){}
     });
   }
 
-  function finishIntro(){
-    const overlay = document.getElementById("sbp-v76-intro-overlay");
+  function closeIntro(){
+    const overlay = document.getElementById("sbp-v77-intro-overlay");
     if(!overlay){
-      cleanupIntro();
+      cleanup();
       return;
     }
-    overlay.classList.add("is-hidden");
-    setTimeout(cleanupIntro, 280);
+    overlay.classList.add("is-hiding");
+    setTimeout(cleanup, 240);
   }
 
   function bootIntro(){
-    cleanupIntro();
-
-    if(sessionStorage.getItem("sbp_intro_seen_v76") === "1"){
-      return;
-    }
-    sessionStorage.setItem("sbp_intro_seen_v76", "1");
+    cleanup();
 
     document.documentElement.classList.add("sbp-intro-running");
     document.body.classList.add("sbp-intro-running");
 
     const overlay = document.createElement("div");
-    overlay.id = "sbp-v76-intro-overlay";
-    overlay.className = "sbp-v76-intro-overlay sbp-v75-intro-overlay sbp-intro-overlay";
-    overlay.innerHTML = '<iframe src="'+INTRO_URL+'" allow="autoplay; fullscreen"></iframe><button class="sbp-v75-intro-skip" type="button" aria-label="Пропустить">×</button>';
+    overlay.id = "sbp-v77-intro-overlay";
+    overlay.innerHTML =
+      '<iframe src="'+INTRO_URL+'" allow="autoplay; fullscreen"></iframe>' +
+      '<button class="sbp-v77-intro-skip" type="button" aria-label="Пропустить">×</button>';
+
     document.body.appendChild(overlay);
 
-    const skip = overlay.querySelector(".sbp-v75-intro-skip");
-    if(skip) skip.addEventListener("click", finishIntro, {once:true});
+    const skip = overlay.querySelector(".sbp-v77-intro-skip");
+    if(skip) skip.addEventListener("click", closeIntro, {once:true});
 
-    setTimeout(finishIntro, INTRO_DURATION_MS);
-    setTimeout(cleanupIntro, INTRO_DURATION_MS + 900);
+    setTimeout(closeIntro, INTRO_DURATION_MS);
+    setTimeout(cleanup, INTRO_DURATION_MS + 1000);
   }
 
   if(document.readyState === "loading"){
@@ -13090,7 +13032,8 @@ window.sendOrder = function sendOrder(){
     bootIntro();
   }
 
-  window.SBP_FORCE_INTRO_CLEANUP = cleanupIntro;
+  window.SBP_CLOSE_INTRO_V77 = closeIntro;
+  window.SBP_CLEAN_INTRO_V77 = cleanup;
 })();
 </script>
 
