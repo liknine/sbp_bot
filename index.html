@@ -1,8 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v83_BONUS_WALLET -->
-<!-- SBP_DEPLOY_MARKER_v82_EXACT_UPLOADED_CANVAS_INTRO -->
+<!-- SBP_DEPLOY_MARKER_v85_BONUS_DISPLAY_NO_DEDUCTION -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -8307,27 +8306,20 @@ body.sbp-v82-intro-running{
 </style>
 
 
-<style id="sbp-v83-bonus-wallet-css">
+<style id="sbp-v85-bonus-display-css">
 #bonusesScreen .bonus-item{
   cursor:pointer;
   transition:transform .16s ease, border-color .16s ease, opacity .16s ease;
 }
 #bonusesScreen .bonus-item:not(.is-locked):active{transform:scale(.985)}
-#bonusesScreen .bonus-item.is-locked{opacity:.48}
-#bonusesScreen .bonus-item.is-selected{
-  border-color:rgba(255,255,255,.44)!important;
-  box-shadow:0 0 0 1px rgba(255,255,255,.18) inset;
-}
-#theme-light:checked ~ .app #bonusesScreen .bonus-item.is-selected{
-  border-color:rgba(0,0,0,.32)!important;
-}
-.sbp-v83-toast{
+#bonusesScreen .bonus-item.is-locked{opacity:.42;cursor:not-allowed}
+.sbp-v85-toast{
   position:fixed;
   left:50%;
   bottom:calc(92px + env(safe-area-inset-bottom));
   transform:translateX(-50%) translateY(20px);
   z-index:2147483645;
-  max-width:min(360px,calc(100vw - 32px));
+  max-width:min(370px,calc(100vw - 32px));
   padding:13px 16px;
   border-radius:999px;
   background:rgba(20,20,20,.94);
@@ -8340,9 +8332,9 @@ body.sbp-v82-intro-running{
   transition:.22s ease;
   box-shadow:0 14px 38px rgba(0,0,0,.35);
 }
-.sbp-v83-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.sbp-v83-wallet-list{display:grid;gap:10px;margin-top:12px}
-.sbp-v83-wallet-card{
+.sbp-v85-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.sbp-v85-bonus-list{display:grid;gap:10px;margin-top:12px}
+.sbp-v85-bonus-card{
   display:grid;
   grid-template-columns:minmax(0,1fr) auto;
   gap:12px;
@@ -8352,17 +8344,15 @@ body.sbp-v82-intro-running{
   background:var(--input);
   border:1px solid var(--line);
 }
-.sbp-v83-wallet-card.is-selected{
+.sbp-v85-bonus-card.is-selected{
   border-color:rgba(255,255,255,.45);
   box-shadow:0 0 0 1px rgba(255,255,255,.14) inset;
 }
-#theme-light:checked ~ .app .sbp-v83-wallet-card.is-selected{
-  border-color:rgba(0,0,0,.3);
-}
-.sbp-v83-wallet-card h3{margin:0 0 5px;font-size:18px;line-height:1.08}
-.sbp-v83-wallet-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.25}
-.sbp-v83-wallet-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
-.sbp-v83-wallet-pill{
+#theme-light:checked ~ .app .sbp-v85-bonus-card.is-selected{border-color:rgba(0,0,0,.3)}
+.sbp-v85-bonus-card h3{margin:0 0 5px;font-size:18px;line-height:1.08}
+.sbp-v85-bonus-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.25}
+.sbp-v85-bonus-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.sbp-v85-bonus-pill{
   height:34px;
   padding:0 12px;
   border-radius:999px;
@@ -8375,7 +8365,7 @@ body.sbp-v82-intro-running{
   white-space:nowrap;
   font-size:12px;
 }
-.sbp-v83-wallet-btn{
+.sbp-v85-bonus-btn{
   height:34px;
   padding:0 12px;
   border:1px solid var(--line);
@@ -8384,15 +8374,21 @@ body.sbp-v82-intro-running{
   color:var(--text);
   font-weight:850;
 }
-.sbp-v83-wallet-card.is-selected .sbp-v83-wallet-btn{
+.sbp-v85-bonus-card.is-selected .sbp-v85-bonus-btn{
   background:var(--inverse);
   color:var(--inverseText);
   border-color:transparent;
 }
-.sbp-v83-wallet-empty{
+.sbp-v85-bonus-empty{
   margin-top:12px;
   color:var(--muted);
   font-size:14px;
+  line-height:1.35;
+}
+.sbp-v85-bonus-note{
+  margin:10px 0 0;
+  color:var(--muted);
+  font-size:13px;
   line-height:1.35;
 }
 .sbp-v69-order-modal{
@@ -9684,7 +9680,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v83"
+      client_app_version: "v85"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11620,7 +11616,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v83";
+  const VERSION = "v85";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12942,12 +12938,13 @@ window.sendOrder = function sendOrder(){
 </script>
 
 
-<script id="sbp-v83-bonus-wallet-script">
+<script id="sbp-v85-bonus-display-script">
 (function(){
   const PROFILE_KEY = "sbp_profile_state_v1";
   const LEGACY_COINS_KEY = "sbp_coins_balance";
-  const BONUS_KEY = "sbp_bonus_wallet_v83";
-  const SELECTED_KEY = "sbp_selected_bonus_id_v83";
+  const LEGACY_ACTIVE_COUNT_KEY = "sbp_active_bonuses_count";
+  const BONUS_KEY = "sbp_active_bonuses_v85";
+  const SELECTED_KEY = "sbp_selected_bonus_id_v85";
   const LEGACY_SELECTED_KEY = "sbp_requested_bonus_v1";
   const MAX_ACTIVE = 3;
   const BONUS_PRESETS = [
@@ -12964,51 +12961,102 @@ window.sendOrder = function sendOrder(){
   function nowIso(){ return new Date().toISOString(); }
   function makeId(){ return "BONUS-" + Date.now() + "-" + Math.random().toString(36).slice(2,8); }
 
-  function remoteProfile(){
+  function normalizeBonus(b){
+    const cost = Number(b && b.coins_cost);
+    const discount = Number(b && b.discount_byn);
+    if(!cost || !discount) return null;
+    return {
+      id:String(b.id || b.frontend_bonus_id || makeId()),
+      coins_cost:cost,
+      discount_byn:discount,
+      title:b.title || `Скидка ${discount} BYN`,
+      status:"active",
+      activated_at:b.activated_at || b.purchased_at || nowIso(),
+      source:"frontend_v85_active_bonus"
+    };
+  }
+
+  function migrateOldBrokenWallets(){
+    if(localStorage.getItem(BONUS_KEY)) return;
+    const sources = [
+      "sbp_bonus_wallet_v84",
+      "sbp_bonus_wallet_v83"
+    ];
+    for(const key of sources){
+      const old = safeJson(localStorage.getItem(key) || "[]", []);
+      if(Array.isArray(old) && old.length){
+        const migrated = old.map(normalizeBonus).filter(Boolean).slice(0, MAX_ACTIVE);
+        if(migrated.length){
+          localStorage.setItem(BONUS_KEY, JSON.stringify(migrated));
+          localStorage.removeItem(key);
+          localStorage.removeItem("sbp_selected_bonus_id_v84");
+          localStorage.removeItem("sbp_selected_bonus_id_v83");
+          break;
+        }
+      }
+    }
+  }
+
+  function activeBonuses(){
+    migrateOldBrokenWallets();
+    const arr = safeJson(localStorage.getItem(BONUS_KEY) || "[]", []);
+    if(!Array.isArray(arr)) return [];
+    const clean = arr.map(normalizeBonus).filter(Boolean).slice(0, MAX_ACTIVE);
+    if(JSON.stringify(clean) !== JSON.stringify(arr)){
+      localStorage.setItem(BONUS_KEY, JSON.stringify(clean));
+    }
+    return clean;
+  }
+
+  function saveBonuses(arr){
+    const clean = Array.isArray(arr) ? arr.map(normalizeBonus).filter(Boolean).slice(0, MAX_ACTIVE) : [];
+    localStorage.setItem(BONUS_KEY, JSON.stringify(clean));
+
+    if(!clean.length){
+      localStorage.removeItem(SELECTED_KEY);
+      localStorage.removeItem(LEGACY_SELECTED_KEY);
+    }else{
+      const selectedId = localStorage.getItem(SELECTED_KEY);
+      if(!selectedId || !clean.some(b => b.id === selectedId)){
+        localStorage.setItem(SELECTED_KEY, clean[0].id);
+      }
+      syncLegacySelected();
+    }
+
+    localStorage.setItem(LEGACY_ACTIVE_COUNT_KEY, String(clean.length));
+    window.dispatchEvent(new StorageEvent("storage", {key:BONUS_KEY}));
+  }
+
+  function profile(){
     if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.read === "function"){
       try{return window.SBP_PROFILE_STATE.read() || {}}catch(e){}
     }
     return safeJson(localStorage.getItem(PROFILE_KEY) || "{}", {});
   }
 
-  function remoteCoins(){
-    const p = remoteProfile();
-    const n = Number(p.coins_balance ?? p.coins ?? localStorage.getItem(LEGACY_COINS_KEY) ?? 0);
-    return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0;
-  }
-
-  function wallet(){
-    const arr = safeJson(localStorage.getItem(BONUS_KEY) || "[]", []);
-    if(!Array.isArray(arr)) return [];
-    return arr
-      .filter(b => b && b.status === "active" && Number(b.coins_cost) > 0 && Number(b.discount_byn) > 0)
-      .slice(0, MAX_ACTIVE);
-  }
-
-  function saveWallet(arr){
-    arr = Array.isArray(arr) ? arr.filter(b => b && b.status === "active").slice(0, MAX_ACTIVE) : [];
-    localStorage.setItem(BONUS_KEY, JSON.stringify(arr));
-    const selected = selectedBonus();
-    if(!selected && arr[0]) selectBonus(arr[0].id, false);
-    if(!arr.length){
-      localStorage.removeItem(SELECTED_KEY);
-      localStorage.removeItem(LEGACY_SELECTED_KEY);
+  function coinsBalance(){
+    const p = profile();
+    const candidates = [p.coins_balance, p.coins, localStorage.getItem(LEGACY_COINS_KEY)];
+    for(const c of candidates){
+      const n = Number(c);
+      if(Number.isFinite(n) && n >= 0) return Math.floor(n);
     }
-    window.dispatchEvent(new StorageEvent("storage", {key:BONUS_KEY}));
+    return 0;
   }
 
-  function reservedCoins(){
-    return wallet().reduce((sum,b)=>sum + Number(b.coins_cost || 0), 0);
+  function reservedPotentialCost(){
+    return activeBonuses().reduce((sum,b)=>sum + Number(b.coins_cost || 0), 0);
   }
 
-  function availableCoins(){
-    return Math.max(0, remoteCoins() - reservedCoins());
+  function canActivateCost(cost){
+    // Coins are not deducted at activation. This only prevents activating obviously impossible bonuses.
+    return coinsBalance() >= Number(cost);
   }
 
   function selectedBonus(){
+    const arr = activeBonuses();
     const id = localStorage.getItem(SELECTED_KEY);
-    const arr = wallet();
-    return arr.find(b => b.id === id) || null;
+    return arr.find(b => b.id === id) || arr[0] || null;
   }
 
   function selectedBonusForOrder(){
@@ -13020,17 +13068,23 @@ window.sendOrder = function sendOrder(){
       coins_cost:Number(b.coins_cost),
       discount_byn:Number(b.discount_byn),
       title:b.title || `Скидка ${Number(b.discount_byn)} BYN`,
-      purchased_at:b.purchased_at,
-      source:"frontend_v83_wallet"
+      activated_at:b.activated_at,
+      source:"frontend_v85_active_bonus"
     };
   }
 
+  function syncLegacySelected(){
+    const b = selectedBonusForOrder();
+    if(b) localStorage.setItem(LEGACY_SELECTED_KEY, JSON.stringify(b));
+    else localStorage.removeItem(LEGACY_SELECTED_KEY);
+  }
+
   function selectBonus(id, shouldToast=true){
-    const arr = wallet();
+    const arr = activeBonuses();
     const b = arr.find(x => x.id === id);
     if(!b) return;
     localStorage.setItem(SELECTED_KEY, b.id);
-    localStorage.setItem(LEGACY_SELECTED_KEY, JSON.stringify(selectedBonusForOrder()));
+    syncLegacySelected();
     if(shouldToast) toast(`Выбран бонус −${Number(b.discount_byn)} BYN для следующего заказа`);
     renderBonuses();
   }
@@ -13038,38 +13092,48 @@ window.sendOrder = function sendOrder(){
   function removeSelectedAfterOrder(){
     const b = selectedBonus();
     if(!b) return;
-    const arr = wallet().filter(x => x.id !== b.id);
-    localStorage.setItem("sbp_last_used_bonus_v83", JSON.stringify({...b, used_at:nowIso()}));
-    saveWallet(arr);
+    const next = activeBonuses().filter(x => x.id !== b.id);
+    localStorage.setItem("sbp_last_used_bonus_v85", JSON.stringify({...b, used_at:nowIso()}));
+    saveBonuses(next);
     toast(`Бонус −${Number(b.discount_byn)} BYN применён к заявке`);
+    renderBonuses();
   }
 
-  function writeLocalProfileCoins(){
-    const effective = availableCoins();
-    try{
-      const p = safeJson(localStorage.getItem(PROFILE_KEY) || "{}", {});
-      p.coins = effective;
-      p.coins_balance = effective;
-      p.activeBonuses = wallet().length;
-      p.active_bonuses_count = wallet().length;
-      p.updated_at = nowIso();
-      localStorage.setItem(PROFILE_KEY, JSON.stringify(p));
-      localStorage.setItem(LEGACY_COINS_KEY, String(effective));
-      localStorage.setItem("sbp_active_bonuses_count", String(wallet().length));
-    }catch(e){}
-  }
+  function activateBonus(cost, discount){
+    cost = Number(cost);
+    discount = Number(discount);
+    const arr = activeBonuses();
 
-  async function syncProfile(){
-    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.sync === "function"){
-      try{ await window.SBP_PROFILE_STATE.sync(); }catch(e){}
+    if(arr.length >= MAX_ACTIVE){
+      toast("Можно иметь максимум 3 активных бонуса");
+      renderBonuses();
+      return;
     }
+    if(!canActivateCost(cost)){
+      toast(`Недостаточно Coins: нужно ${cost}, сейчас ${coinsBalance()}`);
+      renderBonuses();
+      return;
+    }
+
+    const bonus = normalizeBonus({
+      id:makeId(),
+      coins_cost:cost,
+      discount_byn:discount,
+      title:`Скидка ${discount} BYN`,
+      activated_at:nowIso()
+    });
+    arr.push(bonus);
+    saveBonuses(arr);
+    selectBonus(bonus.id, false);
+    toast(`Бонус −${discount} BYN активирован`);
+    renderBonuses();
   }
 
   function toast(text){
-    let el = qs(".sbp-v83-toast");
+    let el = qs(".sbp-v85-toast");
     if(!el){
       el = document.createElement("div");
-      el.className = "sbp-v83-toast";
+      el.className = "sbp-v85-toast";
       document.body.appendChild(el);
     }
     el.textContent = text;
@@ -13078,132 +13142,102 @@ window.sendOrder = function sendOrder(){
     el._t = setTimeout(()=>el.classList.remove("show"), 2400);
   }
 
-  function buyBonus(cost, discount){
-    cost = Number(cost);
-    discount = Number(discount);
-    const arr = wallet();
-    if(arr.length >= MAX_ACTIVE){
-      toast("Можно иметь максимум 3 активных бонуса");
-      return;
+  async function syncProfile(){
+    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.sync === "function"){
+      try{ await window.SBP_PROFILE_STATE.sync(); }catch(e){}
     }
-    if(availableCoins() < cost){
-      toast(`Недостаточно Coins: нужно ${cost}, доступно ${availableCoins()}`);
-      return;
-    }
-    const bonus = {
-      id:makeId(),
-      coins_cost:cost,
-      discount_byn:discount,
-      title:`Скидка ${discount} BYN`,
-      status:"active",
-      purchased_at:nowIso(),
-      source:"frontend_v83_wallet"
-    };
-    arr.push(bonus);
-    saveWallet(arr);
-    selectBonus(bonus.id, false);
-    writeLocalProfileCoins();
-    toast(`Бонус −${discount} BYN куплен. Coins списаны.`);
-    renderBonuses();
   }
 
   function renderBonuses(){
     const screen = qs("#bonusesScreen");
     if(!screen) return;
 
-    const arr = wallet();
+    const arr = activeBonuses();
     const selected = selectedBonus();
-    const coins = availableCoins();
+    const coins = coinsBalance();
 
     const note = qs(".bonuses-zero-note", screen);
     if(note){
-      note.textContent = `Доступно ${coins} Coins после уже купленных бонусов. Активных бонусов: ${arr.length}/${MAX_ACTIVE}.`;
+      note.textContent = `Сейчас доступно ${coins} Coins. Активных бонусов: ${arr.length}/${MAX_ACTIVE}. Coins спишутся только при заказе.`;
     }
 
     const list = qs(".bonus-list", screen);
     if(list){
       list.innerHTML = BONUS_PRESETS.map(b => {
         const locked = coins < b.coins_cost || arr.length >= MAX_ACTIVE;
-        return `<button type="button" class="bonus-item ${locked?"is-locked":""}" data-bonus-buy="1" data-bonus-cost="${b.coins_cost}" data-bonus-discount="${b.discount_byn}" ${locked?"aria-disabled='true'":""}>
+        return `<button type="button" class="bonus-item ${locked?"is-locked":""}" data-bonus-activate="1" data-bonus-cost="${b.coins_cost}" data-bonus-discount="${b.discount_byn}" ${locked?"aria-disabled='true'":""}>
           <div><h3>${esc(b.title)}</h3><p>${esc(b.subtitle)}</p></div>
           <span class="bonus-cost">${b.coins_cost} Coins</span>
         </button>`;
       }).join("");
     }
 
-    let preview = qs(".active-bonus-preview", screen);
+    const preview = qs(".active-bonus-preview", screen);
     if(preview){
       preview.style.display = "";
       preview.innerHTML = `
         <h2>Активные бонусы</h2>
-        <p style="color:var(--muted);margin:0 0 10px;">Можно иметь до 3 бонусов. Для следующего заказа будет использован только выбранный бонус.</p>
-        <div class="sbp-v83-wallet-list" data-sbp-bonus-wallet></div>
+        <p class="sbp-v85-bonus-note">Можно иметь до 3 бонусов. К заказу применяется только выбранный. Coins спишутся при оформлении заказа.</p>
+        <div class="sbp-v85-bonus-list" data-sbp-active-bonus-list></div>
       `;
-      const box = qs("[data-sbp-bonus-wallet]", preview);
+      const box = qs("[data-sbp-active-bonus-list]", preview);
       if(!arr.length){
-        box.innerHTML = `<div class="sbp-v83-wallet-empty">Активных бонусов пока нет. Купите бонус ниже — Coins спишутся сразу.</div>`;
+        box.innerHTML = `<div class="sbp-v85-bonus-empty">Активных бонусов пока нет. Активируйте бонус ниже.</div>`;
       }else{
         box.innerHTML = arr.map(b => {
           const isSelected = selected && selected.id === b.id;
-          return `<article class="sbp-v83-wallet-card ${isSelected?"is-selected":""}" data-wallet-bonus-id="${esc(b.id)}">
+          return `<article class="sbp-v85-bonus-card ${isSelected?"is-selected":""}" data-active-bonus-id="${esc(b.id)}">
             <div>
               <h3>−${Number(b.discount_byn)} BYN</h3>
-              <p>${Number(b.coins_cost)} Coins списаны · ${isSelected ? "будет использован к заказу" : "можно выбрать к заказу"}</p>
+              <p>${Number(b.coins_cost)} Coins · ${isSelected ? "будет использован к заказу" : "можно выбрать к заказу"}</p>
             </div>
-            <div class="sbp-v83-wallet-actions">
-              <span class="sbp-v83-wallet-pill">${isSelected ? "Выбран" : "Активен"}</span>
-              <button type="button" class="sbp-v83-wallet-btn" data-select-wallet-bonus="${esc(b.id)}">${isSelected ? "Используется" : "Использовать"}</button>
+            <div class="sbp-v85-bonus-actions">
+              <span class="sbp-v85-bonus-pill">${isSelected ? "Выбран" : "Активен"}</span>
+              <button type="button" class="sbp-v85-bonus-btn" data-select-active-bonus="${esc(b.id)}">${isSelected ? "Используется" : "Использовать"}</button>
             </div>
           </article>`;
         }).join("");
       }
     }
 
-    const profileCount = qs("[data-sbp-active-bonuses]");
-    if(profileCount) profileCount.textContent = String(arr.length);
-    const coinEls = qsa("[data-sbp-coins-balance]");
-    coinEls.forEach(el => el.textContent = String(coins));
-    try{ localStorage.setItem("sbp_active_bonuses_count", String(arr.length)); }catch(e){}
+    qsa("[data-sbp-active-bonuses]").forEach(el => el.textContent = String(arr.length));
+    qsa("[data-sbp-coins-balance]").forEach(el => el.textContent = String(coins));
+    try{ localStorage.setItem(LEGACY_ACTIVE_COUNT_KEY, String(arr.length)); }catch(e){}
+    syncLegacySelected();
   }
 
   document.addEventListener("click", function(e){
-    const buy = e.target.closest && e.target.closest("#bonusesScreen .bonus-item[data-bonus-buy='1']");
-    if(buy){
+    const btn = e.target.closest && e.target.closest("#bonusesScreen .bonus-item[data-bonus-activate='1']");
+    if(btn){
       e.preventDefault();
       e.stopPropagation();
-      buyBonus(buy.dataset.bonusCost, buy.dataset.bonusDiscount);
+      activateBonus(btn.dataset.bonusCost, btn.dataset.bonusDiscount);
       return;
     }
-    const select = e.target.closest && e.target.closest("[data-select-wallet-bonus]");
+    const select = e.target.closest && e.target.closest("[data-select-active-bonus]");
     if(select){
       e.preventDefault();
       e.stopPropagation();
-      selectBonus(select.dataset.selectWalletBonus);
+      selectBonus(select.dataset.selectActiveBonus);
       return;
     }
   }, true);
 
-  // Order payload bridge: existing orderPayload reads SBP_BONUS_STATE.read().
   window.SBP_BONUS_STATE = window.SBP_BONUS_STATE || {};
   window.SBP_BONUS_STATE.read = selectedBonusForOrder;
   window.SBP_BONUS_STATE.clear = removeSelectedAfterOrder;
-  window.SBP_BONUS_STATE.wallet = wallet;
-  window.SBP_BONUS_STATE.availableCoins = availableCoins;
+  window.SBP_BONUS_STATE.wallet = activeBonuses;
+  window.SBP_BONUS_STATE.availableCoins = coinsBalance;
 
-  // After submit tap, remove selected local bonus once payload was prepared/sent.
   document.addEventListener("click", function(e){
     const submit = e.target.closest && e.target.closest("[data-sbp-submit-order='1']");
     if(!submit) return;
     if(selectedBonus()){
-      setTimeout(function(){
-        // If orderPayload has been built, selected bonus is already inside it.
-        removeSelectedAfterOrder();
-        writeLocalProfileCoins();
-        renderBonuses();
-      }, 700);
+      setTimeout(removeSelectedAfterOrder, 700);
     }
   }, true);
 
+  // Preserve order-history popup.
   function repoBase(){ const repo=(location.pathname.split("/").filter(Boolean)[0]||"").trim(); return repo ? "/"+repo+"/" : "/"; }
   function imgUrl(order){
     let img = String(order.image || order.product_image || "");
@@ -13286,6 +13320,11 @@ window.sendOrder = function sendOrder(){
   document.addEventListener("keydown", e => { if(e.key === "Escape") closeOrderModal(); }, true);
 
   async function boot(){
+    // Clear broken selected pointer from previous failed versions, but keep migrated bonuses.
+    try{
+      localStorage.removeItem("sbp_selected_bonus_id_v84");
+      localStorage.removeItem("sbp_selected_bonus_id_v83");
+    }catch(e){}
     renderBonuses();
     await syncProfile();
     renderBonuses();
