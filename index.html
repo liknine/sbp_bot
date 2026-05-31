@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v85_BONUS_DISPLAY_NO_DEDUCTION -->
+<!-- SBP_DEPLOY_MARKER_v86_BONUS_DISPLAY_CLEAN -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -8306,14 +8306,16 @@ body.sbp-v82-intro-running{
 </style>
 
 
-<style id="sbp-v85-bonus-display-css">
+
+<style id="sbp-v86-bonus-display-css">
 #bonusesScreen .bonus-item{
-  cursor:pointer;
+  cursor:pointer!important;
+  pointer-events:auto!important;
   transition:transform .16s ease, border-color .16s ease, opacity .16s ease;
 }
 #bonusesScreen .bonus-item:not(.is-locked):active{transform:scale(.985)}
-#bonusesScreen .bonus-item.is-locked{opacity:.42;cursor:not-allowed}
-.sbp-v85-toast{
+#bonusesScreen .bonus-item.is-locked{opacity:.42;cursor:not-allowed!important}
+.sbp-v86-toast{
   position:fixed;
   left:50%;
   bottom:calc(92px + env(safe-area-inset-bottom));
@@ -8332,9 +8334,9 @@ body.sbp-v82-intro-running{
   transition:.22s ease;
   box-shadow:0 14px 38px rgba(0,0,0,.35);
 }
-.sbp-v85-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.sbp-v85-bonus-list{display:grid;gap:10px;margin-top:12px}
-.sbp-v85-bonus-card{
+.sbp-v86-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.sbp-v86-bonus-list{display:grid;gap:10px;margin-top:12px}
+.sbp-v86-bonus-card{
   display:grid;
   grid-template-columns:minmax(0,1fr) auto;
   gap:12px;
@@ -8344,15 +8346,15 @@ body.sbp-v82-intro-running{
   background:var(--input);
   border:1px solid var(--line);
 }
-.sbp-v85-bonus-card.is-selected{
+.sbp-v86-bonus-card.is-selected{
   border-color:rgba(255,255,255,.45);
   box-shadow:0 0 0 1px rgba(255,255,255,.14) inset;
 }
-#theme-light:checked ~ .app .sbp-v85-bonus-card.is-selected{border-color:rgba(0,0,0,.3)}
-.sbp-v85-bonus-card h3{margin:0 0 5px;font-size:18px;line-height:1.08}
-.sbp-v85-bonus-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.25}
-.sbp-v85-bonus-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
-.sbp-v85-bonus-pill{
+#theme-light:checked ~ .app .sbp-v86-bonus-card.is-selected{border-color:rgba(0,0,0,.3)}
+.sbp-v86-bonus-card h3{margin:0 0 5px;font-size:18px;line-height:1.08}
+.sbp-v86-bonus-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.25}
+.sbp-v86-bonus-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.sbp-v86-bonus-pill{
   height:34px;
   padding:0 12px;
   border-radius:999px;
@@ -8365,7 +8367,7 @@ body.sbp-v82-intro-running{
   white-space:nowrap;
   font-size:12px;
 }
-.sbp-v85-bonus-btn{
+.sbp-v86-bonus-btn{
   height:34px;
   padding:0 12px;
   border:1px solid var(--line);
@@ -8374,18 +8376,18 @@ body.sbp-v82-intro-running{
   color:var(--text);
   font-weight:850;
 }
-.sbp-v85-bonus-card.is-selected .sbp-v85-bonus-btn{
+.sbp-v86-bonus-card.is-selected .sbp-v86-bonus-btn{
   background:var(--inverse);
   color:var(--inverseText);
   border-color:transparent;
 }
-.sbp-v85-bonus-empty{
+.sbp-v86-bonus-empty{
   margin-top:12px;
   color:var(--muted);
   font-size:14px;
   line-height:1.35;
 }
-.sbp-v85-bonus-note{
+.sbp-v86-bonus-note{
   margin:10px 0 0;
   color:var(--muted);
   font-size:13px;
@@ -9680,7 +9682,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v85"
+      client_app_version: "v86"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11616,7 +11618,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v85";
+  const VERSION = "v86";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12938,13 +12940,13 @@ window.sendOrder = function sendOrder(){
 </script>
 
 
-<script id="sbp-v85-bonus-display-script">
+
+<script id="sbp-v86-bonus-display-script">
 (function(){
-  const PROFILE_KEY = "sbp_profile_state_v1";
   const LEGACY_COINS_KEY = "sbp_coins_balance";
   const LEGACY_ACTIVE_COUNT_KEY = "sbp_active_bonuses_count";
-  const BONUS_KEY = "sbp_active_bonuses_v85";
-  const SELECTED_KEY = "sbp_selected_bonus_id_v85";
+  const BONUS_KEY = "sbp_active_bonuses_v86";
+  const SELECTED_KEY = "sbp_selected_bonus_id_v86";
   const LEGACY_SELECTED_KEY = "sbp_requested_bonus_v1";
   const MAX_ACTIVE = 3;
   const BONUS_PRESETS = [
@@ -12961,77 +12963,30 @@ window.sendOrder = function sendOrder(){
   function nowIso(){ return new Date().toISOString(); }
   function makeId(){ return "BONUS-" + Date.now() + "-" + Math.random().toString(36).slice(2,8); }
 
-  function normalizeBonus(b){
-    const cost = Number(b && b.coins_cost);
-    const discount = Number(b && b.discount_byn);
-    if(!cost || !discount) return null;
-    return {
-      id:String(b.id || b.frontend_bonus_id || makeId()),
-      coins_cost:cost,
-      discount_byn:discount,
-      title:b.title || `Скидка ${discount} BYN`,
-      status:"active",
-      activated_at:b.activated_at || b.purchased_at || nowIso(),
-      source:"frontend_v85_active_bonus"
-    };
-  }
-
-  function migrateOldBrokenWallets(){
-    if(localStorage.getItem(BONUS_KEY)) return;
-    const sources = [
+  function hardResetBrokenOldStateOnce(){
+    const flag = "sbp_v86_bonus_cleanup_done";
+    if(localStorage.getItem(flag) === "1") return;
+    [
+      "sbp_bonus_wallet_v83",
       "sbp_bonus_wallet_v84",
-      "sbp_bonus_wallet_v83"
-    ];
-    for(const key of sources){
-      const old = safeJson(localStorage.getItem(key) || "[]", []);
-      if(Array.isArray(old) && old.length){
-        const migrated = old.map(normalizeBonus).filter(Boolean).slice(0, MAX_ACTIVE);
-        if(migrated.length){
-          localStorage.setItem(BONUS_KEY, JSON.stringify(migrated));
-          localStorage.removeItem(key);
-          localStorage.removeItem("sbp_selected_bonus_id_v84");
-          localStorage.removeItem("sbp_selected_bonus_id_v83");
-          break;
-        }
-      }
-    }
-  }
-
-  function activeBonuses(){
-    migrateOldBrokenWallets();
-    const arr = safeJson(localStorage.getItem(BONUS_KEY) || "[]", []);
-    if(!Array.isArray(arr)) return [];
-    const clean = arr.map(normalizeBonus).filter(Boolean).slice(0, MAX_ACTIVE);
-    if(JSON.stringify(clean) !== JSON.stringify(arr)){
-      localStorage.setItem(BONUS_KEY, JSON.stringify(clean));
-    }
-    return clean;
-  }
-
-  function saveBonuses(arr){
-    const clean = Array.isArray(arr) ? arr.map(normalizeBonus).filter(Boolean).slice(0, MAX_ACTIVE) : [];
-    localStorage.setItem(BONUS_KEY, JSON.stringify(clean));
-
-    if(!clean.length){
-      localStorage.removeItem(SELECTED_KEY);
-      localStorage.removeItem(LEGACY_SELECTED_KEY);
-    }else{
-      const selectedId = localStorage.getItem(SELECTED_KEY);
-      if(!selectedId || !clean.some(b => b.id === selectedId)){
-        localStorage.setItem(SELECTED_KEY, clean[0].id);
-      }
-      syncLegacySelected();
-    }
-
-    localStorage.setItem(LEGACY_ACTIVE_COUNT_KEY, String(clean.length));
-    window.dispatchEvent(new StorageEvent("storage", {key:BONUS_KEY}));
+      "sbp_active_bonuses_v85",
+      "sbp_selected_bonus_id_v83",
+      "sbp_selected_bonus_id_v84",
+      "sbp_selected_bonus_id_v85",
+      "sbp_requested_bonus_v1",
+      "sbp_last_used_bonus_v83",
+      "sbp_last_used_bonus_v84",
+      "sbp_last_used_bonus_v85"
+    ].forEach(k => { try{ localStorage.removeItem(k); }catch(e){} });
+    try{ localStorage.setItem(LEGACY_ACTIVE_COUNT_KEY, "0"); }catch(e){}
+    localStorage.setItem(flag, "1");
   }
 
   function profile(){
     if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.read === "function"){
       try{return window.SBP_PROFILE_STATE.read() || {}}catch(e){}
     }
-    return safeJson(localStorage.getItem(PROFILE_KEY) || "{}", {});
+    return safeJson(localStorage.getItem("sbp_profile_state_v1") || "{}", {});
   }
 
   function coinsBalance(){
@@ -13044,13 +12999,46 @@ window.sendOrder = function sendOrder(){
     return 0;
   }
 
-  function reservedPotentialCost(){
-    return activeBonuses().reduce((sum,b)=>sum + Number(b.coins_cost || 0), 0);
+  function normalizeBonus(b){
+    const cost = Number(b && b.coins_cost);
+    const discount = Number(b && b.discount_byn);
+    if(!cost || !discount) return null;
+    return {
+      id:String(b.id || b.frontend_bonus_id || makeId()),
+      coins_cost:cost,
+      discount_byn:discount,
+      title:b.title || `Скидка ${discount} BYN`,
+      status:"active",
+      activated_at:b.activated_at || nowIso(),
+      source:"frontend_v86_active_bonus"
+    };
   }
 
-  function canActivateCost(cost){
-    // Coins are not deducted at activation. This only prevents activating obviously impossible bonuses.
-    return coinsBalance() >= Number(cost);
+  function activeBonuses(){
+    const arr = safeJson(localStorage.getItem(BONUS_KEY) || "[]", []);
+    if(!Array.isArray(arr)) return [];
+    const clean = arr.map(normalizeBonus).filter(Boolean).slice(0, MAX_ACTIVE);
+    if(JSON.stringify(clean) !== JSON.stringify(arr)){
+      localStorage.setItem(BONUS_KEY, JSON.stringify(clean));
+    }
+    return clean;
+  }
+
+  function saveBonuses(arr){
+    const clean = Array.isArray(arr) ? arr.map(normalizeBonus).filter(Boolean).slice(0, MAX_ACTIVE) : [];
+    localStorage.setItem(BONUS_KEY, JSON.stringify(clean));
+    if(!clean.length){
+      localStorage.removeItem(SELECTED_KEY);
+      localStorage.removeItem(LEGACY_SELECTED_KEY);
+    }else{
+      const selectedId = localStorage.getItem(SELECTED_KEY);
+      if(!selectedId || !clean.some(b => b.id === selectedId)){
+        localStorage.setItem(SELECTED_KEY, clean[0].id);
+      }
+      syncLegacySelected();
+    }
+    localStorage.setItem(LEGACY_ACTIVE_COUNT_KEY, String(clean.length));
+    window.dispatchEvent(new StorageEvent("storage", {key:BONUS_KEY}));
   }
 
   function selectedBonus(){
@@ -13069,7 +13057,7 @@ window.sendOrder = function sendOrder(){
       discount_byn:Number(b.discount_byn),
       title:b.title || `Скидка ${Number(b.discount_byn)} BYN`,
       activated_at:b.activated_at,
-      source:"frontend_v85_active_bonus"
+      source:"frontend_v86_active_bonus"
     };
   }
 
@@ -13079,24 +13067,17 @@ window.sendOrder = function sendOrder(){
     else localStorage.removeItem(LEGACY_SELECTED_KEY);
   }
 
-  function selectBonus(id, shouldToast=true){
-    const arr = activeBonuses();
-    const b = arr.find(x => x.id === id);
-    if(!b) return;
-    localStorage.setItem(SELECTED_KEY, b.id);
-    syncLegacySelected();
-    if(shouldToast) toast(`Выбран бонус −${Number(b.discount_byn)} BYN для следующего заказа`);
-    renderBonuses();
-  }
-
-  function removeSelectedAfterOrder(){
-    const b = selectedBonus();
-    if(!b) return;
-    const next = activeBonuses().filter(x => x.id !== b.id);
-    localStorage.setItem("sbp_last_used_bonus_v85", JSON.stringify({...b, used_at:nowIso()}));
-    saveBonuses(next);
-    toast(`Бонус −${Number(b.discount_byn)} BYN применён к заявке`);
-    renderBonuses();
+  function toast(text){
+    let el = qs(".sbp-v86-toast");
+    if(!el){
+      el = document.createElement("div");
+      el.className = "sbp-v86-toast";
+      document.body.appendChild(el);
+    }
+    el.textContent = text;
+    el.classList.add("show");
+    clearTimeout(el._t);
+    el._t = setTimeout(()=>el.classList.remove("show"), 2400);
   }
 
   function activateBonus(cost, discount){
@@ -13109,7 +13090,7 @@ window.sendOrder = function sendOrder(){
       renderBonuses();
       return;
     }
-    if(!canActivateCost(cost)){
+    if(coinsBalance() < cost){
       toast(`Недостаточно Coins: нужно ${cost}, сейчас ${coinsBalance()}`);
       renderBonuses();
       return;
@@ -13124,22 +13105,29 @@ window.sendOrder = function sendOrder(){
     });
     arr.push(bonus);
     saveBonuses(arr);
-    selectBonus(bonus.id, false);
+    localStorage.setItem(SELECTED_KEY, bonus.id);
+    syncLegacySelected();
     toast(`Бонус −${discount} BYN активирован`);
     renderBonuses();
   }
 
-  function toast(text){
-    let el = qs(".sbp-v85-toast");
-    if(!el){
-      el = document.createElement("div");
-      el.className = "sbp-v85-toast";
-      document.body.appendChild(el);
-    }
-    el.textContent = text;
-    el.classList.add("show");
-    clearTimeout(el._t);
-    el._t = setTimeout(()=>el.classList.remove("show"), 2400);
+  function selectBonus(id, shouldToast=true){
+    const b = activeBonuses().find(x => x.id === id);
+    if(!b) return;
+    localStorage.setItem(SELECTED_KEY, b.id);
+    syncLegacySelected();
+    if(shouldToast) toast(`Выбран бонус −${Number(b.discount_byn)} BYN для следующего заказа`);
+    renderBonuses();
+  }
+
+  function removeSelectedAfterOrder(){
+    const b = selectedBonus();
+    if(!b) return;
+    const next = activeBonuses().filter(x => x.id !== b.id);
+    localStorage.setItem("sbp_last_used_bonus_v86", JSON.stringify({...b, used_at:nowIso()}));
+    saveBonuses(next);
+    toast(`Бонус −${Number(b.discount_byn)} BYN применён к заявке`);
+    renderBonuses();
   }
 
   async function syncProfile(){
@@ -13151,7 +13139,6 @@ window.sendOrder = function sendOrder(){
   function renderBonuses(){
     const screen = qs("#bonusesScreen");
     if(!screen) return;
-
     const arr = activeBonuses();
     const selected = selectedBonus();
     const coins = coinsBalance();
@@ -13177,23 +13164,23 @@ window.sendOrder = function sendOrder(){
       preview.style.display = "";
       preview.innerHTML = `
         <h2>Активные бонусы</h2>
-        <p class="sbp-v85-bonus-note">Можно иметь до 3 бонусов. К заказу применяется только выбранный. Coins спишутся при оформлении заказа.</p>
-        <div class="sbp-v85-bonus-list" data-sbp-active-bonus-list></div>
+        <p class="sbp-v86-bonus-note">Можно иметь до 3 бонусов. К заказу применяется только выбранный. Coins спишутся при оформлении заказа.</p>
+        <div class="sbp-v86-bonus-list" data-sbp-active-bonus-list></div>
       `;
       const box = qs("[data-sbp-active-bonus-list]", preview);
       if(!arr.length){
-        box.innerHTML = `<div class="sbp-v85-bonus-empty">Активных бонусов пока нет. Активируйте бонус ниже.</div>`;
+        box.innerHTML = `<div class="sbp-v86-bonus-empty">Активных бонусов пока нет. Активируйте бонус ниже.</div>`;
       }else{
         box.innerHTML = arr.map(b => {
           const isSelected = selected && selected.id === b.id;
-          return `<article class="sbp-v85-bonus-card ${isSelected?"is-selected":""}" data-active-bonus-id="${esc(b.id)}">
+          return `<article class="sbp-v86-bonus-card ${isSelected?"is-selected":""}" data-active-bonus-id="${esc(b.id)}">
             <div>
               <h3>−${Number(b.discount_byn)} BYN</h3>
               <p>${Number(b.coins_cost)} Coins · ${isSelected ? "будет использован к заказу" : "можно выбрать к заказу"}</p>
             </div>
-            <div class="sbp-v85-bonus-actions">
-              <span class="sbp-v85-bonus-pill">${isSelected ? "Выбран" : "Активен"}</span>
-              <button type="button" class="sbp-v85-bonus-btn" data-select-active-bonus="${esc(b.id)}">${isSelected ? "Используется" : "Использовать"}</button>
+            <div class="sbp-v86-bonus-actions">
+              <span class="sbp-v86-bonus-pill">${isSelected ? "Выбран" : "Активен"}</span>
+              <button type="button" class="sbp-v86-bonus-btn" data-select-active-bonus="${esc(b.id)}">${isSelected ? "Используется" : "Использовать"}</button>
             </div>
           </article>`;
         }).join("");
@@ -13202,18 +13189,25 @@ window.sendOrder = function sendOrder(){
 
     qsa("[data-sbp-active-bonuses]").forEach(el => el.textContent = String(arr.length));
     qsa("[data-sbp-coins-balance]").forEach(el => el.textContent = String(coins));
-    try{ localStorage.setItem(LEGACY_ACTIVE_COUNT_KEY, String(arr.length)); }catch(e){}
+    localStorage.setItem(LEGACY_ACTIVE_COUNT_KEY, String(arr.length));
     syncLegacySelected();
   }
 
   document.addEventListener("click", function(e){
-    const btn = e.target.closest && e.target.closest("#bonusesScreen .bonus-item[data-bonus-activate='1']");
+    const btn = e.target.closest && e.target.closest("#bonusesScreen [data-bonus-activate='1']");
     if(btn){
       e.preventDefault();
       e.stopPropagation();
+      if(btn.classList.contains("is-locked")){
+        const cost = Number(btn.dataset.bonusCost || 0);
+        if(activeBonuses().length >= MAX_ACTIVE) toast("Можно иметь максимум 3 активных бонуса");
+        else toast(`Недостаточно Coins: нужно ${cost}, сейчас ${coinsBalance()}`);
+        return;
+      }
       activateBonus(btn.dataset.bonusCost, btn.dataset.bonusDiscount);
       return;
     }
+
     const select = e.target.closest && e.target.closest("[data-select-active-bonus]");
     if(select){
       e.preventDefault();
@@ -13320,11 +13314,7 @@ window.sendOrder = function sendOrder(){
   document.addEventListener("keydown", e => { if(e.key === "Escape") closeOrderModal(); }, true);
 
   async function boot(){
-    // Clear broken selected pointer from previous failed versions, but keep migrated bonuses.
-    try{
-      localStorage.removeItem("sbp_selected_bonus_id_v84");
-      localStorage.removeItem("sbp_selected_bonus_id_v83");
-    }catch(e){}
+    hardResetBrokenOldStateOnce();
     renderBonuses();
     await syncProfile();
     renderBonuses();
