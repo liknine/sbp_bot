@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v90_BONUS_HARD_CLICK -->
+<!-- SBP_DEPLOY_MARKER_v91_BONUS_SCREEN_REBUILD -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -8308,15 +8308,129 @@ body.sbp-v82-intro-running{
 
 
 
-<style id="sbp-v90-bonus-visible-css">
-#bonusesScreen .bonus-item{
+
+<style id="sbp-v91-bonus-screen-css">
+#bonusesScreen .sbp-v91-bonus-root{
+  display:grid;
+  gap:18px;
+}
+.sbp-v91-card{
+  border-radius:28px;
+  border:1px solid var(--line);
+  background:var(--card);
+  padding:22px;
+}
+.sbp-v91-card h2{
+  margin:0 0 10px;
+  font-size:28px;
+  line-height:1.02;
+  letter-spacing:-.8px;
+}
+.sbp-v91-card p{
+  margin:0;
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.35;
+}
+.sbp-v91-active-list,
+.sbp-v91-buy-list{
+  display:grid;
+  gap:10px;
+  margin-top:16px;
+}
+.sbp-v91-active-card,
+.sbp-v91-buy-btn{
+  width:100%;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:12px;
+  align-items:center;
+  text-align:left;
+  border-radius:22px;
+  border:1px solid var(--line);
+  background:var(--input);
+  color:var(--text);
+  padding:16px;
+}
+.sbp-v91-buy-btn{
   cursor:pointer!important;
   pointer-events:auto!important;
-  transition:transform .16s ease, border-color .16s ease, opacity .16s ease;
+  appearance:none;
+  -webkit-appearance:none;
 }
-#bonusesScreen .bonus-item:not(.is-locked):active{transform:scale(.985)}
-#bonusesScreen .bonus-item.is-locked{opacity:.42;cursor:not-allowed!important}
-.sbp-v90-toast{
+.sbp-v91-buy-btn:active{
+  transform:scale(.985);
+}
+.sbp-v91-buy-btn[disabled]{
+  opacity:.42;
+  cursor:not-allowed!important;
+}
+.sbp-v91-active-card.is-selected{
+  border-color:rgba(255,255,255,.48);
+  box-shadow:0 0 0 1px rgba(255,255,255,.16) inset;
+}
+#theme-light:checked ~ .app .sbp-v91-active-card.is-selected{
+  border-color:rgba(0,0,0,.3);
+}
+.sbp-v91-active-card h3,
+.sbp-v91-buy-btn h3{
+  margin:0 0 6px;
+  font-size:21px;
+  line-height:1.05;
+}
+.sbp-v91-active-card p,
+.sbp-v91-buy-btn p{
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.25;
+}
+.sbp-v91-pill{
+  height:38px;
+  padding:0 13px;
+  border-radius:999px;
+  border:0;
+  background:var(--inverse);
+  color:var(--inverseText);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:950;
+  white-space:nowrap;
+  font-size:13px;
+}
+.sbp-v91-select-btn{
+  height:36px;
+  padding:0 13px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:transparent;
+  color:var(--text);
+  font-weight:900;
+}
+.sbp-v91-active-card.is-selected .sbp-v91-select-btn{
+  background:var(--inverse);
+  color:var(--inverseText);
+  border-color:transparent;
+}
+.sbp-v91-empty{
+  min-height:210px;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  gap:10px;
+}
+.sbp-v91-empty-icon{
+  width:74px;
+  height:74px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:var(--input);
+  color:var(--text);
+  font-size:34px;
+}
+.sbp-v91-toast{
   position:fixed;
   left:50%;
   bottom:calc(92px + env(safe-area-inset-bottom));
@@ -8335,121 +8449,7 @@ body.sbp-v82-intro-running{
   transition:.22s ease;
   box-shadow:0 14px 38px rgba(0,0,0,.35);
 }
-.sbp-v90-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.sbp-v90-bonus-list{display:grid;gap:10px;margin-top:12px}
-.sbp-v90-bonus-card{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) auto;
-  gap:12px;
-  align-items:center;
-  padding:14px;
-  border-radius:20px;
-  background:var(--input);
-  border:1px solid var(--line);
-  text-align:left;
-}
-.sbp-v90-bonus-card.is-selected{
-  border-color:rgba(255,255,255,.45);
-  box-shadow:0 0 0 1px rgba(255,255,255,.14) inset;
-}
-#theme-light:checked ~ .app .sbp-v90-bonus-card.is-selected{border-color:rgba(0,0,0,.3)}
-.sbp-v90-bonus-card h3{margin:0 0 5px;font-size:20px;line-height:1.08}
-.sbp-v90-bonus-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.25}
-.sbp-v90-bonus-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
-.sbp-v90-bonus-pill{
-  height:34px;
-  padding:0 12px;
-  border-radius:999px;
-  background:var(--inverse);
-  color:var(--inverseText);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:900;
-  white-space:nowrap;
-  font-size:12px;
-}
-.sbp-v90-bonus-btn{
-  height:34px;
-  padding:0 12px;
-  border:1px solid var(--line);
-  border-radius:999px;
-  background:transparent;
-  color:var(--text);
-  font-weight:850;
-}
-.sbp-v90-bonus-card.is-selected .sbp-v90-bonus-btn{
-  background:var(--inverse);
-  color:var(--inverseText);
-  border-color:transparent;
-}
-.sbp-v90-bonus-empty{
-  margin-top:12px;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.35;
-}
-.sbp-v90-bonus-note{
-  margin:10px 0 0;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.35;
-}
-.sbp-v90-active-host.empty-state{
-  align-items:stretch!important;
-  text-align:left!important;
-}
-.sbp-v90-active-host.empty-state .empty-icon{
-  margin-left:auto!important;
-  margin-right:auto!important;
-}
-.sbp-v90-active-host.empty-state h2,
-.sbp-v90-active-host.empty-state p{
-  text-align:center!important;
-}
-.sbp-v69-order-modal{
-  position:fixed!important;
-  inset:0!important;
-  z-index:2147483644!important;
-  display:none!important;
-  align-items:center!important;
-  justify-content:center!important;
-  padding:18px!important;
-  padding-top:10px!important;
-  background:rgba(0,0,0,.52)!important;
-  backdrop-filter:blur(16px)!important;
-  -webkit-backdrop-filter:blur(16px)!important;
-}
-.sbp-v69-order-modal.is-open{display:flex!important}
-.sbp-v69-order-box{
-  width:min(100%,430px);
-  max-height:88vh;
-  overflow:auto;
-  position:relative;
-  border-radius:34px;
-  background:linear-gradient(145deg,rgba(22,22,22,.97),rgba(8,8,8,.98));
-  border:1px solid rgba(255,255,255,.14);
-  color:#fff;
-  box-shadow:0 36px 100px rgba(0,0,0,.58);
-  transform:translateY(-24px);
-}
-#theme-light:checked ~ .app .sbp-v69-order-box{background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(238,238,238,.98));color:#111;border-color:rgba(0,0,0,.12)}
-.sbp-v69-order-close{position:absolute;z-index:3;top:12px;right:12px;width:42px;height:42px;border:0;border-radius:50%;background:rgba(0,0,0,.48);color:#fff;font-size:28px;line-height:1;display:grid;place-items:center}
-.sbp-v69-order-img{width:100%;height:300px;background:#0b0b0b;overflow:hidden}
-.sbp-v69-order-img img{width:100%;height:100%;object-fit:cover;display:block}
-.sbp-v69-order-img span{height:100%;display:grid;place-items:center;font-size:54px;opacity:.7}
-.sbp-v69-order-body{padding:22px}
-.sbp-v69-order-body small{display:block;color:rgba(255,255,255,.58);font-weight:800;letter-spacing:.08em;margin-bottom:10px}
-#theme-light:checked ~ .app .sbp-v69-order-body small{color:rgba(0,0,0,.55)}
-.sbp-v69-order-body h2{margin:0 0 16px;font-size:34px;line-height:.98;letter-spacing:-1.2px}
-.sbp-v69-order-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.sbp-v69-order-grid div{border-radius:18px;padding:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08)}
-#theme-light:checked ~ .app .sbp-v69-order-grid div{background:rgba(0,0,0,.045);border-color:rgba(0,0,0,.08)}
-.sbp-v69-order-grid span{display:block;color:rgba(255,255,255,.55);font-size:12px;margin-bottom:6px}
-#theme-light:checked ~ .app .sbp-v69-order-grid span{color:rgba(0,0,0,.52)}
-.sbp-v69-order-grid b{display:block;font-size:17px;line-height:1.15}
-.sbp-v69-order-status{margin-top:12px;padding:14px;border-radius:18px;background:#fff;color:#111;font-weight:950}
-#theme-light:checked ~ .app .sbp-v69-order-status{background:#111;color:#fff}
+.sbp-v91-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 
 </head>
@@ -9696,7 +9696,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v90"
+      client_app_version: "v91"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11632,7 +11632,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v90";
+  const VERSION = "v91";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12956,22 +12956,21 @@ window.sendOrder = function sendOrder(){
 
 
 
-<script id="sbp-v90-bonus-visible-script">
+
+<script id="sbp-v91-bonus-screen-script">
 (function(){
-  const COINS_KEY = "sbp_coins_balance";
-  const ACTIVE_COUNT_KEY = "sbp_active_bonuses_count";
-  const BONUS_KEY = "sbp_active_bonuses_v90";
-  const OLD_BONUS_KEY = "sbp_active_bonuses_v89";
-  const SELECTED_KEY = "sbp_selected_bonus_id_v90";
-  const OLD_SELECTED_KEY = "sbp_selected_bonus_id_v89";
+  const BONUS_KEY = "sbp_active_bonuses_v91";
+  const OLD_BONUS_KEY = "sbp_active_bonuses_v90";
+  const SELECTED_KEY = "sbp_selected_bonus_id_v91";
+  const OLD_SELECTED_KEY = "sbp_selected_bonus_id_v90";
   const REQUEST_KEY = "sbp_requested_bonus_v1";
+  const ACTIVE_COUNT_KEY = "sbp_active_bonuses_count";
   const MAX_ACTIVE = 3;
   const BONUS_PRESETS = [
     {coins_cost:100, discount_byn:5, title:"Скидка 5 BYN", subtitle:"К следующему заказу"},
     {coins_cost:250, discount_byn:15, title:"Скидка 15 BYN", subtitle:"Оптимальный бонус для следующего заказа"},
     {coins_cost:500, discount_byn:35, title:"Скидка 35 BYN", subtitle:"Не больше 20% заказа"}
   ];
-  const STATUS_LABELS = {processing:"В обработке", awaiting_payment:"Ожидает оплаты", sent:"Отправлен", in_transit:"В пути", arrived:"Прибыл", completed:"Завершен", cancelled:"Отменен"};
 
   function qs(sel, root=document){ return root.querySelector(sel); }
   function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
@@ -12979,49 +12978,6 @@ window.sendOrder = function sendOrder(){
   function esc(v){ return String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
   function nowIso(){ return new Date().toISOString(); }
   function makeId(){ return "BONUS-" + Date.now() + "-" + Math.random().toString(36).slice(2,8); }
-
-  function cleanupVeryOldBrokenStateOnce(){
-    const flag = "sbp_v87_bonus_cleanup_done";
-    if(localStorage.getItem(flag) === "1") return;
-    [
-      "sbp_bonus_wallet_v83","sbp_bonus_wallet_v84","sbp_active_bonuses_v85",
-      "sbp_selected_bonus_id_v83","sbp_selected_bonus_id_v84","sbp_selected_bonus_id_v85",
-      "sbp_last_used_bonus_v83","sbp_last_used_bonus_v84","sbp_last_used_bonus_v85"
-    ].forEach(k => { try{ localStorage.removeItem(k); }catch(e){} });
-    localStorage.setItem(flag, "1");
-  }
-
-  function migrateV89Once(){
-    if(localStorage.getItem(BONUS_KEY)) return;
-    const old = safeJson(localStorage.getItem(OLD_BONUS_KEY) || "[]", []);
-    if(Array.isArray(old) && old.length){
-      const migrated = old.map(normalizeBonus).filter(Boolean).slice(0, MAX_ACTIVE);
-      localStorage.setItem(BONUS_KEY, JSON.stringify(migrated));
-      const oldSelected = localStorage.getItem(OLD_SELECTED_KEY);
-      if(oldSelected && migrated.some(b => b.id === oldSelected)){
-        localStorage.setItem(SELECTED_KEY, oldSelected);
-      }
-    }else{
-      localStorage.setItem(BONUS_KEY, "[]");
-    }
-  }
-
-  function profile(){
-    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.read === "function"){
-      try{return window.SBP_PROFILE_STATE.read() || {}}catch(e){}
-    }
-    return safeJson(localStorage.getItem("sbp_profile_state_v1") || "{}", {});
-  }
-
-  function coinsBalance(){
-    const p = profile();
-    const candidates = [p.coins_balance, p.coins, localStorage.getItem(COINS_KEY)];
-    for(const c of candidates){
-      const n = Number(c);
-      if(Number.isFinite(n) && n >= 0) return Math.floor(n);
-    }
-    return 0;
-  }
 
   function normalizeBonus(b){
     const cost = Number(b && b.coins_cost);
@@ -13034,17 +12990,26 @@ window.sendOrder = function sendOrder(){
       title:b.title || `Скидка ${discount} BYN`,
       status:"active",
       activated_at:b.activated_at || nowIso(),
-      source:"frontend_v90_active_bonus"
+      source:"frontend_v91_active_bonus"
     };
   }
 
-  function activeBonuses(){
-    cleanupVeryOldBrokenStateOnce();
-    migrateV89Once();
-    const arr = safeJson(localStorage.getItem(BONUS_KEY) || "[]", []);
-    if(!Array.isArray(arr)) return [];
-    const clean = arr.map(normalizeBonus).filter(Boolean).slice(0, MAX_ACTIVE);
-    if(JSON.stringify(clean) !== JSON.stringify(arr)){
+  function migrateOnce(){
+    if(localStorage.getItem(BONUS_KEY)) return;
+    const old = safeJson(localStorage.getItem(OLD_BONUS_KEY) || "[]", []);
+    const migrated = Array.isArray(old) ? old.map(normalizeBonus).filter(Boolean).slice(0, MAX_ACTIVE) : [];
+    localStorage.setItem(BONUS_KEY, JSON.stringify(migrated));
+    const oldSelected = localStorage.getItem(OLD_SELECTED_KEY);
+    if(oldSelected && migrated.some(b => b.id === oldSelected)){
+      localStorage.setItem(SELECTED_KEY, oldSelected);
+    }
+  }
+
+  function bonuses(){
+    migrateOnce();
+    const raw = safeJson(localStorage.getItem(BONUS_KEY) || "[]", []);
+    const clean = Array.isArray(raw) ? raw.map(normalizeBonus).filter(Boolean).slice(0, MAX_ACTIVE) : [];
+    if(JSON.stringify(clean) !== JSON.stringify(raw)){
       localStorage.setItem(BONUS_KEY, JSON.stringify(clean));
     }
     return clean;
@@ -13054,24 +13019,22 @@ window.sendOrder = function sendOrder(){
     const clean = Array.isArray(arr) ? arr.map(normalizeBonus).filter(Boolean).slice(0, MAX_ACTIVE) : [];
     localStorage.setItem(BONUS_KEY, JSON.stringify(clean));
     localStorage.setItem(ACTIVE_COUNT_KEY, String(clean.length));
-
     if(!clean.length){
       localStorage.removeItem(SELECTED_KEY);
       localStorage.removeItem(REQUEST_KEY);
     }else{
-      const selectedId = localStorage.getItem(SELECTED_KEY);
-      if(!selectedId || !clean.some(b => b.id === selectedId)){
+      const selected = localStorage.getItem(SELECTED_KEY);
+      if(!selected || !clean.some(b => b.id === selected)){
         localStorage.setItem(SELECTED_KEY, clean[0].id);
       }
-      syncSelectedForOrder();
+      syncSelected();
     }
-    window.dispatchEvent(new StorageEvent("storage", {key:BONUS_KEY}));
   }
 
   function selectedBonus(){
-    const arr = activeBonuses();
-    const id = localStorage.getItem(SELECTED_KEY);
-    return arr.find(b => b.id === id) || arr[0] || null;
+    const arr = bonuses();
+    const selected = localStorage.getItem(SELECTED_KEY);
+    return arr.find(b => b.id === selected) || arr[0] || null;
   }
 
   function selectedBonusForOrder(){
@@ -13082,107 +13045,100 @@ window.sendOrder = function sendOrder(){
       frontend_bonus_id:b.id,
       coins_cost:Number(b.coins_cost),
       discount_byn:Number(b.discount_byn),
-      title:b.title || `Скидка ${Number(b.discount_byn)} BYN`,
+      title:b.title,
       activated_at:b.activated_at,
-      source:"frontend_v90_active_bonus"
+      source:"frontend_v91_active_bonus"
     };
   }
 
-  function syncSelectedForOrder(){
+  function syncSelected(){
     const b = selectedBonusForOrder();
     if(b) localStorage.setItem(REQUEST_KEY, JSON.stringify(b));
     else localStorage.removeItem(REQUEST_KEY);
   }
 
   function toast(text){
-    let el = qs(".sbp-v90-toast");
+    let el = qs(".sbp-v91-toast");
     if(!el){
       el = document.createElement("div");
-      el.className = "sbp-v90-toast";
+      el.className = "sbp-v91-toast";
       document.body.appendChild(el);
     }
     el.textContent = text;
     el.classList.add("show");
     clearTimeout(el._t);
-    el._t = setTimeout(()=>el.classList.remove("show"), 2400);
+    el._t = setTimeout(()=>el.classList.remove("show"), 2200);
   }
 
   function activateBonus(cost, discount){
-    cost = Number(cost);
-    discount = Number(discount);
-    let arr = activeBonuses();
-
+    let arr = bonuses();
     if(arr.length >= MAX_ACTIVE){
       toast("Можно иметь максимум 3 активных бонуса");
-      renderBonuses();
+      render();
       return;
     }
 
     const bonus = normalizeBonus({
       id:makeId(),
-      coins_cost:cost,
-      discount_byn:discount,
-      title:`Скидка ${discount} BYN`,
+      coins_cost:Number(cost),
+      discount_byn:Number(discount),
+      title:`Скидка ${Number(discount)} BYN`,
       activated_at:nowIso()
     });
-    arr = [...arr, bonus].slice(0, MAX_ACTIVE);
+
+    arr.push(bonus);
     saveBonuses(arr);
     localStorage.setItem(SELECTED_KEY, bonus.id);
-    syncSelectedForOrder();
-    toast(`Бонус −${discount} BYN активирован`);
-    renderBonuses();
+    syncSelected();
+    toast(`Бонус −${Number(discount)} BYN активирован`);
+    render();
   }
 
-  function selectBonus(id, shouldToast=true){
-    const b = activeBonuses().find(x => x.id === id);
+  function selectBonus(id){
+    const b = bonuses().find(x => x.id === id);
     if(!b) return;
     localStorage.setItem(SELECTED_KEY, b.id);
-    syncSelectedForOrder();
-    if(shouldToast) toast(`Выбран бонус −${Number(b.discount_byn)} BYN для следующего заказа`);
-    renderBonuses();
+    syncSelected();
+    toast(`Выбран бонус −${Number(b.discount_byn)} BYN`);
+    render();
   }
 
   function removeSelectedAfterOrder(){
     const b = selectedBonus();
     if(!b) return;
-    const next = activeBonuses().filter(x => x.id !== b.id);
-    localStorage.setItem("sbp_last_used_bonus_v90", JSON.stringify({...b, used_at:nowIso()}));
+    const next = bonuses().filter(x => x.id !== b.id);
+    localStorage.setItem("sbp_last_used_bonus_v91", JSON.stringify({...b, used_at:nowIso()}));
     saveBonuses(next);
-    toast(`Бонус −${Number(b.discount_byn)} BYN применён к заявке`);
-    renderBonuses();
+    toast(`Бонус −${Number(b.discount_byn)} BYN применён`);
+    render();
   }
 
-  async function syncProfile(){
-    if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.sync === "function"){
-      try{ await window.SBP_PROFILE_STATE.sync(); }catch(e){}
-    }
-  }
-
-  function renderActiveBonusCards(arr, selected){
+  function activeHtml(arr, selected){
     if(!arr.length){
       return `
-        <div class="empty-icon">◇</div>
-        <h2>Активных бонусов пока нет</h2>
-        <p>Активируйте бонус за SBP Coins, и он появится здесь.</p>
-        <label class="secondary-link" for="tab-coins">Открыть SBP Coins</label>
+        <div class="sbp-v91-empty">
+          <div class="sbp-v91-empty-icon">◇</div>
+          <div>
+            <h2>Активных бонусов пока нет</h2>
+            <p>Активируйте бонус ниже, и он появится здесь.</p>
+          </div>
+        </div>
       `;
     }
 
     return `
-      <div class="empty-icon">◇</div>
       <h2>Активные бонусы</h2>
-      <p>Выберите один бонус, который применится к следующему заказу. Coins спишутся при оформлении.</p>
-      <div class="sbp-v90-bonus-list" data-sbp-active-bonus-list>
+      <p>Можно иметь до 3 бонусов. К заказу применится только выбранный. Coins спишутся при оформлении заказа.</p>
+      <div class="sbp-v91-active-list">
         ${arr.map(b => {
           const isSelected = selected && selected.id === b.id;
-          return `<article class="sbp-v90-bonus-card ${isSelected?"is-selected":""}" data-active-bonus-id="${esc(b.id)}">
+          return `<article class="sbp-v91-active-card ${isSelected ? "is-selected" : ""}">
             <div>
               <h3>−${Number(b.discount_byn)} BYN</h3>
-              <p>${Number(b.coins_cost)} Coins · ${isSelected ? "будет использован к заказу" : "можно выбрать к заказу"}</p>
+              <p>${Number(b.coins_cost)} Coins · ${isSelected ? "будет применён к заказу" : "можно выбрать"}</p>
             </div>
-            <div class="sbp-v90-bonus-actions">
-              <span class="sbp-v90-bonus-pill">${isSelected ? "Выбран" : "Активен"}</span>
-              <button type="button" class="sbp-v90-bonus-btn" data-select-active-bonus="${esc(b.id)}">${isSelected ? "Используется" : "Использовать"}</button>
+            <div>
+              <button type="button" class="sbp-v91-select-btn" data-sbp-v91-select="${esc(b.id)}">${isSelected ? "Выбран" : "Выбрать"}</button>
             </div>
           </article>`;
         }).join("")}
@@ -13190,86 +13146,71 @@ window.sendOrder = function sendOrder(){
     `;
   }
 
-  function renderBonuses(){
+  function buyHtml(arr){
+    const full = arr.length >= MAX_ACTIVE;
+    return `
+      <h2>Активация бонуса</h2>
+      <p>${full ? "У вас уже 3/3 активных бонуса." : `Активных бонусов: ${arr.length}/${MAX_ACTIVE}. Coins спишутся только при оформлении заказа.`}</p>
+      <div class="sbp-v91-buy-list">
+        ${BONUS_PRESETS.map(b => `
+          <button type="button" class="sbp-v91-buy-btn" data-sbp-v91-buy="1" data-cost="${b.coins_cost}" data-discount="${b.discount_byn}" ${full ? "disabled" : ""}>
+            <div>
+              <h3>${esc(b.title)}</h3>
+              <p>${esc(b.subtitle)}</p>
+            </div>
+            <span class="sbp-v91-pill">${b.coins_cost} Coins</span>
+          </button>
+        `).join("")}
+      </div>
+    `;
+  }
+
+  function render(){
     const screen = qs("#bonusesScreen");
     if(!screen) return;
-
-    const arr = activeBonuses();
+    const arr = bonuses();
     const selected = selectedBonus();
-    const coins = coinsBalance();
 
-    const note = qs(".bonuses-zero-note", screen);
-    if(note){
-      note.textContent = `Сейчас доступно ${coins} Coins. Активных бонусов: ${arr.length}/${MAX_ACTIVE}. Coins спишутся только при заказе.`;
-    }
-
-    const buyList = qs(".bonus-list", screen);
-    if(buyList){
-      buyList.innerHTML = BONUS_PRESETS.map(b => {
-        const locked = arr.length >= MAX_ACTIVE;
-        return `<button type="button" class="bonus-item ${locked?"is-locked":""}" data-bonus-activate="1" data-bonus-cost="${b.coins_cost}" data-bonus-discount="${b.discount_byn}" aria-disabled="false">
-          <div><h3>${esc(b.title)}</h3><p>${esc(b.subtitle)}</p></div>
-          <span class="bonus-cost">${b.coins_cost} Coins</span>
-        </button>`;
-      }).join("");
-    }
-
-    // Hide old preview to avoid duplicate invisible/above-screen confusion.
-    const preview = qs(".active-bonus-preview", screen);
-    if(preview) preview.style.display = "none";
-
-    // Use the visible old empty-state card as the real active bonuses host.
-    let host = qs(".bonuses-empty-template", screen);
-    if(!host){
-      host = document.createElement("section");
-      host.className = "empty-state bonuses-empty-template";
-      screen.appendChild(host);
-    }
-    host.classList.add("sbp-v90-active-host");
-    host.innerHTML = renderActiveBonusCards(arr, selected);
+    screen.innerHTML = `
+      <div class="screen-head">
+        <button class="back-chip" type="button" data-back-home>‹ Назад</button>
+        <h1>SBP Coins</h1>
+        <p>Бонусы активируются заранее, а Coins списываются только при оформлении заказа.</p>
+      </div>
+      <div class="sbp-v91-bonus-root">
+        <section class="sbp-v91-card" data-sbp-v91-active-host>${activeHtml(arr, selected)}</section>
+        <section class="sbp-v91-card" data-sbp-v91-buy-host>${buyHtml(arr)}</section>
+      </div>
+    `;
 
     qsa("[data-sbp-active-bonuses]").forEach(el => el.textContent = String(arr.length));
-    qsa("[data-sbp-coins-balance]").forEach(el => el.textContent = String(coins));
     localStorage.setItem(ACTIVE_COUNT_KEY, String(arr.length));
-    syncSelectedForOrder();
-
-    if(arr.length < MAX_ACTIVE){
-      qsa("#bonusesScreen [data-bonus-activate='1']").forEach(btn => {
-        btn.classList.remove("is-locked");
-        btn.removeAttribute("disabled");
-        btn.setAttribute("aria-disabled", "false");
-        btn.style.pointerEvents = "auto";
-      });
-    }
+    syncSelected();
   }
 
   document.addEventListener("click", function(e){
-    const btn = e.target.closest && e.target.closest("#bonusesScreen [data-bonus-activate='1'], #bonusesScreen .bonus-item");
-    if(btn && btn.closest("#bonusesScreen")){
-      const cost = Number(btn.dataset.bonusCost || btn.getAttribute("data-bonus-cost") || 0);
-      const discount = Number(btn.dataset.bonusDiscount || btn.getAttribute("data-bonus-discount") || 0);
-      if(cost && discount){
-        e.preventDefault();
-        e.stopPropagation();
-        if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+    const buy = e.target.closest && e.target.closest("[data-sbp-v91-buy='1']");
+    if(buy){
+      e.preventDefault();
+      e.stopPropagation();
+      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
 
-        if(activeBonuses().length >= MAX_ACTIVE){
-          toast("Можно иметь максимум 3 активных бонуса");
-          renderBonuses();
-          return;
-        }
-
-        activateBonus(cost, discount);
+      if(buy.disabled || bonuses().length >= MAX_ACTIVE){
+        toast("Можно иметь максимум 3 активных бонуса");
+        render();
         return;
       }
+
+      activateBonus(buy.dataset.cost, buy.dataset.discount);
+      return;
     }
 
-    const select = e.target.closest && e.target.closest("[data-select-active-bonus]");
+    const select = e.target.closest && e.target.closest("[data-sbp-v91-select]");
     if(select){
       e.preventDefault();
       e.stopPropagation();
       if(e.stopImmediatePropagation) e.stopImmediatePropagation();
-      selectBonus(select.dataset.selectActiveBonus);
+      selectBonus(select.dataset.sbpV91Select);
       return;
     }
   }, true);
@@ -13277,112 +13218,19 @@ window.sendOrder = function sendOrder(){
   window.SBP_BONUS_STATE = window.SBP_BONUS_STATE || {};
   window.SBP_BONUS_STATE.read = selectedBonusForOrder;
   window.SBP_BONUS_STATE.clear = removeSelectedAfterOrder;
-  window.SBP_BONUS_STATE.wallet = activeBonuses;
-  window.SBP_BONUS_STATE.availableCoins = coinsBalance;
+  window.SBP_BONUS_STATE.wallet = bonuses;
 
   document.addEventListener("click", function(e){
     const submit = e.target.closest && e.target.closest("[data-sbp-submit-order='1']");
-    if(!submit) return;
-    if(selectedBonus()){
+    if(submit && selectedBonus()){
       setTimeout(removeSelectedAfterOrder, 700);
     }
   }, true);
 
-  // Preserve order-history popup.
-  function repoBase(){ const repo=(location.pathname.split("/").filter(Boolean)[0]||"").trim(); return repo ? "/"+repo+"/" : "/"; }
-  function imgUrl(order){
-    let img = String(order.image || order.product_image || "");
-    if(!img) return "";
-    if(/^https?:\/\//i.test(img)) return img;
-    img = img.replace(/^\//,"").replace(/^frontend\//,"");
-    return repoBase()+img;
-  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", render, {once:true});
+  else render();
 
-  function ensureOrderModal(){
-    let modal = qs(".sbp-v69-order-modal");
-    if(modal) return modal;
-    modal = document.createElement("div");
-    modal.className = "sbp-v69-order-modal";
-    modal.innerHTML = `
-      <article class="sbp-v69-order-box">
-        <button type="button" class="sbp-v69-order-close" aria-label="Закрыть">×</button>
-        <div class="sbp-v69-order-img"><span>□</span></div>
-        <div class="sbp-v69-order-body">
-          <small></small>
-          <h2></h2>
-          <div class="sbp-v69-order-grid">
-            <div><span>Размер</span><b data-field="size">-</b></div>
-            <div><span>Цена</span><b data-field="price">-</b></div>
-            <div><span>Доставка</span><b data-field="delivery">-</b></div>
-            <div><span>Номер</span><b data-field="number">-</b></div>
-          </div>
-          <div class="sbp-v69-order-status"></div>
-        </div>
-      </article>
-    `;
-    document.body.appendChild(modal);
-    modal.addEventListener("click", e => {
-      if(e.target === modal || e.target.closest(".sbp-v69-order-close")) closeOrderModal();
-    }, true);
-    return modal;
-  }
-
-  function closeOrderModal(){
-    const modal = qs(".sbp-v69-order-modal");
-    if(modal) modal.classList.remove("is-open");
-  }
-
-  function openOrderModal(order){
-    const modal = ensureOrderModal();
-    const img = imgUrl(order);
-    const imgBox = qs(".sbp-v69-order-img", modal);
-    imgBox.innerHTML = img ? `<img src="${esc(img)}" alt="">` : "<span>□</span>";
-    const title = order.product_name || order.name || "SBP order";
-    const status = String(order.status || "processing");
-    const label = order.status_label || STATUS_LABELS[status] || status;
-    const date = order.created_at ? new Date(order.created_at).toLocaleDateString("ru-RU") : "";
-    const number = order.order_number || order.id || "-";
-    qs("small", modal).textContent = [date, number].filter(Boolean).join(" · ");
-    qs("h2", modal).textContent = title;
-    qs('[data-field="size"]', modal).textContent = order.size || "-";
-    qs('[data-field="price"]', modal).textContent = `${Number(order.final_price_byn || order.price_byn || order.price || 0)} BYN`;
-    qs('[data-field="delivery"]', modal).textContent = order.delivery_method || order.delivery || "-";
-    qs('[data-field="number"]', modal).textContent = number;
-    qs(".sbp-v69-order-status", modal).textContent = label;
-    modal.classList.add("is-open");
-  }
-
-  document.addEventListener("click", function(e){
-    const card = e.target.closest && e.target.closest(".sbp-v57-order-card");
-    if(!card) return;
-    if(e.target.closest("a,button,label,input")) return;
-    const index = qsa(".sbp-v57-order-card").indexOf(card);
-    let order = null;
-    try{
-      const orders = window.SBP_ORDERS_V57 && typeof window.SBP_ORDERS_V57.merged === "function" ? window.SBP_ORDERS_V57.merged() : [];
-      order = orders[index];
-    }catch(err){}
-    if(!order) return;
-    e.preventDefault();
-    e.stopPropagation();
-    openOrderModal(order);
-  }, true);
-
-  document.addEventListener("keydown", e => { if(e.key === "Escape") closeOrderModal(); }, true);
-
-  async function boot(){
-    renderBonuses();
-    await syncProfile();
-    renderBonuses();
-    setTimeout(renderBonuses, 400);
-    setTimeout(renderBonuses, 1200);
-  }
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
-  else boot();
-
-  window.addEventListener("storage", renderBonuses);
-  window.addEventListener("focus", () => { syncProfile().then(renderBonuses); });
-  document.addEventListener("visibilitychange", () => { if(!document.hidden) syncProfile().then(renderBonuses); });
+  window.SBP_RENDER_BONUSES_V91 = render;
 })();
 </script>
 
