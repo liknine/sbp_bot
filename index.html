@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v86_BONUS_DISPLAY_CLEAN -->
+<!-- SBP_DEPLOY_MARKER_v87_BONUS_VISIBLE_MULTI -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -8307,7 +8307,8 @@ body.sbp-v82-intro-running{
 
 
 
-<style id="sbp-v86-bonus-display-css">
+
+<style id="sbp-v87-bonus-visible-css">
 #bonusesScreen .bonus-item{
   cursor:pointer!important;
   pointer-events:auto!important;
@@ -8315,7 +8316,7 @@ body.sbp-v82-intro-running{
 }
 #bonusesScreen .bonus-item:not(.is-locked):active{transform:scale(.985)}
 #bonusesScreen .bonus-item.is-locked{opacity:.42;cursor:not-allowed!important}
-.sbp-v86-toast{
+.sbp-v87-toast{
   position:fixed;
   left:50%;
   bottom:calc(92px + env(safe-area-inset-bottom));
@@ -8334,9 +8335,9 @@ body.sbp-v82-intro-running{
   transition:.22s ease;
   box-shadow:0 14px 38px rgba(0,0,0,.35);
 }
-.sbp-v86-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.sbp-v86-bonus-list{display:grid;gap:10px;margin-top:12px}
-.sbp-v86-bonus-card{
+.sbp-v87-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.sbp-v87-bonus-list{display:grid;gap:10px;margin-top:12px}
+.sbp-v87-bonus-card{
   display:grid;
   grid-template-columns:minmax(0,1fr) auto;
   gap:12px;
@@ -8345,16 +8346,17 @@ body.sbp-v82-intro-running{
   border-radius:20px;
   background:var(--input);
   border:1px solid var(--line);
+  text-align:left;
 }
-.sbp-v86-bonus-card.is-selected{
+.sbp-v87-bonus-card.is-selected{
   border-color:rgba(255,255,255,.45);
   box-shadow:0 0 0 1px rgba(255,255,255,.14) inset;
 }
-#theme-light:checked ~ .app .sbp-v86-bonus-card.is-selected{border-color:rgba(0,0,0,.3)}
-.sbp-v86-bonus-card h3{margin:0 0 5px;font-size:18px;line-height:1.08}
-.sbp-v86-bonus-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.25}
-.sbp-v86-bonus-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
-.sbp-v86-bonus-pill{
+#theme-light:checked ~ .app .sbp-v87-bonus-card.is-selected{border-color:rgba(0,0,0,.3)}
+.sbp-v87-bonus-card h3{margin:0 0 5px;font-size:20px;line-height:1.08}
+.sbp-v87-bonus-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.25}
+.sbp-v87-bonus-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.sbp-v87-bonus-pill{
   height:34px;
   padding:0 12px;
   border-radius:999px;
@@ -8367,7 +8369,7 @@ body.sbp-v82-intro-running{
   white-space:nowrap;
   font-size:12px;
 }
-.sbp-v86-bonus-btn{
+.sbp-v87-bonus-btn{
   height:34px;
   padding:0 12px;
   border:1px solid var(--line);
@@ -8376,22 +8378,34 @@ body.sbp-v82-intro-running{
   color:var(--text);
   font-weight:850;
 }
-.sbp-v86-bonus-card.is-selected .sbp-v86-bonus-btn{
+.sbp-v87-bonus-card.is-selected .sbp-v87-bonus-btn{
   background:var(--inverse);
   color:var(--inverseText);
   border-color:transparent;
 }
-.sbp-v86-bonus-empty{
+.sbp-v87-bonus-empty{
   margin-top:12px;
   color:var(--muted);
   font-size:14px;
   line-height:1.35;
 }
-.sbp-v86-bonus-note{
+.sbp-v87-bonus-note{
   margin:10px 0 0;
   color:var(--muted);
   font-size:13px;
   line-height:1.35;
+}
+.sbp-v87-active-host.empty-state{
+  align-items:stretch!important;
+  text-align:left!important;
+}
+.sbp-v87-active-host.empty-state .empty-icon{
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.sbp-v87-active-host.empty-state h2,
+.sbp-v87-active-host.empty-state p{
+  text-align:center!important;
 }
 .sbp-v69-order-modal{
   position:fixed!important;
@@ -9682,7 +9696,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v86"
+      client_app_version: "v87"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11618,7 +11632,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v86";
+  const VERSION = "v87";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12941,13 +12955,16 @@ window.sendOrder = function sendOrder(){
 
 
 
-<script id="sbp-v86-bonus-display-script">
+
+<script id="sbp-v87-bonus-visible-script">
 (function(){
-  const LEGACY_COINS_KEY = "sbp_coins_balance";
-  const LEGACY_ACTIVE_COUNT_KEY = "sbp_active_bonuses_count";
-  const BONUS_KEY = "sbp_active_bonuses_v86";
-  const SELECTED_KEY = "sbp_selected_bonus_id_v86";
-  const LEGACY_SELECTED_KEY = "sbp_requested_bonus_v1";
+  const COINS_KEY = "sbp_coins_balance";
+  const ACTIVE_COUNT_KEY = "sbp_active_bonuses_count";
+  const BONUS_KEY = "sbp_active_bonuses_v87";
+  const OLD_BONUS_KEY = "sbp_active_bonuses_v86";
+  const SELECTED_KEY = "sbp_selected_bonus_id_v87";
+  const OLD_SELECTED_KEY = "sbp_selected_bonus_id_v86";
+  const REQUEST_KEY = "sbp_requested_bonus_v1";
   const MAX_ACTIVE = 3;
   const BONUS_PRESETS = [
     {coins_cost:100, discount_byn:5, title:"Скидка 5 BYN", subtitle:"К следующему заказу"},
@@ -12963,23 +12980,30 @@ window.sendOrder = function sendOrder(){
   function nowIso(){ return new Date().toISOString(); }
   function makeId(){ return "BONUS-" + Date.now() + "-" + Math.random().toString(36).slice(2,8); }
 
-  function hardResetBrokenOldStateOnce(){
-    const flag = "sbp_v86_bonus_cleanup_done";
+  function cleanupVeryOldBrokenStateOnce(){
+    const flag = "sbp_v87_bonus_cleanup_done";
     if(localStorage.getItem(flag) === "1") return;
     [
-      "sbp_bonus_wallet_v83",
-      "sbp_bonus_wallet_v84",
-      "sbp_active_bonuses_v85",
-      "sbp_selected_bonus_id_v83",
-      "sbp_selected_bonus_id_v84",
-      "sbp_selected_bonus_id_v85",
-      "sbp_requested_bonus_v1",
-      "sbp_last_used_bonus_v83",
-      "sbp_last_used_bonus_v84",
-      "sbp_last_used_bonus_v85"
+      "sbp_bonus_wallet_v83","sbp_bonus_wallet_v84","sbp_active_bonuses_v85",
+      "sbp_selected_bonus_id_v83","sbp_selected_bonus_id_v84","sbp_selected_bonus_id_v85",
+      "sbp_last_used_bonus_v83","sbp_last_used_bonus_v84","sbp_last_used_bonus_v85"
     ].forEach(k => { try{ localStorage.removeItem(k); }catch(e){} });
-    try{ localStorage.setItem(LEGACY_ACTIVE_COUNT_KEY, "0"); }catch(e){}
     localStorage.setItem(flag, "1");
+  }
+
+  function migrateV86Once(){
+    if(localStorage.getItem(BONUS_KEY)) return;
+    const old = safeJson(localStorage.getItem(OLD_BONUS_KEY) || "[]", []);
+    if(Array.isArray(old) && old.length){
+      const migrated = old.map(normalizeBonus).filter(Boolean).slice(0, MAX_ACTIVE);
+      localStorage.setItem(BONUS_KEY, JSON.stringify(migrated));
+      const oldSelected = localStorage.getItem(OLD_SELECTED_KEY);
+      if(oldSelected && migrated.some(b => b.id === oldSelected)){
+        localStorage.setItem(SELECTED_KEY, oldSelected);
+      }
+    }else{
+      localStorage.setItem(BONUS_KEY, "[]");
+    }
   }
 
   function profile(){
@@ -12991,7 +13015,7 @@ window.sendOrder = function sendOrder(){
 
   function coinsBalance(){
     const p = profile();
-    const candidates = [p.coins_balance, p.coins, localStorage.getItem(LEGACY_COINS_KEY)];
+    const candidates = [p.coins_balance, p.coins, localStorage.getItem(COINS_KEY)];
     for(const c of candidates){
       const n = Number(c);
       if(Number.isFinite(n) && n >= 0) return Math.floor(n);
@@ -13010,11 +13034,13 @@ window.sendOrder = function sendOrder(){
       title:b.title || `Скидка ${discount} BYN`,
       status:"active",
       activated_at:b.activated_at || nowIso(),
-      source:"frontend_v86_active_bonus"
+      source:"frontend_v87_active_bonus"
     };
   }
 
   function activeBonuses(){
+    cleanupVeryOldBrokenStateOnce();
+    migrateV86Once();
     const arr = safeJson(localStorage.getItem(BONUS_KEY) || "[]", []);
     if(!Array.isArray(arr)) return [];
     const clean = arr.map(normalizeBonus).filter(Boolean).slice(0, MAX_ACTIVE);
@@ -13027,17 +13053,18 @@ window.sendOrder = function sendOrder(){
   function saveBonuses(arr){
     const clean = Array.isArray(arr) ? arr.map(normalizeBonus).filter(Boolean).slice(0, MAX_ACTIVE) : [];
     localStorage.setItem(BONUS_KEY, JSON.stringify(clean));
+    localStorage.setItem(ACTIVE_COUNT_KEY, String(clean.length));
+
     if(!clean.length){
       localStorage.removeItem(SELECTED_KEY);
-      localStorage.removeItem(LEGACY_SELECTED_KEY);
+      localStorage.removeItem(REQUEST_KEY);
     }else{
       const selectedId = localStorage.getItem(SELECTED_KEY);
       if(!selectedId || !clean.some(b => b.id === selectedId)){
         localStorage.setItem(SELECTED_KEY, clean[0].id);
       }
-      syncLegacySelected();
+      syncSelectedForOrder();
     }
-    localStorage.setItem(LEGACY_ACTIVE_COUNT_KEY, String(clean.length));
     window.dispatchEvent(new StorageEvent("storage", {key:BONUS_KEY}));
   }
 
@@ -13057,21 +13084,21 @@ window.sendOrder = function sendOrder(){
       discount_byn:Number(b.discount_byn),
       title:b.title || `Скидка ${Number(b.discount_byn)} BYN`,
       activated_at:b.activated_at,
-      source:"frontend_v86_active_bonus"
+      source:"frontend_v87_active_bonus"
     };
   }
 
-  function syncLegacySelected(){
+  function syncSelectedForOrder(){
     const b = selectedBonusForOrder();
-    if(b) localStorage.setItem(LEGACY_SELECTED_KEY, JSON.stringify(b));
-    else localStorage.removeItem(LEGACY_SELECTED_KEY);
+    if(b) localStorage.setItem(REQUEST_KEY, JSON.stringify(b));
+    else localStorage.removeItem(REQUEST_KEY);
   }
 
   function toast(text){
-    let el = qs(".sbp-v86-toast");
+    let el = qs(".sbp-v87-toast");
     if(!el){
       el = document.createElement("div");
-      el.className = "sbp-v86-toast";
+      el.className = "sbp-v87-toast";
       document.body.appendChild(el);
     }
     el.textContent = text;
@@ -13083,7 +13110,7 @@ window.sendOrder = function sendOrder(){
   function activateBonus(cost, discount){
     cost = Number(cost);
     discount = Number(discount);
-    const arr = activeBonuses();
+    let arr = activeBonuses();
 
     if(arr.length >= MAX_ACTIVE){
       toast("Можно иметь максимум 3 активных бонуса");
@@ -13103,10 +13130,10 @@ window.sendOrder = function sendOrder(){
       title:`Скидка ${discount} BYN`,
       activated_at:nowIso()
     });
-    arr.push(bonus);
+    arr = [...arr, bonus].slice(0, MAX_ACTIVE);
     saveBonuses(arr);
     localStorage.setItem(SELECTED_KEY, bonus.id);
-    syncLegacySelected();
+    syncSelectedForOrder();
     toast(`Бонус −${discount} BYN активирован`);
     renderBonuses();
   }
@@ -13115,7 +13142,7 @@ window.sendOrder = function sendOrder(){
     const b = activeBonuses().find(x => x.id === id);
     if(!b) return;
     localStorage.setItem(SELECTED_KEY, b.id);
-    syncLegacySelected();
+    syncSelectedForOrder();
     if(shouldToast) toast(`Выбран бонус −${Number(b.discount_byn)} BYN для следующего заказа`);
     renderBonuses();
   }
@@ -13124,7 +13151,7 @@ window.sendOrder = function sendOrder(){
     const b = selectedBonus();
     if(!b) return;
     const next = activeBonuses().filter(x => x.id !== b.id);
-    localStorage.setItem("sbp_last_used_bonus_v86", JSON.stringify({...b, used_at:nowIso()}));
+    localStorage.setItem("sbp_last_used_bonus_v87", JSON.stringify({...b, used_at:nowIso()}));
     saveBonuses(next);
     toast(`Бонус −${Number(b.discount_byn)} BYN применён к заявке`);
     renderBonuses();
@@ -13136,9 +13163,42 @@ window.sendOrder = function sendOrder(){
     }
   }
 
+  function renderActiveBonusCards(arr, selected){
+    if(!arr.length){
+      return `
+        <div class="empty-icon">◇</div>
+        <h2>Активных бонусов пока нет</h2>
+        <p>Активируйте бонус за SBP Coins, и он появится здесь.</p>
+        <label class="secondary-link" for="tab-coins">Открыть SBP Coins</label>
+      `;
+    }
+
+    return `
+      <div class="empty-icon">◇</div>
+      <h2>Активные бонусы</h2>
+      <p>Выберите один бонус, который применится к следующему заказу. Coins спишутся при оформлении.</p>
+      <div class="sbp-v87-bonus-list" data-sbp-active-bonus-list>
+        ${arr.map(b => {
+          const isSelected = selected && selected.id === b.id;
+          return `<article class="sbp-v87-bonus-card ${isSelected?"is-selected":""}" data-active-bonus-id="${esc(b.id)}">
+            <div>
+              <h3>−${Number(b.discount_byn)} BYN</h3>
+              <p>${Number(b.coins_cost)} Coins · ${isSelected ? "будет использован к заказу" : "можно выбрать к заказу"}</p>
+            </div>
+            <div class="sbp-v87-bonus-actions">
+              <span class="sbp-v87-bonus-pill">${isSelected ? "Выбран" : "Активен"}</span>
+              <button type="button" class="sbp-v87-bonus-btn" data-select-active-bonus="${esc(b.id)}">${isSelected ? "Используется" : "Использовать"}</button>
+            </div>
+          </article>`;
+        }).join("")}
+      </div>
+    `;
+  }
+
   function renderBonuses(){
     const screen = qs("#bonusesScreen");
     if(!screen) return;
+
     const arr = activeBonuses();
     const selected = selectedBonus();
     const coins = coinsBalance();
@@ -13148,9 +13208,9 @@ window.sendOrder = function sendOrder(){
       note.textContent = `Сейчас доступно ${coins} Coins. Активных бонусов: ${arr.length}/${MAX_ACTIVE}. Coins спишутся только при заказе.`;
     }
 
-    const list = qs(".bonus-list", screen);
-    if(list){
-      list.innerHTML = BONUS_PRESETS.map(b => {
+    const buyList = qs(".bonus-list", screen);
+    if(buyList){
+      buyList.innerHTML = BONUS_PRESETS.map(b => {
         const locked = coins < b.coins_cost || arr.length >= MAX_ACTIVE;
         return `<button type="button" class="bonus-item ${locked?"is-locked":""}" data-bonus-activate="1" data-bonus-cost="${b.coins_cost}" data-bonus-discount="${b.discount_byn}" ${locked?"aria-disabled='true'":""}>
           <div><h3>${esc(b.title)}</h3><p>${esc(b.subtitle)}</p></div>
@@ -13159,38 +13219,24 @@ window.sendOrder = function sendOrder(){
       }).join("");
     }
 
+    // Hide old preview to avoid duplicate invisible/above-screen confusion.
     const preview = qs(".active-bonus-preview", screen);
-    if(preview){
-      preview.style.display = "";
-      preview.innerHTML = `
-        <h2>Активные бонусы</h2>
-        <p class="sbp-v86-bonus-note">Можно иметь до 3 бонусов. К заказу применяется только выбранный. Coins спишутся при оформлении заказа.</p>
-        <div class="sbp-v86-bonus-list" data-sbp-active-bonus-list></div>
-      `;
-      const box = qs("[data-sbp-active-bonus-list]", preview);
-      if(!arr.length){
-        box.innerHTML = `<div class="sbp-v86-bonus-empty">Активных бонусов пока нет. Активируйте бонус ниже.</div>`;
-      }else{
-        box.innerHTML = arr.map(b => {
-          const isSelected = selected && selected.id === b.id;
-          return `<article class="sbp-v86-bonus-card ${isSelected?"is-selected":""}" data-active-bonus-id="${esc(b.id)}">
-            <div>
-              <h3>−${Number(b.discount_byn)} BYN</h3>
-              <p>${Number(b.coins_cost)} Coins · ${isSelected ? "будет использован к заказу" : "можно выбрать к заказу"}</p>
-            </div>
-            <div class="sbp-v86-bonus-actions">
-              <span class="sbp-v86-bonus-pill">${isSelected ? "Выбран" : "Активен"}</span>
-              <button type="button" class="sbp-v86-bonus-btn" data-select-active-bonus="${esc(b.id)}">${isSelected ? "Используется" : "Использовать"}</button>
-            </div>
-          </article>`;
-        }).join("");
-      }
+    if(preview) preview.style.display = "none";
+
+    // Use the visible old empty-state card as the real active bonuses host.
+    let host = qs(".bonuses-empty-template", screen);
+    if(!host){
+      host = document.createElement("section");
+      host.className = "empty-state bonuses-empty-template";
+      screen.appendChild(host);
     }
+    host.classList.add("sbp-v87-active-host");
+    host.innerHTML = renderActiveBonusCards(arr, selected);
 
     qsa("[data-sbp-active-bonuses]").forEach(el => el.textContent = String(arr.length));
     qsa("[data-sbp-coins-balance]").forEach(el => el.textContent = String(coins));
-    localStorage.setItem(LEGACY_ACTIVE_COUNT_KEY, String(arr.length));
-    syncLegacySelected();
+    localStorage.setItem(ACTIVE_COUNT_KEY, String(arr.length));
+    syncSelectedForOrder();
   }
 
   document.addEventListener("click", function(e){
@@ -13314,12 +13360,11 @@ window.sendOrder = function sendOrder(){
   document.addEventListener("keydown", e => { if(e.key === "Escape") closeOrderModal(); }, true);
 
   async function boot(){
-    hardResetBrokenOldStateOnce();
     renderBonuses();
     await syncProfile();
     renderBonuses();
-    setTimeout(renderBonuses, 800);
-    setTimeout(renderBonuses, 1800);
+    setTimeout(renderBonuses, 400);
+    setTimeout(renderBonuses, 1200);
   }
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
   else boot();
