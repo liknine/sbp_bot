@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v91_BONUS_SCREEN_REBUILD -->
+<!-- SBP_DEPLOY_MARKER_v92_BONUS_REAL_DB_BACK -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -8309,37 +8309,37 @@ body.sbp-v82-intro-running{
 
 
 
-<style id="sbp-v91-bonus-screen-css">
-#bonusesScreen .sbp-v91-bonus-root{
+<style id="sbp-v92-bonus-screen-css">
+#bonusesScreen .sbp-v92-bonus-root{
   display:grid;
   gap:18px;
 }
-.sbp-v91-card{
+.sbp-v92-card{
   border-radius:28px;
   border:1px solid var(--line);
   background:var(--card);
   padding:22px;
 }
-.sbp-v91-card h2{
+.sbp-v92-card h2{
   margin:0 0 10px;
   font-size:28px;
   line-height:1.02;
   letter-spacing:-.8px;
 }
-.sbp-v91-card p{
+.sbp-v92-card p{
   margin:0;
   color:var(--muted);
   font-size:15px;
   line-height:1.35;
 }
-.sbp-v91-active-list,
-.sbp-v91-buy-list{
+.sbp-v92-active-list,
+.sbp-v92-buy-list{
   display:grid;
   gap:10px;
   margin-top:16px;
 }
-.sbp-v91-active-card,
-.sbp-v91-buy-btn{
+.sbp-v92-active-card,
+.sbp-v92-buy-btn{
   width:100%;
   display:grid;
   grid-template-columns:minmax(0,1fr) auto;
@@ -8352,40 +8352,40 @@ body.sbp-v82-intro-running{
   color:var(--text);
   padding:16px;
 }
-.sbp-v91-buy-btn{
+.sbp-v92-buy-btn{
   cursor:pointer!important;
   pointer-events:auto!important;
   appearance:none;
   -webkit-appearance:none;
 }
-.sbp-v91-buy-btn:active{
+.sbp-v92-buy-btn:active{
   transform:scale(.985);
 }
-.sbp-v91-buy-btn[disabled]{
+.sbp-v92-buy-btn[disabled]{
   opacity:.42;
   cursor:not-allowed!important;
 }
-.sbp-v91-active-card.is-selected{
+.sbp-v92-active-card.is-selected{
   border-color:rgba(255,255,255,.48);
   box-shadow:0 0 0 1px rgba(255,255,255,.16) inset;
 }
-#theme-light:checked ~ .app .sbp-v91-active-card.is-selected{
+#theme-light:checked ~ .app .sbp-v92-active-card.is-selected{
   border-color:rgba(0,0,0,.3);
 }
-.sbp-v91-active-card h3,
-.sbp-v91-buy-btn h3{
+.sbp-v92-active-card h3,
+.sbp-v92-buy-btn h3{
   margin:0 0 6px;
   font-size:21px;
   line-height:1.05;
 }
-.sbp-v91-active-card p,
-.sbp-v91-buy-btn p{
+.sbp-v92-active-card p,
+.sbp-v92-buy-btn p{
   margin:0;
   color:var(--muted);
   font-size:13px;
   line-height:1.25;
 }
-.sbp-v91-pill{
+.sbp-v92-pill{
   height:38px;
   padding:0 13px;
   border-radius:999px;
@@ -8399,7 +8399,7 @@ body.sbp-v82-intro-running{
   white-space:nowrap;
   font-size:13px;
 }
-.sbp-v91-select-btn{
+.sbp-v92-select-btn{
   height:36px;
   padding:0 13px;
   border-radius:999px;
@@ -8408,19 +8408,19 @@ body.sbp-v82-intro-running{
   color:var(--text);
   font-weight:900;
 }
-.sbp-v91-active-card.is-selected .sbp-v91-select-btn{
+.sbp-v92-active-card.is-selected .sbp-v92-select-btn{
   background:var(--inverse);
   color:var(--inverseText);
   border-color:transparent;
 }
-.sbp-v91-empty{
+.sbp-v92-empty{
   min-height:210px;
   display:grid;
   place-items:center;
   text-align:center;
   gap:10px;
 }
-.sbp-v91-empty-icon{
+.sbp-v92-empty-icon{
   width:74px;
   height:74px;
   border-radius:50%;
@@ -8430,7 +8430,7 @@ body.sbp-v82-intro-running{
   color:var(--text);
   font-size:34px;
 }
-.sbp-v91-toast{
+.sbp-v92-toast{
   position:fixed;
   left:50%;
   bottom:calc(92px + env(safe-area-inset-bottom));
@@ -8449,7 +8449,7 @@ body.sbp-v82-intro-running{
   transition:.22s ease;
   box-shadow:0 14px 38px rgba(0,0,0,.35);
 }
-.sbp-v91-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.sbp-v92-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 
 </head>
@@ -9696,7 +9696,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v91"
+      client_app_version: "v92"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -9830,7 +9830,7 @@ window.sendOrder = function sendOrder(){
         }));
       }catch(e){}
 
-      if(window.SBP_BONUS_STATE && data.bonus_request) window.SBP_BONUS_STATE.clear();
+      if(window.SBP_BONUS_STATE && compact.bonus_request) window.SBP_BONUS_STATE.clear();
 
       alert(
         "Заявка передана Telegram.\\n\\n" +
@@ -11632,7 +11632,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v91";
+  const VERSION = "v92";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12957,12 +12957,12 @@ window.sendOrder = function sendOrder(){
 
 
 
-<script id="sbp-v91-bonus-screen-script">
+<script id="sbp-v92-bonus-screen-script">
 (function(){
-  const BONUS_KEY = "sbp_active_bonuses_v91";
-  const OLD_BONUS_KEY = "sbp_active_bonuses_v90";
-  const SELECTED_KEY = "sbp_selected_bonus_id_v91";
-  const OLD_SELECTED_KEY = "sbp_selected_bonus_id_v90";
+  const BONUS_KEY = "sbp_active_bonuses_v92";
+  const OLD_BONUS_KEY = "sbp_active_bonuses_v91";
+  const SELECTED_KEY = "sbp_selected_bonus_id_v92";
+  const OLD_SELECTED_KEY = "sbp_selected_bonus_id_v91";
   const REQUEST_KEY = "sbp_requested_bonus_v1";
   const ACTIVE_COUNT_KEY = "sbp_active_bonuses_count";
   const MAX_ACTIVE = 3;
@@ -12990,7 +12990,7 @@ window.sendOrder = function sendOrder(){
       title:b.title || `Скидка ${discount} BYN`,
       status:"active",
       activated_at:b.activated_at || nowIso(),
-      source:"frontend_v91_active_bonus"
+      source:"frontend_v92_active_bonus"
     };
   }
 
@@ -13047,7 +13047,7 @@ window.sendOrder = function sendOrder(){
       discount_byn:Number(b.discount_byn),
       title:b.title,
       activated_at:b.activated_at,
-      source:"frontend_v91_active_bonus"
+      source:"frontend_v92_active_bonus"
     };
   }
 
@@ -13058,10 +13058,10 @@ window.sendOrder = function sendOrder(){
   }
 
   function toast(text){
-    let el = qs(".sbp-v91-toast");
+    let el = qs(".sbp-v92-toast");
     if(!el){
       el = document.createElement("div");
-      el.className = "sbp-v91-toast";
+      el.className = "sbp-v92-toast";
       document.body.appendChild(el);
     }
     el.textContent = text;
@@ -13107,7 +13107,7 @@ window.sendOrder = function sendOrder(){
     const b = selectedBonus();
     if(!b) return;
     const next = bonuses().filter(x => x.id !== b.id);
-    localStorage.setItem("sbp_last_used_bonus_v91", JSON.stringify({...b, used_at:nowIso()}));
+    localStorage.setItem("sbp_last_used_bonus_v92", JSON.stringify({...b, used_at:nowIso()}));
     saveBonuses(next);
     toast(`Бонус −${Number(b.discount_byn)} BYN применён`);
     render();
@@ -13116,8 +13116,8 @@ window.sendOrder = function sendOrder(){
   function activeHtml(arr, selected){
     if(!arr.length){
       return `
-        <div class="sbp-v91-empty">
-          <div class="sbp-v91-empty-icon">◇</div>
+        <div class="sbp-v92-empty">
+          <div class="sbp-v92-empty-icon">◇</div>
           <div>
             <h2>Активных бонусов пока нет</h2>
             <p>Активируйте бонус ниже, и он появится здесь.</p>
@@ -13129,16 +13129,16 @@ window.sendOrder = function sendOrder(){
     return `
       <h2>Активные бонусы</h2>
       <p>Можно иметь до 3 бонусов. К заказу применится только выбранный. Coins спишутся при оформлении заказа.</p>
-      <div class="sbp-v91-active-list">
+      <div class="sbp-v92-active-list">
         ${arr.map(b => {
           const isSelected = selected && selected.id === b.id;
-          return `<article class="sbp-v91-active-card ${isSelected ? "is-selected" : ""}">
+          return `<article class="sbp-v92-active-card ${isSelected ? "is-selected" : ""}">
             <div>
               <h3>−${Number(b.discount_byn)} BYN</h3>
               <p>${Number(b.coins_cost)} Coins · ${isSelected ? "будет применён к заказу" : "можно выбрать"}</p>
             </div>
             <div>
-              <button type="button" class="sbp-v91-select-btn" data-sbp-v91-select="${esc(b.id)}">${isSelected ? "Выбран" : "Выбрать"}</button>
+              <button type="button" class="sbp-v92-select-btn" data-sbp-v91-select="${esc(b.id)}">${isSelected ? "Выбран" : "Выбрать"}</button>
             </div>
           </article>`;
         }).join("")}
@@ -13151,14 +13151,14 @@ window.sendOrder = function sendOrder(){
     return `
       <h2>Активация бонуса</h2>
       <p>${full ? "У вас уже 3/3 активных бонуса." : `Активных бонусов: ${arr.length}/${MAX_ACTIVE}. Coins спишутся только при оформлении заказа.`}</p>
-      <div class="sbp-v91-buy-list">
+      <div class="sbp-v92-buy-list">
         ${BONUS_PRESETS.map(b => `
-          <button type="button" class="sbp-v91-buy-btn" data-sbp-v91-buy="1" data-cost="${b.coins_cost}" data-discount="${b.discount_byn}" ${full ? "disabled" : ""}>
+          <button type="button" class="sbp-v92-buy-btn" data-sbp-v91-buy="1" data-cost="${b.coins_cost}" data-discount="${b.discount_byn}" ${full ? "disabled" : ""}>
             <div>
               <h3>${esc(b.title)}</h3>
               <p>${esc(b.subtitle)}</p>
             </div>
-            <span class="sbp-v91-pill">${b.coins_cost} Coins</span>
+            <span class="sbp-v92-pill">${b.coins_cost} Coins</span>
           </button>
         `).join("")}
       </div>
@@ -13173,13 +13173,13 @@ window.sendOrder = function sendOrder(){
 
     screen.innerHTML = `
       <div class="screen-head">
-        <button class="back-chip" type="button" data-back-home>‹ Назад</button>
+        <button class="back-chip" type="button" data-sbp-v92-back-profile>‹ Назад</button>
         <h1>SBP Coins</h1>
         <p>Бонусы активируются заранее, а Coins списываются только при оформлении заказа.</p>
       </div>
-      <div class="sbp-v91-bonus-root">
-        <section class="sbp-v91-card" data-sbp-v91-active-host>${activeHtml(arr, selected)}</section>
-        <section class="sbp-v91-card" data-sbp-v91-buy-host>${buyHtml(arr)}</section>
+      <div class="sbp-v92-bonus-root">
+        <section class="sbp-v92-card" data-sbp-v91-active-host>${activeHtml(arr, selected)}</section>
+        <section class="sbp-v92-card" data-sbp-v91-buy-host>${buyHtml(arr)}</section>
       </div>
     `;
 
@@ -13187,6 +13187,16 @@ window.sendOrder = function sendOrder(){
     localStorage.setItem(ACTIVE_COUNT_KEY, String(arr.length));
     syncSelected();
   }
+
+  
+  document.addEventListener("click", function(e){
+    const back = e.target.closest && e.target.closest("[data-sbp-v92-back-profile]");
+    if(!back) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const profileTab = document.getElementById("tab-profile");
+    if(profileTab) profileTab.checked = true;
+  }, true);
 
   document.addEventListener("click", function(e){
     const buy = e.target.closest && e.target.closest("[data-sbp-v91-buy='1']");
@@ -13219,18 +13229,10 @@ window.sendOrder = function sendOrder(){
   window.SBP_BONUS_STATE.read = selectedBonusForOrder;
   window.SBP_BONUS_STATE.clear = removeSelectedAfterOrder;
   window.SBP_BONUS_STATE.wallet = bonuses;
-
-  document.addEventListener("click", function(e){
-    const submit = e.target.closest && e.target.closest("[data-sbp-submit-order='1']");
-    if(submit && selectedBonus()){
-      setTimeout(removeSelectedAfterOrder, 700);
-    }
-  }, true);
-
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", render, {once:true});
+if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", render, {once:true});
   else render();
 
-  window.SBP_RENDER_BONUSES_V91 = render;
+  window.SBP_RENDER_BONUSES_V92 = render;
 })();
 </script>
 
