@@ -4,8 +4,8 @@
   "username": "liknine",
   "first_name": "ликнайн",
   "status": "Selected",
-  "coins": 257,
-  "coins_balance": 257,
+  "coins": 157,
+  "coins_balance": 157,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
   "completed_orders_count": 4,
@@ -17,6 +17,12 @@
   },
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": -100,
+      "type": "bonus_used",
+      "comment": "Bonus used on order: -100 Coins / discount -5 BYN / frontend_bonus_id=BONUS-1780347900839-tyl8ik",
+      "created_at": "2026-06-01 21:05:23"
+    },
     {
       "amount": -100,
       "type": "bonus_used",
@@ -85,6 +91,24 @@
     }
   ],
   "orders": [
+    {
+      "id": 35,
+      "order_id": 35,
+      "order_number": "SBP-00035",
+      "client_order_id": "WEB-1780347916839-63d0xmey",
+      "product_id": "oo-prol-prold",
+      "product_name": "прол",
+      "brand": "оо",
+      "image": "images/products/oo-prol-prold-1.jpg",
+      "size": "43",
+      "price_byn": 77,
+      "discount_byn": 5,
+      "final_price_byn": 72,
+      "status": "processing",
+      "status_label": "В обработке",
+      "created_at": "2026-06-01 21:05:23",
+      "updated_at": "2026-06-01T21:05:23.697045"
+    },
     {
       "id": 34,
       "order_id": 34,
@@ -590,5 +614,5 @@
       "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-06-01T21:03:39.298358+00:00"
+  "updated_at": "2026-06-01T21:05:23.711453+00:00"
 }
