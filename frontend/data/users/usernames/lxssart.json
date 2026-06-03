@@ -4,8 +4,8 @@
   "username": "lxssart",
   "first_name": "lxssart",
   "status": "Entry",
-  "coins": 220,
-  "coins_balance": 220,
+  "coins": 120,
+  "coins_balance": 120,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
   "completed_orders_count": 0,
@@ -17,6 +17,12 @@
   },
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": -100,
+      "type": "bonus_used",
+      "comment": "Bonus used on order: -100 Coins / discount -5 BYN / frontend_bonus_id=BONUS-1780502592215-j30njg",
+      "created_at": "2026-06-03 16:04:35"
+    },
     {
       "amount": -500,
       "type": "bonus_used",
@@ -37,6 +43,24 @@
     }
   ],
   "orders": [
+    {
+      "id": 40,
+      "order_id": 40,
+      "order_number": "SBP-00040",
+      "client_order_id": "WEB-1780502675272-df0efxsb",
+      "product_id": "test-test-chernyy",
+      "product_name": "тест",
+      "brand": "тест",
+      "image": "images/products/test-test-chernyy-1-98942a5a02.jpg",
+      "size": "43",
+      "price_byn": 350,
+      "discount_byn": 5,
+      "final_price_byn": 345,
+      "status": "processing",
+      "status_label": "В обработке",
+      "created_at": "2026-06-03 16:04:35",
+      "updated_at": "2026-06-03T16:04:35.464409"
+    },
     {
       "id": 33,
       "order_id": 33,
@@ -92,5 +116,5 @@
       "updated_at": "2026-05-30T14:17:30.154945"
     }
   ],
-  "updated_at": "2026-06-01T20:02:07.760307+00:00"
+  "updated_at": "2026-06-03T16:04:35.471423+00:00"
 }
