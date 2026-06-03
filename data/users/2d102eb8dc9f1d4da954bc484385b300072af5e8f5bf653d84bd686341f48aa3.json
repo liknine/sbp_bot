@@ -4,11 +4,11 @@
   "username": "liknine",
   "first_name": "ликнайн",
   "status": "Selected",
-  "coins": 387,
-  "coins_balance": 387,
+  "coins": 287,
+  "coins_balance": 287,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
-  "completed_orders_count": 5,
+  "completed_orders_count": 4,
   "status_rules": {
     "Entry": 0,
     "Selected": 3,
@@ -17,6 +17,12 @@
   },
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": -100,
+      "type": "bonus_used",
+      "comment": "Bonus used on order: -100 Coins / discount -5 BYN / frontend_bonus_id=BONUS-1780502260337-i5nqkl",
+      "created_at": "2026-06-03 15:57:51"
+    },
     {
       "amount": 330,
       "type": "order_completed",
@@ -103,6 +109,24 @@
     }
   ],
   "orders": [
+    {
+      "id": 39,
+      "order_id": 39,
+      "order_number": "SBP-00039",
+      "client_order_id": "WEB-1780502271681-2643cxyi",
+      "product_id": "maison-margiela-maison-margiela-evolution-low-black",
+      "product_name": "Maison Margiela Evolution Low",
+      "brand": "Maison Margiela",
+      "image": "images/products/maison-margiela-maison-margiela-evolution-low-black-1.jpg",
+      "size": "44",
+      "price_byn": 1000,
+      "discount_byn": 5,
+      "final_price_byn": 995,
+      "status": "processing",
+      "status_label": "В обработке",
+      "created_at": "2026-06-03 15:57:51",
+      "updated_at": "2026-06-03T15:57:51.840928"
+    },
     {
       "id": 38,
       "order_id": 38,
@@ -624,25 +648,7 @@
       "status_label": "В обработке",
       "created_at": "2026-05-27 20:42:09",
       "updated_at": "2026-05-27T20:42:09.540831"
-    },
-    {
-      "id": 3,
-      "order_id": 3,
-      "order_number": "SBP-00003",
-      "client_order_id": "WEB-1779896569554-07j71m0g",
-      "product_id": "1-2-3",
-      "product_name": "2",
-      "brand": "1",
-      "image": "images/products/1-2-3-1-81d35fa294.jpg",
-      "size": "45",
-      "price_byn": 4,
-      "discount_byn": 0,
-      "final_price_byn": 4,
-      "status": "completed",
-      "status_label": "Завершен",
-      "created_at": "2026-05-27 15:42:50",
-      "updated_at": "2026-05-27T15:58:25.754662"
     }
   ],
-  "updated_at": "2026-06-03T15:56:36.039394+00:00"
+  "updated_at": "2026-06-03T15:57:51.850303+00:00"
 }
