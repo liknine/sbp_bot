@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v94_PROFILE_TEXT_POLISH -->
+<!-- SBP_DEPLOY_MARKER_v95_PROFILE_ALERT_FIX -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -9696,7 +9696,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v94"
+      client_app_version: "v95"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -9843,8 +9843,8 @@ window.sendOrder = function sendOrder(){
       if(window.SBP_BONUS_STATE && compact.bonus_request) window.SBP_BONUS_STATE.clear();
 
       alert(
-        "✅ Всё хорошо — заявка сформирована!\\n\\n" +
-        "Мы передали её менеджеру SBP. Скоро с вами свяжутся для подтверждения деталей заказа.\\n\\n" +
+        "✅ Всё хорошо — заявка сформирована!\n\n" +
+        "Мы передали её менеджеру SBP. Скоро с вами свяжутся для подтверждения деталей заказа.\n\n" +
         "Номер и статус можно проверить в истории заказов."
       );
 
@@ -11642,7 +11642,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v94";
+  const VERSION = "v95";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -13247,7 +13247,8 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
 </script>
 
 
-<style id="sbp-v94-profile-polish-css">
+
+<style id="sbp-v95-profile-fix-css">
 #profileScreen .avatar.has-tg-avatar,
 #profileScreen .profile-avatar.has-tg-avatar{
   padding:0!important;
@@ -13255,7 +13256,8 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   overflow:hidden!important;
 }
 #profileScreen .avatar.has-tg-avatar img,
-#profileScreen .profile-avatar.has-tg-avatar img{
+#profileScreen .profile-avatar.has-tg-avatar img,
+#profileScreen .sbp-tg-avatar-img{
   width:100%!important;
   height:100%!important;
   max-width:none!important;
@@ -13265,33 +13267,18 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   display:block!important;
   filter:none!important;
 }
-#profileScreen .avatar.sbp-v94-initials,
-#profileScreen .profile-avatar.sbp-v94-initials{
-  background:linear-gradient(145deg,#111,#2d2d2d)!important;
-  color:#fff!important;
-  font-size:38px!important;
-  font-weight:950!important;
-  letter-spacing:-1px!important;
-}
-#theme-light:checked ~ .app #profileScreen .avatar.sbp-v94-initials,
-#theme-light:checked ~ .app #profileScreen .profile-avatar.sbp-v94-initials{
-  background:linear-gradient(145deg,#fff,#e8e8e8)!important;
-  color:#111!important;
-}
 </style>
-<script id="sbp-v94-profile-polish-script">
+<script id="sbp-v95-profile-fix-script">
 (function(){
-  const PROFILE_KEY = "sbp_profile_state_v1";
-
   function qs(sel, root=document){ return root.querySelector(sel); }
   function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
   function safeJson(raw, fallback){ try{return JSON.parse(raw)}catch(e){return fallback} }
   function clean(v){ return String(v || "").replace(/\s+/g," ").trim(); }
-  function esc(v){ return String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
 
   function tgUser(){
     const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
     let user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
+
     if(!user && tg && typeof tg.initData === "string" && tg.initData){
       try{
         const params = new URLSearchParams(tg.initData);
@@ -13299,37 +13286,80 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
         if(raw) user = JSON.parse(raw);
       }catch(e){}
     }
+
     if(user && user.id){
-      try{ localStorage.setItem("sbp_tg_user_cache", JSON.stringify(user)); }catch(e){}
+      try{
+        localStorage.setItem("sbp_tg_user_cache", JSON.stringify(user));
+        localStorage.setItem("sbp_profile_user_id", String(user.id));
+      }catch(e){}
       return user;
     }
+
     return safeJson(localStorage.getItem("sbp_tg_user_cache") || "null", null);
   }
 
-  function profileState(){
-    return safeJson(localStorage.getItem(PROFILE_KEY) || "{}", {});
+  async function profileUrlsFor(id){
+    id = String(id || "").trim();
+    if(!id) return [];
+    const repo = (location.pathname.split("/").filter(Boolean)[0] || "").trim();
+    const repoBase = repo ? "/" + repo + "/" : "/";
+    const urls = [
+      "data/users/" + encodeURIComponent(id) + ".json",
+      "frontend/data/users/" + encodeURIComponent(id) + ".json",
+      "./data/users/" + encodeURIComponent(id) + ".json",
+      "./frontend/data/users/" + encodeURIComponent(id) + ".json",
+      repoBase + "data/users/" + encodeURIComponent(id) + ".json",
+      repoBase + "frontend/data/users/" + encodeURIComponent(id) + ".json"
+    ];
+    try{
+      if(window.crypto && crypto.subtle && window.TextEncoder){
+        const data = new TextEncoder().encode(id);
+        const hash = await crypto.subtle.digest("SHA-256", data);
+        const hex = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,"0")).join("");
+        [
+          "data/users/" + hex + ".json",
+          "frontend/data/users/" + hex + ".json",
+          "./data/users/" + hex + ".json",
+          "./frontend/data/users/" + hex + ".json",
+          repoBase + "data/users/" + hex + ".json",
+          repoBase + "frontend/data/users/" + hex + ".json"
+        ].forEach(u => urls.push(u));
+      }
+    }catch(e){}
+    return Array.from(new Set(urls));
   }
 
-  function displayName(){
+  async function fetchRemoteProfile(id){
+    const urls = await profileUrlsFor(id);
+    for(const url of urls){
+      try{
+        const sep = url.includes("?") ? "&" : "?";
+        const res = await fetch(url + sep + "v=" + Date.now(), {cache:"no-store"});
+        if(!res.ok) continue;
+        const json = await res.json();
+        if(json && typeof json === "object") return json;
+      }catch(e){}
+    }
+    return null;
+  }
+
+  function nameFromSources(remote){
     const user = tgUser() || {};
-    const state = profileState() || {};
-    const username = clean(user.username || state.username);
+    const profileState = safeJson(localStorage.getItem("sbp_profile_state_v1") || "{}", {});
+    const username = clean(user.username || (remote && remote.username) || profileState.username);
     if(username) return "@" + username.replace(/^@/,"");
-    const full = clean([user.first_name || state.first_name, user.last_name || state.last_name].filter(Boolean).join(" "));
+
+    const full = clean([
+      user.first_name || (remote && remote.first_name) || profileState.first_name,
+      user.last_name || (remote && remote.last_name) || profileState.last_name
+    ].filter(Boolean).join(" "));
     if(full) return full;
-    return "SBP Client";
+
+    return "";
   }
 
-  function initials(name){
-    name = clean(name).replace(/^@/,"");
-    if(!name || name === "SBP Client") return "SBP";
-    const parts = name.split(/[ _.-]+/).filter(Boolean);
-    if(parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
-    return name.slice(0,2).toUpperCase();
-  }
-
-  function setName(){
-    const name = displayName();
+  function setName(name){
+    if(!name) return;
     const profile = qs("#profileScreen");
     if(!profile) return;
 
@@ -13357,47 +13387,39 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
 
     const user = tgUser() || {};
     const url = clean(user.photo_url);
+    if(!url) return; // Important: do not replace original SBP avatar with fake fallback.
 
-    if(!avatar.dataset.sbpOriginalHtml){
-      avatar.dataset.sbpOriginalHtml = avatar.innerHTML;
-    }
-
-    if(url){
-      const img = new Image();
-      img.className = "sbp-tg-avatar-img";
-      img.alt = "Telegram avatar";
-      img.referrerPolicy = "no-referrer";
-      img.decoding = "async";
-      img.onload = function(){
-        avatar.innerHTML = "";
-        avatar.appendChild(img);
-        avatar.classList.add("has-tg-avatar");
-        avatar.classList.remove("sbp-v94-initials");
-      };
-      img.onerror = function(){
-        avatar.classList.remove("has-tg-avatar");
-        setInitialsAvatar(avatar);
-      };
-      img.src = url;
-      return;
-    }
-
-    setInitialsAvatar(avatar);
+    const img = new Image();
+    img.className = "sbp-tg-avatar-img";
+    img.alt = "Telegram avatar";
+    img.referrerPolicy = "no-referrer";
+    img.decoding = "async";
+    img.onload = function(){
+      avatar.innerHTML = "";
+      avatar.appendChild(img);
+      avatar.classList.add("has-tg-avatar");
+      avatar.classList.remove("sbp-v94-initials");
+    };
+    img.onerror = function(){
+      avatar.classList.remove("has-tg-avatar");
+      // Keep original avatar exactly as it was.
+    };
+    img.src = url;
   }
 
-  function setInitialsAvatar(avatar){
-    avatar.innerHTML = "<span>" + esc(initials(displayName())) + "</span>";
-    avatar.classList.remove("has-tg-avatar");
-    avatar.classList.add("sbp-v94-initials");
-  }
+  async function apply(){
+    const user = tgUser();
+    let remote = null;
+    const id = user && user.id ? user.id : localStorage.getItem("sbp_profile_user_id");
+    if(id) remote = await fetchRemoteProfile(id);
 
-  function apply(){
-    setName();
+    const name = nameFromSources(remote);
+    setName(name);
     setAvatar();
   }
 
   if(document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", apply, {once:true});
+    document.addEventListener("DOMContentLoaded", function(){ apply(); }, {once:true});
   }else{
     apply();
   }
@@ -13406,17 +13428,18 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     apply();
     setTimeout(apply, 250);
     setTimeout(apply, 1000);
+    setTimeout(apply, 2200);
   });
   window.addEventListener("focus", apply);
   document.addEventListener("visibilitychange", function(){ if(!document.hidden) apply(); });
   document.addEventListener("click", function(e){
     if(e.target.closest && e.target.closest('label[for="tab-profile"], .bottom-nav label[for="tab-profile"], .profile-item')){
       setTimeout(apply, 80);
-      setTimeout(apply, 450);
+      setTimeout(apply, 500);
     }
   }, true);
 
-  window.SBP_APPLY_PROFILE_V94 = apply;
+  window.SBP_APPLY_PROFILE_V95 = apply;
 })();
 </script>
 
