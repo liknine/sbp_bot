@@ -3,6 +3,9 @@
   "telegram_id": 1639462053,
   "username": "liknine",
   "first_name": "ликнайн",
+  "last_name": "",
+  "avatar_url": "images/users/1639462053.jpg",
+  "avatar_updated_at": "2026-06-03T15:16:09.245414+00:00",
   "status": "Selected",
   "coins": 387,
   "coins_balance": 387,
@@ -644,5 +647,5 @@
       "updated_at": "2026-05-27T15:58:25.754662"
     }
   ],
-  "updated_at": "2026-06-03T15:03:36.892138+00:00"
+  "updated_at": "2026-06-03T15:16:09.262334+00:00"
 }
