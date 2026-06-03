@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v96_RESTORE_V93_PROFILE_ALERT_ONLY -->
+<!-- SBP_DEPLOY_MARKER_v99_SIMPLE_TG_PROFILE -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -9696,7 +9696,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v96"
+      client_app_version: "v99"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11642,7 +11642,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v96";
+  const VERSION = "v99";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -13243,6 +13243,154 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   else render();
 
   window.SBP_RENDER_BONUSES_V93 = render;
+})();
+</script>
+
+
+<style id="sbp-v99-simple-tg-profile-css">
+#profileScreen .avatar.sbp-tg-photo,
+#profileScreen .profile-avatar.sbp-tg-photo,
+#profileScreen .profile-avatar-v61.sbp-tg-photo{
+  padding:0!important;
+  background:#111!important;
+  overflow:hidden!important;
+}
+#profileScreen .avatar.sbp-tg-photo img,
+#profileScreen .profile-avatar.sbp-tg-photo img,
+#profileScreen .profile-avatar-v61.sbp-tg-photo img{
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  border-radius:50%!important;
+  display:block!important;
+  opacity:1!important;
+  visibility:visible!important;
+  filter:none!important;
+}
+</style>
+<script id="sbp-v99-simple-tg-profile-script">
+(function(){
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function clean(v){ return String(v || "").replace(/\s+/g," ").trim(); }
+  function safeJson(raw, fallback){ try{return JSON.parse(raw)}catch(e){return fallback} }
+
+  function getTelegramUser(){
+    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    let user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
+
+    if(!user && tg && typeof tg.initData === "string" && tg.initData){
+      try{
+        const raw = new URLSearchParams(tg.initData).get("user");
+        if(raw) user = JSON.parse(raw);
+      }catch(e){}
+    }
+
+    if(user && (user.id || user.username || user.first_name)){
+      try{ localStorage.setItem("sbp_tg_user_cache_v99", JSON.stringify(user)); }catch(e){}
+      return user;
+    }
+
+    return safeJson(localStorage.getItem("sbp_tg_user_cache_v99") || localStorage.getItem("sbp_tg_user_cache") || "null", null);
+  }
+
+  function displayName(user){
+    user = user || {};
+    const username = clean(user.username);
+    if(username) return "@" + username.replace(/^@/,"");
+    return clean([user.first_name, user.last_name].filter(Boolean).join(" "));
+  }
+
+  function applyName(name){
+    if(!name) return;
+    const root = qs("#profileScreen");
+    if(!root) return;
+
+    qsa(".profile-name,.profile-username,.profile-title,.user-name,.account-name", root).forEach(el => {
+      el.textContent = name;
+    });
+
+    const h1 = qs(".profile-top h1", root);
+    if(h1) h1.textContent = name;
+
+    qsa("h1,h2,h3,span,b,p,div", root).forEach(el => {
+      if(el.children.length) return;
+      const text = clean(el.textContent);
+      if(text === "@username" || text === "username" || text === "@user"){
+        el.textContent = name;
+      }
+    });
+  }
+
+  function applyPhoto(url){
+    url = clean(url);
+    if(!url) return;
+
+    const root = qs("#profileScreen");
+    if(!root) return;
+
+    const avatar = qs(".profile-avatar-v61", root) || qs(".profile-avatar", root) || qs(".avatar", root);
+    if(!avatar) return;
+
+    const img = new Image();
+    img.alt = "Telegram avatar";
+    img.className = "sbp-tg-avatar-img";
+    img.referrerPolicy = "no-referrer";
+    img.decoding = "async";
+    img.loading = "lazy";
+    img.onload = function(){
+      avatar.innerHTML = "";
+      avatar.appendChild(img);
+      avatar.classList.add("sbp-tg-photo");
+    };
+    img.onerror = function(){
+      avatar.classList.remove("sbp-tg-photo");
+    };
+    img.src = url;
+  }
+
+  function apply(){
+    const user = getTelegramUser();
+    if(!user) return;
+
+    const name = displayName(user);
+    applyName(name);
+    applyPhoto(user.photo_url);
+
+    try{
+      const current = safeJson(localStorage.getItem("sbp_profile_state_v1") || "{}", {});
+      localStorage.setItem("sbp_profile_state_v1", JSON.stringify(Object.assign({}, current, {
+        username: user.username || current.username || "",
+        first_name: user.first_name || current.first_name || "",
+        last_name: user.last_name || current.last_name || "",
+        tg_photo_url: user.photo_url || current.tg_photo_url || ""
+      })));
+    }catch(e){}
+  }
+
+  function schedule(){
+    apply();
+    setTimeout(apply, 120);
+    setTimeout(apply, 450);
+    setTimeout(apply, 1200);
+    setTimeout(apply, 2600);
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", schedule, {once:true});
+  else schedule();
+
+  window.addEventListener("load", schedule);
+  window.addEventListener("focus", schedule);
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden) schedule(); });
+  document.addEventListener("click", function(e){
+    if(e.target.closest && e.target.closest('label[for="tab-profile"], .bottom-nav label[for="tab-profile"], .profile-item')){
+      setTimeout(schedule, 80);
+    }
+  }, true);
+
+  window.SBP_APPLY_SIMPLE_TG_PROFILE_V99 = apply;
 })();
 </script>
 
