@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v93_IDEMPOTENT_BONUS_DB -->
+<!-- SBP_DEPLOY_MARKER_v94_PROFILE_TEXT_POLISH -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -9593,14 +9593,14 @@ body.sbp-v82-intro-running{
     copyOrderSubmitCommandV66(payload).then(({command, copied}) => {
       const shortCommand = command.length > 900 ? command.slice(0,900) + "..." : command;
       alert(
-        (reason || "Telegram не доставил заявку автоматически.") + "\\n\\n" +
-        (copied ? "Я скопировал резервную команду в буфер обмена.\\n" : "Резервная команда сохранена в localStorage: sbp_last_order_submit_command_v68.\\n") +
-        "Открой чат с ботом и отправь эту команду:\\n\\n" +
+        (reason || "Заявка сформирована, осталось подтвердить её в чате.") + "\\n\\n" +
+        (copied ? "Резервная команда уже скопирована.\\n" : "Резервная команда сохранена.\\n") +
+        "Отправьте эту команду боту, если заявка не появилась у менеджера:\\n\\n" +
         shortCommand
       );
     }).catch(() => {
       try{ localStorage.setItem("sbp_last_order_submit_payload_v68", JSON.stringify(payload)); }catch(e){}
-      alert("Telegram не доставил заявку автоматически. Резервный payload сохранён в localStorage: sbp_last_order_submit_payload_v68");
+      alert("Заявка сформирована, но Telegram не передал её автоматически. Резервные данные сохранены.");
     });
   }
 
@@ -9625,12 +9625,12 @@ body.sbp-v82-intro-running{
     modal.className = "sbp-order-submit-fallback-v67";
     modal.innerHTML = `
       <div class="box">
-        <h2>Нужно подтвердить заявку в боте</h2>
-        <p>Telegram на этом аккаунте не передал заявку автоматически. Код заявки уже готов: скопируй его, открой чат с ботом и отправь одним сообщением.</p>
+        <h2>Заявка сформирована</h2>
+        <p>Если менеджер не получил заявку автоматически, скопируйте готовую команду и отправьте её боту одним сообщением.</p>
         <textarea readonly></textarea>
-        <button type="button" class="copy">Скопировать команду</button>
-        <a class="bot" href="https://t.me/sbp_rabot_bot">Открыть чат с ботом</a>
-        <button type="button" class="close">Закрыть</button>
+        <button type="button" class="copy">Скопировать</button>
+        <a class="bot" href="https://t.me/sbp_rabot_bot">Открыть бот</a>
+        <button type="button" class="close">Готово</button>
       </div>
     `;
     document.body.appendChild(modal);
@@ -9696,7 +9696,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v93"
+      client_app_version: "v94"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -9843,9 +9843,9 @@ window.sendOrder = function sendOrder(){
       if(window.SBP_BONUS_STATE && compact.bonus_request) window.SBP_BONUS_STATE.clear();
 
       alert(
-        "Заявка передана Telegram.\\n\\n" +
-        "Если через 5 секунд она не появилась у менеджера, резервная команда уже сохранена в буфере обмена. " +
-        "Открой чат с ботом и отправь её сообщением."
+        "✅ Всё хорошо — заявка сформирована!\\n\\n" +
+        "Мы передали её менеджеру SBP. Скоро с вами свяжутся для подтверждения деталей заказа.\\n\\n" +
+        "Номер и статус можно проверить в истории заказов."
       );
 
       return false;
@@ -11303,7 +11303,7 @@ window.sendOrder = function sendOrder(){
 <div class="sbp-gallery-modal" id="sbpGalleryModal" aria-hidden="true">
   <div class="sbp-gallery-top">
     <div class="sbp-gallery-title" data-sbp-gallery-title>SBP</div>
-    <button class="sbp-gallery-close" type="button" data-sbp-gallery-close aria-label="Закрыть">×</button>
+    <button class="sbp-gallery-close" type="button" data-sbp-gallery-close aria-label="Готово">×</button>
   </div>
   <div class="sbp-gallery-stage">
     <button class="sbp-gallery-arrow sbp-gallery-prev" type="button" data-sbp-gallery-prev aria-label="Предыдущее фото">‹</button>
@@ -11642,7 +11642,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v93";
+  const VERSION = "v94";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12740,7 +12740,7 @@ window.sendOrder = function sendOrder(){
     overlay = document.createElement("div");
     overlay.className = "sbp-banner-fullscreen-v59";
     overlay.innerHTML = `
-      <button type="button" class="sbp-banner-v59-close" aria-label="Закрыть">×</button>
+      <button type="button" class="sbp-banner-v59-close" aria-label="Готово">×</button>
       <article class="sbp-banner-v59-card">
         <div class="sbp-banner-v59-image"><img alt=""></div>
         <div class="sbp-banner-v59-body">
@@ -13243,6 +13243,180 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   else render();
 
   window.SBP_RENDER_BONUSES_V93 = render;
+})();
+</script>
+
+
+<style id="sbp-v94-profile-polish-css">
+#profileScreen .avatar.has-tg-avatar,
+#profileScreen .profile-avatar.has-tg-avatar{
+  padding:0!important;
+  background:#111!important;
+  overflow:hidden!important;
+}
+#profileScreen .avatar.has-tg-avatar img,
+#profileScreen .profile-avatar.has-tg-avatar img{
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  border-radius:50%!important;
+  display:block!important;
+  filter:none!important;
+}
+#profileScreen .avatar.sbp-v94-initials,
+#profileScreen .profile-avatar.sbp-v94-initials{
+  background:linear-gradient(145deg,#111,#2d2d2d)!important;
+  color:#fff!important;
+  font-size:38px!important;
+  font-weight:950!important;
+  letter-spacing:-1px!important;
+}
+#theme-light:checked ~ .app #profileScreen .avatar.sbp-v94-initials,
+#theme-light:checked ~ .app #profileScreen .profile-avatar.sbp-v94-initials{
+  background:linear-gradient(145deg,#fff,#e8e8e8)!important;
+  color:#111!important;
+}
+</style>
+<script id="sbp-v94-profile-polish-script">
+(function(){
+  const PROFILE_KEY = "sbp_profile_state_v1";
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function safeJson(raw, fallback){ try{return JSON.parse(raw)}catch(e){return fallback} }
+  function clean(v){ return String(v || "").replace(/\s+/g," ").trim(); }
+  function esc(v){ return String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
+
+  function tgUser(){
+    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    let user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
+    if(!user && tg && typeof tg.initData === "string" && tg.initData){
+      try{
+        const params = new URLSearchParams(tg.initData);
+        const raw = params.get("user");
+        if(raw) user = JSON.parse(raw);
+      }catch(e){}
+    }
+    if(user && user.id){
+      try{ localStorage.setItem("sbp_tg_user_cache", JSON.stringify(user)); }catch(e){}
+      return user;
+    }
+    return safeJson(localStorage.getItem("sbp_tg_user_cache") || "null", null);
+  }
+
+  function profileState(){
+    return safeJson(localStorage.getItem(PROFILE_KEY) || "{}", {});
+  }
+
+  function displayName(){
+    const user = tgUser() || {};
+    const state = profileState() || {};
+    const username = clean(user.username || state.username);
+    if(username) return "@" + username.replace(/^@/,"");
+    const full = clean([user.first_name || state.first_name, user.last_name || state.last_name].filter(Boolean).join(" "));
+    if(full) return full;
+    return "SBP Client";
+  }
+
+  function initials(name){
+    name = clean(name).replace(/^@/,"");
+    if(!name || name === "SBP Client") return "SBP";
+    const parts = name.split(/[ _.-]+/).filter(Boolean);
+    if(parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+    return name.slice(0,2).toUpperCase();
+  }
+
+  function setName(){
+    const name = displayName();
+    const profile = qs("#profileScreen");
+    if(!profile) return;
+
+    qsa(".profile-name,.profile-username,.profile-title,.user-name,.account-name", profile).forEach(el => {
+      el.textContent = name;
+    });
+
+    const h = qs(".profile-top h1", profile);
+    if(h) h.textContent = name;
+
+    qsa("h1,h2,h3,span,b,p,div", profile).forEach(el => {
+      if(el.children.length) return;
+      const text = clean(el.textContent);
+      if(text === "@username" || text === "username" || text === "@user" || text === "SBP Client"){
+        el.textContent = name;
+      }
+    });
+  }
+
+  function setAvatar(){
+    const profile = qs("#profileScreen");
+    if(!profile) return;
+    const avatar = qs(".profile-avatar", profile) || qs(".avatar", profile);
+    if(!avatar) return;
+
+    const user = tgUser() || {};
+    const url = clean(user.photo_url);
+
+    if(!avatar.dataset.sbpOriginalHtml){
+      avatar.dataset.sbpOriginalHtml = avatar.innerHTML;
+    }
+
+    if(url){
+      const img = new Image();
+      img.className = "sbp-tg-avatar-img";
+      img.alt = "Telegram avatar";
+      img.referrerPolicy = "no-referrer";
+      img.decoding = "async";
+      img.onload = function(){
+        avatar.innerHTML = "";
+        avatar.appendChild(img);
+        avatar.classList.add("has-tg-avatar");
+        avatar.classList.remove("sbp-v94-initials");
+      };
+      img.onerror = function(){
+        avatar.classList.remove("has-tg-avatar");
+        setInitialsAvatar(avatar);
+      };
+      img.src = url;
+      return;
+    }
+
+    setInitialsAvatar(avatar);
+  }
+
+  function setInitialsAvatar(avatar){
+    avatar.innerHTML = "<span>" + esc(initials(displayName())) + "</span>";
+    avatar.classList.remove("has-tg-avatar");
+    avatar.classList.add("sbp-v94-initials");
+  }
+
+  function apply(){
+    setName();
+    setAvatar();
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", apply, {once:true});
+  }else{
+    apply();
+  }
+
+  window.addEventListener("load", function(){
+    apply();
+    setTimeout(apply, 250);
+    setTimeout(apply, 1000);
+  });
+  window.addEventListener("focus", apply);
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden) apply(); });
+  document.addEventListener("click", function(e){
+    if(e.target.closest && e.target.closest('label[for="tab-profile"], .bottom-nav label[for="tab-profile"], .profile-item')){
+      setTimeout(apply, 80);
+      setTimeout(apply, 450);
+    }
+  }, true);
+
+  window.SBP_APPLY_PROFILE_V94 = apply;
 })();
 </script>
 
