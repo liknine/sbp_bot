@@ -104,6 +104,24 @@
   ],
   "orders": [
     {
+      "id": 37,
+      "order_id": 37,
+      "order_number": "SBP-00037",
+      "client_order_id": "WEB-1780497446177-a2q83hw6",
+      "product_id": "1-2-3",
+      "product_name": "2",
+      "brand": "1",
+      "image": "images/products/1-2-3-1-81d35fa294.jpg",
+      "size": "45",
+      "price_byn": 4,
+      "discount_byn": 0,
+      "final_price_byn": 4,
+      "status": "processing",
+      "status_label": "В обработке",
+      "created_at": "2026-06-03 14:37:31",
+      "updated_at": "2026-06-03T14:37:31.384986"
+    },
+    {
       "id": 36,
       "order_id": 36,
       "order_number": "SBP-00036",
@@ -624,25 +642,7 @@
       "status_label": "В обработке",
       "created_at": "2026-05-27 13:37:13",
       "updated_at": "2026-05-27T13:37:13.980945"
-    },
-    {
-      "id": 1,
-      "order_id": 1,
-      "order_number": "SBP-00001",
-      "client_order_id": "",
-      "product_id": "debug-product",
-      "product_name": "Debug test order",
-      "brand": "SBP",
-      "image": "",
-      "size": "43",
-      "price_byn": 1,
-      "discount_byn": 0,
-      "final_price_byn": 1,
-      "status": "processing",
-      "status_label": "В обработке",
-      "created_at": "2026-05-27 13:04:21",
-      "updated_at": "2026-05-27T13:04:21.711743"
     }
   ],
-  "updated_at": "2026-06-03T04:40:17.125153+00:00"
+  "updated_at": "2026-06-03T14:37:31.467553+00:00"
 }
