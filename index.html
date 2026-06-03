@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v95_PROFILE_ALERT_FIX -->
+<!-- SBP_DEPLOY_MARKER_v96_RESTORE_V93_PROFILE_ALERT_ONLY -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -9593,14 +9593,14 @@ body.sbp-v82-intro-running{
     copyOrderSubmitCommandV66(payload).then(({command, copied}) => {
       const shortCommand = command.length > 900 ? command.slice(0,900) + "..." : command;
       alert(
-        (reason || "Заявка сформирована, осталось подтвердить её в чате.") + "\\n\\n" +
-        (copied ? "Резервная команда уже скопирована.\\n" : "Резервная команда сохранена.\\n") +
-        "Отправьте эту команду боту, если заявка не появилась у менеджера:\\n\\n" +
+        (reason || "Telegram не доставил заявку автоматически.") + "\\n\\n" +
+        (copied ? "Я скопировал резервную команду в буфер обмена.\\n" : "Резервная команда сохранена в localStorage: sbp_last_order_submit_command_v68.\\n") +
+        "Открой чат с ботом и отправь эту команду:\\n\\n" +
         shortCommand
       );
     }).catch(() => {
       try{ localStorage.setItem("sbp_last_order_submit_payload_v68", JSON.stringify(payload)); }catch(e){}
-      alert("Заявка сформирована, но Telegram не передал её автоматически. Резервные данные сохранены.");
+      alert("Telegram не доставил заявку автоматически. Резервный payload сохранён в localStorage: sbp_last_order_submit_payload_v68");
     });
   }
 
@@ -9625,12 +9625,12 @@ body.sbp-v82-intro-running{
     modal.className = "sbp-order-submit-fallback-v67";
     modal.innerHTML = `
       <div class="box">
-        <h2>Заявка сформирована</h2>
-        <p>Если менеджер не получил заявку автоматически, скопируйте готовую команду и отправьте её боту одним сообщением.</p>
+        <h2>Нужно подтвердить заявку в боте</h2>
+        <p>Telegram на этом аккаунте не передал заявку автоматически. Код заявки уже готов: скопируй его, открой чат с ботом и отправь одним сообщением.</p>
         <textarea readonly></textarea>
-        <button type="button" class="copy">Скопировать</button>
-        <a class="bot" href="https://t.me/sbp_rabot_bot">Открыть бот</a>
-        <button type="button" class="close">Готово</button>
+        <button type="button" class="copy">Скопировать команду</button>
+        <a class="bot" href="https://t.me/sbp_rabot_bot">Открыть чат с ботом</a>
+        <button type="button" class="close">Закрыть</button>
       </div>
     `;
     document.body.appendChild(modal);
@@ -9696,7 +9696,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v95"
+      client_app_version: "v96"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11303,7 +11303,7 @@ window.sendOrder = function sendOrder(){
 <div class="sbp-gallery-modal" id="sbpGalleryModal" aria-hidden="true">
   <div class="sbp-gallery-top">
     <div class="sbp-gallery-title" data-sbp-gallery-title>SBP</div>
-    <button class="sbp-gallery-close" type="button" data-sbp-gallery-close aria-label="Готово">×</button>
+    <button class="sbp-gallery-close" type="button" data-sbp-gallery-close aria-label="Закрыть">×</button>
   </div>
   <div class="sbp-gallery-stage">
     <button class="sbp-gallery-arrow sbp-gallery-prev" type="button" data-sbp-gallery-prev aria-label="Предыдущее фото">‹</button>
@@ -11642,7 +11642,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v95";
+  const VERSION = "v96";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12740,7 +12740,7 @@ window.sendOrder = function sendOrder(){
     overlay = document.createElement("div");
     overlay.className = "sbp-banner-fullscreen-v59";
     overlay.innerHTML = `
-      <button type="button" class="sbp-banner-v59-close" aria-label="Готово">×</button>
+      <button type="button" class="sbp-banner-v59-close" aria-label="Закрыть">×</button>
       <article class="sbp-banner-v59-card">
         <div class="sbp-banner-v59-image"><img alt=""></div>
         <div class="sbp-banner-v59-body">
@@ -13243,203 +13243,6 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   else render();
 
   window.SBP_RENDER_BONUSES_V93 = render;
-})();
-</script>
-
-
-
-<style id="sbp-v95-profile-fix-css">
-#profileScreen .avatar.has-tg-avatar,
-#profileScreen .profile-avatar.has-tg-avatar{
-  padding:0!important;
-  background:#111!important;
-  overflow:hidden!important;
-}
-#profileScreen .avatar.has-tg-avatar img,
-#profileScreen .profile-avatar.has-tg-avatar img,
-#profileScreen .sbp-tg-avatar-img{
-  width:100%!important;
-  height:100%!important;
-  max-width:none!important;
-  max-height:none!important;
-  object-fit:cover!important;
-  border-radius:50%!important;
-  display:block!important;
-  filter:none!important;
-}
-</style>
-<script id="sbp-v95-profile-fix-script">
-(function(){
-  function qs(sel, root=document){ return root.querySelector(sel); }
-  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
-  function safeJson(raw, fallback){ try{return JSON.parse(raw)}catch(e){return fallback} }
-  function clean(v){ return String(v || "").replace(/\s+/g," ").trim(); }
-
-  function tgUser(){
-    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-    let user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
-
-    if(!user && tg && typeof tg.initData === "string" && tg.initData){
-      try{
-        const params = new URLSearchParams(tg.initData);
-        const raw = params.get("user");
-        if(raw) user = JSON.parse(raw);
-      }catch(e){}
-    }
-
-    if(user && user.id){
-      try{
-        localStorage.setItem("sbp_tg_user_cache", JSON.stringify(user));
-        localStorage.setItem("sbp_profile_user_id", String(user.id));
-      }catch(e){}
-      return user;
-    }
-
-    return safeJson(localStorage.getItem("sbp_tg_user_cache") || "null", null);
-  }
-
-  async function profileUrlsFor(id){
-    id = String(id || "").trim();
-    if(!id) return [];
-    const repo = (location.pathname.split("/").filter(Boolean)[0] || "").trim();
-    const repoBase = repo ? "/" + repo + "/" : "/";
-    const urls = [
-      "data/users/" + encodeURIComponent(id) + ".json",
-      "frontend/data/users/" + encodeURIComponent(id) + ".json",
-      "./data/users/" + encodeURIComponent(id) + ".json",
-      "./frontend/data/users/" + encodeURIComponent(id) + ".json",
-      repoBase + "data/users/" + encodeURIComponent(id) + ".json",
-      repoBase + "frontend/data/users/" + encodeURIComponent(id) + ".json"
-    ];
-    try{
-      if(window.crypto && crypto.subtle && window.TextEncoder){
-        const data = new TextEncoder().encode(id);
-        const hash = await crypto.subtle.digest("SHA-256", data);
-        const hex = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,"0")).join("");
-        [
-          "data/users/" + hex + ".json",
-          "frontend/data/users/" + hex + ".json",
-          "./data/users/" + hex + ".json",
-          "./frontend/data/users/" + hex + ".json",
-          repoBase + "data/users/" + hex + ".json",
-          repoBase + "frontend/data/users/" + hex + ".json"
-        ].forEach(u => urls.push(u));
-      }
-    }catch(e){}
-    return Array.from(new Set(urls));
-  }
-
-  async function fetchRemoteProfile(id){
-    const urls = await profileUrlsFor(id);
-    for(const url of urls){
-      try{
-        const sep = url.includes("?") ? "&" : "?";
-        const res = await fetch(url + sep + "v=" + Date.now(), {cache:"no-store"});
-        if(!res.ok) continue;
-        const json = await res.json();
-        if(json && typeof json === "object") return json;
-      }catch(e){}
-    }
-    return null;
-  }
-
-  function nameFromSources(remote){
-    const user = tgUser() || {};
-    const profileState = safeJson(localStorage.getItem("sbp_profile_state_v1") || "{}", {});
-    const username = clean(user.username || (remote && remote.username) || profileState.username);
-    if(username) return "@" + username.replace(/^@/,"");
-
-    const full = clean([
-      user.first_name || (remote && remote.first_name) || profileState.first_name,
-      user.last_name || (remote && remote.last_name) || profileState.last_name
-    ].filter(Boolean).join(" "));
-    if(full) return full;
-
-    return "";
-  }
-
-  function setName(name){
-    if(!name) return;
-    const profile = qs("#profileScreen");
-    if(!profile) return;
-
-    qsa(".profile-name,.profile-username,.profile-title,.user-name,.account-name", profile).forEach(el => {
-      el.textContent = name;
-    });
-
-    const h = qs(".profile-top h1", profile);
-    if(h) h.textContent = name;
-
-    qsa("h1,h2,h3,span,b,p,div", profile).forEach(el => {
-      if(el.children.length) return;
-      const text = clean(el.textContent);
-      if(text === "@username" || text === "username" || text === "@user" || text === "SBP Client"){
-        el.textContent = name;
-      }
-    });
-  }
-
-  function setAvatar(){
-    const profile = qs("#profileScreen");
-    if(!profile) return;
-    const avatar = qs(".profile-avatar", profile) || qs(".avatar", profile);
-    if(!avatar) return;
-
-    const user = tgUser() || {};
-    const url = clean(user.photo_url);
-    if(!url) return; // Important: do not replace original SBP avatar with fake fallback.
-
-    const img = new Image();
-    img.className = "sbp-tg-avatar-img";
-    img.alt = "Telegram avatar";
-    img.referrerPolicy = "no-referrer";
-    img.decoding = "async";
-    img.onload = function(){
-      avatar.innerHTML = "";
-      avatar.appendChild(img);
-      avatar.classList.add("has-tg-avatar");
-      avatar.classList.remove("sbp-v94-initials");
-    };
-    img.onerror = function(){
-      avatar.classList.remove("has-tg-avatar");
-      // Keep original avatar exactly as it was.
-    };
-    img.src = url;
-  }
-
-  async function apply(){
-    const user = tgUser();
-    let remote = null;
-    const id = user && user.id ? user.id : localStorage.getItem("sbp_profile_user_id");
-    if(id) remote = await fetchRemoteProfile(id);
-
-    const name = nameFromSources(remote);
-    setName(name);
-    setAvatar();
-  }
-
-  if(document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", function(){ apply(); }, {once:true});
-  }else{
-    apply();
-  }
-
-  window.addEventListener("load", function(){
-    apply();
-    setTimeout(apply, 250);
-    setTimeout(apply, 1000);
-    setTimeout(apply, 2200);
-  });
-  window.addEventListener("focus", apply);
-  document.addEventListener("visibilitychange", function(){ if(!document.hidden) apply(); });
-  document.addEventListener("click", function(e){
-    if(e.target.closest && e.target.closest('label[for="tab-profile"], .bottom-nav label[for="tab-profile"], .profile-item')){
-      setTimeout(apply, 80);
-      setTimeout(apply, 500);
-    }
-  }, true);
-
-  window.SBP_APPLY_PROFILE_V95 = apply;
 })();
 </script>
 
