@@ -4,11 +4,11 @@
   "username": "liknine",
   "first_name": "ликнайн",
   "status": "Selected",
-  "coins": 287,
-  "coins_balance": 287,
+  "coins": 1387,
+  "coins_balance": 1387,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
-  "completed_orders_count": 4,
+  "completed_orders_count": 5,
   "status_rules": {
     "Entry": 0,
     "Selected": 3,
@@ -17,6 +17,12 @@
   },
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": 1100,
+      "type": "order_completed",
+      "comment": "Order completed / Selected",
+      "created_at": "2026-06-03 15:58:30"
+    },
     {
       "amount": -100,
       "type": "bonus_used",
@@ -122,10 +128,10 @@
       "price_byn": 1000,
       "discount_byn": 5,
       "final_price_byn": 995,
-      "status": "processing",
-      "status_label": "В обработке",
+      "status": "completed",
+      "status_label": "Завершен",
       "created_at": "2026-06-03 15:57:51",
-      "updated_at": "2026-06-03T15:57:51.840928"
+      "updated_at": "2026-06-03T15:58:30.932949"
     },
     {
       "id": 38,
@@ -650,5 +656,5 @@
       "updated_at": "2026-05-27T20:42:09.540831"
     }
   ],
-  "updated_at": "2026-06-03T15:57:51.946563+00:00"
+  "updated_at": "2026-06-03T15:58:30.938328+00:00"
 }
