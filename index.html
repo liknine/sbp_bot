@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v99_SIMPLE_TG_PROFILE -->
+<!-- SBP_DEPLOY_MARKER_v100_CUSTOMER_DEMO_STABLE -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -9696,7 +9696,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v99"
+      client_app_version: "v100"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11642,7 +11642,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v99";
+  const VERSION = "v100";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -13247,17 +13247,17 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
 </script>
 
 
-<style id="sbp-v99-simple-tg-profile-css">
-#profileScreen .avatar.sbp-tg-photo,
-#profileScreen .profile-avatar.sbp-tg-photo,
-#profileScreen .profile-avatar-v61.sbp-tg-photo{
+<style id="sbp-v100-demo-profile-css">
+#profileScreen .avatar.sbp-demo-tg-photo,
+#profileScreen .profile-avatar.sbp-demo-tg-photo,
+#profileScreen .profile-avatar-v61.sbp-demo-tg-photo{
   padding:0!important;
   background:#111!important;
   overflow:hidden!important;
 }
-#profileScreen .avatar.sbp-tg-photo img,
-#profileScreen .profile-avatar.sbp-tg-photo img,
-#profileScreen .profile-avatar-v61.sbp-tg-photo img{
+#profileScreen .avatar.sbp-demo-tg-photo img,
+#profileScreen .profile-avatar.sbp-demo-tg-photo img,
+#profileScreen .profile-avatar-v61.sbp-demo-tg-photo img{
   width:100%!important;
   height:100%!important;
   max-width:none!important;
@@ -13270,15 +13270,18 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   filter:none!important;
 }
 </style>
-<script id="sbp-v99-simple-tg-profile-script">
+<script id="sbp-v100-demo-profile-script">
 (function(){
   function qs(sel, root=document){ return root.querySelector(sel); }
   function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
   function clean(v){ return String(v || "").replace(/\s+/g," ").trim(); }
   function safeJson(raw, fallback){ try{return JSON.parse(raw)}catch(e){return fallback} }
 
-  function getTelegramUser(){
+  function getTgUser(){
     const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    try{ if(tg && tg.ready) tg.ready(); }catch(e){}
+    try{ if(tg && tg.expand) tg.expand(); }catch(e){}
+
     let user = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user : null;
 
     if(!user && tg && typeof tg.initData === "string" && tg.initData){
@@ -13289,11 +13292,14 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     }
 
     if(user && (user.id || user.username || user.first_name)){
-      try{ localStorage.setItem("sbp_tg_user_cache_v99", JSON.stringify(user)); }catch(e){}
+      try{
+        localStorage.setItem("sbp_tg_user_cache_v100", JSON.stringify(user));
+        if(user.id) localStorage.setItem("sbp_profile_user_id", String(user.id));
+      }catch(e){}
       return user;
     }
 
-    return safeJson(localStorage.getItem("sbp_tg_user_cache_v99") || localStorage.getItem("sbp_tg_user_cache") || "null", null);
+    return safeJson(localStorage.getItem("sbp_tg_user_cache_v100") || localStorage.getItem("sbp_tg_user_cache") || "null", null);
   }
 
   function displayName(user){
@@ -13324,9 +13330,9 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     });
   }
 
-  function applyPhoto(url){
-    url = clean(url);
-    if(!url) return;
+  function applyPhoto(photoUrl){
+    photoUrl = clean(photoUrl);
+    if(!photoUrl) return; // Keep original SBP avatar/logo if Telegram does not provide photo_url.
 
     const root = qs("#profileScreen");
     if(!root) return;
@@ -13336,23 +13342,24 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
 
     const img = new Image();
     img.alt = "Telegram avatar";
-    img.className = "sbp-tg-avatar-img";
+    img.className = "sbp-demo-tg-avatar-img";
     img.referrerPolicy = "no-referrer";
     img.decoding = "async";
     img.loading = "lazy";
     img.onload = function(){
       avatar.innerHTML = "";
       avatar.appendChild(img);
-      avatar.classList.add("sbp-tg-photo");
+      avatar.classList.add("sbp-demo-tg-photo");
     };
     img.onerror = function(){
-      avatar.classList.remove("sbp-tg-photo");
+      avatar.classList.remove("sbp-demo-tg-photo");
+      // Do not break avatar area. Original SBP avatar remains if image cannot load.
     };
-    img.src = url;
+    img.src = photoUrl;
   }
 
   function apply(){
-    const user = getTelegramUser();
+    const user = getTgUser();
     if(!user) return;
 
     const name = displayName(user);
@@ -13360,12 +13367,12 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     applyPhoto(user.photo_url);
 
     try{
-      const current = safeJson(localStorage.getItem("sbp_profile_state_v1") || "{}", {});
-      localStorage.setItem("sbp_profile_state_v1", JSON.stringify(Object.assign({}, current, {
-        username: user.username || current.username || "",
-        first_name: user.first_name || current.first_name || "",
-        last_name: user.last_name || current.last_name || "",
-        tg_photo_url: user.photo_url || current.tg_photo_url || ""
+      const state = safeJson(localStorage.getItem("sbp_profile_state_v1") || "{}", {});
+      localStorage.setItem("sbp_profile_state_v1", JSON.stringify(Object.assign({}, state, {
+        username: user.username || state.username || "",
+        first_name: user.first_name || state.first_name || "",
+        last_name: user.last_name || state.last_name || "",
+        tg_photo_url: user.photo_url || state.tg_photo_url || ""
       })));
     }catch(e){}
   }
@@ -13373,8 +13380,8 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   function schedule(){
     apply();
     setTimeout(apply, 120);
-    setTimeout(apply, 450);
-    setTimeout(apply, 1200);
+    setTimeout(apply, 500);
+    setTimeout(apply, 1300);
     setTimeout(apply, 2600);
   }
 
@@ -13390,7 +13397,7 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     }
   }, true);
 
-  window.SBP_APPLY_SIMPLE_TG_PROFILE_V99 = apply;
+  window.SBP_APPLY_DEMO_PROFILE_V100 = apply;
 })();
 </script>
 
