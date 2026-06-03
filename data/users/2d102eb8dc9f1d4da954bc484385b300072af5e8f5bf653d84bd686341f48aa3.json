@@ -104,6 +104,24 @@
   ],
   "orders": [
     {
+      "id": 38,
+      "order_id": 38,
+      "order_number": "SBP-00038",
+      "client_order_id": "WEB-1780497915604-u31fgf4f",
+      "product_id": "maison-margiela-maison-margiela-evolution-low-black",
+      "product_name": "Maison Margiela Evolution Low",
+      "brand": "Maison Margiela",
+      "image": "images/products/maison-margiela-maison-margiela-evolution-low-black-1.jpg",
+      "size": "44",
+      "price_byn": 1000,
+      "discount_byn": 0,
+      "final_price_byn": 1000,
+      "status": "processing",
+      "status_label": "В обработке",
+      "created_at": "2026-06-03 14:45:22",
+      "updated_at": "2026-06-03T14:45:22.310576"
+    },
+    {
       "id": 37,
       "order_id": 37,
       "order_number": "SBP-00037",
@@ -624,25 +642,7 @@
       "status_label": "Завершен",
       "created_at": "2026-05-27 15:42:50",
       "updated_at": "2026-05-27T15:58:25.754662"
-    },
-    {
-      "id": 2,
-      "order_id": 2,
-      "order_number": "SBP-00002",
-      "client_order_id": "WEB-1779889033316-9skq58ca",
-      "product_id": "maison-margiela-maison-margiela-evolution-low-black",
-      "product_name": "Maison Margiela Evolution Low",
-      "brand": "Maison Margiela",
-      "image": "images/products/maison-margiela-maison-margiela-evolution-low-black-1.jpg",
-      "size": "43",
-      "price_byn": 1000,
-      "discount_byn": 0,
-      "final_price_byn": 1000,
-      "status": "processing",
-      "status_label": "В обработке",
-      "created_at": "2026-05-27 13:37:13",
-      "updated_at": "2026-05-27T13:37:13.980945"
     }
   ],
-  "updated_at": "2026-06-03T14:43:59.973664+00:00"
+  "updated_at": "2026-06-03T14:45:22.372765+00:00"
 }
