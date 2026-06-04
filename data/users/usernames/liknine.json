@@ -290,8 +290,8 @@
       "price_byn": 4,
       "discount_byn": 0,
       "final_price_byn": 4,
-      "status": "in_transit",
-      "status_label": "В пути",
+      "status": "sent",
+      "status_label": "Отправлен",
       "created_at": "2026-05-28 14:27:30",
       "updated_at": "2026-05-28T14:32:53.549619"
     },
@@ -470,8 +470,8 @@
       "price_byn": 77,
       "discount_byn": 0,
       "final_price_byn": 77,
-      "status": "in_transit",
-      "status_label": "В пути",
+      "status": "sent",
+      "status_label": "Отправлен",
       "created_at": "2026-05-28 12:56:56",
       "updated_at": "2026-05-28T12:58:56.248653"
     },
@@ -506,8 +506,8 @@
       "price_byn": 350,
       "discount_byn": 0,
       "final_price_byn": 350,
-      "status": "in_transit",
-      "status_label": "В пути",
+      "status": "sent",
+      "status_label": "Отправлен",
       "created_at": "2026-05-28 12:43:03",
       "updated_at": "2026-05-28T12:43:37.110111"
     },
@@ -656,5 +656,5 @@
       "updated_at": "2026-05-27T20:42:09.540831"
     }
   ],
-  "updated_at": "2026-06-03T16:00:52.075157+00:00"
+  "updated_at": "2026-06-04T18:31:35.139277+00:00"
 }
