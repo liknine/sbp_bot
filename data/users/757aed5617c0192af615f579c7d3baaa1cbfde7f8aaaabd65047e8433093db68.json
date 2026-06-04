@@ -4,11 +4,11 @@
   "username": "finance_log",
   "first_name": "фараксус",
   "status": "Entry",
-  "coins": 350,
-  "coins_balance": 350,
+  "coins": 3350,
+  "coins_balance": 3350,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
-  "completed_orders_count": 1,
+  "completed_orders_count": 2,
   "status_rules": {
     "Entry": 0,
     "Selected": 3,
@@ -17,6 +17,12 @@
   },
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": 3000,
+      "type": "order_completed",
+      "comment": "Order completed / Entry",
+      "created_at": "2026-06-04 18:39:51"
+    },
     {
       "amount": 350,
       "type": "order_completed",
@@ -38,10 +44,10 @@
       "price_byn": 3000,
       "discount_byn": 0,
       "final_price_byn": 3000,
-      "status": "processing",
-      "status_label": "В обработке",
+      "status": "completed",
+      "status_label": "Завершен",
       "created_at": "2026-06-04 18:39:23",
-      "updated_at": "2026-06-04T18:39:23.216946"
+      "updated_at": "2026-06-04T18:39:51.725289"
     },
     {
       "id": 29,
@@ -98,5 +104,5 @@
       "updated_at": "2026-05-29T16:17:54.341458"
     }
   ],
-  "updated_at": "2026-06-04T18:39:23.222457+00:00"
+  "updated_at": "2026-06-04T18:39:51.731622+00:00"
 }
