@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v100_CUSTOMER_DEMO_STABLE -->
+<!-- SBP_DEPLOY_MARKER_v101_ORDER_STATUSES_CLEAN -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -9696,7 +9696,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v100"
+      client_app_version: "v101"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11642,7 +11642,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v100";
+  const VERSION = "v101";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12672,7 +12672,7 @@ window.sendOrder = function sendOrder(){
 (function(){
   const PROFILE_KEY = "sbp_profile_state_v1";
   const LOCAL_KEYS = ["sbp_local_orders_v1", "sbp_orders_v1", "sbp_orders_history_v1"];
-  const STATUS_LABELS = {processing:"В обработке", awaiting_payment:"Ожидает оплаты", sent:"Отправлен", in_transit:"В пути", arrived:"Прибыл", completed:"Завершен", cancelled:"Отменен"};
+  const STATUS_LABELS = {processing:"В обработке", awaiting_payment:"Ожидает оплаты", sent:"Отправлен", completed:"Завершен", cancelled:"Отменен"};
   let latestRemoteProfile = null;
   let fetching = false;
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13398,6 +13398,33 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   }, true);
 
   window.SBP_APPLY_DEMO_PROFILE_V100 = apply;
+})();
+</script>
+
+
+<script id="SBP_NORMALIZE_ORDER_STATUS_V101">
+(function(){
+  const map = {in_transit:"sent", arrived:"sent", waiting:"sent", shipped:"sent"};
+  function normalizeOrders(){
+    try{
+      const raw = localStorage.getItem("sbp_profile_state_v1");
+      if(!raw) return;
+      const state = JSON.parse(raw);
+      if(!state || !Array.isArray(state.orders)) return;
+      let changed = false;
+      state.orders.forEach(o => {
+        if(o && map[o.status]){
+          o.status = map[o.status];
+          o.status_label = "Отправлен";
+          changed = true;
+        }
+      });
+      if(changed) localStorage.setItem("sbp_profile_state_v1", JSON.stringify(state));
+    }catch(e){}
+  }
+  normalizeOrders();
+  window.addEventListener("storage", normalizeOrders);
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden) normalizeOrders(); });
 })();
 </script>
 
