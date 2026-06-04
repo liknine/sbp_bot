@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v106_TRACKING_GET_ORDER_IMPORT -->
+<!-- SBP_DEPLOY_MARKER_v107_STATUS_LEVEL_INFO -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -9696,7 +9696,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v106"
+      client_app_version: "v107"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11642,7 +11642,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v106";
+  const VERSION = "v107";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -13682,6 +13682,118 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   document.addEventListener("keydown", function(e){
     if(e.key === "Escape") closeModal();
   }, true);
+})();
+</script>
+
+
+<style id="sbp-v107-status-level-info-css">
+.sbp-v107-status-info{
+  border-radius:28px!important;
+  border:1px solid var(--line)!important;
+  background:var(--card)!important;
+  padding:22px!important;
+  margin-top:18px!important;
+  color:var(--text)!important;
+}
+.sbp-v107-status-info h2{
+  margin:0 0 10px!important;
+  font-size:26px!important;
+  line-height:1.05!important;
+  letter-spacing:-.7px!important;
+}
+.sbp-v107-status-info p{
+  margin:0 0 14px!important;
+  color:var(--muted)!important;
+  font-size:15px!important;
+  line-height:1.35!important;
+}
+.sbp-v107-status-list{
+  display:grid!important;
+  gap:10px!important;
+}
+.sbp-v107-status-row{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  padding:13px 14px!important;
+  border-radius:18px!important;
+  background:var(--input)!important;
+  border:1px solid var(--line)!important;
+}
+.sbp-v107-status-row b{
+  font-size:16px!important;
+  line-height:1.1!important;
+}
+.sbp-v107-status-row span{
+  color:var(--muted)!important;
+  font-size:13px!important;
+  font-weight:850!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+}
+</style>
+<script id="sbp-v107-status-level-info-js">
+(function(){
+  function qs(sel, root=document){ return root.querySelector(sel); }
+
+  function buildCard(){
+    const card = document.createElement("section");
+    card.className = "sbp-v107-status-info";
+    card.innerHTML = `
+      <h2>Статусы клиента</h2>
+      <p>Статус повышается автоматически после завершённых заказов. Чем выше статус, тем больше Coins начисляется после покупки.</p>
+      <div class="sbp-v107-status-list">
+        <div class="sbp-v107-status-row"><b>Selected</b><span>с 3 заказов</span></div>
+        <div class="sbp-v107-status-row"><b>Priority</b><span>с 10 заказов</span></div>
+        <div class="sbp-v107-status-row"><b>Black Access</b><span>с 20 заказов</span></div>
+      </div>
+    `;
+    return card;
+  }
+
+  function mount(){
+    const screen = qs("#bonusesScreen");
+    if(!screen) return;
+    if(screen.querySelector(".sbp-v107-status-info")) return;
+
+    const root =
+      qs(".sbp-v93-bonus-root", screen) ||
+      qs(".sbp-v92-bonus-root", screen) ||
+      qs(".sbp-v91-bonus-root", screen) ||
+      qs(".sbp-v100-bonus-root", screen) ||
+      qs(".sbp-v101-bonus-root", screen) ||
+      qs(".sbp-v102-bonus-root", screen) ||
+      qs(".sbp-v103-bonus-root", screen) ||
+      qs(".sbp-v104-bonus-root", screen) ||
+      qs(".sbp-v105-bonus-root", screen) ||
+      qs(".sbp-v106-bonus-root", screen);
+
+    const card = buildCard();
+    if(root) root.appendChild(card);
+    else screen.appendChild(card);
+  }
+
+  function schedule(){
+    mount();
+    setTimeout(mount, 250);
+    setTimeout(mount, 900);
+    setTimeout(mount, 1800);
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", schedule, {once:true});
+  else schedule();
+
+  window.addEventListener("load", schedule);
+  window.addEventListener("focus", schedule);
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden) schedule(); });
+  document.addEventListener("click", function(e){
+    if(e.target.closest && e.target.closest('label[for="tab-profile"], label[for="tab-bonuses"], [data-screen="bonuses"], [data-open-bonuses], button')){
+      setTimeout(schedule, 120);
+    }
+  }, true);
+
+  window.SBP_MOUNT_STATUS_INFO_V107 = mount;
 })();
 </script>
 
