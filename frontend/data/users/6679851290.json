@@ -32,6 +32,24 @@
   ],
   "orders": [
     {
+      "id": 43,
+      "order_id": 43,
+      "order_number": "SBP-00043",
+      "client_order_id": "WEB-1780601506635-klwuk6mp",
+      "product_id": "oo-prol-prold",
+      "product_name": "прол",
+      "brand": "оо",
+      "image": "images/products/oo-prol-prold-1.jpg",
+      "size": "43",
+      "price_byn": 77,
+      "discount_byn": 0,
+      "final_price_byn": 77,
+      "status": "processing",
+      "status_label": "В обработке",
+      "created_at": "2026-06-04 19:31:52",
+      "updated_at": "2026-06-04T19:31:52.453381"
+    },
+    {
       "id": 42,
       "order_id": 42,
       "order_number": "SBP-00042",
@@ -47,7 +65,7 @@
       "status": "sent",
       "status_label": "Отправлен",
       "created_at": "2026-06-04 19:19:37",
-      "updated_at": "2026-06-04T19:21:26.478272"
+      "updated_at": "2026-06-04T19:21:26.484550"
     },
     {
       "id": 41,
@@ -122,5 +140,5 @@
       "updated_at": "2026-05-29T16:17:54.341458"
     }
   ],
-  "updated_at": "2026-06-04T19:21:26.482956+00:00"
+  "updated_at": "2026-06-04T19:31:52.460151+00:00"
 }
