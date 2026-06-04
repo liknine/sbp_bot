@@ -26,6 +26,24 @@
   ],
   "orders": [
     {
+      "id": 41,
+      "order_id": 41,
+      "order_number": "SBP-00041",
+      "client_order_id": "WEB-1780598358765-w6asul0k",
+      "product_id": "bh-junk-ggg",
+      "product_name": "Junk",
+      "brand": "Bh",
+      "image": "images/products/bh-junk-ggg-1-c6e709a637.jpg",
+      "size": "3000",
+      "price_byn": 3000,
+      "discount_byn": 0,
+      "final_price_byn": 3000,
+      "status": "processing",
+      "status_label": "В обработке",
+      "created_at": "2026-06-04 18:39:23",
+      "updated_at": "2026-06-04T18:39:23.216946"
+    },
+    {
       "id": 29,
       "order_id": 29,
       "order_number": "SBP-00029",
@@ -80,5 +98,5 @@
       "updated_at": "2026-05-29T16:17:54.341458"
     }
   ],
-  "updated_at": "2026-05-30T14:11:15.182674+00:00"
+  "updated_at": "2026-06-04T18:39:23.222457+00:00"
 }
