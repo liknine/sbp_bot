@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v107_STATUS_LEVEL_INFO -->
+<!-- SBP_DEPLOY_MARKER_v108_STATUS_PROGRESS_BONUS_COUNT -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -9696,7 +9696,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v107"
+      client_app_version: "v108"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11642,7 +11642,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v107";
+  const VERSION = "v108";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -13686,114 +13686,43 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
 </script>
 
 
-<style id="sbp-v107-status-level-info-css">
-.sbp-v107-status-info{
-  border-radius:28px!important;
-  border:1px solid var(--line)!important;
-  background:var(--card)!important;
-  padding:22px!important;
-  margin-top:18px!important;
-  color:var(--text)!important;
-}
-.sbp-v107-status-info h2{
-  margin:0 0 10px!important;
-  font-size:26px!important;
-  line-height:1.05!important;
-  letter-spacing:-.7px!important;
-}
-.sbp-v107-status-info p{
-  margin:0 0 14px!important;
-  color:var(--muted)!important;
-  font-size:15px!important;
-  line-height:1.35!important;
-}
-.sbp-v107-status-list{
-  display:grid!important;
-  gap:10px!important;
-}
-.sbp-v107-status-row{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:space-between!important;
-  gap:12px!important;
-  padding:13px 14px!important;
-  border-radius:18px!important;
-  background:var(--input)!important;
-  border:1px solid var(--line)!important;
-}
-.sbp-v107-status-row b{
-  font-size:16px!important;
-  line-height:1.1!important;
-}
-.sbp-v107-status-row span{
-  color:var(--muted)!important;
-  font-size:13px!important;
-  font-weight:850!important;
-  text-align:right!important;
-  white-space:nowrap!important;
-}
+
+<style id="sbp-v108-status-progress-bonus-css">
+.sbp-v108-status-progress{margin-top:10px!important;padding:12px 14px!important;border-radius:18px!important;background:var(--input)!important;border:1px solid var(--line)!important;color:var(--text)!important}
+.sbp-v108-status-progress b{display:block!important;font-size:15px!important;line-height:1.15!important;margin-bottom:5px!important}
+.sbp-v108-status-progress span{display:block!important;color:var(--muted)!important;font-size:13px!important;line-height:1.25!important}
+.sbp-v108-status-info{border-radius:28px!important;border:1px solid var(--line)!important;background:var(--card)!important;padding:22px!important;margin-top:18px!important;color:var(--text)!important}
+.sbp-v108-status-info h2{margin:0 0 10px!important;font-size:26px!important;line-height:1.05!important;letter-spacing:-.7px!important}
+.sbp-v108-status-info p{margin:0 0 14px!important;color:var(--muted)!important;font-size:15px!important;line-height:1.35!important}
+.sbp-v108-status-list{display:grid!important;gap:10px!important}
+.sbp-v108-status-row{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:13px 14px!important;border-radius:18px!important;background:var(--input)!important;border:1px solid var(--line)!important}
+.sbp-v108-status-row b{font-size:16px!important;line-height:1.1!important}
+.sbp-v108-status-row span{color:var(--muted)!important;font-size:13px!important;font-weight:850!important;text-align:right!important;white-space:nowrap!important}
 </style>
-<script id="sbp-v107-status-level-info-js">
+<script id="sbp-v108-status-progress-bonus-js">
 (function(){
-  function qs(sel, root=document){ return root.querySelector(sel); }
-
-  function buildCard(){
-    const card = document.createElement("section");
-    card.className = "sbp-v107-status-info";
-    card.innerHTML = `
-      <h2>Статусы клиента</h2>
-      <p>Статус повышается автоматически после завершённых заказов. Чем выше статус, тем больше Coins начисляется после покупки.</p>
-      <div class="sbp-v107-status-list">
-        <div class="sbp-v107-status-row"><b>Selected</b><span>с 3 заказов</span></div>
-        <div class="sbp-v107-status-row"><b>Priority</b><span>с 10 заказов</span></div>
-        <div class="sbp-v107-status-row"><b>Black Access</b><span>с 20 заказов</span></div>
-      </div>
-    `;
-    return card;
-  }
-
-  function mount(){
-    const screen = qs("#bonusesScreen");
-    if(!screen) return;
-    if(screen.querySelector(".sbp-v107-status-info")) return;
-
-    const root =
-      qs(".sbp-v93-bonus-root", screen) ||
-      qs(".sbp-v92-bonus-root", screen) ||
-      qs(".sbp-v91-bonus-root", screen) ||
-      qs(".sbp-v100-bonus-root", screen) ||
-      qs(".sbp-v101-bonus-root", screen) ||
-      qs(".sbp-v102-bonus-root", screen) ||
-      qs(".sbp-v103-bonus-root", screen) ||
-      qs(".sbp-v104-bonus-root", screen) ||
-      qs(".sbp-v105-bonus-root", screen) ||
-      qs(".sbp-v106-bonus-root", screen);
-
-    const card = buildCard();
-    if(root) root.appendChild(card);
-    else screen.appendChild(card);
-  }
-
-  function schedule(){
-    mount();
-    setTimeout(mount, 250);
-    setTimeout(mount, 900);
-    setTimeout(mount, 1800);
-  }
-
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", schedule, {once:true});
-  else schedule();
-
-  window.addEventListener("load", schedule);
-  window.addEventListener("focus", schedule);
-  document.addEventListener("visibilitychange", function(){ if(!document.hidden) schedule(); });
-  document.addEventListener("click", function(e){
-    if(e.target.closest && e.target.closest('label[for="tab-profile"], label[for="tab-bonuses"], [data-screen="bonuses"], [data-open-bonuses], button')){
-      setTimeout(schedule, 120);
-    }
-  }, true);
-
-  window.SBP_MOUNT_STATUS_INFO_V107 = mount;
+  const BONUS_KEYS=["sbp_active_bonuses_v93","sbp_active_bonuses_v92","sbp_active_bonuses_v91","sbp_active_bonuses_v90"];
+  const STATUS_THRESHOLDS=[{name:"Selected",count:3},{name:"Priority",count:10},{name:"Black Access",count:20}];
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function safeJson(raw,fallback){try{return JSON.parse(raw)}catch(e){return fallback}}
+  function clean(v){return String(v||"").replace(/\s+/g," ").trim()}
+  function profileState(){const state=safeJson(localStorage.getItem("sbp_profile_state_v1")||"{}",{});return state&&typeof state==="object"?state:{}}
+  function orders(){const state=profileState();if(Array.isArray(state.orders))return state.orders;try{if(window.SBP_ORDERS_V57&&typeof window.SBP_ORDERS_V57.merged==="function"){const arr=window.SBP_ORDERS_V57.merged();if(Array.isArray(arr))return arr}}catch(e){}return[]}
+  function completedOrdersCount(){return orders().filter(o=>clean(o&&o.status)==="completed").length}
+  function currentStatus(){const state=profileState();return clean(state.status||state.client_status||state.level||"Entry")}
+  function nextStatusInfo(){const done=completedOrdersCount();const status=currentStatus();if(status==="Black Access"||done>=20){return{done,current:"Black Access",next:null,left:0,text:"Максимальный статус уже открыт."}}const next=STATUS_THRESHOLDS.find(x=>done<x.count)||null;if(!next){return{done,current:status,next:null,left:0,text:"Максимальный статус уже открыт."}}const left=Math.max(next.count-done,0);return{done,current:status||"Entry",next:next.name,left,target:next.count,text:left===1?`До ${next.name} остался 1 завершённый заказ.`:`До ${next.name} осталось ${left} завершённых заказов.`}}
+  function activeBonuses(){for(const key of BONUS_KEYS){const arr=safeJson(localStorage.getItem(key)||"[]",[]);if(Array.isArray(arr)&&arr.length){return arr.filter(b=>b&&(b.status==="active"||!b.status))}}return[]}
+  function bonusCount(){return activeBonuses().length}
+  function updateProfileBonusCount(){const count=bonusCount();const state=profileState();state.activeBonuses=count;state.active_bonuses_count=count;localStorage.setItem("sbp_profile_state_v1",JSON.stringify(state));localStorage.setItem("sbp_active_bonuses_count",String(count));const profile=qs("#profileScreen");if(!profile)return;qsa("[data-sbp-active-bonuses],[data-active-bonuses],[data-profile-bonuses]",profile).forEach(el=>{el.textContent=String(count)});qsa("span,b,strong,p,div",profile).forEach(el=>{if(el.children.length)return;const t=clean(el.textContent);const parentText=clean((el.parentElement&&el.parentElement.textContent)||"");if(/^0$/.test(t)&&/Мои бонусы|бонус/i.test(parentText)){el.textContent=String(count)}if(/Мои бонусы/i.test(t)){const parent=el.parentElement;if(parent){qsa("span,b,strong",parent).forEach(v=>{if(/^\d+$/.test(clean(v.textContent)))v.textContent=String(count)})}}})}
+  function mountProfileProgress(){const profile=qs("#profileScreen");if(!profile)return;const info=nextStatusInfo();let card=qs(".sbp-v108-status-progress",profile);if(!card){card=document.createElement("div");card.className="sbp-v108-status-progress";const statusHost=qs(".profile-status",profile)||qs(".status-card",profile)||qs("[data-profile-status]",profile)||qsa(".profile-card,.profile-info-card,.glass-card,.card",profile).find(el=>/статус|status/i.test(el.textContent||""));if(statusHost)statusHost.appendChild(card);else{const head=qs(".profile-head,.profile-top",profile)||profile.firstElementChild||profile;head.appendChild(card)}}card.innerHTML=`<b>${info.text}</b><span>Selected — 3 заказа · Priority — 10 заказов · Black Access — 20 заказов</span>`}
+  function buildCoinsInfoCard(){const card=document.createElement("section");card.className="sbp-v108-status-info";card.innerHTML=`<h2>Статусы клиента</h2><p>Статус повышается автоматически после завершённых заказов. Чем выше статус, тем больше Coins начисляется после покупки.</p><div class="sbp-v108-status-list"><div class="sbp-v108-status-row"><b>Selected</b><span>с 3 заказов</span></div><div class="sbp-v108-status-row"><b>Priority</b><span>с 10 заказов</span></div><div class="sbp-v108-status-row"><b>Black Access</b><span>с 20 заказов</span></div></div>`;return card}
+  function mountCoinsInfo(){const screen=qs("#bonusesScreen");if(!screen)return;qsa(".sbp-v107-status-info",screen).forEach(el=>el.remove());if(screen.querySelector(".sbp-v108-status-info"))return;const root=qs(".sbp-v93-bonus-root",screen)||qs(".sbp-v92-bonus-root",screen)||qs(".sbp-v91-bonus-root",screen)||qs(".sbp-v100-bonus-root",screen)||qs(".sbp-v101-bonus-root",screen)||qs(".sbp-v102-bonus-root",screen)||qs(".sbp-v103-bonus-root",screen)||qs(".sbp-v104-bonus-root",screen)||qs(".sbp-v105-bonus-root",screen)||qs(".sbp-v106-bonus-root",screen)||qs(".sbp-v107-bonus-root",screen);const card=buildCoinsInfoCard();if(root)root.appendChild(card);else screen.appendChild(card)}
+  function apply(){updateProfileBonusCount();mountProfileProgress();mountCoinsInfo()}
+  function schedule(){apply();setTimeout(apply,160);setTimeout(apply,600);setTimeout(apply,1400)}
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",schedule,{once:true});else schedule();
+  window.addEventListener("load",schedule);window.addEventListener("focus",schedule);window.addEventListener("storage",schedule);document.addEventListener("visibilitychange",function(){if(!document.hidden)schedule()});document.addEventListener("click",function(e){if(e.target.closest&&e.target.closest('label,button,.bottom-nav,.profile-item,.sbp-v93-buy-btn,.sbp-v92-buy-btn,.sbp-v91-buy-btn,[data-sbp-v91-buy],[data-sbp-v92-buy],[data-sbp-v93-buy]')){setTimeout(schedule,120);setTimeout(schedule,700)}},true);
+  window.SBP_APPLY_STATUS_BONUS_V108=apply;
 })();
 </script>
 
