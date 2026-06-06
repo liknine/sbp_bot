@@ -4,8 +4,8 @@
   "username": "liknine",
   "first_name": "ликнайн",
   "status": "Selected",
-  "coins": 1387,
-  "coins_balance": 1387,
+  "coins": 1287,
+  "coins_balance": 1287,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
   "completed_orders_count": 5,
@@ -17,6 +17,12 @@
   },
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": -100,
+      "type": "bonus_used",
+      "comment": "Bonus used on order: -100 Coins / discount -5 BYN / frontend_bonus_id=BONUS-1780758716737-hv5jtq",
+      "created_at": "2026-06-06 16:26:56"
+    },
     {
       "amount": 1100,
       "type": "order_completed",
@@ -115,6 +121,24 @@
     }
   ],
   "orders": [
+    {
+      "id": 47,
+      "order_id": 47,
+      "order_number": "SBP-00047",
+      "client_order_id": "WEB-1780763215995-949thnef",
+      "product_id": "1-2-3",
+      "product_name": "2",
+      "brand": "1",
+      "image": "images/products/1-2-3-1-81d35fa294.jpg",
+      "size": "45",
+      "price_byn": 4,
+      "discount_byn": 5,
+      "final_price_byn": 4,
+      "status": "processing",
+      "status_label": "В обработке",
+      "created_at": "2026-06-06 16:26:56",
+      "updated_at": "2026-06-06T16:26:56.213388"
+    },
     {
       "id": 39,
       "order_id": 39,
@@ -636,25 +660,7 @@
       "status_label": "В обработке",
       "created_at": "2026-05-28 04:21:04",
       "updated_at": "2026-05-28T04:21:04.138627"
-    },
-    {
-      "id": 4,
-      "order_id": 4,
-      "order_number": "SBP-00004",
-      "client_order_id": "WEB-1779914527153-67fyzy0t",
-      "product_id": "oo-prol-prold",
-      "product_name": "прол",
-      "brand": "оо",
-      "image": "images/products/oo-prol-prold-1.jpg",
-      "size": "44",
-      "price_byn": 77,
-      "discount_byn": 0,
-      "final_price_byn": 77,
-      "status": "processing",
-      "status_label": "В обработке",
-      "created_at": "2026-05-27 20:42:09",
-      "updated_at": "2026-05-27T20:42:09.540831"
     }
   ],
-  "updated_at": "2026-06-06T16:04:59.823385+00:00"
+  "updated_at": "2026-06-06T16:26:56.328289+00:00"
 }
