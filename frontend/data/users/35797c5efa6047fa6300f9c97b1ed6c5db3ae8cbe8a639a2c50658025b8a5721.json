@@ -68,10 +68,10 @@
       "price_byn": 350,
       "discount_byn": 5,
       "final_price_byn": 345,
-      "status": "sent",
-      "status_label": "Отправлен",
+      "status": "awaiting_payment",
+      "status_label": "Ожидает оплаты",
       "created_at": "2026-06-06 14:49:26",
-      "updated_at": "2026-06-06T15:01:28.516604"
+      "updated_at": "2026-06-06T15:03:37.385337"
     },
     {
       "id": 40,
@@ -146,5 +146,5 @@
       "updated_at": "2026-05-30T14:17:30.154945"
     }
   ],
-  "updated_at": "2026-06-06T15:01:28.523572+00:00"
+  "updated_at": "2026-06-06T15:03:37.390717+00:00"
 }
