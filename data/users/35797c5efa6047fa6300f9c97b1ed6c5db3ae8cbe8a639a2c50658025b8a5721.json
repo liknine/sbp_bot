@@ -4,8 +4,8 @@
   "username": "lxssart",
   "first_name": "lxssart",
   "status": "Entry",
-  "coins": 720,
-  "coins_balance": 720,
+  "coins": 220,
+  "coins_balance": 220,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
   "completed_orders_count": 2,
@@ -17,6 +17,12 @@
   },
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": -500,
+      "type": "bonus_used",
+      "comment": "Bonus used on order: -500 Coins / discount -35 BYN / frontend_bonus_id=BONUS-1780944020570-vldneq",
+      "created_at": "2026-06-08 18:41:15"
+    },
     {
       "amount": 350,
       "type": "order_completed",
@@ -61,6 +67,24 @@
     }
   ],
   "orders": [
+    {
+      "id": 48,
+      "order_id": 48,
+      "order_number": "SBP-00048",
+      "client_order_id": "WEB-1780944075517-k73hrd4v",
+      "product_id": "maison-margiela-maison-margiela-evolution-low-black",
+      "product_name": "Maison Margiela Evolution Low",
+      "brand": "Maison Margiela",
+      "image": "images/products/maison-margiela-maison-margiela-evolution-low-black-1.jpg",
+      "size": "43",
+      "price_byn": 1000,
+      "discount_byn": 35,
+      "final_price_byn": 965,
+      "status": "processing",
+      "status_label": "В обработке",
+      "created_at": "2026-06-08 18:41:15",
+      "updated_at": "2026-06-08T18:41:15.750612"
+    },
     {
       "id": 46,
       "order_id": 46,
@@ -152,5 +176,5 @@
       "updated_at": "2026-05-30T14:17:30.154945"
     }
   ],
-  "updated_at": "2026-06-06T15:11:46.776359+00:00"
+  "updated_at": "2026-06-08T18:41:15.757327+00:00"
 }
