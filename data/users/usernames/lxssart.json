@@ -3,12 +3,12 @@
   "telegram_id": 8204895546,
   "username": "lxssart",
   "first_name": "lxssart",
-  "status": "Entry",
-  "coins": 220,
-  "coins_balance": 220,
+  "status": "Selected",
+  "coins": 1220,
+  "coins_balance": 1220,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
-  "completed_orders_count": 2,
+  "completed_orders_count": 3,
   "status_rules": {
     "Entry": 0,
     "Selected": 3,
@@ -17,6 +17,12 @@
   },
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": 1000,
+      "type": "order_completed",
+      "comment": "Order completed / Entry",
+      "created_at": "2026-06-08 18:53:49"
+    },
     {
       "amount": -500,
       "type": "bonus_used",
@@ -80,10 +86,10 @@
       "price_byn": 1000,
       "discount_byn": 35,
       "final_price_byn": 965,
-      "status": "awaiting_payment",
-      "status_label": "Ожидает оплаты",
+      "status": "completed",
+      "status_label": "Завершен",
       "created_at": "2026-06-08 18:41:15",
-      "updated_at": "2026-06-08T18:51:05.828628"
+      "updated_at": "2026-06-08T18:53:49.790913"
     },
     {
       "id": 46,
@@ -176,5 +182,5 @@
       "updated_at": "2026-05-30T14:17:30.154945"
     }
   ],
-  "updated_at": "2026-06-08T18:51:05.832836+00:00"
+  "updated_at": "2026-06-08T18:53:49.802332+00:00"
 }
