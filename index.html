@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v109_STATUS_LINE_ONLY -->
+<!-- SBP_DEPLOY_MARKER_v111_TRACKING_EVERYWHERE -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -9696,7 +9696,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v109"
+      client_app_version: "v111"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11642,7 +11642,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v109";
+  const VERSION = "v111";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12704,7 +12704,7 @@ window.sendOrder = function sendOrder(){
   function sortOrders(a,b){ return (Date.parse(b.updated_at||b.created_at||"")||0)-(Date.parse(a.updated_at||a.created_at||"")||0); }
   function mergedOrders(){ const p=readProfile(); const remote=Array.isArray(p.orders)?p.orders.map(o=>Object.assign({_source:"remote"}, normalize(o))):[]; const local=readLocal().map(o=>Object.assign({_source:"local"}, normalize(o))); if(!remote.length) return local.sort(sortOrders); const result=remote.slice(); const remoteStrong=new Set(remote.map(strongKey).filter(Boolean)); const remoteFuzzy=new Set(remote.map(fuzzyKey).filter(Boolean)); local.forEach(o=>{ const sk=strongKey(o), fk=fuzzyKey(o); if((sk&&remoteStrong.has(sk))||(fk&&remoteFuzzy.has(fk))) return; result.push(o); }); return result.sort(sortOrders); }
   function imageUrl(order){ let img=String(order.image||order.product_image||""); if(!img) return ""; if(/^https?:\/\//i.test(img)) return img; img=img.replace(/^\//,"").replace(/^frontend\//,""); return repoBase()+img; }
-  function renderOrders(){ const screen=qs("#ordersScreen"); if(!screen) return; const list=qs("[data-orders-list]", screen); const empty=qs("[data-orders-empty]", screen); if(!list) return; list.classList.add("sbp-v57-orders"); let note=qs(".sbp-v57-sync-note", screen); if(!note){ note=document.createElement("p"); note.className="sbp-v57-sync-note"; list.insertAdjacentElement("beforebegin", note); } const profile=readProfile(); note.textContent=profile.updated_at?"Обновлено: "+new Date(profile.updated_at).toLocaleString("ru-RU"):"Синхронизация истории..."; const orders=mergedOrders(); if(!orders.length){ list.innerHTML=""; if(empty) empty.style.display=""; return; } if(empty) empty.style.display="none"; list.innerHTML=orders.map(order=>{ const status=String(order.status||"processing"); const label=order.status_label||STATUS_LABELS[status]||status; const img=imageUrl(order); const price=Number(order.final_price_byn||order.price_byn||order.price||0); const date=order.created_at?new Date(order.created_at).toLocaleDateString("ru-RU"):""; const number=order.order_number||""; const title=order.product_name||order.name||"SBP order"; return `<article class="sbp-v57-order-card" data-source="${esc(order._source)}" data-status="${esc(status)}"><div class="sbp-v57-order-img">${img?`<img src="${esc(img)}" alt="">`:`<span>□</span>`}</div><div class="sbp-v57-order-info"><div class="sbp-v57-order-top"><small>${esc(date)}${number?" · "+esc(number):""}</small><span class="sbp-v57-status ${esc(status)}">${esc(label)}</span></div><h2>${esc(title)}</h2><div class="sbp-v57-meta"><span>Размер: ${esc(order.size||"-")}</span><b>${price} BYN</b></div></div></article>`; }).join(""); }
+  function renderOrders(){ const screen=qs("#ordersScreen"); if(!screen) return; const list=qs("[data-orders-list]", screen); const empty=qs("[data-orders-empty]", screen); if(!list) return; list.classList.add("sbp-v57-orders"); let note=qs(".sbp-v57-sync-note", screen); if(!note){ note=document.createElement("p"); note.className="sbp-v57-sync-note"; list.insertAdjacentElement("beforebegin", note); } const profile=readProfile(); note.textContent=profile.updated_at?"Обновлено: "+new Date(profile.updated_at).toLocaleString("ru-RU"):"Синхронизация истории..."; const orders=mergedOrders(); if(!orders.length){ list.innerHTML=""; if(empty) empty.style.display=""; return; } if(empty) empty.style.display="none"; list.innerHTML=orders.map(order=>{ const status=String(order.status||"processing"); const label=order.status_label||STATUS_LABELS[status]||status; const img=imageUrl(order); const price=Number(order.final_price_byn||order.price_byn||order.price||0); const date=order.created_at?new Date(order.created_at).toLocaleDateString("ru-RU"):""; const number=order.order_number||""; const title=order.product_name||order.name||"SBP order"; return `<article class="sbp-v57-order-card" data-source="${esc(order._source)}" data-status="${esc(status)}"><div class="sbp-v57-order-img">${img?`<img src="${esc(img)}" alt="">`:`<span>□</span>`}</div><div class="sbp-v57-order-info"><div class="sbp-v57-order-top"><small>${esc(date)}${number?" · "+esc(number):""}</small><span class="sbp-v57-status ${esc(status)}">${esc(label)}</span></div><h2>${esc(title)}</h2><div class="sbp-v57-meta"><span>Размер: ${esc(order.size||"-")} · Трек: ${esc(order.tracking_code||"--")}</span><b>${price} BYN</b></div></div></article>`; }).join(""); }
   async function syncAndRender(){ if(window.SBP_PROFILE_STATE && typeof window.SBP_PROFILE_STATE.sync === "function"){ try{ await window.SBP_PROFILE_STATE.sync(); }catch(e){} } await fetchRemoteProfile(); renderOrders(); setTimeout(renderOrders,400); setTimeout(renderOrders,1200); }
   window.SBP_ORDERS_V57={render:renderOrders,sync:syncAndRender,merged:mergedOrders,fetch:fetchRemoteProfile};
   function boot(){ renderOrders(); syncAndRender(); setInterval(()=>{ if(document.querySelector('#tab-orders:checked')) syncAndRender(); else renderOrders(); },2500); }
@@ -13626,6 +13626,7 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
             <div><span>Цена</span><b data-field="price">-</b></div>
             <div><span>Доставка</span><b data-field="delivery">-</b></div>
             <div><span>Номер</span><b data-field="number">-</b></div>
+            <div><span>Трек-номер</span><b data-field="tracking">--</b></div>
           </div>
           <div class="sbp-v102-order-status"></div>
         </div>
@@ -13660,6 +13661,8 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     qs('[data-field="price"]', modal).textContent = price + " BYN";
     qs('[data-field="delivery"]', modal).textContent = order.delivery_method || order.delivery || "-";
     qs('[data-field="number"]', modal).textContent = String(number);
+    const trackingEl = qs('[data-field="tracking"]', modal);
+    if(trackingEl) trackingEl.textContent = order.tracking_code || "--";
     qs(".sbp-v102-order-status", modal).textContent = label;
     modal.classList.add("is-open");
   }
