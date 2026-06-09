@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v111_TRACKING_EVERYWHERE -->
+<!-- SBP_DEPLOY_MARKER_v112_FIX_ORDER_INSERT_TRACKING -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -9696,7 +9696,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v111"
+      client_app_version: "v112"
     };
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
@@ -11642,7 +11642,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v111";
+  const VERSION = "v112";
   let active = 0;
   let timer = null;
   let banners = [];
