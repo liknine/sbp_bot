@@ -4,8 +4,8 @@
   "username": "lxssart",
   "first_name": "lxssart",
   "status": "Selected",
-  "coins": 1220,
-  "coins_balance": 1220,
+  "coins": 720,
+  "coins_balance": 720,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
   "completed_orders_count": 3,
@@ -17,6 +17,12 @@
   },
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": -500,
+      "type": "bonus_used",
+      "comment": "Bonus used on order: -500 Coins / discount -35 BYN / frontend_bonus_id=BONUS-1780944900553-3vibzm",
+      "created_at": "2026-06-09 18:50:52"
+    },
     {
       "amount": 1000,
       "type": "order_completed",
@@ -74,6 +80,25 @@
   ],
   "orders": [
     {
+      "id": 54,
+      "order_id": 54,
+      "order_number": "SBP-00054",
+      "client_order_id": "WEB-1781031052224-vhrlzeus",
+      "product_id": "valentino-vl-chb",
+      "product_name": "Вл",
+      "brand": "Валентино",
+      "image": "images/products/valentino-vl-chb-1-0e61361f8f.jpg",
+      "size": "43",
+      "price_byn": 350,
+      "discount_byn": 35,
+      "final_price_byn": 315,
+      "status": "processing",
+      "status_label": "В обработке",
+      "tracking_code": "--",
+      "created_at": "2026-06-09 18:50:52",
+      "updated_at": "2026-06-09T18:50:52.390349"
+    },
+    {
       "id": 48,
       "order_id": 48,
       "order_number": "SBP-00048",
@@ -88,6 +113,7 @@
       "final_price_byn": 965,
       "status": "completed",
       "status_label": "Завершен",
+      "tracking_code": "--",
       "created_at": "2026-06-08 18:41:15",
       "updated_at": "2026-06-08T18:53:49.790913"
     },
@@ -106,6 +132,7 @@
       "final_price_byn": 345,
       "status": "completed",
       "status_label": "Завершен",
+      "tracking_code": "--",
       "created_at": "2026-06-06 14:49:26",
       "updated_at": "2026-06-06T15:11:46.771007"
     },
@@ -124,6 +151,7 @@
       "final_price_byn": 345,
       "status": "completed",
       "status_label": "Завершен",
+      "tracking_code": "--",
       "created_at": "2026-06-03 16:04:35",
       "updated_at": "2026-06-03T16:06:42.362954"
     },
@@ -142,6 +170,7 @@
       "final_price_byn": 315,
       "status": "sent",
       "status_label": "Отправлен",
+      "tracking_code": "--",
       "created_at": "2026-06-01 19:59:52",
       "updated_at": "2026-06-01T20:02:07.757296"
     },
@@ -160,6 +189,7 @@
       "final_price_byn": 2965,
       "status": "processing",
       "status_label": "В обработке",
+      "tracking_code": "--",
       "created_at": "2026-05-31 11:57:28",
       "updated_at": "2026-05-31T11:57:28.616925"
     },
@@ -178,9 +208,10 @@
       "final_price_byn": 1000,
       "status": "processing",
       "status_label": "В обработке",
+      "tracking_code": "--",
       "created_at": "2026-05-30 14:17:30",
       "updated_at": "2026-05-30T14:17:30.154945"
     }
   ],
-  "updated_at": "2026-06-08T18:56:56.033517+00:00"
+  "updated_at": "2026-06-09T18:50:52.399918+00:00"
 }
