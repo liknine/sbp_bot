@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v119_CART_DELETE_VISIBLE -->
+<!-- SBP_DEPLOY_MARKER_v120_CART_DELETE_NO_HIDE -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -9715,7 +9715,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v119"
+      client_app_version: "v120"
     };
 
     if(!validateBonus20LimitV114(compact)){
@@ -11666,7 +11666,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v119";
+  const VERSION = "v120";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -13813,18 +13813,17 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
 </script>
 
 
-
-<style id="sbp-v119-cart-delete-visible-css">
-.sbp-v119-delete-wrap{
-  margin:14px 0 0!important;
+<style id="sbp-v120-cart-delete-no-hide-css">
+.sbp-v120-delete-wrap{
+  margin:14px 0!important;
   display:block!important;
 }
-.sbp-v119-delete-btn{
+.sbp-v120-delete-btn{
   width:100%!important;
   appearance:none!important;
   -webkit-appearance:none!important;
   border:1px solid var(--line)!important;
-  background:var(--card)!important;
+  background:transparent!important;
   color:var(--text)!important;
   border-radius:24px!important;
   min-height:56px!important;
@@ -13835,18 +13834,11 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   cursor:pointer!important;
   text-align:center!important;
 }
-.sbp-v119-delete-btn:active{
+.sbp-v120-delete-btn:active{
   transform:scale(.985)!important;
 }
-#cartScreen.sbp-v119-cart-empty .sbp-v119-delete-wrap,
-#cartScreen.sbp-v119-cart-empty label[for="tab-checkout"],
-#cartScreen.sbp-v119-cart-empty .primary-link[for="tab-checkout"],
-#cartScreen.sbp-v119-cart-empty button[onclick*="sendOrder"],
-#cartScreen.sbp-v119-cart-empty button[onclick*="Order"]{
-  display:none!important;
-}
 </style>
-<script id="sbp-v119-cart-delete-visible-js">
+<script id="sbp-v120-cart-delete-no-hide-js">
 (function(){
   const CART_KEYS=[
     "sbp_cart_v1","cart","SBP_CART","sbpCart","sbp_cart",
@@ -13861,7 +13853,7 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     "sbp_selected_size","selected_size","sbp_product_size","product_size",
     "sbp_size","size","sbp_selected_product_size"
   ];
-  const BONUS_KEYS=[
+  const BONUS_REQUEST_KEYS=[
     "sbp_requested_bonus_v1","sbp_order_bonus_request","sbp_selected_bonus_request"
   ];
 
@@ -13869,78 +13861,70 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
   function safeJson(raw,fallback){try{return JSON.parse(raw)}catch(e){return fallback}}
 
-  function cartScreen(){
+  function cartRoot(){
     return qs("#cartScreen") || qs("#cart") || qs('[data-screen="cart"]') || qs('[data-tab="cart"]');
   }
 
-  function cartHasProductByDom(root){
+  function cartHasVisibleOrder(root){
     if(!root) return false;
-    const text=(root.textContent||"").toLowerCase();
-    if(/пустая корзина/i.test(text) && !/товары|скидка|итого|byn|руб|₽/.test(text)) return false;
-    return /товары|скидка|доставка|итого|byn|руб|₽|оформить заказ/i.test(text) && !/пустая корзина\s*если товаров нет/i.test(text);
+    const text=(root.textContent||"");
+    if(/Пустая корзина/i.test(text) && !/Оформить заказ|Итого|Товары|Скидка|BYN|руб|₽/i.test(text)) return false;
+    return /Оформить заказ|Итого|Товары|Скидка|BYN|руб|₽/i.test(text);
   }
 
-  function cartHasProduct(){
-    for(const key of CART_KEYS){
-      const arr=safeJson(localStorage.getItem(key)||"[]",[]);
-      if(Array.isArray(arr)&&arr.length) return true;
-    }
-    for(const key of ACTIVE_KEYS){
-      const v=String(localStorage.getItem(key)||"").trim();
-      if(v) return true;
-    }
-    const root=cartScreen();
-    return cartHasProductByDom(root);
-  }
-
-  function clearCart(){
+  function clearCartStorage(){
     CART_KEYS.forEach(k=>{try{localStorage.setItem(k,"[]")}catch(e){}});
     ACTIVE_KEYS.forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
     SIZE_KEYS.forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
-    BONUS_KEYS.forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
+    BONUS_REQUEST_KEYS.forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
     try{sessionStorage.removeItem("sbp_current_client_order_id")}catch(e){}
     try{localStorage.setItem("sbp_cart_count","0")}catch(e){}
     try{localStorage.setItem("cart_count","0")}catch(e){}
+  }
 
+  function rerender(){
     window.dispatchEvent(new Event("storage"));
     window.dispatchEvent(new CustomEvent("sbp-cart-updated",{detail:{items:[]}}));
-
     try{if(typeof window.renderCart==="function")window.renderCart()}catch(e){}
     try{if(typeof window.updateCart==="function")window.updateCart()}catch(e){}
     try{if(typeof window.SBP_RENDER_CART==="function")window.SBP_RENDER_CART()}catch(e){}
     try{if(typeof window.renderBasket==="function")window.renderBasket()}catch(e){}
+    try{if(typeof window.renderProduct==="function")window.renderProduct()}catch(e){}
   }
 
-  function cleanupOldButtons(root){
-    qsa(".sbp-v113-cart-delete,.sbp-v115-cart-delete-btn,.sbp-v116-cart-delete,.sbp-v117-cart-delete,.sbp-v118-cart-delete,.sbp-v119-delete-wrap",root).forEach(el=>el.remove());
-    root.classList.remove("sbp-v117-empty","sbp-v115-cart-is-empty");
+  function cleanupOldBroken(root){
+    if(!root) return;
+    root.classList.remove("sbp-v117-empty","sbp-v119-cart-empty","sbp-v115-cart-is-empty");
+    qsa(".sbp-v113-cart-delete,.sbp-v115-cart-delete-btn,.sbp-v116-cart-delete,.sbp-v117-cart-delete,.sbp-v118-cart-delete,.sbp-v119-delete-wrap,.sbp-v120-delete-wrap",root).forEach(el=>el.remove());
     qsa(".sbp-v113-cart-empty,.sbp-v115-cart-empty,.sbp-v115-cart-empty-real,.sbp-cart-empty-extra,.cart-empty-extra",root).forEach(el=>el.remove());
   }
 
-  function placeButton(){
-    const root=cartScreen();
+  function insertDeleteButton(){
+    const root=cartRoot();
     if(!root) return;
 
-    cleanupOldButtons(root);
+    cleanupOldBroken(root);
 
-    const has=cartHasProduct();
-    root.classList.toggle("sbp-v119-cart-empty", !has);
-    if(!has) return;
+    if(!cartHasVisibleOrder(root)) return;
 
     const wrap=document.createElement("div");
-    wrap.className="sbp-v119-delete-wrap";
+    wrap.className="sbp-v120-delete-wrap";
 
     const btn=document.createElement("button");
     btn.type="button";
-    btn.className="sbp-v119-delete-btn";
+    btn.className="sbp-v120-delete-btn";
     btn.textContent="Удалить";
     btn.addEventListener("click",function(e){
       e.preventDefault();
       e.stopPropagation();
       if(e.stopImmediatePropagation)e.stopImmediatePropagation();
-      clearCart();
-      setTimeout(placeButton,80);
-      setTimeout(placeButton,300);
+
+      clearCartStorage();
+      rerender();
+
+      // Do not hide checkout/delete with CSS. Let native app redraw cart.
+      setTimeout(rerender,80);
+      setTimeout(rerender,250);
       return false;
     },true);
 
@@ -13949,8 +13933,7 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     const checkout =
       qs('label[for="tab-checkout"]',root) ||
       qs('.primary-link[for="tab-checkout"]',root) ||
-      qs('button[onclick*="sendOrder"]',root) ||
-      qs('button[onclick*="Order"]',root);
+      qsa("button,a,label",root).find(el=>/Оформить заказ/i.test(el.textContent||""));
 
     if(checkout && checkout.parentNode){
       checkout.parentNode.insertBefore(wrap, checkout);
@@ -13960,7 +13943,7 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     const summary =
       qs(".cart-summary",root) ||
       qs(".summary-card",root) ||
-      qsa(".card",root).find(el=>/итого|товары|скидка|доставка/i.test(el.textContent||""));
+      qsa(".card",root).find(el=>/Итого|Товары|Скидка|Доставка/i.test(el.textContent||""));
 
     if(summary && summary.parentNode){
       summary.parentNode.insertBefore(wrap, summary.nextSibling);
@@ -13971,10 +13954,10 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   }
 
   function schedule(){
-    placeButton();
-    setTimeout(placeButton,120);
-    setTimeout(placeButton,500);
-    setTimeout(placeButton,1200);
+    insertDeleteButton();
+    setTimeout(insertDeleteButton,120);
+    setTimeout(insertDeleteButton,500);
+    setTimeout(insertDeleteButton,1200);
   }
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",schedule,{once:true});else schedule();
@@ -13991,8 +13974,8 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     }
   },true);
 
-  window.SBP_CART_CLEAR_VISIBLE_V119=clearCart;
-  window.SBP_CART_DELETE_VISIBLE_V119=schedule;
+  window.SBP_CART_CLEAR_V120=function(){clearCartStorage();rerender();};
+  window.SBP_CART_DELETE_V120=schedule;
 })();
 </script>
 
