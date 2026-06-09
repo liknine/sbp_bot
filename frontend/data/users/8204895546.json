@@ -92,11 +92,11 @@
       "price_byn": 350,
       "discount_byn": 35,
       "final_price_byn": 315,
-      "status": "processing",
-      "status_label": "В обработке",
+      "status": "sent",
+      "status_label": "Отправлен",
       "tracking_code": "--",
       "created_at": "2026-06-09 18:50:52",
-      "updated_at": "2026-06-09T18:51:17.794817"
+      "updated_at": "2026-06-09T19:00:49.945372"
     },
     {
       "id": 48,
@@ -213,5 +213,5 @@
       "updated_at": "2026-05-30T14:17:30.154945"
     }
   ],
-  "updated_at": "2026-06-09T18:56:02.942051+00:00"
+  "updated_at": "2026-06-09T19:00:49.951865+00:00"
 }
