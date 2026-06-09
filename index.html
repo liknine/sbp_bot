@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v112_FIX_ORDER_INSERT_TRACKING -->
+<!-- SBP_DEPLOY_MARKER_v114_BONUS_20_LIMIT -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -9565,6 +9565,25 @@ body.sbp-v82-intro-running{
   }
 
   
+function validateBonus20LimitV114(payload){
+  const bonus = payload && payload.bonus_request ? payload.bonus_request : null;
+  if(!bonus) return true;
+  const price = Number(payload.price_byn || payload.price || payload.total || payload.final_price_byn || 0);
+  const discount = Number(bonus.discount_byn || bonus.discount || 0);
+  const max = Math.floor(price * 0.20);
+  if(price > 0 && discount > max){
+    alert(
+      "Этот бонус нельзя применить к этому заказу.\n\n" +
+      "Максимальная скидка для этого товара — " + max + " BYN.\n" +
+      "Выбранный бонус — " + discount + " BYN.\n\n" +
+      "Выберите другой бонус или оформите заказ без бонуса."
+    );
+    try{ sessionStorage.removeItem("sbp_current_client_order_id"); }catch(e){}
+    return false;
+  }
+  return true;
+}
+
   function encodeOrderSubmitPayloadV67(payload){
     const json = JSON.stringify(payload);
     const bytes = new TextEncoder().encode(json);
@@ -9696,8 +9715,13 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v112"
+      client_app_version: "v114"
     };
+
+    if(!validateBonus20LimitV114(compact)){
+      lastOrderSentAt = 0;
+      return false;
+    }
 
     try{ localStorage.setItem("sbp_last_customer_fields_v68", JSON.stringify(compact.customer_fields || {})); }catch(e){}
     try{ localStorage.setItem("sbp_last_payload_v68", JSON.stringify(compact)); }catch(e){}
@@ -11642,7 +11666,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v112";
+  const VERSION = "v114";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -13726,6 +13750,114 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",schedule,{once:true});else schedule();
   window.addEventListener("load",schedule);window.addEventListener("focus",schedule);window.addEventListener("storage",schedule);document.addEventListener("visibilitychange",function(){if(!document.hidden)schedule()});document.addEventListener("click",function(e){if(e.target.closest&&e.target.closest('label,button,.bottom-nav,.profile-item,.sbp-v93-buy-btn,.sbp-v92-buy-btn,.sbp-v91-buy-btn,[data-sbp-v91-buy],[data-sbp-v92-buy],[data-sbp-v93-buy]')){setTimeout(schedule,120);setTimeout(schedule,700)}},true);
   window.SBP_APPLY_STATUS_BONUS_V108=apply;
+})();
+</script>
+
+
+<style id="sbp-v113-cart-delete-css">
+.sbp-v113-cart-delete{appearance:none!important;border:1px solid var(--line)!important;background:var(--input)!important;color:var(--muted)!important;border-radius:999px!important;padding:8px 12px!important;font-size:13px!important;line-height:1!important;font-weight:850!important;cursor:pointer!important;margin-left:auto!important;flex:0 0 auto!important}
+.sbp-v113-cart-delete:active{transform:scale(.98)!important}
+.sbp-v113-cart-empty{color:var(--muted)!important;text-align:center!important;padding:28px 14px!important;font-size:15px!important}
+</style>
+<script id="sbp-v113-cart-delete-js">
+(function(){
+  const CART_KEYS=["sbp_cart_v1","cart","SBP_CART","sbpCart","sbp_cart"];
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function safeJson(raw,fallback){try{return JSON.parse(raw)}catch(e){return fallback}}
+  function getCartKey(){for(const key of CART_KEYS){const arr=safeJson(localStorage.getItem(key)||"[]",[]);if(Array.isArray(arr)&&arr.length)return key}return"sbp_cart_v1"}
+  function getCart(){const key=getCartKey();const arr=safeJson(localStorage.getItem(key)||"[]",[]);return{key,items:Array.isArray(arr)?arr:[]}}
+  function saveCart(key,items){localStorage.setItem(key,JSON.stringify(items));window.dispatchEvent(new Event("storage"));window.dispatchEvent(new CustomEvent("sbp-cart-updated",{detail:{items}}));try{if(typeof window.renderCart==="function")window.renderCart()}catch(e){}try{if(typeof window.updateCart==="function")window.updateCart()}catch(e){}try{if(typeof window.SBP_RENDER_CART==="function")window.SBP_RENDER_CART()}catch(e){}try{if(typeof window.renderBasket==="function")window.renderBasket()}catch(e){}}
+  function itemId(item){if(!item)return"";return String(item.cart_id||item.cartId||item.id||item.product_id||item.productId||item.sku||item.name||item.product_name||"")}
+  function removeItemByIndex(index){const data=getCart();if(index<0||index>=data.items.length)return;data.items.splice(index,1);saveCart(data.key,data.items);setTimeout(apply,80);setTimeout(apply,300)}
+  function screen(){return qs("#cartScreen")||qs("#cart")||qs('[data-screen="cart"]')||qs('[data-tab="cart"]')}
+  function cards(root){let list=qsa(".cart-item,.cart-card,.basket-item,.basket-card,[data-cart-item]",root);if(list.length)return list;return qsa(".card,.product-card,.item",root).filter(el=>{const t=(el.textContent||"").toLowerCase();return t.includes("byn")||t.includes("руб")||t.includes("₽")||t.includes("размер")||t.includes("size")})}
+  function apply(){
+    const root=screen();if(!root)return;
+    const list=cards(root);
+    list.forEach((card,index)=>{
+      if(card.querySelector(".sbp-v113-cart-delete"))return;
+      const btn=document.createElement("button");
+      btn.type="button";btn.className="sbp-v113-cart-delete";btn.textContent="Удалить";
+      btn.addEventListener("click",function(e){
+        e.preventDefault();e.stopPropagation();
+        const current=getCart();let removeIndex=index;
+        const domId=card.getAttribute("data-cart-id")||card.getAttribute("data-id")||"";
+        if(domId){const found=current.items.findIndex(x=>itemId(x)===domId);if(found>=0)removeIndex=found}
+        removeItemByIndex(removeIndex);
+        card.remove();
+        const after=getCart();
+        if(!after.items.length&&!root.querySelector(".sbp-v113-cart-empty")){const empty=document.createElement("div");empty.className="sbp-v113-cart-empty";empty.textContent="Корзина пустая";root.appendChild(empty)}
+      },true);
+      const host=card.querySelector(".cart-actions,.actions,.item-actions,.card-actions")||card.querySelector(".cart-row,.item-row,.top,.head,.header")||card;
+      host.appendChild(btn);
+    });
+  }
+  function schedule(){apply();setTimeout(apply,120);setTimeout(apply,450);setTimeout(apply,1000)}
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",schedule,{once:true});else schedule();
+  window.addEventListener("load",schedule);window.addEventListener("focus",schedule);window.addEventListener("storage",schedule);window.addEventListener("sbp-cart-updated",schedule);
+  document.addEventListener("visibilitychange",function(){if(!document.hidden)schedule()});
+  document.addEventListener("click",function(e){if(e.target.closest&&e.target.closest('label,button,.bottom-nav,[for="tab-cart"],[data-screen="cart"],[data-open-cart]')){setTimeout(schedule,100);setTimeout(schedule,500)}},true);
+  window.SBP_CART_DELETE_APPLY_V113=apply;
+})();
+</script>
+
+
+<script id="sbp-v114-bonus-20-senddata-guard">
+(function(){
+  function check(raw){
+    try{
+      const payload = typeof raw === "string" ? JSON.parse(raw) : raw;
+      const bonus = payload && payload.bonus_request ? payload.bonus_request : null;
+      if(!bonus) return true;
+      const price = Number(payload.price_byn || payload.price || payload.total || payload.final_price_byn || 0);
+      const discount = Number(bonus.discount_byn || bonus.discount || 0);
+      const max = Math.floor(price * 0.20);
+      if(price > 0 && discount > max){
+        alert(
+          "Этот бонус нельзя применить к этому заказу.\n\n" +
+          "Максимальная скидка для этого товара — " + max + " BYN.\n" +
+          "Выбранный бонус — " + discount + " BYN.\n\n" +
+          "Выберите другой бонус или оформите заказ без бонуса."
+        );
+        try{ sessionStorage.removeItem("sbp_current_client_order_id"); }catch(e){}
+        return false;
+      }
+    }catch(e){}
+    return true;
+  }
+  function patch(){
+    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    if(!tg || typeof tg.sendData !== "function" || tg.__sbpBonus20GuardV114) return;
+    const original = tg.sendData.bind(tg);
+    tg.sendData = function(data){
+      if(!check(data)) return false;
+      return original(data);
+    };
+    tg.__sbpBonus20GuardV114 = true;
+  }
+  patch(); setTimeout(patch, 200); setTimeout(patch, 900);
+  window.SBP_BONUS_20_CHECK_V114 = check;
+})();
+</script>
+
+
+<script id="sbp-v114-active-bonus-count-fast">
+(function(){
+  function safeJson(raw,fallback){try{return JSON.parse(raw)}catch(e){return fallback}}
+  function count(){
+    const arr = safeJson(localStorage.getItem("sbp_active_bonuses_v93") || "[]", []);
+    return Array.isArray(arr) ? arr.filter(b => b && (b.status === "active" || !b.status)).length : Number(localStorage.getItem("sbp_active_bonuses_count") || 0) || 0;
+  }
+  function apply(){
+    const n = count();
+    localStorage.setItem("sbp_active_bonuses_count", String(n));
+    document.querySelectorAll("[data-sbp-active-bonuses]").forEach(el => el.textContent = String(n));
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply, {once:true}); else apply();
+  window.addEventListener("storage", apply); window.addEventListener("focus", apply);
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden) apply(); });
+  setTimeout(apply, 50); setTimeout(apply, 250); setTimeout(apply, 700);
 })();
 </script>
 
