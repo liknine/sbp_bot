@@ -4,8 +4,8 @@
   "username": "lxssart",
   "first_name": "lxssart",
   "status": "Selected",
-  "coins": 605,
-  "coins_balance": 605,
+  "coins": 105,
+  "coins_balance": 105,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
   "completed_orders_count": 4,
@@ -17,6 +17,12 @@
   },
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": -500,
+      "type": "bonus_used",
+      "comment": "Bonus used on order: -500 Coins / discount -12 BYN / frontend_bonus_id=BONUS-1781032927897-tyzw9d",
+      "created_at": "2026-06-09 19:22:38"
+    },
     {
       "amount": -500,
       "type": "bonus_used",
@@ -91,6 +97,25 @@
     }
   ],
   "orders": [
+    {
+      "id": 56,
+      "order_id": 56,
+      "order_number": "SBP-00056",
+      "client_order_id": "WEB-1781032957809-nsoa3cd9",
+      "product_id": "yyy-aaa-rrr",
+      "product_name": "Ааа",
+      "brand": "Ййй",
+      "image": "images/products/yyy-aaa-rrr-1-1f2d487c66.jpg",
+      "size": "41",
+      "price_byn": 60,
+      "discount_byn": 12,
+      "final_price_byn": 48,
+      "status": "processing",
+      "status_label": "В обработке",
+      "tracking_code": "--",
+      "created_at": "2026-06-09 19:22:38",
+      "updated_at": "2026-06-09T19:22:38.054724"
+    },
     {
       "id": 55,
       "order_id": 55,
@@ -244,5 +269,5 @@
       "updated_at": "2026-05-30T14:17:30.154945"
     }
   ],
-  "updated_at": "2026-06-09T19:21:20.813104+00:00"
+  "updated_at": "2026-06-09T19:22:38.061883+00:00"
 }
