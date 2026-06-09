@@ -8,7 +8,7 @@
   "coins_balance": 1105,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
-  "completed_orders_count": 3,
+  "completed_orders_count": 4,
   "status_rules": {
     "Entry": 0,
     "Selected": 3,
@@ -98,11 +98,11 @@
       "price_byn": 350,
       "discount_byn": 35,
       "final_price_byn": 315,
-      "status": "awaiting_payment",
-      "status_label": "Ожидает оплаты",
+      "status": "completed",
+      "status_label": "Завершен",
       "tracking_code": "4939398377",
       "created_at": "2026-06-09 18:50:52",
-      "updated_at": "2026-06-09T19:09:58.237782"
+      "updated_at": "2026-06-09T19:11:28.597550"
     },
     {
       "id": 48,
@@ -219,5 +219,5 @@
       "updated_at": "2026-05-30T14:17:30.154945"
     }
   ],
-  "updated_at": "2026-06-09T19:09:58.246556+00:00"
+  "updated_at": "2026-06-09T19:11:28.612844+00:00"
 }
