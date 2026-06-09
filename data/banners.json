@@ -1,5 +1,16 @@
 [
   {
+    "id": "channel",
+    "title": "Наш канал",
+    "subtitle": "Channel",
+    "button_text": "Смотреть →",
+    "link": "https://t.me/sbpunited",
+    "image": "images/banners/channel-039ac3e229.jpg",
+    "sort": -1781032799,
+    "active": true,
+    "updated_at": "2026-06-09T19:19:55.329643+00:00"
+  },
+  {
     "id": "uauaua",
     "title": "проверка\nнахуй",
     "subtitle": "уауауа",
