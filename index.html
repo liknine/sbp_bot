@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v116_CART_EMPTY_CLEAN -->
+<!-- SBP_DEPLOY_MARKER_v117_CART_DELETE_REAL -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -9716,7 +9716,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v116"
+      client_app_version: "v117"
     };
 
     if(!validateBonus20LimitV114(compact)){
@@ -11667,7 +11667,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v116";
+  const VERSION = "v117";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -13814,14 +13814,9 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
 </script>
 
 
-<style id="sbp-v116-cart-empty-clean-css">
-#cartScreen .sbp-v113-cart-empty,
-#cartScreen .sbp-v115-cart-empty,
-#cartScreen .sbp-cart-empty-extra,
-#cartScreen .cart-empty-extra{
-  display:none!important;
-}
-.sbp-v116-cart-delete{
+
+<style id="sbp-v117-cart-delete-real-css">
+.sbp-v117-cart-delete{
   appearance:none!important;
   border:1px solid var(--line)!important;
   background:var(--input)!important;
@@ -13835,11 +13830,42 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   margin-left:auto!important;
   flex:0 0 auto!important;
 }
-.sbp-v116-cart-delete:active{transform:scale(.98)!important}
+.sbp-v117-cart-delete:active{transform:scale(.98)!important}
+#cartScreen.sbp-v117-empty .cart-list,
+#cartScreen.sbp-v117-empty .cart-summary,
+#cartScreen.sbp-v117-empty .summary-card,
+#cartScreen.sbp-v117-empty .order-card,
+#cartScreen.sbp-v117-empty .cart-card:not(.cart-empty-template):not(.sbp-native-empty),
+#cartScreen.sbp-v117-empty label[for="tab-checkout"],
+#cartScreen.sbp-v117-empty .primary-link[for="tab-checkout"],
+#cartScreen.sbp-v117-empty button[onclick*="sendOrder"],
+#cartScreen.sbp-v117-empty button[onclick*="Order"]{
+  display:none!important;
+}
+#cartScreen.sbp-v117-empty .cart-empty-template,
+#cartScreen.sbp-v117-empty .empty-cart,
+#cartScreen.sbp-v117-empty .sbp-native-empty{
+  display:block!important;
+}
 </style>
-<script id="sbp-v116-cart-empty-clean-js">
+<script id="sbp-v117-cart-delete-real-js">
 (function(){
-  const CART_KEYS=["sbp_cart_v1","cart","SBP_CART","sbpCart","sbp_cart"];
+  const CART_KEYS=[
+    "sbp_cart_v1","cart","SBP_CART","sbpCart","sbp_cart",
+    "sbp_cart_items","sbp_basket","basket","cartItems"
+  ];
+  const ACTIVE_PRODUCT_KEYS=[
+    "sbp_active_product_id","sbp_product_active_id","active_product_id",
+    "sbp_current_product_id","current_product_id","product_id",
+    "sbp_selected_product_id","selected_product_id"
+  ];
+  const SIZE_KEYS=[
+    "sbp_selected_size","selected_size","sbp_product_size","product_size",
+    "sbp_size","size","sbp_selected_product_size"
+  ];
+  const BONUS_REQUEST_KEYS=[
+    "sbp_requested_bonus_v1","sbp_order_bonus_request","sbp_selected_bonus_request"
+  ];
 
   function qs(sel,root=document){return root.querySelector(sel)}
   function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
@@ -13849,113 +13875,150 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     return qs("#cartScreen") || qs("#cart") || qs('[data-screen="cart"]') || qs('[data-tab="cart"]');
   }
 
-  function getCartKey(){
+  function hasCartItems(){
     for(const key of CART_KEYS){
       const arr=safeJson(localStorage.getItem(key)||"[]",[]);
-      if(Array.isArray(arr)&&arr.length)return key;
+      if(Array.isArray(arr)&&arr.length)return true;
     }
-    return "sbp_cart_v1";
+    for(const key of ACTIVE_PRODUCT_KEYS){
+      const v=String(localStorage.getItem(key)||"").trim();
+      if(v)return true;
+    }
+    return false;
   }
 
-  function getCart(){
-    const key=getCartKey();
-    const arr=safeJson(localStorage.getItem(key)||"[]",[]);
-    return {key,items:Array.isArray(arr)?arr:[]};
+  function clearCartStorage(){
+    CART_KEYS.forEach(k=>{try{localStorage.setItem(k,"[]")}catch(e){}});
+    ACTIVE_PRODUCT_KEYS.forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
+    SIZE_KEYS.forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
+    BONUS_REQUEST_KEYS.forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
+    try{sessionStorage.removeItem("sbp_current_client_order_id")}catch(e){}
+    try{localStorage.setItem("sbp_cart_count","0")}catch(e){}
+    try{localStorage.setItem("cart_count","0")}catch(e){}
   }
 
-  function saveCart(key,items){
-    localStorage.setItem(key,JSON.stringify(items));
+  function fireUpdates(){
     window.dispatchEvent(new Event("storage"));
-    window.dispatchEvent(new CustomEvent("sbp-cart-updated",{detail:{items}}));
+    window.dispatchEvent(new CustomEvent("sbp-cart-updated",{detail:{items:[]}}));
     try{if(typeof window.renderCart==="function")window.renderCart()}catch(e){}
     try{if(typeof window.updateCart==="function")window.updateCart()}catch(e){}
     try{if(typeof window.SBP_RENDER_CART==="function")window.SBP_RENDER_CART()}catch(e){}
     try{if(typeof window.renderBasket==="function")window.renderBasket()}catch(e){}
   }
 
-  function removeExtraEmptyBlocks(root){
-    if(!root)return;
-    qsa(".sbp-v113-cart-empty,.sbp-v115-cart-empty,.sbp-cart-empty-extra,.cart-empty-extra",root).forEach(el=>el.remove());
-
-    const emptyCards=qsa(".card,.cart-card,.basket-card,.empty-card",root).filter(el=>{
-      const t=(el.textContent||"").trim();
-      return /Пустая корзина/i.test(t);
-    });
-
-    if(emptyCards.length>1){
-      emptyCards.slice(1).forEach(el=>el.remove());
-    }
+  function findNativeEmpty(root){
+    const all=qsa(".cart-empty-template,.empty-cart,.empty-state,.card,.cart-card",root);
+    return all.find(el=>/Пустая корзина/i.test(el.textContent||"")) || null;
   }
 
-  function productCards(root){
-    let list=qsa(".cart-item,.cart-card,.basket-item,.basket-card,[data-cart-item]",root).filter(el=>{
-      const t=(el.textContent||"").trim();
-      return !/Пустая корзина/i.test(t);
-    });
-    if(list.length)return list;
-
-    return qsa(".card,.product-card,.item",root).filter(el=>{
-      const t=(el.textContent||"").toLowerCase();
-      if(t.includes("пустая корзина"))return false;
-      return t.includes("byn")||t.includes("руб")||t.includes("₽")||t.includes("размер")||t.includes("size");
-    });
+  function removeDuplicateEmpty(root){
+    const empties=qsa(".cart-empty-template,.empty-cart,.empty-state,.card,.cart-card",root)
+      .filter(el=>/Пустая корзина/i.test(el.textContent||""));
+    if(empties.length>1) empties.slice(1).forEach(el=>el.remove());
   }
 
-  function clearActiveProductFallback(){
-    try{localStorage.removeItem("sbp_active_product_id")}catch(e){}
-    try{localStorage.removeItem("sbp_product_active_id")}catch(e){}
-    try{localStorage.removeItem("sbp_selected_size")}catch(e){}
-    try{localStorage.removeItem("selected_size")}catch(e){}
-  }
-
-  function applyDeleteButtons(){
+  function showNativeEmpty(){
     const root=cartScreen();
     if(!root)return;
-    removeExtraEmptyBlocks(root);
+    root.classList.add("sbp-v117-empty");
 
-    const cards=productCards(root);
-    cards.forEach((card,index)=>{
-      qsa(".sbp-v113-cart-delete,.sbp-v115-cart-delete",card).forEach(el=>el.remove());
-      if(card.querySelector(".sbp-v116-cart-delete"))return;
+    qsa(".sbp-v116-cart-delete,.sbp-v117-cart-delete",root).forEach(el=>el.remove());
+    qsa(".sbp-v113-cart-empty,.sbp-v115-cart-empty,.sbp-v115-cart-empty-real,.sbp-cart-empty-extra,.cart-empty-extra",root).forEach(el=>el.remove());
 
-      const btn=document.createElement("button");
-      btn.type="button";
-      btn.className="sbp-v116-cart-delete";
-      btn.textContent="Удалить";
-      btn.addEventListener("click",function(e){
-        e.preventDefault();
-        e.stopPropagation();
+    const native=findNativeEmpty(root);
+    if(native){
+      native.classList.add("sbp-native-empty");
+      native.style.display="";
+    }
 
-        const data=getCart();
-        if(data.items.length){
-          const next=data.items.slice();
-          next.splice(Math.min(index,next.length-1),1);
-          saveCart(data.key,next);
-        }else{
-          saveCart(getCartKey(),[]);
-        }
+    removeDuplicateEmpty(root);
 
-        clearActiveProductFallback();
-        card.remove();
-        removeExtraEmptyBlocks(root);
-
-        try{if(typeof window.renderCart==="function")window.renderCart()}catch(_e){}
-        setTimeout(function(){removeExtraEmptyBlocks(root)},80);
-        setTimeout(function(){removeExtraEmptyBlocks(root)},300);
-      },true);
-
-      const host=card.querySelector(".cart-actions,.actions,.item-actions,.card-actions")||
-                 card.querySelector(".cart-row,.item-row,.top,.head,.header")||
-                 card;
-      host.appendChild(btn);
+    qsa("[data-sbp-cart-count],.cart-count,.cart-badge,.basket-count",document).forEach(el=>{
+      el.textContent="0";
     });
+  }
+
+  function productAreas(root){
+    if(!root)return [];
+    const selectors=[
+      ".cart-list > *",
+      ".cart-items > *",
+      ".cart-products > *",
+      ".basket-list > *",
+      ".basket-items > *",
+      ".order-card",
+      ".cart-card",
+      ".product-card",
+      ".card"
+    ];
+    const seen=new Set();
+    let out=[];
+    selectors.forEach(sel=>{
+      qsa(sel,root).forEach(el=>{
+        if(seen.has(el))return;
+        seen.add(el);
+        const t=(el.textContent||"").trim();
+        if(!t)return;
+        if(/Пустая корзина/i.test(t))return;
+        if(/Продолжить покупки/i.test(t) && t.length<80)return;
+        const looksProduct=/byn|руб|₽|размер|size|товар|скидка|доставка|итого/i.test(t);
+        if(looksProduct)out.push(el);
+      });
+    });
+    return out;
+  }
+
+  function clearCartNow(){
+    clearCartStorage();
+    showNativeEmpty();
+    fireUpdates();
+    setTimeout(showNativeEmpty,80);
+    setTimeout(showNativeEmpty,300);
+    setTimeout(showNativeEmpty,900);
+  }
+
+  function addDeleteButton(){
+    const root=cartScreen();
+    if(!root)return;
+    removeDuplicateEmpty(root);
+
+    if(!hasCartItems()){
+      showNativeEmpty();
+      return;
+    }
+
+    root.classList.remove("sbp-v117-empty");
+    const areas=productAreas(root);
+    if(!areas.length)return;
+
+    // Attach to the most specific first product area, but clear the whole cart.
+    const card=areas[0];
+    qsa(".sbp-v116-cart-delete,.sbp-v117-cart-delete",root).forEach((el,i)=>{ if(i>0) el.remove(); });
+    if(root.querySelector(".sbp-v117-cart-delete"))return;
+
+    const btn=document.createElement("button");
+    btn.type="button";
+    btn.className="sbp-v117-cart-delete";
+    btn.textContent="Удалить";
+    btn.addEventListener("click",function(e){
+      e.preventDefault();
+      e.stopPropagation();
+      if(e.stopImmediatePropagation)e.stopImmediatePropagation();
+      clearCartNow();
+      return false;
+    },true);
+
+    const host=card.querySelector(".cart-actions,.actions,.item-actions,.card-actions")||
+               card.querySelector(".cart-row,.item-row,.top,.head,.header")||
+               card;
+    host.appendChild(btn);
   }
 
   function schedule(){
-    applyDeleteButtons();
-    setTimeout(applyDeleteButtons,120);
-    setTimeout(applyDeleteButtons,500);
-    setTimeout(applyDeleteButtons,1000);
+    addDeleteButton();
+    setTimeout(addDeleteButton,120);
+    setTimeout(addDeleteButton,500);
+    setTimeout(addDeleteButton,1200);
   }
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",schedule,{once:true});else schedule();
@@ -13968,10 +14031,12 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     if(e.target.closest&&e.target.closest('label,button,.bottom-nav,[for="tab-cart"],[data-screen="cart"],[data-open-cart]')){
       setTimeout(schedule,80);
       setTimeout(schedule,400);
+      setTimeout(schedule,1000);
     }
   },true);
 
-  window.SBP_CART_EMPTY_CLEAN_V116=schedule;
+  window.SBP_CART_CLEAR_REAL_V117=clearCartNow;
+  window.SBP_CART_DELETE_APPLY_V117=schedule;
 })();
 </script>
 
