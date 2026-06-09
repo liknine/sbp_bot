@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v117_CART_DELETE_REAL -->
+<!-- SBP_DEPLOY_MARKER_v118_CART_DELETE_SAFE -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -8452,7 +8452,6 @@ body.sbp-v82-intro-running{
 .sbp-v93-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 
-
 </head>
 <body>
 <input class="state" type="radio" name="tab" id="tab-home" checked>
@@ -9716,7 +9715,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v117"
+      client_app_version: "v118"
     };
 
     if(!validateBonus20LimitV114(compact)){
@@ -11667,7 +11666,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v117";
+  const VERSION = "v118";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -13814,9 +13813,8 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
 </script>
 
 
-
-<style id="sbp-v117-cart-delete-real-css">
-.sbp-v117-cart-delete{
+<style id="sbp-v118-cart-delete-safe-css">
+.sbp-v118-cart-delete{
   appearance:none!important;
   border:1px solid var(--line)!important;
   background:var(--input)!important;
@@ -13828,33 +13826,17 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   font-weight:850!important;
   cursor:pointer!important;
   margin-left:auto!important;
-  flex:0 0 auto!important;
+  white-space:nowrap!important;
 }
-.sbp-v117-cart-delete:active{transform:scale(.98)!important}
-#cartScreen.sbp-v117-empty .cart-list,
-#cartScreen.sbp-v117-empty .cart-summary,
-#cartScreen.sbp-v117-empty .summary-card,
-#cartScreen.sbp-v117-empty .order-card,
-#cartScreen.sbp-v117-empty .cart-card:not(.cart-empty-template):not(.sbp-native-empty),
-#cartScreen.sbp-v117-empty label[for="tab-checkout"],
-#cartScreen.sbp-v117-empty .primary-link[for="tab-checkout"],
-#cartScreen.sbp-v117-empty button[onclick*="sendOrder"],
-#cartScreen.sbp-v117-empty button[onclick*="Order"]{
-  display:none!important;
-}
-#cartScreen.sbp-v117-empty .cart-empty-template,
-#cartScreen.sbp-v117-empty .empty-cart,
-#cartScreen.sbp-v117-empty .sbp-native-empty{
-  display:block!important;
-}
+.sbp-v118-cart-delete:active{transform:scale(.98)!important}
 </style>
-<script id="sbp-v117-cart-delete-real-js">
+<script id="sbp-v118-cart-delete-safe-js">
 (function(){
   const CART_KEYS=[
     "sbp_cart_v1","cart","SBP_CART","sbpCart","sbp_cart",
     "sbp_cart_items","sbp_basket","basket","cartItems"
   ];
-  const ACTIVE_PRODUCT_KEYS=[
+  const ACTIVE_KEYS=[
     "sbp_active_product_id","sbp_product_active_id","active_product_id",
     "sbp_current_product_id","current_product_id","product_id",
     "sbp_selected_product_id","selected_product_id"
@@ -13863,7 +13845,7 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     "sbp_selected_size","selected_size","sbp_product_size","product_size",
     "sbp_size","size","sbp_selected_product_size"
   ];
-  const BONUS_REQUEST_KEYS=[
+  const BONUS_KEYS=[
     "sbp_requested_bonus_v1","sbp_order_bonus_request","sbp_selected_bonus_request"
   ];
 
@@ -13875,150 +13857,112 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     return qs("#cartScreen") || qs("#cart") || qs('[data-screen="cart"]') || qs('[data-tab="cart"]');
   }
 
-  function hasCartItems(){
+  function realCartCount(){
+    let n = 0;
     for(const key of CART_KEYS){
-      const arr=safeJson(localStorage.getItem(key)||"[]",[]);
-      if(Array.isArray(arr)&&arr.length)return true;
+      const arr = safeJson(localStorage.getItem(key) || "[]", []);
+      if(Array.isArray(arr)) n += arr.length;
     }
-    for(const key of ACTIVE_PRODUCT_KEYS){
-      const v=String(localStorage.getItem(key)||"").trim();
-      if(v)return true;
-    }
-    return false;
+    const active = ACTIVE_KEYS.some(k => String(localStorage.getItem(k)||"").trim());
+    return Math.max(n, active ? 1 : 0);
   }
 
-  function clearCartStorage(){
+  function clearCart(){
     CART_KEYS.forEach(k=>{try{localStorage.setItem(k,"[]")}catch(e){}});
-    ACTIVE_PRODUCT_KEYS.forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
+    ACTIVE_KEYS.forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
     SIZE_KEYS.forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
-    BONUS_REQUEST_KEYS.forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
+    BONUS_KEYS.forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
     try{sessionStorage.removeItem("sbp_current_client_order_id")}catch(e){}
     try{localStorage.setItem("sbp_cart_count","0")}catch(e){}
     try{localStorage.setItem("cart_count","0")}catch(e){}
-  }
 
-  function fireUpdates(){
     window.dispatchEvent(new Event("storage"));
     window.dispatchEvent(new CustomEvent("sbp-cart-updated",{detail:{items:[]}}));
+
+    // Call native renderers only. No forced empty classes, no deleting random DOM nodes.
     try{if(typeof window.renderCart==="function")window.renderCart()}catch(e){}
     try{if(typeof window.updateCart==="function")window.updateCart()}catch(e){}
     try{if(typeof window.SBP_RENDER_CART==="function")window.SBP_RENDER_CART()}catch(e){}
     try{if(typeof window.renderBasket==="function")window.renderBasket()}catch(e){}
   }
 
-  function findNativeEmpty(root){
-    const all=qsa(".cart-empty-template,.empty-cart,.empty-state,.card,.cart-card",root);
-    return all.find(el=>/Пустая корзина/i.test(el.textContent||"")) || null;
-  }
-
-  function removeDuplicateEmpty(root){
-    const empties=qsa(".cart-empty-template,.empty-cart,.empty-state,.card,.cart-card",root)
-      .filter(el=>/Пустая корзина/i.test(el.textContent||""));
-    if(empties.length>1) empties.slice(1).forEach(el=>el.remove());
-  }
-
-  function showNativeEmpty(){
-    const root=cartScreen();
-    if(!root)return;
-    root.classList.add("sbp-v117-empty");
-
-    qsa(".sbp-v116-cart-delete,.sbp-v117-cart-delete",root).forEach(el=>el.remove());
+  function cleanupBrokenOldClasses(){
+    const root = cartScreen();
+    if(!root) return;
+    root.classList.remove("sbp-v117-empty","sbp-v115-cart-is-empty");
     qsa(".sbp-v113-cart-empty,.sbp-v115-cart-empty,.sbp-v115-cart-empty-real,.sbp-cart-empty-extra,.cart-empty-extra",root).forEach(el=>el.remove());
-
-    const native=findNativeEmpty(root);
-    if(native){
-      native.classList.add("sbp-native-empty");
-      native.style.display="";
-    }
-
-    removeDuplicateEmpty(root);
-
-    qsa("[data-sbp-cart-count],.cart-count,.cart-badge,.basket-count",document).forEach(el=>{
-      el.textContent="0";
-    });
+    qsa(".sbp-v116-cart-delete,.sbp-v117-cart-delete,.sbp-v115-cart-delete-btn,.sbp-v113-cart-delete",root).forEach(el=>el.remove());
   }
 
-  function productAreas(root){
-    if(!root)return [];
+  function productHosts(root){
     const selectors=[
       ".cart-list > *",
       ".cart-items > *",
       ".cart-products > *",
       ".basket-list > *",
       ".basket-items > *",
-      ".order-card",
       ".cart-card",
-      ".product-card",
-      ".card"
+      ".order-card",
+      ".product-card"
     ];
     const seen=new Set();
-    let out=[];
+    const out=[];
     selectors.forEach(sel=>{
       qsa(sel,root).forEach(el=>{
-        if(seen.has(el))return;
+        if(seen.has(el)) return;
         seen.add(el);
         const t=(el.textContent||"").trim();
-        if(!t)return;
-        if(/Пустая корзина/i.test(t))return;
-        if(/Продолжить покупки/i.test(t) && t.length<80)return;
-        const looksProduct=/byn|руб|₽|размер|size|товар|скидка|доставка|итого/i.test(t);
-        if(looksProduct)out.push(el);
+        if(!t || /Пустая корзина/i.test(t)) return;
+        if(/Продолжить покупки/i.test(t) && t.length < 100) return;
+        if(/byn|руб|₽|размер|size|скидка|доставка|итого|товар/i.test(t)) out.push(el);
       });
     });
     return out;
   }
 
-  function clearCartNow(){
-    clearCartStorage();
-    showNativeEmpty();
-    fireUpdates();
-    setTimeout(showNativeEmpty,80);
-    setTimeout(showNativeEmpty,300);
-    setTimeout(showNativeEmpty,900);
-  }
+  function addButton(){
+    const root = cartScreen();
+    if(!root) return;
 
-  function addDeleteButton(){
-    const root=cartScreen();
-    if(!root)return;
-    removeDuplicateEmpty(root);
+    cleanupBrokenOldClasses();
 
-    if(!hasCartItems()){
-      showNativeEmpty();
-      return;
-    }
+    if(realCartCount() <= 0) return;
 
-    root.classList.remove("sbp-v117-empty");
-    const areas=productAreas(root);
-    if(!areas.length)return;
+    if(root.querySelector(".sbp-v118-cart-delete")) return;
 
-    // Attach to the most specific first product area, but clear the whole cart.
-    const card=areas[0];
-    qsa(".sbp-v116-cart-delete,.sbp-v117-cart-delete",root).forEach((el,i)=>{ if(i>0) el.remove(); });
-    if(root.querySelector(".sbp-v117-cart-delete"))return;
+    const hosts = productHosts(root);
+    const target = hosts[0];
+    if(!target) return;
 
     const btn=document.createElement("button");
     btn.type="button";
-    btn.className="sbp-v117-cart-delete";
+    btn.className="sbp-v118-cart-delete";
     btn.textContent="Удалить";
     btn.addEventListener("click",function(e){
       e.preventDefault();
       e.stopPropagation();
-      if(e.stopImmediatePropagation)e.stopImmediatePropagation();
-      clearCartNow();
+      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
+      clearCart();
+      setTimeout(cleanupBrokenOldClasses,80);
+      setTimeout(function(){
+        try{if(typeof window.renderCart==="function")window.renderCart()}catch(e){}
+      },160);
       return false;
     },true);
 
-    const host=card.querySelector(".cart-actions,.actions,.item-actions,.card-actions")||
-               card.querySelector(".cart-row,.item-row,.top,.head,.header")||
-               card;
+    const host =
+      target.querySelector(".cart-actions,.actions,.item-actions,.card-actions") ||
+      target.querySelector(".cart-row,.item-row,.top,.head,.header") ||
+      target;
+
     host.appendChild(btn);
   }
 
   function schedule(){
-    addDeleteButton();
-    setTimeout(addDeleteButton,120);
-    setTimeout(addDeleteButton,500);
-    setTimeout(addDeleteButton,1200);
+    addButton();
+    setTimeout(addButton,120);
+    setTimeout(addButton,500);
+    setTimeout(addButton,1200);
   }
 
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",schedule,{once:true});else schedule();
@@ -14035,8 +13979,8 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     }
   },true);
 
-  window.SBP_CART_CLEAR_REAL_V117=clearCartNow;
-  window.SBP_CART_DELETE_APPLY_V117=schedule;
+  window.SBP_CART_DELETE_SAFE_V118=schedule;
+  window.SBP_CART_CLEAR_SAFE_V118=clearCart;
 })();
 </script>
 
