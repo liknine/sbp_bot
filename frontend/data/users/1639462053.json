@@ -4,8 +4,8 @@
   "username": "liknine",
   "first_name": "ликнайн",
   "status": "Selected",
-  "coins": 1291,
-  "coins_balance": 1291,
+  "coins": 791,
+  "coins_balance": 791,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
   "completed_orders_count": 6,
@@ -17,6 +17,12 @@
   },
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": -500,
+      "type": "bonus_used",
+      "comment": "Bonus used on order: -500 Coins / discount -35 BYN / frontend_bonus_id=BONUS-1781034251788-xudok2",
+      "created_at": "2026-06-10 15:35:33"
+    },
     {
       "amount": 4,
       "type": "order_completed",
@@ -127,6 +133,25 @@
     }
   ],
   "orders": [
+    {
+      "id": 57,
+      "order_id": 57,
+      "order_number": "SBP-00057",
+      "client_order_id": "WEB-1781105733590-2oi70ir2",
+      "product_id": "test-test-chernyy",
+      "product_name": "тест",
+      "brand": "тест",
+      "image": "images/products/test-test-chernyy-1-98942a5a02.jpg",
+      "size": "43",
+      "price_byn": 350,
+      "discount_byn": 35,
+      "final_price_byn": 315,
+      "status": "processing",
+      "status_label": "В обработке",
+      "tracking_code": "--",
+      "created_at": "2026-06-10 15:35:33",
+      "updated_at": "2026-06-10T15:35:33.730311"
+    },
     {
       "id": 50,
       "order_id": 50,
@@ -677,26 +702,7 @@
       "tracking_code": "--",
       "created_at": "2026-05-28 11:33:10",
       "updated_at": "2026-05-28T11:33:10.741971"
-    },
-    {
-      "id": 7,
-      "order_id": 7,
-      "order_number": "SBP-00007",
-      "client_order_id": "WEB-1779967182253-xn3p2sph",
-      "product_id": "maison-margiela-maison-margiela-evolution-low-black",
-      "product_name": "Maison Margiela Evolution Low",
-      "brand": "Maison Margiela",
-      "image": "images/products/maison-margiela-maison-margiela-evolution-low-black-1.jpg",
-      "size": "44",
-      "price_byn": 1000,
-      "discount_byn": 0,
-      "final_price_byn": 1000,
-      "status": "processing",
-      "status_label": "В обработке",
-      "tracking_code": "--",
-      "created_at": "2026-05-28 11:19:47",
-      "updated_at": "2026-05-28T11:19:47.901682"
     }
   ],
-  "updated_at": "2026-06-10T15:33:07.553714+00:00"
+  "updated_at": "2026-06-10T15:35:33.845374+00:00"
 }
