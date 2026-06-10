@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v129_CART_COUNTER_SYNC -->
+<!-- SBP_DEPLOY_MARKER_v130_CART_COUNTER_STATE -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -9715,7 +9715,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v129"
+      client_app_version: "v130"
     };
 
     if(!validateBonus20LimitV114(compact)){
@@ -11666,7 +11666,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v129";
+  const VERSION = "v130";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -11675,16 +11675,6 @@ window.sendOrder = function sendOrder(){
 
   function qs(sel, root=document){ return root.querySelector(sel); }
   function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
-
-  function syncCartCount(count){
-    const value = String(Math.max(0, Number(count || 0)));
-    try{ localStorage.setItem("sbp_cart_count", value); }catch(e){}
-    qsa("[data-sbp-cart-count],.cart-badge,.cart-count,.basket-count,.nav-badge,.tab-badge,.cart-counter", document).forEach(el => {
-      el.textContent = value;
-      el.style.display = value === "0" ? "none" : "";
-    });
-  }
-
   function esc(v){ return String(v ?? "").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
 
   function repoBase(){
@@ -12568,7 +12558,7 @@ window.sendOrder = function sendOrder(){
 
     const cartScreen = document.getElementById("cartScreen");
     if(cartScreen){
-      cartScreen.classList.remove("sbp-v129-cart-deleted");
+      cartScreen.classList.remove("sbp-v130-cart-deleted");
       const emptyBlock = cartScreen.querySelector(".cart-empty-template");
       if(emptyBlock) emptyBlock.style.display = "none";
       const list = cartScreen.querySelector(".cart-list");
@@ -12578,18 +12568,13 @@ window.sendOrder = function sendOrder(){
       const checkout = cartScreen.querySelector('label[for="tab-checkout"], .primary-link[for="tab-checkout"]');
       if(checkout) checkout.style.display = "";
     }
-    try{ localStorage.setItem("sbp_cart_count", "1"); }catch(e){}
-    document.querySelectorAll("[data-sbp-cart-count],.cart-badge,.cart-count,.basket-count,.nav-badge,.tab-badge,.cart-counter").forEach(function(el){
-      el.textContent = "1";
-      el.style.display = "";
-    });
 
     const cart = document.getElementById("tab-cart");
     if(cart) cart.checked = true;
 
     setTimeout(function(){
-      if(window.SBP_CART_DELETE_VISUAL_V129_REFRESH){
-        window.SBP_CART_DELETE_VISUAL_V129_REFRESH();
+      if(window.SBP_CART_DELETE_VISUAL_V130_REFRESH){
+        window.SBP_CART_DELETE_VISUAL_V130_REFRESH();
       }
     }, 80);
 
@@ -13849,12 +13834,12 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
 </script>
 
 
-<style id="sbp-v129-cart-delete-visual-css">
-.sbp-v129-delete-wrap{
+<style id="sbp-v130-cart-delete-visual-css">
+.sbp-v130-delete-wrap{
   margin:14px 0!important;
   display:block!important;
 }
-.sbp-v129-delete-btn{
+.sbp-v130-delete-btn{
   width:100%!important;
   min-height:56px!important;
   border-radius:24px!important;
@@ -13865,24 +13850,24 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   font-weight:950!important;
   cursor:pointer!important;
 }
-.sbp-v129-delete-btn:active{
+.sbp-v130-delete-btn:active{
   transform:scale(.985)!important;
 }
-#cartScreen.sbp-v129-cart-deleted .cart-list,
-#cartScreen.sbp-v129-cart-deleted .cart-summary,
-#cartScreen.sbp-v129-cart-deleted label[for="tab-checkout"],
-#cartScreen.sbp-v129-cart-deleted .primary-link[for="tab-checkout"],
-#cartScreen.sbp-v129-cart-deleted .sbp-v129-delete-wrap{
+#cartScreen.sbp-v130-cart-deleted .cart-list,
+#cartScreen.sbp-v130-cart-deleted .cart-summary,
+#cartScreen.sbp-v130-cart-deleted label[for="tab-checkout"],
+#cartScreen.sbp-v130-cart-deleted .primary-link[for="tab-checkout"],
+#cartScreen.sbp-v130-cart-deleted .sbp-v130-delete-wrap{
   display:none!important;
 }
-#cartScreen.sbp-v129-cart-deleted .cart-empty-template{
+#cartScreen.sbp-v130-cart-deleted .cart-empty-template{
   display:flex!important;
 }
-#cartScreen:not(.sbp-v129-cart-deleted) .cart-empty-template{
+#cartScreen:not(.sbp-v130-cart-deleted) .cart-empty-template{
   display:none!important;
 }
 </style>
-<script id="sbp-v129-cart-delete-visual-js">
+<script id="sbp-v130-cart-delete-visual-js">
 (function(){
   function qs(sel, root=document){ return root.querySelector(sel); }
   function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
@@ -13891,38 +13876,54 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     return qs("#cartScreen");
   }
 
+  function syncCartCount(){
+    const cart = screen();
+    const deleted = !!(cart && cart.classList.contains("sbp-v130-cart-deleted"));
+    const hasVisibleItem = !!(cart && cart.querySelector(".cart-list .cart-item"));
+    const count = (!deleted && hasVisibleItem) ? "1" : "0";
+
+    try{ localStorage.setItem("sbp_cart_count", count); }catch(e){}
+    qsa("[data-sbp-cart-count],.cart-badge,.cart-count,.basket-count,.nav-badge,.tab-badge,.cart-counter", document).forEach(el => {
+      el.textContent = count;
+      el.style.display = count === "0" ? "none" : "";
+    });
+  }
+
+
   function addDeleteButton(){
     const cart = screen();
-    if(!cart || cart.classList.contains("sbp-v129-cart-deleted")) return;
+    if(!cart || cart.classList.contains("sbp-v130-cart-deleted")) return;
 
-    qsa(".sbp-v129-delete-wrap", cart).forEach(el => el.remove());
+    qsa(".sbp-v130-delete-wrap", cart).forEach(el => el.remove());
 
     const cartItem = qs(".cart-list .cart-item", cart);
     const checkout = qs('label[for="tab-checkout"]', cart) || qs(".primary-link[for='tab-checkout']", cart);
     if(!cartItem || !checkout || !checkout.parentNode) return;
 
     const wrap = document.createElement("div");
-    wrap.className = "sbp-v129-delete-wrap";
+    wrap.className = "sbp-v130-delete-wrap";
 
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className = "sbp-v129-delete-btn";
+    btn.className = "sbp-v130-delete-btn";
     btn.textContent = "Удалить";
     btn.onclick = function(e){
       e.preventDefault();
       e.stopPropagation();
-      cart.classList.add("sbp-v129-cart-deleted");
+      cart.classList.add("sbp-v130-cart-deleted");
       try{ sessionStorage.removeItem("sbp_current_client_order_id"); }catch(err){}
-      syncCartCount(0);
+      syncCartCount();
       return false;
     };
 
     wrap.appendChild(btn);
     checkout.parentNode.insertBefore(wrap, checkout);
+    syncCartCount();
   }
 
   function apply(){
     addDeleteButton();
+    syncCartCount();
   }
 
   if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply, {once:true});
@@ -13935,7 +13936,7 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
     if(!document.hidden) apply();
   });
 
-  window.SBP_CART_DELETE_VISUAL_V129_REFRESH = apply;
+  window.SBP_CART_DELETE_VISUAL_V130_REFRESH = apply;
 })();
 </script>
 
