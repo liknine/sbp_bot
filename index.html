@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v121_CART_NATIVE_DELETE -->
+<!-- SBP_DEPLOY_MARKER_v122_CART_DELETE_HTML_ONLY -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -9196,7 +9196,6 @@ body.sbp-v82-intro-running{
   const FAV_KEY = "sbp_favorites_v9";
   const ACTIVE_KEY = "sbp_active_product";
   const SIZE_KEY = "sbp_selected_size";
-  const CART_EMPTY_KEY = "sbp_cart_empty_v121";
 
   const qs = (s, r=document) => r.querySelector(s);
   const qsa = (s, r=document) => Array.from(r.querySelectorAll(s));
@@ -9391,11 +9390,9 @@ body.sbp-v82-intro-running{
   }
 
   function updateCart(p){
+    if(!p) return;
     const screen = qs("#cartScreen");
     if(!screen) return;
-    const empty = localStorage.getItem(CART_EMPTY_KEY) === "1" || !p;
-    screen.classList.toggle("sbp-v121-empty", empty);
-    if(empty) return;
     const img = qs(".cart-img img", screen);
     const productImage = imageOf(p);
     if(img && productImage){ img.src = productImage; img.alt = p.name || ""; }
@@ -9480,7 +9477,7 @@ body.sbp-v82-intro-running{
   }
 
   function validateCheckout(showAlert){
-    const activeProduct = localStorage.getItem(CART_EMPTY_KEY)==="1" ? null : productById(localStorage.getItem(ACTIVE_KEY));
+    const activeProduct = productById(localStorage.getItem(ACTIVE_KEY)) || products[0];
     const selectedSize = localStorage.getItem(SIZE_KEY);
 
     if(!activeProduct){
@@ -9541,8 +9538,7 @@ body.sbp-v82-intro-running{
   }
 
   function orderPayload(){
-    if(localStorage.getItem(CART_EMPTY_KEY)==="1") return null;
-    const p = productById(localStorage.getItem(ACTIVE_KEY));
+    const p = productById(localStorage.getItem(ACTIVE_KEY)) || products[0];
     if(!p) return null;
     const fields = collectCustomerFieldsForOrder();
 
@@ -9719,7 +9715,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v121"
+      client_app_version: "v122"
     };
 
     if(!validateBonus20LimitV114(compact)){
@@ -11670,7 +11666,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v121";
+  const VERSION = "v122";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12559,9 +12555,6 @@ window.sendOrder = function sendOrder(){
       showAlert();
       return false;
     }
-    localStorage.removeItem("sbp_cart_empty_v121");
-    const active = productById(localStorage.getItem("sbp_active_product"));
-    if(active) updateCart(active);
     const cart = document.getElementById("tab-cart");
     if(cart) cart.checked = true;
     return true;
@@ -13820,12 +13813,22 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
 </script>
 
 
-<style id="sbp-v121-cart-native-delete-css">
-.sbp-v121-delete-wrap{
-  margin:14px 0!important;
-  display:block!important;
+<style id="sbp-v122-cart-delete-html-only-css">
+#cartScreen.sbp-v122-cart-empty .cart-list,
+#cartScreen.sbp-v122-cart-empty .cart-summary,
+#cartScreen.sbp-v122-cart-empty label[for="tab-checkout"],
+#cartScreen.sbp-v122-cart-empty .primary-link[for="tab-checkout"],
+#cartScreen.sbp-v122-cart-empty .sbp-v122-delete-wrap{
+  display:none!important;
 }
-.sbp-v121-delete-btn{
+#cartScreen.sbp-v122-cart-empty .cart-empty-template{
+  display:flex!important;
+}
+#cartScreen:not(.sbp-v122-cart-empty) .cart-empty-template{
+  display:none!important;
+}
+.sbp-v122-delete-wrap{margin:14px 0!important;display:block!important}
+.sbp-v122-delete-btn{
   width:100%!important;
   appearance:none!important;
   -webkit-appearance:none!important;
@@ -13841,124 +13844,133 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   cursor:pointer!important;
   text-align:center!important;
 }
-.sbp-v121-delete-btn:active{transform:scale(.985)!important}
-#cartScreen.sbp-v121-empty .cart-list,
-#cartScreen.sbp-v121-empty .cart-summary,
-#cartScreen.sbp-v121-empty .sbp-v121-delete-wrap,
-#cartScreen.sbp-v121-empty label[for="tab-checkout"],
-#cartScreen.sbp-v121-empty .primary-link[for="tab-checkout"]{
-  display:none!important;
-}
-#cartScreen.sbp-v121-empty .cart-empty-template{
-  display:flex!important;
-}
-#cartScreen:not(.sbp-v121-empty) .cart-empty-template{
-  display:none!important;
-}
+.sbp-v122-delete-btn:active{transform:scale(.985)!important}
 </style>
-<script id="sbp-v121-cart-native-delete-js">
+<script id="sbp-v122-cart-delete-html-only-js">
 (function(){
-  const EMPTY_KEY="sbp_cart_empty_v121";
-  const ACTIVE_KEY="sbp_active_product";
-  const SIZE_KEY="sbp_selected_size";
-  const SIZE_PID_KEY="sbp_selected_size_product_id";
-  const BONUS_KEYS=["sbp_requested_bonus_v1","sbp_order_bonus_request","sbp_selected_bonus_request"];
-  function qs(sel,root=document){return root.querySelector(sel)}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
-  function root(){return qs("#cartScreen")}
+  const EMPTY_KEY = "sbp_cart_empty_v122";
+  const OLD_EMPTY_KEYS = ["sbp_cart_empty_v121"];
+  const BONUS_REQUEST_KEYS = ["sbp_requested_bonus_v1","sbp_order_bonus_request","sbp_selected_bonus_request"];
 
-  function isEmpty(){
-    return localStorage.getItem(EMPTY_KEY)==="1" || !String(localStorage.getItem(ACTIVE_KEY)||"").trim();
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function cart(){ return qs("#cartScreen"); }
+
+  function setEmpty(isEmpty){
+    const screen = cart();
+    if(!screen) return;
+
+    screen.classList.toggle("sbp-v122-cart-empty", !!isEmpty);
+    screen.classList.remove("sbp-v115-cart-is-empty","sbp-v117-empty","sbp-v119-cart-empty");
+
+    qsa(".sbp-v113-cart-empty,.sbp-v115-cart-empty,.sbp-v115-cart-empty-real,.sbp-cart-empty-extra,.cart-empty-extra", screen).forEach(el => el.remove());
+
+    if(isEmpty){
+      qsa("[data-sbp-cart-count],.cart-badge,.cart-count,.basket-count", document).forEach(el => {
+        el.textContent = "0";
+      });
+    }
   }
 
-  function setEmptyState(empty){
-    const screen=root();
-    if(!screen)return;
-    screen.classList.toggle("sbp-v121-empty", !!empty);
-    const count=empty?"0":"1";
-    qsa("[data-sbp-cart-count],.cart-badge,.cart-count,.basket-count",document).forEach(el=>{
-      if(el) el.textContent=count;
-    });
+  function isEmpty(){
+    return localStorage.getItem(EMPTY_KEY) === "1";
   }
 
   function clearCart(){
-    localStorage.setItem(EMPTY_KEY,"1");
-    try{localStorage.removeItem(SIZE_KEY)}catch(e){}
-    try{localStorage.removeItem(SIZE_PID_KEY)}catch(e){}
-    BONUS_KEYS.forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
-    try{sessionStorage.removeItem("sbp_current_client_order_id")}catch(e){}
-    setEmptyState(true);
+    localStorage.setItem(EMPTY_KEY, "1");
+    OLD_EMPTY_KEYS.forEach(k => { try{ localStorage.removeItem(k); }catch(e){} });
+
+    try{ localStorage.removeItem("sbp_selected_size"); }catch(e){}
+    try{ localStorage.removeItem("sbp_selected_size_product_id"); }catch(e){}
+    try{ localStorage.removeItem("selected_size"); }catch(e){}
+    try{ sessionStorage.removeItem("sbp_current_client_order_id"); }catch(e){}
+
+    BONUS_REQUEST_KEYS.forEach(k => { try{ localStorage.removeItem(k); }catch(e){} });
+
+    setEmpty(true);
     window.dispatchEvent(new Event("storage"));
-    window.dispatchEvent(new CustomEvent("sbp-cart-updated",{detail:{items:[]}}));
+    window.dispatchEvent(new CustomEvent("sbp-cart-updated", {detail:{empty:true}}));
   }
 
   function markNotEmpty(){
     localStorage.removeItem(EMPTY_KEY);
-    setTimeout(()=>setEmptyState(false),0);
-    setTimeout(()=>setEmptyState(false),120);
+    OLD_EMPTY_KEYS.forEach(k => { try{ localStorage.removeItem(k); }catch(e){} });
+    setEmpty(false);
+    window.dispatchEvent(new CustomEvent("sbp-cart-updated", {detail:{empty:false}}));
   }
 
-  function ensureDeleteButton(){
-    const screen=root();
-    if(!screen)return;
+  function removeOldButtons(screen){
+    qsa(".sbp-v113-cart-delete,.sbp-v115-cart-delete-btn,.sbp-v116-cart-delete,.sbp-v117-cart-delete,.sbp-v118-cart-delete,.sbp-v119-delete-wrap,.sbp-v120-delete-wrap,.sbp-v121-delete-wrap,.sbp-v122-delete-wrap", screen).forEach(el => el.remove());
+  }
 
-    qsa(".sbp-v113-cart-delete,.sbp-v115-cart-delete-btn,.sbp-v116-cart-delete,.sbp-v117-cart-delete,.sbp-v118-cart-delete,.sbp-v119-delete-wrap,.sbp-v120-delete-wrap,.sbp-v121-delete-wrap",screen).forEach(el=>el.remove());
-    screen.classList.remove("sbp-v117-empty","sbp-v119-cart-empty","sbp-v115-cart-is-empty");
-    qsa(".sbp-v113-cart-empty,.sbp-v115-cart-empty,.sbp-v115-cart-empty-real,.sbp-cart-empty-extra,.cart-empty-extra",screen).forEach(el=>el.remove());
+  function addDeleteButton(){
+    const screen = cart();
+    if(!screen) return;
 
-    setEmptyState(isEmpty());
+    removeOldButtons(screen);
+    setEmpty(isEmpty());
 
-    if(isEmpty())return;
+    if(isEmpty()) return;
 
-    const checkout=qs('label[for="tab-checkout"]',screen)||qs('.primary-link[for="tab-checkout"]',screen);
-    if(!checkout)return;
+    const checkout = qs('label[for="tab-checkout"]', screen) || qs('.primary-link[for="tab-checkout"]', screen);
+    if(!checkout || !checkout.parentNode) return;
 
-    const wrap=document.createElement("div");
-    wrap.className="sbp-v121-delete-wrap";
-    const btn=document.createElement("button");
-    btn.type="button";
-    btn.className="sbp-v121-delete-btn";
-    btn.textContent="Удалить";
-    btn.addEventListener("click",function(e){
+    const wrap = document.createElement("div");
+    wrap.className = "sbp-v122-delete-wrap";
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "sbp-v122-delete-btn";
+    btn.textContent = "Удалить";
+    btn.addEventListener("click", function(e){
       e.preventDefault();
       e.stopPropagation();
-      if(e.stopImmediatePropagation)e.stopImmediatePropagation();
+      if(e.stopImmediatePropagation) e.stopImmediatePropagation();
       clearCart();
       return false;
-    },true);
+    }, true);
+
     wrap.appendChild(btn);
     checkout.parentNode.insertBefore(wrap, checkout);
   }
 
   function schedule(){
-    ensureDeleteButton();
-    setTimeout(ensureDeleteButton,120);
-    setTimeout(ensureDeleteButton,500);
-    setTimeout(ensureDeleteButton,1200);
+    addDeleteButton();
+    setTimeout(addDeleteButton, 120);
+    setTimeout(addDeleteButton, 500);
+    setTimeout(addDeleteButton, 1200);
   }
 
-  document.addEventListener("click",function(e){
-    if(e.target.closest && e.target.closest("#productScreen .sbp-cart-button-v47")){
-      // The original handler validates size. We mark as not empty after it runs.
-      setTimeout(markNotEmpty,40);
-      setTimeout(schedule,100);
+  document.addEventListener("click", function(e){
+    const addBtn = e.target.closest && e.target.closest("#productScreen .sbp-cart-button-v47");
+    if(addBtn){
+      // Do not block the native add-to-cart handler. Just clear the empty flag.
+      setTimeout(function(){
+        markNotEmpty();
+        schedule();
+      }, 40);
+      return;
     }
+
     if(e.target.closest && e.target.closest('label,button,.bottom-nav,[for="tab-cart"],[data-screen="cart"],[data-open-cart]')){
-      setTimeout(schedule,80);
-      setTimeout(schedule,400);
-      setTimeout(schedule,1000);
+      setTimeout(schedule, 80);
+      setTimeout(schedule, 400);
     }
-  },true);
+  }, true);
 
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",schedule,{once:true});else schedule();
-  window.addEventListener("load",schedule);
-  window.addEventListener("focus",schedule);
-  window.addEventListener("storage",schedule);
-  window.addEventListener("sbp-cart-updated",schedule);
-  document.addEventListener("visibilitychange",function(){if(!document.hidden)schedule()});
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", schedule, {once:true});
+  else schedule();
 
-  window.SBP_CART_CLEAR_V121=clearCart;
-  window.SBP_CART_DELETE_V121=schedule;
+  window.addEventListener("load", schedule);
+  window.addEventListener("focus", schedule);
+  window.addEventListener("storage", schedule);
+  window.addEventListener("sbp-cart-updated", schedule);
+  document.addEventListener("visibilitychange", function(){
+    if(!document.hidden) schedule();
+  });
+
+  window.SBP_CART_CLEAR_V122 = clearCart;
+  window.SBP_CART_DELETE_V122 = schedule;
 })();
 </script>
 
