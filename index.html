@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v125_CART_NATIVE_FROM_V114 -->
+<!-- SBP_DEPLOY_MARKER_v126_CART_DIRECT_NATIVE -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -9210,29 +9210,16 @@ body.sbp-v82-intro-running{
   let ready = false;
   let lastOrderSentAt = 0;
 
-  function getCartItemV125(){
+  function getCartItemV126(){
     try{
-      const item = JSON.parse(localStorage.getItem("sbp_cart_item_v125") || "null");
+      const item = JSON.parse(localStorage.getItem("sbp_cart_item_v126") || "null");
       if(item && item.product_id) return item;
     }catch(e){}
     return null;
   }
 
-  function setCartItemV125(productId, size){
-    const cleanId = String(productId || "").trim();
-    if(!cleanId) return null;
-    const item = {
-      product_id: cleanId,
-      size: String(size || "-"),
-      added_at: new Date().toISOString()
-    };
-    localStorage.setItem("sbp_cart_item_v125", JSON.stringify(item));
-    localStorage.setItem("sbp_cart_count", "1");
-    return item;
-  }
-
-  function clearCartItemV125(){
-    localStorage.removeItem("sbp_cart_item_v125");
+  function clearCartItemV126(){
+    localStorage.removeItem("sbp_cart_item_v126");
     localStorage.setItem("sbp_cart_count", "0");
     try{ sessionStorage.removeItem("sbp_current_client_order_id"); }catch(e){}
     try{ localStorage.removeItem("sbp_requested_bonus_v1"); }catch(e){}
@@ -9241,7 +9228,7 @@ body.sbp-v82-intro-running{
     window.dispatchEvent(new CustomEvent("sbp-cart-updated", {detail:{items:[]}}));
   }
 
-  function setCartEmptyV125(screen, empty){
+  function setCartEmptyV126(screen, empty){
     const cartList = qs(".cart-list", screen);
     const emptyBlock = qs(".cart-empty-template", screen);
     const summary = qs(".cart-summary", screen);
@@ -9250,27 +9237,27 @@ body.sbp-v82-intro-running{
     if(emptyBlock) emptyBlock.style.display = empty ? "flex" : "none";
     if(summary) summary.style.display = empty ? "none" : "";
     if(checkout) checkout.style.display = empty ? "none" : "";
-    qsa(".sbp-v125-delete-wrap", screen).forEach(el => el.remove());
+    qsa(".sbp-v126-delete-wrap", screen).forEach(el => el.remove());
     qsa("[data-sbp-cart-count],.cart-badge,.cart-count,.basket-count", document).forEach(el => {
       el.textContent = empty ? "0" : "1";
     });
   }
 
-  function ensureDeleteButtonV125(screen){
-    qsa(".sbp-v125-delete-wrap", screen).forEach(el => el.remove());
+  function ensureDeleteButtonV126(screen){
+    qsa(".sbp-v126-delete-wrap,.sbp-v125-delete-wrap,.sbp-v124-delete-wrap,.sbp-v123-delete-wrap", screen).forEach(el => el.remove());
     const checkout = qs('label[for="tab-checkout"]', screen) || qs('.primary-link[for="tab-checkout"]', screen);
     if(!checkout || !checkout.parentNode) return;
     const wrap = document.createElement("div");
-    wrap.className = "sbp-v125-delete-wrap";
+    wrap.className = "sbp-v126-delete-wrap";
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className = "sbp-v125-delete-btn";
+    btn.className = "sbp-v126-delete-btn";
     btn.textContent = "Удалить";
     btn.addEventListener("click", function(e){
       e.preventDefault();
       e.stopPropagation();
       if(e.stopImmediatePropagation) e.stopImmediatePropagation();
-      clearCartItemV125();
+      clearCartItemV126();
       return false;
     }, true);
     wrap.appendChild(btn);
@@ -9462,19 +9449,19 @@ body.sbp-v82-intro-running{
     const screen = qs("#cartScreen");
     if(!screen) return;
 
-    const item = getCartItemV125();
+    const item = getCartItemV126();
     if(!item){
-      setCartEmptyV125(screen, true);
+      setCartEmptyV126(screen, true);
       return;
     }
 
     const product = productById(item.product_id) || p;
     if(!product){
-      setCartEmptyV125(screen, true);
+      setCartEmptyV126(screen, true);
       return;
     }
 
-    setCartEmptyV125(screen, false);
+    setCartEmptyV126(screen, false);
 
     const img = qs(".cart-img img", screen);
     const productImage = imageOf(product);
@@ -9499,7 +9486,7 @@ body.sbp-v82-intro-running{
       if(row.classList.contains("total")) value.textContent = priceOf(product);
     });
 
-    ensureDeleteButtonV125(screen);
+    ensureDeleteButtonV126(screen);
   }
 
   function setActive(id){
@@ -9568,7 +9555,7 @@ body.sbp-v82-intro-running{
   }
 
   function validateCheckout(showAlert){
-    const cartItemForCheckout = getCartItemV125();
+    const cartItemForCheckout = getCartItemV126();
     const activeProduct = cartItemForCheckout ? productById(cartItemForCheckout.product_id) : null;
     const selectedSize = cartItemForCheckout ? cartItemForCheckout.size : "";
 
@@ -9630,7 +9617,7 @@ body.sbp-v82-intro-running{
   }
 
   function orderPayload(){
-    const cartItemForOrder = getCartItemV125();
+    const cartItemForOrder = getCartItemV126();
     if(!cartItemForOrder) return null;
     const p = productById(cartItemForOrder.product_id);
     if(!p) return null;
@@ -9809,7 +9796,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v125"
+      client_app_version: "v126"
     };
 
     if(!validateBonus20LimitV114(compact)){
@@ -11760,7 +11747,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v125";
+  const VERSION = "v126";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -12649,11 +12636,34 @@ window.sendOrder = function sendOrder(){
       showAlert();
       return false;
     }
-    const productId = localStorage.getItem("sbp_active_product") || "";
-    const selectedSize = localStorage.getItem("sbp_selected_size") || "-";
-    setCartItemV125(productId, selectedSize);
-    const activeProduct = productById(productId);
-    if(activeProduct) updateCart(activeProduct);
+
+    const productId = String(localStorage.getItem("sbp_active_product") || "").trim();
+    const selectedSize = String(localStorage.getItem("sbp_selected_size") || "-").trim() || "-";
+
+    if(productId){
+      localStorage.setItem("sbp_cart_item_v126", JSON.stringify({
+        product_id: productId,
+        size: selectedSize,
+        added_at: new Date().toISOString()
+      }));
+      localStorage.setItem("sbp_cart_count", "1");
+    }
+
+    const screen = document.getElementById("cartScreen");
+    if(screen){
+      const cartList = screen.querySelector(".cart-list");
+      const emptyBlock = screen.querySelector(".cart-empty-template");
+      const summary = screen.querySelector(".cart-summary");
+      const checkout = screen.querySelector('label[for="tab-checkout"], .primary-link[for="tab-checkout"]');
+      if(cartList) cartList.style.display = "";
+      if(emptyBlock) emptyBlock.style.display = "none";
+      if(summary) summary.style.display = "";
+      if(checkout) checkout.style.display = "";
+    }
+
+    window.dispatchEvent(new Event("storage"));
+    window.dispatchEvent(new CustomEvent("sbp-cart-updated", {detail:{items:[productId]}}));
+
     const cart = document.getElementById("tab-cart");
     if(cart) cart.checked = true;
     return true;
@@ -13912,9 +13922,9 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
 </script>
 
 
-<style id="sbp-v125-cart-css">
-.sbp-v125-delete-wrap{margin:14px 0!important;display:block!important}
-.sbp-v125-delete-btn{
+<style id="sbp-v126-cart-css">
+.sbp-v126-delete-wrap{margin:14px 0!important;display:block!important}
+.sbp-v126-delete-btn{
   width:100%!important;
   min-height:56px!important;
   border-radius:24px!important;
@@ -13926,19 +13936,6 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   cursor:pointer!important;
 }
 </style>
-<script id="sbp-v125-cart-boot">
-(function(){
-  function boot(){
-    try{
-      window.dispatchEvent(new CustomEvent("sbp-cart-updated", {detail:{boot:true}}));
-    }catch(e){}
-  }
-  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, {once:true});
-  else boot();
-  setTimeout(boot, 300);
-  setTimeout(boot, 900);
-})();
-</script>
 
 </body>
 </html>
