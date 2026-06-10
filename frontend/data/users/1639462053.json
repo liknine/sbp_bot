@@ -134,6 +134,25 @@
   ],
   "orders": [
     {
+      "id": 58,
+      "order_id": 58,
+      "order_number": "SBP-00058",
+      "client_order_id": "WEB-1781108006803-rlhngqjd",
+      "product_id": "yyy-aaa-rrr",
+      "product_name": "Ааа",
+      "brand": "Ййй",
+      "image": "images/products/yyy-aaa-rrr-1-1f2d487c66.jpg",
+      "size": "41",
+      "price_byn": 60,
+      "discount_byn": 0,
+      "final_price_byn": 60,
+      "status": "processing",
+      "status_label": "В обработке",
+      "tracking_code": "--",
+      "created_at": "2026-06-10 16:13:27",
+      "updated_at": "2026-06-10T16:13:27.036072"
+    },
+    {
       "id": 57,
       "order_id": 57,
       "order_number": "SBP-00057",
@@ -683,26 +702,7 @@
       "tracking_code": "--",
       "created_at": "2026-05-28 12:13:48",
       "updated_at": "2026-05-28T12:13:48.769224"
-    },
-    {
-      "id": 8,
-      "order_id": 8,
-      "order_number": "SBP-00008",
-      "client_order_id": "WEB-1779967990578-wp3bffct",
-      "product_id": "1-2-3",
-      "product_name": "2",
-      "brand": "1",
-      "image": "images/products/1-2-3-1-81d35fa294.jpg",
-      "size": "44",
-      "price_byn": 4,
-      "discount_byn": 0,
-      "final_price_byn": 4,
-      "status": "processing",
-      "status_label": "В обработке",
-      "tracking_code": "--",
-      "created_at": "2026-05-28 11:33:10",
-      "updated_at": "2026-05-28T11:33:10.741971"
     }
   ],
-  "updated_at": "2026-06-10T16:12:38.626746+00:00"
+  "updated_at": "2026-06-10T16:13:27.040484+00:00"
 }
