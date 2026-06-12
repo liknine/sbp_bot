@@ -4,8 +4,8 @@
   "username": "lxssart",
   "first_name": "lxssart",
   "status": "Selected",
-  "coins": 105,
-  "coins_balance": 105,
+  "coins": 5,
+  "coins_balance": 5,
   "activeBonuses": 0,
   "active_bonuses_count": 0,
   "completed_orders_count": 4,
@@ -17,6 +17,12 @@
   },
   "active_bonus": null,
   "coin_history": [
+    {
+      "amount": -100,
+      "type": "bonus_used",
+      "comment": "Bonus used on order: -100 Coins / discount -5 BYN / frontend_bonus_id=BONUS-1780944003233-42wjj7",
+      "created_at": "2026-06-12 13:13:24"
+    },
     {
       "amount": -500,
       "type": "bonus_used",
@@ -97,6 +103,25 @@
     }
   ],
   "orders": [
+    {
+      "id": 59,
+      "order_id": 59,
+      "order_number": "SBP-00059",
+      "client_order_id": "WEB-1781268506839-huq7cnty",
+      "product_id": "bh-junk-ggg",
+      "product_name": "Junk",
+      "brand": "Bh",
+      "image": "images/products/bh-junk-ggg-1-c6e709a637.jpg",
+      "size": "3000",
+      "price_byn": 3000,
+      "discount_byn": 5,
+      "final_price_byn": 2995,
+      "status": "processing",
+      "status_label": "В обработке",
+      "tracking_code": "--",
+      "created_at": "2026-06-12 13:13:24",
+      "updated_at": "2026-06-12T13:13:24.633084"
+    },
     {
       "id": 56,
       "order_id": 56,
@@ -269,5 +294,5 @@
       "updated_at": "2026-05-30T14:17:30.154945"
     }
   ],
-  "updated_at": "2026-06-09T19:22:38.061883+00:00"
+  "updated_at": "2026-06-12T13:13:24.638374+00:00"
 }
