@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<!-- SBP_DEPLOY_MARKER_v131_BELPOST_COMMENT_FIELD -->
+<!-- SBP_DEPLOY_MARKER_v132_TEXTAREA_TG_PROFILE -->
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <title>SBP Catalog Final v65 Single Product Heart</title>
@@ -8654,7 +8654,7 @@ body.sbp-v82-intro-running{
 
   <main class="screen" id="checkoutScreen">
     <label class="screen-back" for="tab-cart"><span>‹</span><b>Назад</b></label><header class="page-head"><h1>Оформление</h1><p>Выберите способ получения и оставьте данные.</p></header><section class="checkout-block"><h2>Способ получения</h2><div class="delivery-grid"><label class="delivery-option" for="delivery-pickup"><span>Самовывоз<small>Только город Витебск</small></span><b></b></label><label class="delivery-option" for="delivery-evro"><span>Европочта<small>ФИО, телефон, номер отделения</small></span><b></b></label><label class="delivery-option" for="delivery-bel"><span>Белпочта<small>ФИО, телефон, адрес, индекс</small></span><b></b></label></div></section><section class="checkout-block delivery-fields" data-fields="pickup"><h2>Самовывоз</h2><div class="pickup-note"><b>Самовывоз доступен только в городе Витебск.</b><span>Менеджер свяжется для уточнения деталей встречи.</span></div><div class="form-grid"><input class="field" placeholder="Имя"><input class="field" placeholder="Номер телефона"><textarea class="field" placeholder="Пожелания"></textarea></div></section><section class="checkout-block delivery-fields" data-fields="evropochta"><h2>Европочта</h2><div class="form-grid"><input class="field" placeholder="ФИО"><input class="field" placeholder="Номер телефона"><input class="field" placeholder="Номер отделения Европочты"><textarea class="field" placeholder="Пожелания"></textarea></div></section><section class="checkout-block delivery-fields" data-fields="belpochta"><h2>Белпочта</h2><div class="form-grid"><input class="field" placeholder="ФИО"><input class="field" placeholder="Номер телефона"><input class="field" placeholder="Адрес"><input class="field" placeholder="Индекс">
-          <textarea class="field-input" rows="3" placeholder="Пожелания / комментарий к доставке"></textarea>
+          <textarea class="field-input sbp-comment-field-v132" rows="3" placeholder="Пожелания / комментарий к доставке"></textarea>
         </div></section><section class="checkout-block"><h2>SBP Coins</h2><div class="discount-card is-empty"><div><b>Активных бонусов нет</b><span>0 BYN доступно к заказу</span></div><button type="button" disabled>Нет бонуса</button></div><p class="form-note">Скидка через Coins не может превышать 20% стоимости заказа.</p></section><button type="button" class="primary-link" data-sbp-submit-order="1">Отправить заявку</button><label class="secondary-link" for="tab-cart">Назад в корзину</label></main>
 
   <main class="screen" id="successScreen">
@@ -9717,7 +9717,7 @@ window.sendOrder = function sendOrder(){
       customer_fields: liveCustomerFields || data.customer_fields || {},
       created_at: data.created_at,
       client_order_id: data.client_order_id || ("WEB-" + Date.now()),
-      client_app_version: "v131"
+      client_app_version: "v132"
     };
 
     if(!validateBonus20LimitV114(compact)){
@@ -11668,7 +11668,7 @@ window.sendOrder = function sendOrder(){
 
 <script id="sbp-banner-v26-solid-loader">
 (function(){
-  const VERSION = "v131";
+  const VERSION = "v132";
   let active = 0;
   let timer = null;
   let banners = [];
@@ -13939,6 +13939,149 @@ if(document.readyState === "loading") document.addEventListener("DOMContentLoade
   });
 
   window.SBP_CART_DELETE_VISUAL_V130_REFRESH = apply;
+})();
+</script>
+
+
+<style id="sbp-v132-comment-and-profile-css">
+textarea.field-input,
+#checkoutScreen textarea,
+[data-fields="belpochta"] textarea,
+[data-fields="evropochta"] textarea,
+[data-fields="pickup"] textarea{
+  width:100%!important;
+  box-sizing:border-box!important;
+  min-height:132px!important;
+  resize:vertical!important;
+  border-radius:24px!important;
+  border:1px solid var(--line)!important;
+  background:rgba(255,255,255,.035)!important;
+  color:var(--text)!important;
+  font:inherit!important;
+  font-size:18px!important;
+  font-weight:800!important;
+  line-height:1.25!important;
+  padding:22px 26px!important;
+  outline:none!important;
+  box-shadow:none!important;
+  -webkit-appearance:none!important;
+  appearance:none!important;
+}
+textarea.field-input::placeholder,
+#checkoutScreen textarea::placeholder,
+[data-fields="belpochta"] textarea::placeholder,
+[data-fields="evropochta"] textarea::placeholder,
+[data-fields="pickup"] textarea::placeholder{
+  color:rgba(255,255,255,.48)!important;
+  opacity:1!important;
+}
+textarea.field-input:focus,
+#checkoutScreen textarea:focus,
+[data-fields="belpochta"] textarea:focus,
+[data-fields="evropochta"] textarea:focus,
+[data-fields="pickup"] textarea:focus{
+  border-color:rgba(255,255,255,.18)!important;
+  background:rgba(255,255,255,.045)!important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.06)!important;
+}
+</style>
+<script id="sbp-v132-telegram-profile-sync">
+(function(){
+  function qs(sel, root){ return (root || document).querySelector(sel); }
+  function qsa(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
+
+  function getTgUser(){
+    try{
+      const tg = window.Telegram && window.Telegram.WebApp;
+      const u = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
+      if(u && (u.id || u.username || u.first_name || u.photo_url)) return u;
+    }catch(e){}
+    try{
+      const raw = localStorage.getItem("sbp_tg_user") || localStorage.getItem("telegram_user") || "";
+      if(raw){
+        const u = JSON.parse(raw);
+        if(u && (u.id || u.username || u.first_name || u.photo_url)) return u;
+      }
+    }catch(e){}
+    return null;
+  }
+
+  function fullName(u){
+    const name = [u && u.first_name, u && u.last_name].filter(Boolean).join(" ").trim();
+    if(name) return name;
+    if(u && u.username) return "@" + String(u.username).replace(/^@/, "");
+    return "";
+  }
+
+  function handle(u){
+    return u && u.username ? "@" + String(u.username).replace(/^@/, "") : "";
+  }
+
+  function isPlaceholder(text){
+    const t = String(text || "").trim().toLowerCase();
+    if(!t) return true;
+    return t === "user" || t === "username" || t === "пользователь" || t.includes("username") || t.includes("ник") || t.includes("заглуш");
+  }
+
+  function setText(el, value){
+    if(!el || !value) return;
+    const current = String(el.textContent || "").trim();
+    if(!current || isPlaceholder(current) || current.length < 40){
+      el.textContent = value;
+    }
+  }
+
+  function setAvatar(el, url, label){
+    if(!el) return;
+    if(url){
+      if(el.tagName && el.tagName.toLowerCase() === "img"){
+        el.src = url;
+        el.alt = label || "Telegram avatar";
+      }else{
+        el.style.backgroundImage = 'url("' + String(url).replace(/"/g, "%22") + '")';
+        el.style.backgroundSize = "cover";
+        el.style.backgroundPosition = "center";
+        el.textContent = "";
+      }
+      el.classList.add("sbp-profile-avatar-loaded-v132");
+      return;
+    }
+    const initials = String(label || "SBP").trim().split(/\s+/).slice(0,2).map(function(x){ return x[0] || ""; }).join("").toUpperCase();
+    if(initials && (!String(el.textContent || "").trim() || isPlaceholder(el.textContent))) el.textContent = initials;
+  }
+
+  function apply(){
+    const u = getTgUser();
+    if(!u) return;
+
+    try{ localStorage.setItem("sbp_tg_user", JSON.stringify(u)); }catch(e){}
+
+    const name = fullName(u);
+    const userHandle = handle(u);
+    const avatar = u.photo_url || "";
+    const root = qs("#profileScreen") || qs('[id*="profile" i]') || document;
+
+    qsa('[data-tg-name],[data-profile-name],[data-user-name],.profile-name,.user-name,.profile-title,.account-name,.client-name', root).forEach(function(el){ setText(el, name || userHandle); });
+    qsa('[data-tg-username],[data-profile-username],[data-user-username],.profile-username,.user-username,.account-username,.client-username', root).forEach(function(el){ setText(el, userHandle || name); });
+
+    qsa('img[data-tg-avatar],img[data-profile-avatar],img[data-user-avatar],img.profile-avatar,img.user-avatar,.profile-avatar img,.user-avatar img,.avatar img', root).forEach(function(el){ setAvatar(el, avatar, name || userHandle); });
+    qsa('[data-tg-avatar]:not(img),[data-profile-avatar]:not(img),[data-user-avatar]:not(img),.profile-avatar:not(img),.user-avatar:not(img),.avatar:not(img),.profile-pic,.user-pic', root).forEach(function(el){ setAvatar(el, avatar, name || userHandle); });
+
+    qsa("h1,h2,h3,b,strong,p,span", root).forEach(function(el){
+      const text = String(el.textContent || "").trim();
+      if(isPlaceholder(text)){
+        if(text.indexOf("@") >= 0 || text.toLowerCase().indexOf("username") >= 0 || text.toLowerCase().indexOf("ник") >= 0) setText(el, userHandle || name);
+        else setText(el, name || userHandle);
+      }
+    });
+  }
+
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply, {once:true});
+  else apply();
+  window.addEventListener("load", apply);
+  window.addEventListener("focus", apply);
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden) apply(); });
+  window.SBP_SYNC_TG_PROFILE_V132 = apply;
 })();
 </script>
 
