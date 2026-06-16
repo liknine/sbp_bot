@@ -3,6 +3,10 @@
   "telegram_id": 6679851290,
   "username": "finance_log",
   "first_name": "фараксус",
+  "display_name": "@finance_log",
+  "photo_url": "",
+  "avatar_url": "",
+  "profile_photo_url": "",
   "status": "Entry",
   "coins": 3700,
   "coins_balance": 3700,
@@ -247,5 +251,5 @@
       "updated_at": "2026-05-29T16:17:54.341458"
     }
   ],
-  "updated_at": "2026-06-09T15:15:04.404497+00:00"
+  "updated_at": "2026-06-16T17:33:52.960563+00:00"
 }
