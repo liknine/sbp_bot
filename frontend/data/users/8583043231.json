@@ -1,0 +1,26 @@
+{
+  "schema_version": 4,
+  "telegram_id": 8583043231,
+  "username": "crewdqq",
+  "first_name": "crewdqq",
+  "display_name": "@crewdqq",
+  "photo_url": "",
+  "avatar_url": "",
+  "profile_photo_url": "",
+  "status": "Entry",
+  "coins": 0,
+  "coins_balance": 0,
+  "activeBonuses": 0,
+  "active_bonuses_count": 0,
+  "completed_orders_count": 0,
+  "status_rules": {
+    "Entry": 0,
+    "Selected": 3,
+    "Priority": 10,
+    "Black Access": 20
+  },
+  "active_bonus": null,
+  "coin_history": [],
+  "orders": [],
+  "updated_at": "2026-06-16T13:01:32.151903+00:00"
+}
