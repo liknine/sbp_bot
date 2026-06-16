@@ -3,6 +3,10 @@
   "telegram_id": 1639462053,
   "username": "liknine",
   "first_name": "ликнайн",
+  "display_name": "@liknine",
+  "photo_url": "images/users/1639462053-91b3c5caf04f.jpg",
+  "avatar_url": "images/users/1639462053-91b3c5caf04f.jpg",
+  "profile_photo_url": "images/users/1639462053-91b3c5caf04f.jpg",
   "status": "Selected",
   "coins": 791,
   "coins_balance": 791,
@@ -704,5 +708,5 @@
       "updated_at": "2026-05-28T12:13:48.769224"
     }
   ],
-  "updated_at": "2026-06-15T20:50:19.041752+00:00"
+  "updated_at": "2026-06-16T04:43:47.375611+00:00"
 }
