@@ -6753,6 +6753,7 @@ a,
   filter:grayscale(1) saturate(.35) brightness(.72)!important;
   transform:none!important;
   pointer-events:auto!important;
+  height:272px!important;
 }
 .sbp-archive-card:hover,
 .sbp-archive-card:active,
@@ -6802,12 +6803,33 @@ a,
   display:none!important;
 }
 .sbp-archive-card .photo{
-  transform:translateY(-10px)!important;
-  margin-bottom:-10px!important;
+  height:144px!important;
+  padding:0!important;
+  margin:0 0 10px!important;
+  display:block!important;
+  overflow:hidden!important;
+  border-radius:22px 22px 16px 16px!important;
 }
 .sbp-archive-card .photo img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:center top!important;
   filter:grayscale(1) contrast(.88)!important;
-  object-position:center 38%!important;
+}
+.sbp-archive-card .meta{
+  left:14px!important;
+  right:14px!important;
+  bottom:14px!important;
+}
+.sbp-archive-card .brand{
+  margin:0 0 6px!important;
+}
+.sbp-archive-card h3{
+  margin:0 0 6px!important;
+}
+.sbp-archive-card .color{
+  margin:0 0 12px!important;
 }
 .sbp-archive-card *{
   pointer-events:none!important;
@@ -9426,7 +9448,7 @@ body.sbp-v82-intro-running{
     if(!section){
       section = document.createElement("div");
       section.className = "sbp-catalog-archive-section";
-      section.innerHTML = `<section class="section-head"><h2>Архив</h2><span>Архивные позиции</span></section><section class="product-grid sbp-archive-grid" aria-label="Архив"></section>`;
+      section.innerHTML = `<section class="section-head"><h2>Архив</h2><span>Недоступные позиции</span></section><section class="product-grid sbp-archive-grid" aria-label="Архив"></section>`;
       const grid = qs(":scope > .product-grid", screen) || qs(".product-grid", screen);
       if(grid) grid.insertAdjacentElement("afterend", section);
       else screen.appendChild(section);
