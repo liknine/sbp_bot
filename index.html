@@ -6823,6 +6823,10 @@ a,
   background:#111!important;
   color:#fff!important;
 }
+
+/* remove archive label from product cards */
+.sbp-archive-card .sbp-archive-pill{display:none!important;}
+
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
 
@@ -9397,7 +9401,6 @@ body.sbp-v82-intro-running{
     const img = imageOf(p);
     return `
       <div class="card sbp-dynamic-card sbp-archive-card" data-archive-product-id="${esc(id)}" aria-disabled="true">
-        <span class="sbp-archive-pill">Архив</span>
         ${p.badge && p.badge !== "-" ? `<span class="badge">${esc(p.badge)}</span>` : ""}
         <span class="photo">${img ? `<img src="${esc(img)}" alt="${esc(p.name || "")}" loading="lazy" decoding="async">` : ""}</span>
         <span class="meta">
