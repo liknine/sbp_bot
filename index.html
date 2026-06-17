@@ -6734,6 +6734,90 @@ a,
   background:transparent !important;
 }
 
+
+
+/* === SBP archive catalog/backend state UI === */
+.sbp-catalog-archive-section{
+  margin-top:32px!important;
+}
+.sbp-catalog-archive-section .section-head{
+  margin-top:0!important;
+}
+.sbp-archive-grid{
+  margin-top:12px!important;
+}
+.sbp-archive-card{
+  position:relative!important;
+  cursor:default!important;
+  opacity:.64!important;
+  filter:grayscale(1) saturate(.35) brightness(.72)!important;
+  transform:none!important;
+  pointer-events:auto!important;
+}
+.sbp-archive-card:hover,
+.sbp-archive-card:active,
+.sbp-archive-card:focus{
+  transform:none!important;
+  box-shadow:none!important;
+}
+.sbp-archive-card:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:26px;
+  background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.32));
+  pointer-events:none;
+  z-index:4;
+}
+.sbp-archive-card .photo,
+.sbp-archive-card .meta,
+.sbp-archive-card .badge,
+.sbp-archive-card .sbp-archive-pill{
+  position:relative;
+  z-index:5;
+}
+.sbp-archive-card .sbp-archive-pill{
+  position:absolute!important;
+  left:12px!important;
+  top:12px!important;
+  min-height:28px!important;
+  padding:0 10px!important;
+  border-radius:999px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:rgba(255,255,255,.84)!important;
+  color:#111!important;
+  font-size:10px!important;
+  font-weight:900!important;
+  letter-spacing:.08em!important;
+  text-transform:uppercase!important;
+}
+.sbp-archive-card .sbp-archive-note{
+  color:var(--muted)!important;
+  font-weight:800!important;
+  white-space:nowrap!important;
+}
+.sbp-archive-card .fav-heart{
+  display:none!important;
+}
+.sbp-archive-card .photo img{
+  filter:grayscale(1) contrast(.88)!important;
+}
+.sbp-archive-card *{
+  pointer-events:none!important;
+}
+#theme-light:checked ~ .app .sbp-archive-card{
+  opacity:.72!important;
+  filter:grayscale(1) saturate(.2) brightness(.9)!important;
+}
+#theme-light:checked ~ .app .sbp-archive-card:after{
+  background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(0,0,0,.16));
+}
+#theme-light:checked ~ .app .sbp-archive-card .sbp-archive-pill{
+  background:#111!important;
+  color:#fff!important;
+}
 </style>
 <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
 
@@ -9219,8 +9303,15 @@ body.sbp-v82-intro-running{
   const priceNum = (p) => Number(p.price || p.price_byn || 0);
   const priceOf = (p) => priceNum(p) ? `${priceNum(p)} BYN` : "Цена уточняется";
   const sizesOf = (p) => Array.isArray(p.sizes) && p.sizes.length ? p.sizes.join(" ") : "Размеры уточняются";
+  function isArchived(p){
+    const value = p && p.archived;
+    if(typeof value === "string") return ["1","true","yes","y","да","archive","archived","архив"].includes(value.trim().toLowerCase());
+    return !!value;
+  }
 
   let products = [];
+  let archivedProducts = [];
+  let allProducts = [];
   let ready = false;
   let lastOrderSentAt = 0;
 
@@ -9262,13 +9353,16 @@ body.sbp-v82-intro-running{
 
   window.SBP_PRODUCTS_API = {
     all: function(){ return products.slice(); },
+    activeProducts: function(){ return products.slice(); },
+    archived: function(){ return archivedProducts.slice(); },
+    raw: function(){ return allProducts.slice(); },
     active: function(){
       return productById(localStorage.getItem(ACTIVE_KEY)) || products[0] || null;
     },
     byId: productById
   };
   window.SBP_PRODUCTS_DEBUG = function(){
-    return {count:products.length, loadedUrl:localStorage.getItem("sbp_products_loaded_url") || "", products:products.slice(0,5)};
+    return {count:products.length, archivedCount:archivedProducts.length, loadedUrl:localStorage.getItem("sbp_products_loaded_url") || "", products:products.slice(0,5), archived:archivedProducts.slice(0,5)};
   };
 
   function cardHtml(p){
@@ -9293,6 +9387,23 @@ body.sbp-v82-intro-running{
       </div>`;
   }
 
+  function archiveCardHtml(p){
+    const id = idOf(p);
+    const img = imageOf(p);
+    return `
+      <div class="card sbp-dynamic-card sbp-archive-card" data-archive-product-id="${esc(id)}" aria-disabled="true">
+        <span class="sbp-archive-pill">Архив</span>
+        ${p.badge && p.badge !== "-" ? `<span class="badge">${esc(p.badge)}</span>` : ""}
+        <span class="photo">${img ? `<img src="${esc(img)}" alt="${esc(p.name || "")}" loading="lazy" decoding="async">` : ""}</span>
+        <span class="meta">
+          <p class="brand">${esc(p.brand || "")}</p>
+          <h3>${esc(p.name || "Без названия")}</h3>
+          <p class="color">${esc(p.color || "")}</p>
+          <span class="card-bottom"><b>${esc(priceOf(p))}</b><span class="sbp-archive-note">Недоступно</span></span>
+        </span>
+      </div>`;
+  }
+
   function emptyHtml(){
     return `<div class="sbp-empty-dynamic"><h2>Каталог пока пуст</h2><p>Товары появятся здесь после добавления администратором.</p></div>`;
   }
@@ -9303,9 +9414,58 @@ body.sbp-v82-intro-running{
     grid.insertAdjacentHTML("beforeend", list.length ? list.map(cardHtml).join("") : emptyHtml());
   }
 
+  function ensureCatalogArchiveSection(){
+    const screen = qs("#catalogScreen");
+    if(!screen) return null;
+    let section = qs(".sbp-catalog-archive-section", screen);
+    if(!section){
+      section = document.createElement("div");
+      section.className = "sbp-catalog-archive-section";
+      section.innerHTML = `<section class="section-head"><h2>Архив</h2><span>Недоступные позиции</span></section><section class="product-grid sbp-archive-grid" aria-label="Архив"></section>`;
+      const grid = qs(":scope > .product-grid", screen) || qs(".product-grid", screen);
+      if(grid) grid.insertAdjacentElement("afterend", section);
+      else screen.appendChild(section);
+    }
+    return section;
+  }
+
+  function ensureArchiveScreenGrid(){
+    const screen = qs("#archiveScreen");
+    if(!screen) return null;
+    let grid = qs(".sbp-archive-screen-grid", screen);
+    if(!grid){
+      grid = document.createElement("section");
+      grid.className = "product-grid sbp-archive-grid sbp-archive-screen-grid";
+      const head = qs(".page-head", screen);
+      head ? head.insertAdjacentElement("afterend", grid) : screen.appendChild(grid);
+    }
+    return grid;
+  }
+
+  function renderArchiveCards(grid, list){
+    if(!grid) return;
+    grid.innerHTML = list.map(archiveCardHtml).join("");
+  }
+
+  function renderArchiveSections(){
+    const catalogSection = ensureCatalogArchiveSection();
+    if(catalogSection){
+      catalogSection.style.display = archivedProducts.length ? "" : "none";
+      renderArchiveCards(qs(".sbp-archive-grid", catalogSection), archivedProducts);
+    }
+
+    const archiveGrid = ensureArchiveScreenGrid();
+    const archiveScreen = qs("#archiveScreen");
+    const archiveEmpty = archiveScreen ? qs(".empty-state", archiveScreen) : null;
+    if(archiveGrid) renderArchiveCards(archiveGrid, archivedProducts);
+    if(archiveGrid) archiveGrid.style.display = archivedProducts.length ? "" : "none";
+    if(archiveEmpty) archiveEmpty.style.display = archivedProducts.length ? "none" : "";
+  }
+
   function renderCatalogs(){
     renderGrid(qs("#homeScreen .product-grid"), products);
-    renderGrid(qs("#catalogScreen .product-grid"), products);
+    renderGrid(qs("#catalogScreen > .product-grid"), products);
+    renderArchiveSections();
     syncHearts();
     applySearch();
   }
@@ -10028,18 +10188,21 @@ window.sendOrder = function sendOrder(){
         }catch(_e){}
       }
       localStorage.setItem("sbp_products_loaded_url", loadedUrl || "");
-      products = Array.isArray(data) ? data.slice() : [];
-      products = products
-        .map((p, i) => Object.assign({_sbpOriginalIndex:i}, p))
+      allProducts = (Array.isArray(data) ? data.slice() : [])
+        .map((p, i) => Object.assign({_sbpOriginalIndex:i, archived:false}, p))
         .sort((a,b) => {
           const ad = Date.parse(a.created_at || a.updated_at || a.date || "");
           const bd = Date.parse(b.created_at || b.updated_at || b.date || "");
           if(Number.isFinite(ad) && Number.isFinite(bd) && ad !== bd) return bd - ad;
           return (b._sbpOriginalIndex || 0) - (a._sbpOriginalIndex || 0);
         });
+      products = allProducts.filter(p => !isArchived(p));
+      archivedProducts = allProducts.filter(p => isArchived(p));
     }catch(e){
       console.error("[SBP] products load failed", e);
       products = [];
+      archivedProducts = [];
+      allProducts = [];
     }
 
     ready = true;
@@ -10097,6 +10260,14 @@ window.sendOrder = function sendOrder(){
       e.preventDefault();
       filterState.priceSort = priceSortBtn.dataset.priceSort || "asc";
       applySearch();
+      return false;
+    }
+
+    const archiveCard = e.target.closest(".sbp-archive-card");
+    if(archiveCard){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      e.stopPropagation();
       return false;
     }
 
@@ -10161,6 +10332,9 @@ window.sendOrder = function sendOrder(){
 
     if(e.target.closest('label[for="tab-favorites"], .nav-favorites')){
       setTimeout(renderFavorites, 80);
+    }
+    if(e.target.closest('label[for="tab-archive"], .quick-card[for="tab-archive"]')){
+      setTimeout(renderArchiveSections, 80);
     }
   }, true);
 
