@@ -6753,7 +6753,6 @@ a,
   filter:grayscale(1) saturate(.35) brightness(.72)!important;
   transform:none!important;
   pointer-events:auto!important;
-  height:272px!important;
 }
 .sbp-archive-card:hover,
 .sbp-archive-card:active,
@@ -6803,33 +6802,12 @@ a,
   display:none!important;
 }
 .sbp-archive-card .photo{
-  height:144px!important;
-  padding:0!important;
-  margin:0 0 10px!important;
-  display:block!important;
-  overflow:hidden!important;
-  border-radius:22px 22px 16px 16px!important;
+  transform:translateY(-10px)!important;
+  margin-bottom:-10px!important;
 }
 .sbp-archive-card .photo img{
-  width:100%!important;
-  height:100%!important;
-  object-fit:cover!important;
-  object-position:center top!important;
   filter:grayscale(1) contrast(.88)!important;
-}
-.sbp-archive-card .meta{
-  left:14px!important;
-  right:14px!important;
-  bottom:14px!important;
-}
-.sbp-archive-card .brand{
-  margin:0 0 6px!important;
-}
-.sbp-archive-card h3{
-  margin:0 0 6px!important;
-}
-.sbp-archive-card .color{
-  margin:0 0 12px!important;
+  object-position:center 38%!important;
 }
 .sbp-archive-card *{
   pointer-events:none!important;
@@ -9448,7 +9426,7 @@ body.sbp-v82-intro-running{
     if(!section){
       section = document.createElement("div");
       section.className = "sbp-catalog-archive-section";
-      section.innerHTML = `<section class="section-head"><h2>Архив</h2><span>Недоступные позиции</span></section><section class="product-grid sbp-archive-grid" aria-label="Архив"></section>`;
+      section.innerHTML = `<section class="section-head"><h2>Архив</h2><span>Архивные позиции</span></section><section class="product-grid sbp-archive-grid" aria-label="Архив"></section>`;
       const grid = qs(":scope > .product-grid", screen) || qs(".product-grid", screen);
       if(grid) grid.insertAdjacentElement("afterend", section);
       else screen.appendChild(section);
@@ -14307,6 +14285,84 @@ textarea.field-input:focus,
   window.SBP_SYNC_TG_PROFILE_V132 = apply;
 })();
 </script>
+
+
+
+<style id="sbp-archive-card-layout-final-fix">
+/* Final archive card layout: image stays at the very top of the card frame, text is below it, no overlap. */
+.sbp-archive-card{
+  height:272px!important;
+  min-height:272px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  padding:0!important;
+  overflow:hidden!important;
+  border-radius:26px!important;
+  clip-path:inset(0 round 26px)!important;
+}
+.sbp-archive-card .photo{
+  order:0!important;
+  position:relative!important;
+  z-index:5!important;
+  display:block!important;
+  flex:0 0 150px!important;
+  width:100%!important;
+  height:150px!important;
+  min-height:150px!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  border-radius:26px 26px 17px 17px!important;
+}
+.sbp-archive-card .photo img{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center top!important;
+  filter:grayscale(1) contrast(.88)!important;
+}
+.sbp-archive-card .meta{
+  order:1!important;
+  position:relative!important;
+  z-index:5!important;
+  left:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  width:100%!important;
+  min-width:0!important;
+  flex:1 1 auto!important;
+  padding:12px 14px 14px!important;
+  box-sizing:border-box!important;
+}
+.sbp-archive-card .brand{
+  margin:0 0 7px!important;
+  line-height:1!important;
+}
+.sbp-archive-card h3{
+  margin:0 0 7px!important;
+  line-height:1.12!important;
+}
+.sbp-archive-card .color{
+  margin:0 0 13px!important;
+  line-height:1!important;
+}
+.sbp-archive-card .card-bottom{
+  margin-top:0!important;
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:9px!important;
+}
+.sbp-archive-card .sbp-archive-pill,
+.sbp-archive-card .badge{
+  position:absolute!important;
+  z-index:7!important;
+}
+</style>
 
 </body>
 </html>
