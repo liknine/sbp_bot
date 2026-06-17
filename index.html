@@ -6801,8 +6801,13 @@ a,
 .sbp-archive-card .fav-heart{
   display:none!important;
 }
+.sbp-archive-card .photo{
+  transform:translateY(-10px)!important;
+  margin-bottom:-10px!important;
+}
 .sbp-archive-card .photo img{
   filter:grayscale(1) contrast(.88)!important;
+  object-position:center 38%!important;
 }
 .sbp-archive-card *{
   pointer-events:none!important;
@@ -9421,7 +9426,7 @@ body.sbp-v82-intro-running{
     if(!section){
       section = document.createElement("div");
       section.className = "sbp-catalog-archive-section";
-      section.innerHTML = `<section class="section-head"><h2>Архив</h2><span>Недоступные позиции</span></section><section class="product-grid sbp-archive-grid" aria-label="Архив"></section>`;
+      section.innerHTML = `<section class="section-head"><h2>Архив</h2><span>Архивные позиции</span></section><section class="product-grid sbp-archive-grid" aria-label="Архив"></section>`;
       const grid = qs(":scope > .product-grid", screen) || qs(".product-grid", screen);
       if(grid) grid.insertAdjacentElement("afterend", section);
       else screen.appendChild(section);
