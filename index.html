@@ -14488,5 +14488,93 @@ textarea.field-input:focus,
 
 </style>
 
+
+
+<style id="sbp-product-photo-smart-crop-v2">
+/* Smart product photo fit: no big inner white frame, but much softer crop than the old cover mode. */
+#homeScreen .product-grid > .card,
+#catalogScreen .product-grid > .card,
+#favoritesScreen .product-grid > .card,
+.sbp-catalog-archive-section .sbp-archive-card,
+#archiveScreen .sbp-archive-card{
+  height:286px!important;
+  min-height:286px!important;
+  border-radius:26px!important;
+  clip-path:inset(0 round 26px)!important;
+}
+
+#homeScreen .product-grid > .card .photo,
+#catalogScreen .product-grid > .card .photo,
+#favoritesScreen .product-grid > .card .photo,
+.sbp-catalog-archive-section .sbp-archive-card .photo,
+#archiveScreen .sbp-archive-card .photo{
+  width:100%!important;
+  height:170px!important;
+  min-height:170px!important;
+  flex:0 0 170px!important;
+  margin:0!important;
+  padding:0!important;
+  display:block!important;
+  overflow:hidden!important;
+  border-radius:26px 26px 18px 18px!important;
+  background:linear-gradient(145deg,var(--card1),var(--card2))!important;
+}
+
+#homeScreen .product-grid > .card .photo img,
+#catalogScreen .product-grid > .card .photo img,
+#favoritesScreen .product-grid > .card .photo img,
+.sbp-catalog-archive-section .sbp-archive-card .photo img,
+#archiveScreen .sbp-archive-card .photo img{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  border:0!important;
+  background:transparent!important;
+}
+
+#homeScreen .product-grid > .card .meta,
+#catalogScreen .product-grid > .card .meta,
+#favoritesScreen .product-grid > .card .meta{
+  left:14px!important;
+  right:14px!important;
+  bottom:15px!important;
+}
+
+.sbp-catalog-archive-section .sbp-archive-card .meta,
+#archiveScreen .sbp-archive-card .meta{
+  padding:14px 14px 15px!important;
+}
+
+.sbp-catalog-archive-section .sbp-archive-card .photo img,
+#archiveScreen .sbp-archive-card .photo img{
+  filter:grayscale(1) contrast(.88)!important;
+}
+
+@media(max-width:380px){
+  #homeScreen .product-grid > .card,
+  #catalogScreen .product-grid > .card,
+  #favoritesScreen .product-grid > .card,
+  .sbp-catalog-archive-section .sbp-archive-card,
+  #archiveScreen .sbp-archive-card{
+    height:274px!important;
+    min-height:274px!important;
+  }
+
+  #homeScreen .product-grid > .card .photo,
+  #catalogScreen .product-grid > .card .photo,
+  #favoritesScreen .product-grid > .card .photo,
+  .sbp-catalog-archive-section .sbp-archive-card .photo,
+  #archiveScreen .sbp-archive-card .photo{
+    height:160px!important;
+    min-height:160px!important;
+    flex-basis:160px!important;
+  }
+}
+</style>
+
 </body>
 </html>
