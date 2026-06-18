@@ -14440,43 +14440,34 @@ textarea.field-input:focus,
 }
 
 
-/* === SBP product photo contain fix ===
-   Product/catalog/archive/order photos should fit inside their own frame instead of being heavily cropped. */
+/* === SBP product photo frame fix ===
+   Catalog/archive cards fill the photo slot so uploaded white canvases do not appear as big inner frames.
+   Detail/cart/order images still use contain so the product is readable there. */
 .card .photo,
-.sbp-dynamic-card .photo{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  overflow:hidden!important;
-  padding:7px!important;
-  box-sizing:border-box!important;
-  background:rgba(255,255,255,.025)!important;
-}
-.card .photo img,
-.sbp-dynamic-card .photo img{
-  display:block!important;
-  width:100%!important;
-  height:100%!important;
-  max-width:100%!important;
-  max-height:100%!important;
-  object-fit:contain!important;
-  object-position:center!important;
-}
+.sbp-dynamic-card .photo,
 .sbp-archive-card .photo{
   display:flex!important;
   align-items:center!important;
   justify-content:center!important;
-  padding:7px!important;
+  overflow:hidden!important;
+  padding:0!important;
   box-sizing:border-box!important;
+  background:rgba(255,255,255,.025)!important;
 }
+.card .photo img,
+.sbp-dynamic-card .photo img,
 .sbp-archive-card .photo img{
   display:block!important;
   width:100%!important;
   height:100%!important;
-  max-width:100%!important;
-  max-height:100%!important;
-  object-fit:contain!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:cover!important;
   object-position:center!important;
+  border:0!important;
+  background:transparent!important;
+}
+.sbp-archive-card .photo img{
   filter:grayscale(1) contrast(.88)!important;
 }
 .product-main-image img,
