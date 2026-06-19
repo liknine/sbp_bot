@@ -3,6 +3,10 @@
   "telegram_id": 7952353435,
   "username": "SBP_Admin",
   "first_name": "SBP_Admin",
+  "display_name": "@SBP_Admin",
+  "photo_url": "images/users/7952353435-acbdb2ba9c99.jpg",
+  "avatar_url": "images/users/7952353435-acbdb2ba9c99.jpg",
+  "profile_photo_url": "images/users/7952353435-acbdb2ba9c99.jpg",
   "status": "Entry",
   "coins": 0,
   "coins_balance": 0,
@@ -18,5 +22,5 @@
   "active_bonus": null,
   "coin_history": [],
   "orders": [],
-  "updated_at": "2026-05-30T13:54:18.210447+00:00"
+  "updated_at": "2026-06-19T16:45:40.701897+00:00"
 }
