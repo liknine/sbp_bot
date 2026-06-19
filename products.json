@@ -136,26 +136,5 @@
     ],
     "created_at": "2026-05-30T15:33:07.570777+00:00",
     "updated_at": "2026-05-30T15:33:07.570842+00:00"
-  },
-  {
-    "id": "valentino-vl-chb",
-    "brand": "Валентино",
-    "name": "Вл",
-    "color": "Чб",
-    "price": 350,
-    "sizes": [
-      "41",
-      "42",
-      "43"
-    ],
-    "badge": "ХИТ",
-    "description": "ТОВАР",
-    "images": [
-      "images/products/valentino-vl-chb-1-0e61361f8f.jpg"
-    ],
-    "created_at": "2026-06-08T18:56:27.917473+00:00",
-    "updated_at": "2026-06-18T18:37:20.737762+00:00",
-    "archived": true,
-    "archived_at": "2026-06-18T18:37:20.736591+00:00"
   }
 ]
