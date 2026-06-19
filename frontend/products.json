@@ -57,24 +57,6 @@
     "updated_at": "2026-05-26T18:28:01.773315+00:00"
   },
   {
-    "id": "1-2-3",
-    "brand": "1",
-    "name": "2",
-    "color": "3",
-    "price": 4,
-    "sizes": [
-      "44",
-      "45"
-    ],
-    "badge": "",
-    "description": "ыывы",
-    "images": [
-      "images/products/1-2-3-1-81d35fa294.jpg"
-    ],
-    "created_at": "2026-05-27T12:37:25.228540+00:00",
-    "updated_at": "2026-05-27T12:50:28.487933+00:00"
-  },
-  {
     "id": "test-test-chernyy",
     "brand": "тест",
     "name": "тест",
