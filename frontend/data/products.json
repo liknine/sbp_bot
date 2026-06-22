@@ -53,5 +53,34 @@
     "archived": false,
     "created_at": "2026-06-22T19:45:46.184017+00:00",
     "updated_at": "2026-06-22T19:45:46.184048+00:00"
+  },
+  {
+    "id": "nike-nike-dunk-low-grey-grey-seryy",
+    "brand": "Nike",
+    "name": "NIKE DUNK LOW \"Grey\"",
+    "color": "Grey / Серый",
+    "price": 50,
+    "sizes": [
+      "40",
+      "41",
+      "42",
+      "43",
+      "44",
+      "45",
+      "46"
+    ],
+    "badge": "'-'",
+    "description": "Lux Replica\n\nNike Dunk Low Grey — универсальная модель в спокойной серой расцветке, которая легко сочетается как с повседневными, так и с более собранными образами. Классический силуэт Dunk, комфортная посадка и практичная цветовая гамма делают эту пару отличным выбором на каждый день.\n\nЛаконичный дизайн без лишних деталей позволяет модели оставаться актуальной вне зависимости от сезона и трендов.\n\nКомплектация:\n\nВ комплект входит всё необходимое для полноценного опыта распаковки:\n\n— Новая пара Nike Dunk Low Grey\n\n— Фирменная коробка\n\n— Дополнительный комплект шнурков\n\n— Защитная упаковка для безопасной транспортировки\n\nКаждая пара проходит проверку перед отправкой и поставляется в новом состоянии.",
+    "images": [
+      "images/products/nike-nike-dunk-low-grey-grey-seryy-1-62bb163d09.jpg",
+      "images/products/nike-nike-dunk-low-grey-grey-seryy-2-bf5450c348.jpg",
+      "images/products/nike-nike-dunk-low-grey-grey-seryy-3-f7c4bd78ec.jpg",
+      "images/products/nike-nike-dunk-low-grey-grey-seryy-4-a307c995d3.jpg",
+      "images/products/nike-nike-dunk-low-grey-grey-seryy-5-1f6ce8b368.jpg",
+      "images/products/nike-nike-dunk-low-grey-grey-seryy-6-236295cec4.jpg"
+    ],
+    "archived": false,
+    "created_at": "2026-06-22T19:54:57.670143+00:00",
+    "updated_at": "2026-06-22T19:54:57.670201+00:00"
   }
 ]
