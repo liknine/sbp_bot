@@ -166,5 +166,33 @@
     "archived": false,
     "created_at": "2026-06-22T20:15:14.069083+00:00",
     "updated_at": "2026-06-22T20:15:14.070275+00:00"
+  },
+  {
+    "id": "amiri-amiri-ma-1-crystal-swarovski-black-chernyy",
+    "brand": "Amiri",
+    "name": "AMIRI MA-1 Crystal Swarovski",
+    "color": "Black / Черный",
+    "price": 200,
+    "sizes": [
+      "40",
+      "41",
+      "42",
+      "43",
+      "44",
+      "45",
+      "46"
+    ],
+    "badge": "'-'",
+    "description": "Lux Replica\n\nAMIRI MA-1 — одна из самых узнаваемых моделей бренда, сочетающая премиальный внешний вид, выразительные детали и фирменный силуэт. Модель выполнена с максимальным вниманием к материалам и отделке, сохраняя характерный стиль AMIRI, благодаря которому пара остаётся актуальной как в повседневных, так и в более собранных образах.\n\nТщательно проработанные элементы, качественная фурнитура и аккуратное исполнение делают эту модель отличным выбором для тех, кто ценит детали и современную эстетику люксовой обуви.\n\nКомплектация:\n\nВ комплект входит всё необходимое для полноценного опыта распаковки:\n\n— Новая пара AMIRI MA-1\n\n— Фирменная коробка\n\n— Брендированная карточка\n\n— Фирменный конверт\n\n— Чеки и сопутствующие вложения\n\n— Защитная упаковка при отправке\n\nКаждая пара проходит проверку перед отправкой и поставляется в новом состоянии.",
+    "images": [
+      "images/products/amiri-amiri-ma-1-crystal-swarovski-black-chern-1-ac4b52d4d7.jpg",
+      "images/products/amiri-amiri-ma-1-crystal-swarovski-black-chern-2-58a3bf6143.jpg",
+      "images/products/amiri-amiri-ma-1-crystal-swarovski-black-chern-3-7582ab80ee.jpg",
+      "images/products/amiri-amiri-ma-1-crystal-swarovski-black-chern-4-757e543334.jpg",
+      "images/products/amiri-amiri-ma-1-crystal-swarovski-black-chern-5-2ef9d65c78.jpg"
+    ],
+    "archived": false,
+    "created_at": "2026-06-22T20:20:38.039562+00:00",
+    "updated_at": "2026-06-22T20:20:38.040475+00:00"
   }
 ]
